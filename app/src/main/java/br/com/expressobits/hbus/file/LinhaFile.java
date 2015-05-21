@@ -19,12 +19,15 @@ public class LinhaFile {
 
 
     public LinhaFile(String nome,boolean sentido,TipoDeDia dias,Context context){
-        ManageFile file = new ManageFile(context);
-        String nameFile = nome+"_"+sentido+"_"+dias;
-        Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
-        String fileString = file.ReadFile(nameFile);
-        String[] fileStringarray=fileString.split("\n");
-        horarios = new ArrayList<String>(Arrays.asList(fileStringarray));
+
+                ManageFile file = new ManageFile(context);
+                String nameFile = nome+"_"+sentido+"_"+dias+".dat";
+                Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
+                String fileString = file.ReadFile(nameFile);
+                String[] fileStringarray=fileString.split("\n");
+                horarios = new ArrayList<String>(Arrays.asList(fileStringarray));
+
+
     }
 
     public List<String> getHorarios() {

@@ -8,4 +8,7 @@
     <string name="title_activity_list_line">Online hours</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="saturday">Saturday</string>
+    <string name="useful">Useful days</string>
+    <string name="sunday">Sunday</string>
 </resources>

@@ -1,6 +1,7 @@
 package br.com.expressobits.hbus;
 
 import android.annotation.SuppressLint;
+import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView;
+import android.widget.TabHost;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,10 @@ import br.com.expressobits.hbus.modelo.TipoDeDia;
 
 public class ListLineActivity extends ActionBarActivity {
 
-    ListView listView;
+    ListView listViewUseful;
+    ListView listViewSaturday;
+    ListView listViewSunday;
+
     String line;
     String local;
 
@@ -32,21 +37,53 @@ public class ListLineActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_line);
+
+        TabHost abas = (TabHost) findViewById(R.id.tabhost);
+        abas.setup();
+
+        TabHost.TabSpec descritor = abas.newTabSpec("tag1");
+        descritor.setContent(R.id.listview_listline_line_uteis);
+        descritor.setIndicator(getString(R.string.useful));
+        abas.addTab(descritor);
+
+        descritor = abas.newTabSpec("tag2");
+        descritor.setContent(R.id.listview_listline_line_sabado);
+        descritor.setIndicator(getString(R.string.saturday));
+        abas.addTab(descritor);
+
+        descritor = abas.newTabSpec("tag3");
+        descritor.setContent(R.id.listview_listline_line_domingo);
+        descritor.setIndicator(getString(R.string.sunday));
+        abas.addTab(descritor);
+
+        //Definir pelo dia retornado
+        abas.setCurrentTab(0);
+
+
         Intent intent = getIntent();
         line = intent.getStringExtra(MainActivity.EXTRA_LINE);
         local = intent.getStringExtra(MainActivity.EXTRA_LOCAL);
         this.setTitle(local+" - "+line);
 
-        listView = (ListView)findViewById(R.id.listview_listline_line);
-        ArrayList<String> list = new ArrayList<String>();
-        list = (ArrayList<String>)new LinhaFile("vilaschirmer",false, TipoDeDia.UTEIS,this).getHorarios();
+        listViewUseful = (ListView)findViewById(R.id.listview_listline_line_uteis);
+        ArrayList<String> listUseful = (ArrayList<String>)new LinhaFile("vilaschirmer",false, TipoDeDia.UTEIS,this).getHorarios();
+        ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listUseful);
+        listViewUseful.setAdapter(adapterLinesUteis);
 
-        String[] lista = getResources().getStringArray(R.array.line_2_b_d);
+        listViewSaturday = (ListView)findViewById(R.id.listview_listline_line_sabado);
+        ArrayList<String> listSabado = (ArrayList<String>)new LinhaFile("vilaschirmer",false, TipoDeDia.SABADO,this).getHorarios();
+        ListViewAdapterLines adapterLinesSabado = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listSabado);
+        listViewSaturday.setAdapter(adapterLinesSabado);
 
-        ListViewAdapterLines adapterLines = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,list);
+        listViewSunday = (ListView)findViewById(R.id.listview_listline_line_domingo);
+        ArrayList<String> listDomingo = (ArrayList<String>)new LinhaFile("vilaschirmer",false, TipoDeDia.DOMINGO,this).getHorarios();
+        ListViewAdapterLines adapterLinesDomingo = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listDomingo);
+        listViewSunday.setAdapter(adapterLinesDomingo);
 
 
-        listView.setAdapter(adapterLines);
+
+
+
 
 
     }

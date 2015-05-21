@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
     compileOptions.encoding = 'ISO-8859-1'
     defaultConfig {
-        applicationId "hbus.expressobits.com.br.hbus"
+        applicationId "br.com.expressobits.hbus"
         minSdkVersion 8
         targetSdkVersion 22
         versionCode 1

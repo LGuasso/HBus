@@ -1,15 +1,37 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="br.com.expressobits.hbus.ListLineActivity">
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/listview_listline_line"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/listview_listline_line_uteis"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+            <ListView
+                android:id="@+id/listview_listline_line_sabado"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+            <ListView
+                android:id="@+id/listview_listline_line_domingo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+        </FrameLayout>
+    </LinearLayout>
 
 
-
-        </ListView>
-
-</LinearLayout>
+</TabHost>

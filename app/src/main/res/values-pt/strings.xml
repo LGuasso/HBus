@@ -7,4 +7,7 @@
     <string name="look_line">Olhar horários da linha</string>
     <string name="title_activity_list_line">Horários da linha</string>
     <string name="hello_world">Olá Mundo</string>
+    <string name="saturday">Sábado</string>
+    <string name="sunday">Domingo</string>
+    <string name="useful">Dias úteis</string>
 </resources>
