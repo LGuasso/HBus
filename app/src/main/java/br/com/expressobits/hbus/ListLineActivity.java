@@ -18,6 +18,9 @@ import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
+import br.com.expressobits.hbus.file.LinhaFile;
+import br.com.expressobits.hbus.modelo.TipoDeDia;
+
 
 public class ListLineActivity extends ActionBarActivity {
 
@@ -35,15 +38,8 @@ public class ListLineActivity extends ActionBarActivity {
         this.setTitle(local+" - "+line);
 
         listView = (ListView)findViewById(R.id.listview_listline_line);
-        final ArrayList<String> list = new ArrayList<String>();
-        list.add("18:30 - Alto boa vista");
-        list.add("19:15 - Ate Maneco");
-        list.add("20:15 - Ate Maneco");
-        list.add("21:15 - Ate Maneco");
-        list.add("23:15 - Ate Maneco");
-        list.add("23:15 - Ate Maneco");
-        list.add("23:15 - Ate Maneco");
-        list.add("23:15 - Ate Maneco");
+        ArrayList<String> list = new ArrayList<String>();
+        list = (ArrayList<String>)new LinhaFile("vilaschirmer",false, TipoDeDia.UTEIS,this).getHorarios();
 
         String[] lista = getResources().getStringArray(R.array.line_2_b_d);
 

@@ -1,4 +1,4 @@
-package hbus.expressobits.com.br.hbus;
+package br.com.expressobits.hbus;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
