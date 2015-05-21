@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:padding="10px">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Choose_the_line"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+        <Spinner
+            android:id="@+id/spinner_list_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/list_line"
+            android:textAlignment="center" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Choose_the_local"
+            android:textAlignment="center"/>
+
+        <Spinner
+            android:id="@+id/spinner_list_local"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/list_local"
+            android:textAlignment="center"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_main_look_line"
+            android:text="@string/look_line"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/title_activity_list_line"
+            >
+
+        </TextView>
+
+
+
+
+</LinearLayout>
