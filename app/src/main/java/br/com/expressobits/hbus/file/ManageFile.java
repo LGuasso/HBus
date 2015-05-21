@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 import android.content.Context;
 import android.os.Environment;
@@ -70,22 +73,34 @@ public class ManageFile {
      * @throws IOException
      */
     public String ReadFile(String fileName){
-       
-        
-        try {
-        	 File file = context.getFilesDir();
-             File textfile = new File(file+"/"+fileName);
-             Log.i(TAG,textfile.getAbsolutePath());	
-             
-             
-             FileInputStream input = context.openFileInput(fileName);
-             byte[] buffer = new byte[(int)textfile.length()];
-             
-             
-			input.read(buffer);
-			
-			Log.i(TAG,new String(buffer));	
-			return new String(buffer);
+
+
+            // Stringbuilder que sera utilizado no processamento
+            StringBuilder sb = new StringBuilder();
+
+
+
+            // Adiciona o nome do Arquivo
+            sb.append(fileName);
+
+            try
+            {
+
+                // Obtem o contexto definido globalmente e abre o arquivo do Assets
+                InputStream is = context.getAssets().open(sb.toString());
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String s = null;
+
+                // Instancia do stringbuilder que sera utilizada para leitura do arquivo
+                sb = new StringBuilder();
+
+                while ((s = br.readLine()) != null)
+                    sb.append(s + "\r\n");
+
+                br.close();
+                is.close();
+                return sb.toString();
+
 		} catch (Exception e) {
 			// TODO Bloco catch gerado automaticamente
 			Log.e(TAG, "ERRO "+e.getMessage());
