@@ -4,8 +4,12 @@
     <color name="background_dark">#ff8800</color>
     <color name="background_full_dark">#f65100</color>
     <color name="orange_light">#ffb74d</color>
+    <color name="orange_ultralight">#FFE0B2</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+
+    <color name="red">#f00</color>
+    <color name="green">#090</color>
 
     <color name="text_color">#000000</color>
 </resources>

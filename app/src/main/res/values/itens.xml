@@ -2,30 +2,14 @@
 
 <resources>
     <array name="list_line">
-        <item name="line_1">7 de Dezembro</item>
-        <item name="line_2">Vila Schirmer</item>
-        <item naem="line_3">Brigada-Itararé</item>
+        <item name="line_1">Vila Schirmer</item>
+        <item name="line_2">Jardim Berleze</item>
+        <item name="line_3">Maringa</item>
     </array>
 
-    <array name="list_local">
-        <item name="center">Centro</item>
-        <item name="bairro">Bairro</item>
-    </array>
-
-    <array name="line_2_b_d">
-        <item name="01">06:30</item>
-        <item name="01">06:50</item>
-        <item name="01">07:05</item>
-        <item name="01">07:30</item>
-        <item name="01">07:50</item>
-        <item name="01">08:07</item>
-        <item name="01">08:30</item>
-        <item name="01">08:50</item>
-        <item name="01">09:10</item>
-        <item name="01">09:30</item>
-        <item name="01">09:50</item>
-        <item name="01">10:10</item>
-
+    <array name="list_sentido">
+        <item name="center">Centro > Bairro</item>
+        <item name="bairro">Bairro > Centro</item>
     </array>
 
 </resources>
