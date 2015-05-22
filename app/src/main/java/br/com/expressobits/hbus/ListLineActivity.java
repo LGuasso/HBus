@@ -19,8 +19,11 @@ import android.widget.AdapterView;
 import android.widget.TabHost;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import br.com.expressobits.hbus.file.LinhaFile;
+import br.com.expressobits.hbus.modelo.Onibus;
 import br.com.expressobits.hbus.modelo.TipoDeDia;
 
 
@@ -30,15 +33,17 @@ public class ListLineActivity extends ActionBarActivity {
     ListView listViewSaturday;
     ListView listViewSunday;
 
+    TabHost abas;
+
     String line;
-    String local;
+    boolean centro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_line);
 
-        TabHost abas = (TabHost) findViewById(R.id.tabhost);
+        abas = (TabHost) findViewById(R.id.tabhost);
         abas.setup();
 
         TabHost.TabSpec descritor = abas.newTabSpec("tag1");
@@ -62,31 +67,33 @@ public class ListLineActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         line = intent.getStringExtra(MainActivity.EXTRA_LINE);
-        local = intent.getStringExtra(MainActivity.EXTRA_LOCAL);
-        this.setTitle(local+" - "+line);
+        centro = intent.getBooleanExtra(MainActivity.EXTRA_SENTIDO,false);
+        this.setTitle((centro ? "Centro > Bairro" : "Bairro > Centro")+" - "+line);
 
         listViewUseful = (ListView)findViewById(R.id.listview_listline_line_uteis);
-        ArrayList<String> listUseful = (ArrayList<String>)new LinhaFile("vilaschirmer",false, TipoDeDia.UTEIS,this).getHorarios();
+        ArrayList<Onibus> listUseful = (ArrayList<Onibus>)new LinhaFile(toFileName(line),centro, TipoDeDia.UTEIS,this).getHorarios();
         ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listUseful);
         listViewUseful.setAdapter(adapterLinesUteis);
 
+        for(int i=0;i<listUseful.size();i++){
+            if(listUseful.get(i).getHora()<=new GregorianCalendar().get(Calendar.HOUR_OF_DAY)){
+                listViewUseful.setSelection(i);
+                break;
+            }
+        }
+
         listViewSaturday = (ListView)findViewById(R.id.listview_listline_line_sabado);
-        ArrayList<String> listSabado = (ArrayList<String>)new LinhaFile("vilaschirmer",false, TipoDeDia.SABADO,this).getHorarios();
+        ArrayList<Onibus> listSabado = (ArrayList<Onibus>)new LinhaFile(toFileName(line),centro, TipoDeDia.SABADO,this).getHorarios();
         ListViewAdapterLines adapterLinesSabado = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listSabado);
         listViewSaturday.setAdapter(adapterLinesSabado);
 
         listViewSunday = (ListView)findViewById(R.id.listview_listline_line_domingo);
-        ArrayList<String> listDomingo = (ArrayList<String>)new LinhaFile("vilaschirmer",false, TipoDeDia.DOMINGO,this).getHorarios();
+        ArrayList<Onibus> listDomingo = (ArrayList<Onibus>)new LinhaFile(toFileName(line),false, TipoDeDia.DOMINGO,this).getHorarios();
         ListViewAdapterLines adapterLinesDomingo = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listDomingo);
         listViewSunday.setAdapter(adapterLinesDomingo);
-
-
-
-
-
-
-
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -112,5 +119,18 @@ public class ListLineActivity extends ActionBarActivity {
 
 
 
+    }
+
+    /**
+     * Retorna nome sem espaço sem acentos e sem maiusculas.
+     * @param name
+     * @return
+     */
+    public String toFileName(String name){
+        String ok = name;
+        ok = ok.replace(" ", "-");
+        ok = ok.replace("é","e");
+        ok = ok.toLowerCase();
+        return ok;
     }
 }

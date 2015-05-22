@@ -15,7 +15,7 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity {
 
     public static final String EXTRA_LINE = "line_bus";
-    public static final String EXTRA_LOCAL = "line_local";
+    public static final String EXTRA_SENTIDO = "line_sentido";
     Spinner spinnerLine;
     Spinner spinnerLocal;
     @Override
@@ -42,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListLineActivity.class);
                 intent.putExtra(EXTRA_LINE, spinnerLine.getSelectedItem().toString());
-                intent.putExtra(EXTRA_LOCAL, spinnerLocal.getSelectedItem().toString());
+                intent.putExtra(EXTRA_SENTIDO, spinnerLocal.getSelectedItem().toString().equals("Centro > Bairro"));
                 startActivity(intent);
             }
         });
@@ -77,14 +77,14 @@ public class MainActivity extends ActionBarActivity {
      */
     private void initSpinners(){
         spinnerLine = (Spinner) findViewById(R.id.spinner_list_line);
-        spinnerLocal = (Spinner) findViewById(R.id.spinner_list_local);
+        spinnerLocal = (Spinner) findViewById(R.id.spinner_list_sentido);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.list_line, android.R.layout.simple_dropdown_item_1line);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerLine.setAdapter(adapter);
         spinnerLine.setSelection(0);
 
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.list_local, android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.list_sentido, android.R.layout.simple_dropdown_item_1line);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLocal.setAdapter(adapter2);
         spinnerLocal.setSelection(0);

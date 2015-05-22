@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.expressobits.hbus.modelo.Onibus;
 import br.com.expressobits.hbus.modelo.TipoDeDia;
 
 /**
@@ -15,7 +16,9 @@ import br.com.expressobits.hbus.modelo.TipoDeDia;
  */
 public class LinhaFile {
 
-    ArrayList<String> horarios=new ArrayList<String>();
+    ArrayList<Onibus> horarios=new ArrayList<Onibus>();
+
+    ArrayList<String> texto= new ArrayList<String>();
 
 
     public LinhaFile(String nome,boolean sentido,TipoDeDia dias,Context context){
@@ -25,12 +28,21 @@ public class LinhaFile {
                 Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
                 String fileString = file.ReadFile(nameFile);
                 String[] fileStringarray=fileString.split("\n");
-                horarios = new ArrayList<String>(Arrays.asList(fileStringarray));
+                texto = new ArrayList<String>(Arrays.asList(fileStringarray));
 
 
     }
 
-    public List<String> getHorarios() {
+    public List<Onibus> getHorarios() {
+
+        for(String txt : texto){
+            Onibus onibus = new Onibus();
+            onibus.setHorario(txt.split(" - ")[0]);
+            onibus.setCodigo(txt.split(" - ")[1]);
+            horarios.add(onibus);
+        }
+
+
         return horarios;
     }
 }
