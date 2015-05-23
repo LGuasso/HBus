@@ -72,12 +72,12 @@ public class ListViewAdapterLines extends ArrayAdapter<Onibus>{
 
         if(onibus.getHora()-hora==0){
             if(onibus.getMinuto()>minuto){
-                textViewUltimo.setText("Falta "+(onibus.getMinuto()-minuto)+" minuto(s)");
+                textViewUltimo.setText("Daqui "+(onibus.getMinuto()-minuto)+" minuto(s)");
                 textViewUltimo.setTextColor(context.getResources().getColor(R.color.red));
             }
         }else{
-            if(onibus.getHora()>hora){
-                textViewUltimo.setText("Falta "+(onibus.getHora()-hora)+" hora(s)");
+            if(onibus.getHora()>hora && onibus.getHora()-hora<3){
+                textViewUltimo.setText("Daqui "+(onibus.getHora()-hora)+" hora(s)");
                 textViewUltimo.setTextColor(context.getResources().getColor(R.color.green));
             }
         }

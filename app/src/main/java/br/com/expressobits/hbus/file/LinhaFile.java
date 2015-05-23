@@ -21,7 +21,7 @@ public class LinhaFile {
     ArrayList<String> texto= new ArrayList<String>();
 
 
-    public LinhaFile(String nome,boolean sentido,TipoDeDia dias,Context context){
+    public LinhaFile(String nome,String sentido,TipoDeDia dias,Context context){
 
                 ManageFile file = new ManageFile(context);
                 String nameFile = nome+"_"+sentido+"_"+dias+".dat";

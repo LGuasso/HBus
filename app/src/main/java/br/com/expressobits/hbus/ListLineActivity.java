@@ -1,21 +1,11 @@
 package br.com.expressobits.hbus;
 
-import android.annotation.SuppressLint;
-import android.app.TabActivity;
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView;
 import android.widget.TabHost;
 
 import java.util.ArrayList;
@@ -36,7 +26,7 @@ public class ListLineActivity extends ActionBarActivity {
     TabHost abas;
 
     String line;
-    boolean centro;
+    String sentido;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +57,11 @@ public class ListLineActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         line = intent.getStringExtra(MainActivity.EXTRA_LINE);
-        centro = intent.getBooleanExtra(MainActivity.EXTRA_SENTIDO,false);
-        this.setTitle((centro ? "Centro > Bairro" : "Bairro > Centro")+" - "+line);
+        sentido = intent.getStringExtra(MainActivity.EXTRA_SENTIDO).toLowerCase().replace(" > ","-");
+        this.setTitle(sentido +" - "+line);
 
         listViewUseful = (ListView)findViewById(R.id.listview_listline_line_uteis);
-        ArrayList<Onibus> listUseful = (ArrayList<Onibus>)new LinhaFile(toFileName(line),centro, TipoDeDia.UTEIS,this).getHorarios();
+        ArrayList<Onibus> listUseful = (ArrayList<Onibus>)new LinhaFile(toFileName(line), sentido, TipoDeDia.UTEIS,this).getHorarios();
         ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listUseful);
         listViewUseful.setAdapter(adapterLinesUteis);
 
@@ -83,12 +73,12 @@ public class ListLineActivity extends ActionBarActivity {
         }
 
         listViewSaturday = (ListView)findViewById(R.id.listview_listline_line_sabado);
-        ArrayList<Onibus> listSabado = (ArrayList<Onibus>)new LinhaFile(toFileName(line),centro, TipoDeDia.SABADO,this).getHorarios();
+        ArrayList<Onibus> listSabado = (ArrayList<Onibus>)new LinhaFile(toFileName(line), sentido, TipoDeDia.SABADO,this).getHorarios();
         ListViewAdapterLines adapterLinesSabado = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listSabado);
         listViewSaturday.setAdapter(adapterLinesSabado);
 
         listViewSunday = (ListView)findViewById(R.id.listview_listline_line_domingo);
-        ArrayList<Onibus> listDomingo = (ArrayList<Onibus>)new LinhaFile(toFileName(line),false, TipoDeDia.DOMINGO,this).getHorarios();
+        ArrayList<Onibus> listDomingo = (ArrayList<Onibus>)new LinhaFile(toFileName(line),sentido, TipoDeDia.DOMINGO,this).getHorarios();
         ListViewAdapterLines adapterLinesDomingo = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1,listDomingo);
         listViewSunday.setAdapter(adapterLinesDomingo);
     }
