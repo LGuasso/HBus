@@ -5,7 +5,13 @@ package br.com.expressobits.hbus.modelo;
  */
 public class Onibus {
 
+    /**
+     * Horário único desse ônibus
+     */
     String horario;
+    /**
+     * Código único desse ônibus
+     */
     String codigo;
 
 

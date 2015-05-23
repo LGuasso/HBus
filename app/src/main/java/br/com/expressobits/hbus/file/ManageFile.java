@@ -105,7 +105,7 @@ public class ManageFile {
 			// TODO Bloco catch gerado automaticamente
 			Log.e(TAG, "ERRO "+e.getMessage());
 			e.printStackTrace();
-			return "ERRO ERRO";
+			return "ERRO";
 		}            
         
         
