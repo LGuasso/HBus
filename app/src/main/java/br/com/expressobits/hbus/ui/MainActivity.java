@@ -9,19 +9,24 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.file.LinhaFile;
+import br.com.expressobits.hbus.modelo.Linha;
 
 public class MainActivity extends ActionBarActivity {
 
     public static final String EXTRA_LINE = "line_bus";
     public static final String EXTRA_SENTIDO = "line_sentido";
-    Spinner spinnerLine;
     Spinner spinnerLocal;
+    public String selectedItem;
+    ListView listViewLines;
     ArrayAdapter<CharSequence> adapter;
-    ArrayAdapter<CharSequence> adapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListLineActivity.class);
-                intent.putExtra(EXTRA_LINE, spinnerLine.getSelectedItem().toString());
+                intent.putExtra(EXTRA_LINE, selectedItem);
                 intent.putExtra(EXTRA_SENTIDO, spinnerLocal.getSelectedItem().toString());
                 startActivity(intent);
             }
@@ -72,29 +77,37 @@ public class MainActivity extends ActionBarActivity {
      * e define seleção
      */
     private void initSpinners() {
-        spinnerLine = (Spinner) findViewById(R.id.spinner_list_line);
+        //spinnerLine = (Spinner) findViewById(R.id.spinner_list_line);
+        listViewLines = (ListView) findViewById(R.id.list_lines);
+        final ArrayList<Linha> linhas = (ArrayList<Linha>) new LinhaFile("linhas",this).getLinhasList();
+        ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1, linhas);
+        listViewLines.setAdapter(adapterLinesUteis);
+
+
         spinnerLocal = (Spinner) findViewById(R.id.spinner_list_sentido);
 
-        adapter = ArrayAdapter.createFromResource(this, R.array.list_line, android.R.layout.simple_dropdown_item_1line);
+        adapter = ArrayAdapter.createFromResource(this, R.array.list_sentido, android.R.layout.simple_dropdown_item_1line);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerLine.setAdapter(adapter);
-        spinnerLine.setSelection(0);
-        spinnerLine.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //spinnerLine.setAdapter(adapter);
+        //spinnerLine.setSelection(0);
+        listViewLines.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                switch (spinnerLine.getSelectedItem().toString()) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedItem = linhas.get(position).getNome();
+                switch (selectedItem) {
 
                     case "Seletivo UFSM Bombeiros":
-                        adapter2 = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
                         break;
                     case "T Neves Campus":
-                        adapter2 = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_tneves_campus, android.R.layout.simple_dropdown_item_1line);
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_tneves_campus, android.R.layout.simple_dropdown_item_1line);
                         break;
                     case "Boi Morto":
-                        adapter2 = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_boi_morto, android.R.layout.simple_dropdown_item_1line);
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_boi_morto, android.R.layout.simple_dropdown_item_1line);
                         break;
                     case "Carolina Sao Jose":
-                        adapter2 = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_carolina_sao_jose, android.R.layout.simple_dropdown_item_1line);
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_carolina_sao_jose, android.R.layout.simple_dropdown_item_1line);
                         break;
                     case "Itarare Brigada":
                     case "Circular Cemiterio Sul":
@@ -102,29 +115,26 @@ public class MainActivity extends ActionBarActivity {
                     case "Circular Camobi":
                     case "Circular Barao":
                     case "Brigada Itarare":
-                        adapter2 = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_circular, android.R.layout.simple_dropdown_item_1line);
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_circular, android.R.layout.simple_dropdown_item_1line);
                         break;
                     case "UFSM Circular":
                     case "UFSM":
                     case "Seletivo UFSM":
-                        adapter2 = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_centro, android.R.layout.simple_dropdown_item_1line);
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_centro, android.R.layout.simple_dropdown_item_1line);
                         break;
                     case "UFSM Bombeiros":
-                        adapter2 = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
                         break;
                     default:
-                        adapter2 = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido, android.R.layout.simple_dropdown_item_1line);
+
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido, android.R.layout.simple_dropdown_item_1line);
 
                 }
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerLocal.setAdapter(adapter2);
+                spinnerLocal.setAdapter(adapter);
                 spinnerLocal.setSelection(0);
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
 
         });
 

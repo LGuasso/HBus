@@ -5,8 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TabWidget;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,7 +34,7 @@ public class ListLineActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_line);
+        setContentView(R.layout.activity_list_bus);
         initViews();
     }
 
@@ -53,7 +55,7 @@ public class ListLineActivity extends ActionBarActivity {
 
         listViewUseful = (ListView)findViewById(R.id.listview_listline_line_uteis);
         ArrayList<Onibus> listUseful = (ArrayList<Onibus>)new LinhaFile(toFileName(line), sentido, TipoDeDia.UTEIS,this).getOnibusList();
-        ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1, listUseful);
+        ListViewAdapterBus adapterLinesUteis = new ListViewAdapterBus(this,android.R.layout.simple_list_item_1, listUseful);
         listViewUseful.setAdapter(adapterLinesUteis);
 
 
@@ -66,13 +68,13 @@ public class ListLineActivity extends ActionBarActivity {
 
         listViewSaturday = (ListView)findViewById(R.id.listview_listline_line_sabado);
         ArrayList<Onibus> listSabado = (ArrayList<Onibus>)new LinhaFile(toFileName(line), sentido, TipoDeDia.SABADO,this).getOnibusList();
-        ListViewAdapterLines adapterLinesSabado = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1, listSabado);
+        ListViewAdapterBus adapterLinesSabado = new ListViewAdapterBus(this,android.R.layout.simple_list_item_1, listSabado);
         listViewSaturday.setAdapter(adapterLinesSabado);
 
 
         listViewSunday = (ListView)findViewById(R.id.listview_listline_line_domingo);
         ArrayList<Onibus> listDomingo = (ArrayList<Onibus>)new LinhaFile(toFileName(line),sentido, TipoDeDia.DOMINGO,this).getOnibusList();
-        ListViewAdapterLines adapterLinesDomingo = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1, listDomingo);
+        ListViewAdapterBus adapterLinesDomingo = new ListViewAdapterBus(this,android.R.layout.simple_list_item_1, listDomingo);
         listViewSunday.setAdapter(adapterLinesDomingo);
 
     }
@@ -92,6 +94,24 @@ public class ListLineActivity extends ActionBarActivity {
         descritor.setContent(R.id.linear_layout_domingo);
         descritor.setIndicator(getString(R.string.sunday));
         abas.addTab(descritor);
+
+        // Assim como voce mencionou
+        TabWidget tabWidget = abas.getTabWidget();
+
+        // Como o TabWidget eh um ViewGroup, ele tem filhos e podemos iterar
+        // sobre os mesmos
+        int childCount = tabWidget.getChildCount();
+
+        for(int i = 0; i < childCount; ++i) {
+            View child = tabWidget.getChildTabViewAt(i);
+            // Que eh o mesmo que
+            //View child = tabWidget.getChildAt(i);
+            // Vide o codigo fonte
+
+            // O Drawable vai variar conforme o nome do seu tema, confirme se tem
+            // algum nome parecido com esse e altere aqui
+            child.setBackgroundResource(R.drawable.tab_indicator_ab_orange);
+        }
     }
 
 
