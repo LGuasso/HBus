@@ -12,10 +12,10 @@ public class Onibus {
     /**
      * Código único desse ônibus
      */
-    String codigo;
+    Codigo codigo;
 
 
-    public void setCodigo(String codigo) {
+    public void setCodigo(Codigo codigo) {
         this.codigo = codigo;
     }
 
@@ -27,7 +27,7 @@ public class Onibus {
         return horario;
     }
 
-    public String getCodigo() {
+    public Codigo getCodigo() {
         return codigo;
     }
 

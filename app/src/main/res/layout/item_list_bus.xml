@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:id="@+id/listView_background"
-    android:padding="15dp">
+    android:padding="5dp">
 
 
 
@@ -32,7 +32,16 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/red"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="marquee"
+                android:textColorHighlight="#FFFFFF"
+                android:text="Exemplo de markeee rolando na tela com dicas, truques e muito mais!!!"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:textSize="14sp"
+                android:fadingEdge="vertical"
+                android:fadingEdgeLength="5dp"
+                android:focusable="false"/>
 
             </LinearLayout>
 
@@ -40,16 +49,27 @@
         <TextView
             android:id="@+id/item_list_textview_codigo"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textColor="@color/background_full_dark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:lines="1"
+            android:textColor="@color/black"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:background="@color/background"
+            android:textColorHighlight="#FFFFFF"
+            android:text="Exemplo de markeee rolando na tela com dicas, truques e muito mais!!!"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:textSize="14sp"
+            android:fadingEdge="horizontal"
+            android:fadingEdgeLength="5dp"
+            android:focusable="false"
+            android:singleLine="true" />
 
     </LinearLayout>
 
-    <ImageView
+    <!--ImageView
         android:id="@+id/item_list_imageview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"/ -->
 
 
 

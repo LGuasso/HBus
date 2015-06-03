@@ -79,7 +79,8 @@ public class MainActivity extends ActionBarActivity {
     private void initSpinners() {
         //spinnerLine = (Spinner) findViewById(R.id.spinner_list_line);
         listViewLines = (ListView) findViewById(R.id.list_lines);
-        final ArrayList<Linha> linhas = (ArrayList<Linha>) new LinhaFile("linhas",this).getLinhasList();
+        new LinhaFile(this).iniciarDados();
+        final ArrayList<Linha> linhas = LinhaFile.getLinhas();
         ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1, linhas);
         listViewLines.setAdapter(adapterLinesUteis);
 

@@ -54,7 +54,7 @@ public class ListLineActivity extends ActionBarActivity {
         this.setTitle(intent.getStringExtra(MainActivity.EXTRA_SENTIDO) + " - " + line);
 
         listViewUseful = (ListView)findViewById(R.id.listview_listline_line_uteis);
-        ArrayList<Onibus> listUseful = (ArrayList<Onibus>)new LinhaFile(toFileName(line), sentido, TipoDeDia.UTEIS,this).getOnibusList();
+        ArrayList<Onibus> listUseful = new LinhaFile(this).getOnibuses(toFileName(line), sentido, TipoDeDia.UTEIS);
         ListViewAdapterBus adapterLinesUteis = new ListViewAdapterBus(this,android.R.layout.simple_list_item_1, listUseful);
         listViewUseful.setAdapter(adapterLinesUteis);
 
@@ -67,13 +67,13 @@ public class ListLineActivity extends ActionBarActivity {
         }
 
         listViewSaturday = (ListView)findViewById(R.id.listview_listline_line_sabado);
-        ArrayList<Onibus> listSabado = (ArrayList<Onibus>)new LinhaFile(toFileName(line), sentido, TipoDeDia.SABADO,this).getOnibusList();
+        ArrayList<Onibus> listSabado = new LinhaFile(this).getOnibuses(toFileName(line), sentido, TipoDeDia.SABADO);
         ListViewAdapterBus adapterLinesSabado = new ListViewAdapterBus(this,android.R.layout.simple_list_item_1, listSabado);
         listViewSaturday.setAdapter(adapterLinesSabado);
 
 
         listViewSunday = (ListView)findViewById(R.id.listview_listline_line_domingo);
-        ArrayList<Onibus> listDomingo = (ArrayList<Onibus>)new LinhaFile(toFileName(line),sentido, TipoDeDia.DOMINGO,this).getOnibusList();
+        ArrayList<Onibus> listDomingo = new LinhaFile(this).getOnibuses(toFileName(line), sentido, TipoDeDia.DOMINGO);
         ListViewAdapterBus adapterLinesDomingo = new ListViewAdapterBus(this,android.R.layout.simple_list_item_1, listDomingo);
         listViewSunday.setAdapter(adapterLinesDomingo);
 
