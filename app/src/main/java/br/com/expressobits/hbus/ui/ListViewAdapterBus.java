@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -49,15 +50,16 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
         }
         TextView textView = (TextView) view.findViewById(R.id.item_list_textview);
         TextView textViewUltimo = (TextView) view.findViewById(R.id.item_list_textview_ultimo);
-        TextView textViewCodigo = (TextView) view.findViewById(R.id.item_list_textview_codigo);
+        TextView textViewDescricao = (TextView) view.findViewById(R.id.item_list_textview_codigo);
+        TextView textViewCodigo = (TextView) view.findViewById(R.id.item_list_code);
         //ImageView imageView = (ImageView) view.findViewById(R.id.item_list_imageview);
         textView.setText(onibus.getHorario());
+        textViewCodigo.setText(onibus.getCodigo().getId());
         //textViewCodigo.setText(context.getString(R.string.code_of_bus) + " " + onibus.getCodigo());
-        textViewCodigo.setText(onibus.getCodigo().getDescricao());
-        textViewCodigo.setSelected(true);
+        textViewDescricao.setText(onibus.getCodigo().getDescricao());
+        textViewDescricao.setSelected(true);
+        textViewUltimo.setSelected(true);
         textView.setTextAppearance(context, R.style.Base_TextAppearance_AppCompat_Large);
-        int hora = new GregorianCalendar().get(Calendar.HOUR_OF_DAY);
-        int minuto = new GregorianCalendar().get(Calendar.MINUTE);
         Calendar dataInicial = new GregorianCalendar();
         Calendar dataFinal = new GregorianCalendar();
         dataFinal.set(Calendar.HOUR_OF_DAY,onibus.getHora());
@@ -65,7 +67,7 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
         long horas = (dataFinal.getTimeInMillis() - dataInicial.getTimeInMillis()) / 3600000;
         long minutos = (dataFinal.getTimeInMillis() - dataInicial.getTimeInMillis() - horas*3600000) / 60000;
         String textoDoHorario = new String();
-        textoDoHorario+="Ônibus chegando apartir de ";
+        textoDoHorario+="Chegando em ";
         if(horas>=0){
             if(horas == 0){
                 if(minutos>=0){
@@ -89,7 +91,6 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
 
 
         }
-        textoDoHorario+="\nCódigo do ônibus "+onibus.getCodigo();
         textViewUltimo.setText(textoDoHorario);
         //imageView.setImageResource(android.R.drawable.ic_notification_clear_all);
         return view;

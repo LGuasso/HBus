@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity {
         listViewLines = (ListView) findViewById(R.id.list_lines);
         new LinhaFile(this).iniciarDados();
         final ArrayList<Linha> linhas = LinhaFile.getLinhas();
-        ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1, linhas);
+        final ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1, linhas);
         listViewLines.setAdapter(adapterLinesUteis);
 
 
@@ -97,7 +97,9 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedItem = linhas.get(position).getNome();
                 switch (selectedItem) {
-
+                    case "Big Rodoviaria":
+                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_centro_rodoviaria, android.R.layout.simple_dropdown_item_1line);
+                        break;
                     case "Seletivo UFSM Bombeiros":
                         adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
                         break;

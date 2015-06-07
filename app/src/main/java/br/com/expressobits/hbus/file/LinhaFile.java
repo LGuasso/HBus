@@ -106,7 +106,7 @@ public class LinhaFile {
         iniciarCodigos();
         if(onibuses.isEmpty()){
             ArrayList<String> texto = lerTexto((nome + "_" + sentido + "_" + dias));
-
+            //TODO implementar um relátorio para os arquivos que leiam e não existam horários!
             if(!texto.isEmpty() && !texto.get(0).equals("ERRO")) {
                 for (String txt : texto) {
                     Onibus onibus = new Onibus();
@@ -134,7 +134,7 @@ public class LinhaFile {
             codigo = codigos.get(id.trim());
         }else{
             codigo = new Codigo();
-            //TODO implementar texto dinamico
+            //TODO implementar texto dinamico do res
             codigo.setId("Falta ID");
             codigo.setDescricao("Não há descrição");
         }

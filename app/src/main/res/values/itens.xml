@@ -73,6 +73,11 @@
         <item>Vitoria</item>
     </array>
 
+    <array name="list_sentido_centro_rodoviaria">
+        <item name="center">Centro > Rodoviaria</item>
+        <item name="bairro">Rodoviaria > Centro</item>
+    </array>
+
     <array name="list_sentido">
         <item name="center">Centro > Bairro</item>
         <item name="bairro">Bairro > Centro</item>

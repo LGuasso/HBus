@@ -12,8 +12,6 @@
     <string name="useful">Useful days</string>
     <string name="sunday">Sunday</string>
     <string name="code_of_bus">Code of bus</string>
-
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="no_have_bus">No have bus</string>
 </resources>
