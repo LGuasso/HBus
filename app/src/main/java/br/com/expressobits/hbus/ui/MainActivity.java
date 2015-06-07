@@ -148,7 +148,7 @@ public class MainActivity extends ActionBarActivity {
      */
     private void initActionBar() {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_foreground);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 }

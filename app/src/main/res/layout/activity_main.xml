@@ -41,7 +41,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/button_main_look_line"
             android:text="@string/look_line"
+            android:padding="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:background="@color/background_dark"/>
 
     </LinearLayout>
 </LinearLayout>

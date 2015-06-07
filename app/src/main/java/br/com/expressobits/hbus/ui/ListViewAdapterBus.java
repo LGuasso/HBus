@@ -48,18 +48,17 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
         if(position%2==0) {
             //layout.setBackgroundColor(context.getResources().getColor(R.color.orange_ultralight));
         }
-        TextView textView = (TextView) view.findViewById(R.id.item_list_textview);
-        TextView textViewUltimo = (TextView) view.findViewById(R.id.item_list_textview_ultimo);
-        TextView textViewDescricao = (TextView) view.findViewById(R.id.item_list_textview_codigo);
-        TextView textViewCodigo = (TextView) view.findViewById(R.id.item_list_code);
+        TextView textViewHorario = (TextView) view.findViewById(R.id.item_list_textview_horario);
+        TextView textViewTempoFaltando = (TextView) view.findViewById(R.id.item_list_textview_tempo_faltando);
+        TextView textViewDescricaoCodigo = (TextView) view.findViewById(R.id.item_list_textview_descricao_do_codigo);
+        TextView textViewCodigo = (TextView) view.findViewById(R.id.item_list_textview_codigo);
         //ImageView imageView = (ImageView) view.findViewById(R.id.item_list_imageview);
-        textView.setText(onibus.getHorario());
+        textViewHorario.setText(onibus.getHorario());
         textViewCodigo.setText(onibus.getCodigo().getId());
         //textViewCodigo.setText(context.getString(R.string.code_of_bus) + " " + onibus.getCodigo());
-        textViewDescricao.setText(onibus.getCodigo().getDescricao());
-        textViewDescricao.setSelected(true);
-        textViewUltimo.setSelected(true);
-        textView.setTextAppearance(context, R.style.Base_TextAppearance_AppCompat_Large);
+        textViewDescricaoCodigo.setText(onibus.getCodigo().getDescricao());
+        textViewDescricaoCodigo.setSelected(true);
+        textViewTempoFaltando.setSelected(true);
         Calendar dataInicial = new GregorianCalendar();
         Calendar dataFinal = new GregorianCalendar();
         dataFinal.set(Calendar.HOUR_OF_DAY,onibus.getHora());
@@ -67,31 +66,31 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
         long horas = (dataFinal.getTimeInMillis() - dataInicial.getTimeInMillis()) / 3600000;
         long minutos = (dataFinal.getTimeInMillis() - dataInicial.getTimeInMillis() - horas*3600000) / 60000;
         String textoDoHorario = new String();
-        textoDoHorario+="Chegando em ";
+        textoDoHorario+="Em ";
         if(horas>=0){
             if(horas == 0){
                 if(minutos>=0){
                     textoDoHorario+=minutos+" minuto(s)";
-                    textViewUltimo.setTextColor(context.getResources().getColor(R.color.red));
+                    textViewTempoFaltando.setTextColor(context.getResources().getColor(R.color.red));
                 }else{
                     horas+=24;
                     textoDoHorario+=horas+" hora(s)";
-                    textViewUltimo.setTextColor(context.getResources().getColor(R.color.black));
+                    textViewTempoFaltando.setTextColor(context.getResources().getColor(R.color.black));
                 }
 
             }else{
                 textoDoHorario+=horas+" hora(s)";
-                textViewUltimo.setTextColor(context.getResources().getColor(R.color.green));
+                textViewTempoFaltando.setTextColor(context.getResources().getColor(R.color.green));
             }
 
         }else{
                 horas+=24;
                 textoDoHorario+=horas+" hora(s)";
-                textViewUltimo.setTextColor(context.getResources().getColor(R.color.black));
+                textViewTempoFaltando.setTextColor(context.getResources().getColor(R.color.black));
 
 
         }
-        textViewUltimo.setText(textoDoHorario);
+        textViewTempoFaltando.setText(textoDoHorario);
         //imageView.setImageResource(android.R.drawable.ic_notification_clear_all);
         return view;
     }
