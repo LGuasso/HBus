@@ -1,37 +1,37 @@
 package br.com.expressobits.hbus.ui;
 
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.modelo.Linha;
+import br.com.expressobits.hbus.modelo.Onibus;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity implements LinhasFragment.OnSettingsListener {
 
-    public static final String EXTRA_LINE = "line_bus";
-    public static final String EXTRA_SENTIDO = "line_sentido";
-    Spinner spinnerLocal;
-    public String selectedItem;
-    ListView listViewLines;
-    ArrayAdapter<CharSequence> adapter;
+    //Gerencia a atuação dos fragments
+    FragmentManager fm = getSupportFragmentManager();
+    int lastPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        if(savedInstanceState == null){
+            LinhasFragment linhasFragment = new LinhasFragment();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.linear_layout_main,linhasFragment,"linhasFragment");
+            ft.commit();
+        }
+
         initViews();
     }
 
@@ -51,104 +51,63 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_LONG).show();
         }
-
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     private void initViews() {
         initActionBar();
-        initSpinners();
-
-        Button button = (Button) findViewById(R.id.button_main_look_line);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListLineActivity.class);
-                intent.putExtra(EXTRA_LINE, selectedItem);
-                intent.putExtra(EXTRA_SENTIDO, spinnerLocal.getSelectedItem().toString());
-                startActivity(intent);
-            }
-        });
-    }
-
-    /**
-     * Iniciando os spinners.
-     * Cria spinners e define arrayAdapters
-     * e define seleção
-     */
-    private void initSpinners() {
-        //spinnerLine = (Spinner) findViewById(R.id.spinner_list_line);
-        listViewLines = (ListView) findViewById(R.id.list_lines);
-        new LinhaFile(this).iniciarDados();
-        final ArrayList<Linha> linhas = LinhaFile.getLinhas();
-        final ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this,android.R.layout.simple_list_item_1, linhas);
-        listViewLines.setAdapter(adapterLinesUteis);
-
-
-        spinnerLocal = (Spinner) findViewById(R.id.spinner_list_sentido);
-
-        adapter = ArrayAdapter.createFromResource(this, R.array.list_sentido, android.R.layout.simple_dropdown_item_1line);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        //spinnerLine.setAdapter(adapter);
-        //spinnerLine.setSelection(0);
-        listViewLines.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedItem = linhas.get(position).getNome();
-                switch (selectedItem) {
-                    case "Big Rodoviaria":
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_centro_rodoviaria, android.R.layout.simple_dropdown_item_1line);
-                        break;
-                    case "Seletivo UFSM Bombeiros":
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
-                        break;
-                    case "T Neves Campus":
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_tneves_campus, android.R.layout.simple_dropdown_item_1line);
-                        break;
-                    case "Boi Morto":
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_boi_morto, android.R.layout.simple_dropdown_item_1line);
-                        break;
-                    case "Carolina Sao Jose":
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_carolina_sao_jose, android.R.layout.simple_dropdown_item_1line);
-                        break;
-                    case "Itarare Brigada":
-                    case "Circular Cemiterio Sul":
-                    case "Circular Cemiterio Norte":
-                    case "Circular Camobi":
-                    case "Circular Barao":
-                    case "Brigada Itarare":
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_circular, android.R.layout.simple_dropdown_item_1line);
-                        break;
-                    case "UFSM Circular":
-                    case "UFSM":
-                    case "Seletivo UFSM":
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_centro, android.R.layout.simple_dropdown_item_1line);
-                        break;
-                    case "UFSM Bombeiros":
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
-                        break;
-                    default:
-
-                        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.list_sentido, android.R.layout.simple_dropdown_item_1line);
-
-                }
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerLocal.setAdapter(adapter);
-                spinnerLocal.setSelection(0);
-            }
-
-
-        });
-
     }
 
     /**
      * Iniciando o actionbar
+     * <ul>
+     *     <li>Coloca uma imagem</li>
+     *     <li>Mostra este logo como botão de HOME</li>
+     * </ul>
      */
     private void initActionBar() {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_foreground);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+    }
+
+    /**
+     * Gerencia forma dos {@link android.support.v4.app.Fragment}
+     */
+    public void addOnibusFragment(){
+        FragmentTransaction ft = fm.beginTransaction();
+        OnibusFragment onibusFragment = (OnibusFragment)fm.findFragmentByTag("onibusFragment");
+        if(onibusFragment == null){
+            onibusFragment = new OnibusFragment();
+        }
+        ft.replace(R.id.linear_layout_main,onibusFragment,"onibusFragment");
+        ft.addToBackStack("pilha");
+        ft.commit();
+        lastPosition = 1;
+    }
+
+    @Override
+    public void OnSettingsDone(String linha, String sentido) {
+        FragmentTransaction ft = fm.beginTransaction();
+        OnibusFragment onibusFragment = (OnibusFragment)fm.findFragmentByTag("onibusFragment");
+        if(onibusFragment != null){
+            onibusFragment.refresh(linha, sentido);
+        }else{
+            onibusFragment = new OnibusFragment();
+            Bundle args = new Bundle();
+            args.putString(OnibusFragment.ARGS_LINHA,linha);
+            args.putString(OnibusFragment.ARGS_SENTIDO,sentido);
+            onibusFragment.setArguments(args);
+            // Cria um fragment e passa para ele como parâmetro as configurações selecionadas
+            FragmentTransaction ft2 = fm.beginTransaction();
+            // Troca o que quer que tenha na view do fragment_container por este fragment,
+            // e adiciona a transação novamente na pilha de navegação
+            ft2.replace(R.id.linear_layout_main, onibusFragment, "onibusFragment");
+            ft2.addToBackStack("pilha");
+            // Finaliza a transção com sucesso
+            ft2.commit();
+            lastPosition = 1;
+
+        }
     }
 }

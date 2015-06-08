@@ -5,6 +5,7 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
+
     <LinearLayout
         android:id="@+id/linear_layout_main"
         android:layout_width="match_parent"

@@ -56,6 +56,8 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
         textViewHorario.setText(onibus.getHorario());
         textViewCodigo.setText(onibus.getCodigo().getId());
         //textViewCodigo.setText(context.getString(R.string.code_of_bus) + " " + onibus.getCodigo());
+        // TODO Arrumar codigos que contem caracteres diferentes
+        // TODO Separar a descrição por diferents Strings para poder trabalhar
         textViewDescricaoCodigo.setText(onibus.getCodigo().getDescricao());
         textViewDescricaoCodigo.setSelected(true);
         textViewTempoFaltando.setSelected(true);
