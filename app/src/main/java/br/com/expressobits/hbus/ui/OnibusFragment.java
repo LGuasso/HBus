@@ -42,7 +42,10 @@ public class OnibusFragment extends Fragment{
         initViews(view);
 
         Bundle arguments = getArguments();
-        refresh(arguments.getString(ARGS_LINHA),arguments.getString(ARGS_SENTIDO));
+        if(arguments!=null && arguments.getString(ARGS_LINHA)!=null && arguments.getString(ARGS_SENTIDO)!=null){
+            refresh(arguments.getString(ARGS_LINHA),arguments.getString(ARGS_SENTIDO));
+        }
+
         return view;
     }
 
@@ -52,11 +55,6 @@ public class OnibusFragment extends Fragment{
     }
 
     private void initListViews(View view) {
-        //TODO implementar leitura de fragment params
-        //Intent intent = getIntent();
-        //line = intent.getStringExtra(MainActivity.EXTRA_LINE);
-        //sentido = intent.getStringExtra(MainActivity.EXTRA_SENTIDO).toLowerCase().replace(" > ","-").replace(" ", "");
-        //this.setTitle(intent.getStringExtra(MainActivity.EXTRA_SENTIDO) + " - " + line);
 
         listViewUseful = (ListView)view.findViewById(R.id.listview_listline_line_uteis);
 
@@ -141,5 +139,7 @@ public class OnibusFragment extends Fragment{
             return ok;
         }
     }
+
+
 
 }

@@ -1,9 +1,11 @@
 package br.com.expressobits.hbus.ui;
 
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -12,24 +14,35 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.modelo.Linha;
 import br.com.expressobits.hbus.modelo.Onibus;
 
-public class MainActivity extends AppCompatActivity implements LinhasFragment.OnSettingsListener {
+public class MainActivity extends AppCompatActivity implements OnSettingsListener {
+
+    public static final String TAG = "Atividade Principal";
 
     //Gerencia a atuação dos fragments
     FragmentManager fm = getSupportFragmentManager();
     int lastPosition = 0;
+    String linha;
+    String sentido;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         if(savedInstanceState == null){
+
             LinhasFragment linhasFragment = new LinhasFragment();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.linear_layout_main,linhasFragment,"linhasFragment");
-            ft.commit();
+            if(findViewById(R.id.framelayout_main)!=null){
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.add(R.id.framelayout_main,linhasFragment,"linhasFragment");
+                ft.commit();
+            }else if(findViewById(R.id.framelayout_content)!=null){
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.add(R.id.framelayout_menu,linhasFragment,"linhasFragment");
+                ft.add(R.id.framelayout_content,new OnibusFragment(),"onibusFragment");
+                ft.commit();
+            }
+
         }
 
         initViews();
@@ -80,34 +93,75 @@ public class MainActivity extends AppCompatActivity implements LinhasFragment.On
         if(onibusFragment == null){
             onibusFragment = new OnibusFragment();
         }
-        ft.replace(R.id.linear_layout_main,onibusFragment,"onibusFragment");
+        ft.replace(R.id.framelayout_main,onibusFragment,"onibusFragment");
         ft.addToBackStack("pilha");
         ft.commit();
         lastPosition = 1;
     }
 
     @Override
-    public void OnSettingsDone(String linha, String sentido) {
-        FragmentTransaction ft = fm.beginTransaction();
-        OnibusFragment onibusFragment = (OnibusFragment)fm.findFragmentByTag("onibusFragment");
-        if(onibusFragment != null){
-            onibusFragment.refresh(linha, sentido);
-        }else{
-            onibusFragment = new OnibusFragment();
-            Bundle args = new Bundle();
-            args.putString(OnibusFragment.ARGS_LINHA,linha);
-            args.putString(OnibusFragment.ARGS_SENTIDO,sentido);
-            onibusFragment.setArguments(args);
-            // Cria um fragment e passa para ele como parâmetro as configurações selecionadas
-            FragmentTransaction ft2 = fm.beginTransaction();
-            // Troca o que quer que tenha na view do fragment_container por este fragment,
-            // e adiciona a transação novamente na pilha de navegação
-            ft2.replace(R.id.linear_layout_main, onibusFragment, "onibusFragment");
-            ft2.addToBackStack("pilha");
-            // Finaliza a transção com sucesso
-            ft2.commit();
-            lastPosition = 1;
+    public void onSettingsDone(String linha, String sentido) {
 
+        this.linha = linha;
+        this.sentido = sentido;
+
+        getSupportActionBar().setTitle(linha);
+        getSupportActionBar().setSubtitle(sentido);
+
+        FragmentTransaction ft = fm.beginTransaction();
+
+        /** Se for acessodado de um smartphone o espaço main existirá */
+        /** Adiciona o fragment com o novo conteúdo no único espaço */
+        OnibusFragment onibusFragment = (OnibusFragment)fm.findFragmentByTag("onibusFragment");
+
+        if(findViewById(R.id.framelayout_main)!=null){
+
+            if(onibusFragment != null){
+                onibusFragment.refresh(linha, sentido);
+            }else{
+                onibusFragment = new OnibusFragment();
+                Bundle args = new Bundle();
+                args.putString(OnibusFragment.ARGS_LINHA,linha);
+                args.putString(OnibusFragment.ARGS_SENTIDO, sentido);
+                onibusFragment.setArguments(args);
+                // Troca o que quer que tenha na view do fragment_container por este fragment,
+                // e adiciona a transação novamente na pilha de navegação
+                ft.replace(R.id.framelayout_main, onibusFragment, "onibusFragment");
+                ft.addToBackStack("pilha");
+                lastPosition = 1;
+
+            }
+
+        }else if(findViewById(R.id.framelayout_content)!=null){
+            if(onibusFragment != null){
+                onibusFragment.refresh(linha, sentido);
+            }else{
+                onibusFragment = new OnibusFragment();
+                Bundle args = new Bundle();
+                args.putString(OnibusFragment.ARGS_LINHA,linha);
+                args.putString(OnibusFragment.ARGS_SENTIDO, sentido);
+                onibusFragment.setArguments(args);
+                // Troca o que quer que tenha na view do fragment_container por este fragment,
+                // e adiciona a transação novamente na pilha de navegação
+                ft.replace(R.id.framelayout_content, onibusFragment, "onibusFragment");
+                lastPosition = 1;
+            }
         }
+
+        // Finaliza a transção com sucesso
+        ft.commit();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putString(OnibusFragment.ARGS_LINHA,linha);
+        outState.putString(OnibusFragment.ARGS_SENTIDO,sentido);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    public void setActionBarTitle(String title,String subtitle){
+        getSupportActionBar().setTitle(title);
+        getSupportActionBar().setSubtitle(subtitle);
+    }
+
 }

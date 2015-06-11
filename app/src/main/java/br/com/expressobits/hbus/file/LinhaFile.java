@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.modelo.Codigo;
 import br.com.expressobits.hbus.modelo.Linha;
 import br.com.expressobits.hbus.modelo.Onibus;
@@ -52,7 +53,9 @@ public class LinhaFile {
         String nameFile = nome+".dat";
         String fileString = file.ReadFile(nameFile);
         String[] fileStringarray=fileString.split("\n");
-        Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
+        if(BuildConfig.DEBUG){
+            Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
+        }
         Log.d(TAG, "Read file " + nameFile);
         return new ArrayList<>(Arrays.asList(fileStringarray));
     }

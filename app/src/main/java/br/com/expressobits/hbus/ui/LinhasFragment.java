@@ -36,11 +36,6 @@ public class LinhasFragment extends Fragment {
 
     OnSettingsListener mCallback;
 
-    // A Activity que contém o fragment deve implementar esta interface
-    public interface OnSettingsListener {
-        public void OnSettingsDone(String linha,String sentido);
-    }
-
     int lastPosition = 0;
 
     public LinhasFragment() {
@@ -58,8 +53,15 @@ public class LinhasFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " precisa implementar OnSettingsListener");
         }
+
+
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).setActionBarTitle(getResources().getString(R.string.app_name), "");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,8 +85,7 @@ public class LinhasFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO implementar troca de listas no fragemnt de horarios
-                mCallback.OnSettingsDone(selectedItem, spinnerSentido.getSelectedItem().toString());
+                mCallback.onSettingsDone(selectedItem, spinnerSentido.getSelectedItem().toString());
                 //((MainActivity)LinhasFragment.this.getActivity()).addOnibusFragment();
             }
         });
