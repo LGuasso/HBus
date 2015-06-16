@@ -7,6 +7,7 @@ import android.util.Log;
  * Define lista dos tipos de dia das linhas
  */
 public enum TipoDeDia {
+
     /**
      * Dias úteis - Segunda á sexta
      */
@@ -28,4 +29,5 @@ public enum TipoDeDia {
                 return "ERRO";
         }
     }
+
 }

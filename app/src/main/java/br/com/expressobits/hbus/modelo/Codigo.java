@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Created by Rafael on 02/06/2015.
  */
-public class Codigo {
+public class Codigo{
     private String id;
     private String descricao;
 

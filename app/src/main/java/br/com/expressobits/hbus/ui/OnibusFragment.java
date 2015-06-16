@@ -11,11 +11,14 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.GregorianCalendar;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.modelo.Onibus;
 import br.com.expressobits.hbus.modelo.TipoDeDia;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +57,12 @@ public class OnibusFragment extends Fragment{
         initListViews(view);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        abas.setCurrentTab(TimeUtils.getTipoDeDia(GregorianCalendar.getInstance()));
+    }
+
     private void initListViews(View view) {
 
         listViewUseful = (ListView)view.findViewById(R.id.listview_listline_line_uteis);
@@ -67,8 +76,6 @@ public class OnibusFragment extends Fragment{
         abas = (TabHost) view.findViewById(R.id.tabhost);
         abas.setup();
 
-        //TODO Definir pelo dia retornado
-        abas.setCurrentTab(0);
 
         TabHost.TabSpec descritor = abas.newTabSpec("tag1");
         descritor.setContent(R.id.linear_layout_uteis);
@@ -108,14 +115,17 @@ public class OnibusFragment extends Fragment{
         linha = toSimpleName(linha);
         sentido = toSimpleName(sentido);
         ArrayList<Onibus> listUseful = new LinhaFile(this.getActivity()).getOnibuses(linha, sentido, TipoDeDia.UTEIS);
+        Collections.sort(listUseful);
         ListViewAdapterBus adapterLinesUteis = new ListViewAdapterBus(this.getActivity(),android.R.layout.simple_list_item_1, listUseful);
         listViewUseful.setAdapter(adapterLinesUteis);
 
         ArrayList<Onibus> listSabado = new LinhaFile(this.getActivity()).getOnibuses(linha, sentido, TipoDeDia.SABADO);
+        Collections.sort(listSabado);
         ListViewAdapterBus adapterLinesSabado = new ListViewAdapterBus(this.getActivity(),android.R.layout.simple_list_item_1, listSabado);
         listViewSaturday.setAdapter(adapterLinesSabado);
 
         ArrayList<Onibus> listDomingo = new LinhaFile(this.getActivity()).getOnibuses(linha, sentido, TipoDeDia.DOMINGO);
+        Collections.sort(listDomingo);
         ListViewAdapterBus adapterLinesDomingo = new ListViewAdapterBus(this.getActivity(),android.R.layout.simple_list_item_1, listDomingo);
         listViewSunday.setAdapter(adapterLinesDomingo);
     }

@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     public void setActionBarTitle(String title,String subtitle){
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setSubtitle(subtitle);
+        Log.i(TAG,"Trocando o título da action bar para "+title+" ,trocando o subtítulo para "+subtitle);
     }
 
 }

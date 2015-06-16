@@ -20,9 +20,9 @@ public class Linha {
      */
     private TipoDeDia dia;
 
-    private ArrayList<String> tipos;
+    private ArrayList<String> codigos;
 
-    ArrayList<String> horarios;
+    ArrayList<Onibus> onibuses;
 
     public String getNome() {
         return nome;
@@ -48,11 +48,11 @@ public class Linha {
         this.dia = dia;
     }
 
-    public ArrayList<String> getTipos(){
-        return tipos;
+    public ArrayList<String> getCodigos(){
+        return codigos;
     }
 
-    public void setTipos(ArrayList<String> tipos) {
-        this.tipos = tipos;
+    public void setCodigos(ArrayList<String> codigos) {
+        this.codigos = codigos;
     }
 }

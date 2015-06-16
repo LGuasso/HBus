@@ -13,6 +13,7 @@ import br.com.expressobits.hbus.modelo.Codigo;
 import br.com.expressobits.hbus.modelo.Linha;
 import br.com.expressobits.hbus.modelo.Onibus;
 import br.com.expressobits.hbus.modelo.TipoDeDia;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * Created by Rafael on 20/05/2015.
@@ -24,9 +25,7 @@ public class LinhaFile {
     public static String TAG = "LinhaFile";
     public static final String LINHAFILE = "linhas";
     public static final String CODIGOFILE = "codigos";
-
     private static ArrayList<Linha> linhas = new ArrayList<>();
-    //private static ArrayList<Codigo> codigos = new ArrayList<>();
     private static HashMap<String,Codigo> codigos = new HashMap<>();
     private ArrayList<Onibus> onibuses = new ArrayList<>();
     private static Context context;
@@ -71,7 +70,7 @@ public class LinhaFile {
             for (String txt : texto) {
                 Linha linha = new Linha();
                 linha.setNome(txt.split(" - ")[0]);
-                linha.setTipos(new ArrayList<>(Arrays.asList(txt.split(" - ")[1].split(":"))));
+                linha.setCodigos(new ArrayList<>(Arrays.asList(txt.split(" - ")[1].split(":"))));
                 linhas.add(linha);
             }
         }
@@ -110,17 +109,20 @@ public class LinhaFile {
         if(onibuses.isEmpty()){
             ArrayList<String> texto = lerTexto((nome + "_" + sentido + "_" + dias));
             //TODO implementar um relátorio para os arquivos que leiam e não existam horários!
-            if(!texto.isEmpty() && !texto.get(0).equals("ERRO")) {
-                for (String txt : texto) {
-                    Onibus onibus = new Onibus();
-                    onibus.setHorario(txt.split(" - ")[0]);
-                    onibus.setCodigo(getCodigoId(txt.split(" - ")[1]));
-                    onibuses.add(onibus);
+            if(texto.size()>1){
+                if(!texto.get(0).equals("ERRO")) {
+                    for (String txt : texto) {
+                        Onibus onibus = new Onibus();
+                        onibus.setTime(TimeUtils.stringToTimeCalendar(txt.split(" - ")[0]));
+                        onibus.setCodigo(getCodigoId(txt.split(" - ")[1]));
+                        onibuses.add(onibus);
+                    }
                 }
             }
 
+
         }else{
-            throw new RuntimeException("ERRO onibuses not empty");
+            //throw new RuntimeException("ERRO onibuses not empty");
         }
 
     }

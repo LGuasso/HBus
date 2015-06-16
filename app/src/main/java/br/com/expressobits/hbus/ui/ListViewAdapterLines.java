@@ -41,7 +41,7 @@ public class ListViewAdapterLines extends ArrayAdapter<Linha> {
         TextView textView = (TextView) view.findViewById(R.id.item_list_textview_line);
         TextView textViewTipo = (TextView) view.findViewById(R.id.item_list_textview_line_type);
         textView.setText(linha.getNome());
-        textViewTipo.setText(linha.getTipos().toString());
+        textViewTipo.setText(linha.getCodigos().toString());
         return view;
     }
 }

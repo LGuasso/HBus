@@ -17,6 +17,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.modelo.Onibus;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * Created by Rafael on 03/05/2015.
@@ -53,7 +54,7 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
         TextView textViewDescricaoCodigo = (TextView) view.findViewById(R.id.item_list_textview_descricao_do_codigo);
         TextView textViewCodigo = (TextView) view.findViewById(R.id.item_list_textview_codigo);
         //ImageView imageView = (ImageView) view.findViewById(R.id.item_list_imageview);
-        textViewHorario.setText(onibus.getHorario());
+        textViewHorario.setText(TimeUtils.calendarToTimeString(onibus.getTime()));
         textViewCodigo.setText(onibus.getCodigo().getId());
         //textViewCodigo.setText(context.getString(R.string.code_of_bus) + " " + onibus.getCodigo());
         // TODO Arrumar codigos que contem caracteres diferentes
@@ -62,9 +63,7 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
         textViewDescricaoCodigo.setSelected(true);
         textViewTempoFaltando.setSelected(true);
         Calendar dataInicial = new GregorianCalendar();
-        Calendar dataFinal = new GregorianCalendar();
-        dataFinal.set(Calendar.HOUR_OF_DAY,onibus.getHora());
-        dataFinal.set(Calendar.MINUTE,onibus.getMinuto());
+        Calendar dataFinal = onibus.getTime();
         long horas = (dataFinal.getTimeInMillis() - dataInicial.getTimeInMillis()) / 3600000;
         long minutos = (dataFinal.getTimeInMillis() - dataInicial.getTimeInMillis() - horas*3600000) / 60000;
         String textoDoHorario = new String();

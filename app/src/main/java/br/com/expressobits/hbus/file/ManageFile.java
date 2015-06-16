@@ -20,7 +20,7 @@ import android.widget.Toast;
  * @author Romar Consultoria
  *
  */
-public class ManageFile {
+class ManageFile {
     private static final String TAG = "ManageFile";
     private Context context;
     
@@ -105,7 +105,7 @@ public class ManageFile {
 			// TODO Bloco catch gerado automaticamente
 			Log.e(TAG, "ERRO "+e.getMessage());
 			e.printStackTrace();
-			return "ERRO";
+			return null;
 		}            
         
         
