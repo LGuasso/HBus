@@ -23,6 +23,8 @@ public class Onibus implements Comparable<Onibus>{
      */
     private Codigo codigo;
 
+    private boolean tomorrow;
+
     public void setTime(Calendar horario) {
         this.time = horario;
     }
@@ -37,6 +39,14 @@ public class Onibus implements Comparable<Onibus>{
 
     public Codigo getCodigo() {
         return codigo;
+    }
+
+    public boolean isTomorrow(){
+        return this.tomorrow;
+    }
+
+    public void setTomorrow(boolean tomorrow){
+        this.tomorrow = tomorrow;
     }
 
     @Override
@@ -54,12 +64,13 @@ public class Onibus implements Comparable<Onibus>{
         c2.set(Calendar.DAY_OF_MONTH,GregorianCalendar.getInstance().get(Calendar.DAY_OF_MONTH));
 
 
-        if(now.after(c1)){
+        if(now.get(Calendar.HOUR_OF_DAY)>c1.get(Calendar.HOUR_OF_DAY)){
             Log.d(TAG, "now vem depois de c1");
             c1.add(Calendar.DAY_OF_MONTH, +1);
+            setTomorrow(true);
         }
 
-        if(now.after(c2)){
+        if(now.get(Calendar.HOUR_OF_DAY)>c2.get(Calendar.HOUR_OF_DAY)){
             Log.d(TAG, "now vem depois de c2");
             c2.add(Calendar.DAY_OF_MONTH,+1);
         }

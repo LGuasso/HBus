@@ -45,10 +45,11 @@ public class ListViewAdapterBus extends ArrayAdapter<Onibus>{
         View view = inflater.inflate(R.layout.item_list_bus,null);
 
         //Iniciando o laoyout e views
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.listView_background);
-        if(position%2==0) {
-            //layout.setBackgroundColor(context.getResources().getColor(R.color.orange_ultralight));
+        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linear_layout_list_bus_square);
+        if(onibus.isTomorrow()) {
+            linearLayout.setBackgroundColor(context.getResources().getColor(R.color.color_light));
         }
+
         TextView textViewHorario = (TextView) view.findViewById(R.id.item_list_textview_horario);
         TextView textViewTempoFaltando = (TextView) view.findViewById(R.id.item_list_textview_tempo_faltando);
         TextView textViewDescricaoCodigo = (TextView) view.findViewById(R.id.item_list_textview_descricao_do_codigo);

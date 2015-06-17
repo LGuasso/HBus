@@ -107,7 +107,7 @@ public class OnibusFragment extends Fragment{
 
             // O Drawable vai variar conforme o nome do seu tema, confirme se tem
             // algum nome parecido com esse e altere aqui
-            child.setBackgroundResource(R.drawable.tab_indicator_ab_orange);
+            //child.setBackgroundResource(R.drawable.tab_indicator_ab_orange);
         }
     }
 
@@ -134,7 +134,6 @@ public class OnibusFragment extends Fragment{
      * Retorna nome sem espaço sem acentos e sem maiusculas.
      * @param name
      * @return
-     * TODO ver o null deste método
      */
     private String toSimpleName(String name){
         if(name == null){

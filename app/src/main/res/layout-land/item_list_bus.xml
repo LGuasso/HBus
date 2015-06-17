@@ -9,10 +9,11 @@
 
     <!-- Primeiro layout com quadrado que tem as horas-->
     <LinearLayout
+        android:id="@+id/linear_layout_list_bus_square"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/background">
+        android:background="@color/color_default">
 
         <!-- TODO implementar diferentes cores -->
         <!-- Texto que exibe horário do ônibus -->

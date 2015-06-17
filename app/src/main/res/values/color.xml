@@ -10,4 +10,22 @@
     <color name="red">#f00</color>
     <color name="green">#090</color>
     <color name="text_color">#000000</color>
+
+    <!-- Cor primaria do aplicativo  255 152 00-->
+    <color name="color_default">#FFC107</color>
+    <color name="color_light">#FFECB3</color>
+    <color name="color_dark">#FFA000</color>
+
+    <!-- Cor secundaria(acento) do aplicativo  255 152 00-->
+    <!-- 100 -->
+    <color name="accent_color_default">#536DFE</color>
+    <!-- 200 -->
+    <color name="accent_color_light">#8C9EFF</color>
+    <!-- 400 -->
+    <color name="accent_color_dark">#3D5AFE</color>
+    <!-- 700 -->
+    <color name="accent_color_ultra_dark">#304FFE</color>
+
+
+
 </resources>
