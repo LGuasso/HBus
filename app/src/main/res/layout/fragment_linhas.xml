@@ -21,27 +21,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Choose_the_local"
-            android:textAlignment="center"/>
-
-        <Spinner
-            android:id="@+id/spinner_list_sentido"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/list_sentido"
-            android:textAlignment="center"
-            />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_main_look_line"
-            android:text="@string/look_line"
-            android:layout_margin="10dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
     </LinearLayout>
 </LinearLayout>

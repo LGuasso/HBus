@@ -10,6 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.modelo.Linha;
 import br.com.expressobits.hbus.modelo.Onibus;
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     private void initViews() {
         initActionBar();
+        initAdView();
     }
 
     /**
@@ -162,7 +166,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     public void setActionBarTitle(String title,String subtitle){
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setSubtitle(subtitle);
-        Log.i(TAG,"Trocando o título da action bar para "+title+" ,trocando o subtítulo para "+subtitle);
+        Log.i(TAG, "Trocando o título da action bar para " + title + " ,trocando o subtítulo para " + subtitle);
+    }
+
+    public void initAdView(){
+        AdView mAdView = (AdView) findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
 }

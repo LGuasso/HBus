@@ -2,38 +2,40 @@ package br.com.expressobits.hbus.ui;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.modelo.Linha;
+import br.com.expressobits.hbus.utils.Popup;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LinhasFragment extends Fragment {
+public class LinhasFragment extends Fragment{
 
-
-    public static final String EXTRA_LINE = "line_bus";
-    public static final String EXTRA_SENTIDO = "line_sentido";
-    Spinner spinnerSentido;
     public String selectedItem;
     ListView listViewLines;
     private ArrayList<Linha> linhas;
-    ArrayAdapter<CharSequence> adapter;
-
-
     OnSettingsListener mCallback;
 
     int lastPosition = 0;
@@ -53,7 +55,6 @@ public class LinhasFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " precisa implementar OnSettingsListener");
         }
-
 
     }
 
@@ -75,33 +76,9 @@ public class LinhasFragment extends Fragment {
     }
 
     private void initViews(View view){
-        initButtons(view);
-        initSpinners(view);
         initListViews(view);
     }
 
-    private void initButtons(View view) {
-        Button button = (Button) view.findViewById(R.id.button_main_look_line);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onSettingsDone(selectedItem, spinnerSentido.getSelectedItem().toString());
-                //((MainActivity)LinhasFragment.this.getActivity()).addOnibusFragment();
-            }
-        });
-    }
-
-
-    /**
-     * Iniciando os spinners.
-     * Cria spinners e define arrayAdapters
-     * e define seleção
-     */
-    private void initSpinners(View view) {
-        spinnerSentido = (Spinner) view.findViewById(R.id.spinner_list_sentido);
-        adapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.list_sentido, android.R.layout.simple_dropdown_item_1line);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-    }
 
     private void initListViews(View view){
         listViewLines = (ListView) view.findViewById(R.id.list_lines);
@@ -117,19 +94,20 @@ public class LinhasFragment extends Fragment {
                 selectedItem = linhas.get(position).getNome();
                 switch (selectedItem) {
                     case "Big Rodoviaria":
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido_centro_rodoviaria, android.R.layout.simple_dropdown_item_1line);
+                        Popup.showPopUp(mCallback,view,selectedItem,Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_big_rodoviaria)));
                         break;
                     case "Seletivo UFSM Bombeiros":
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
+                        Popup.showPopUp(mCallback,view,selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_ufsm_bombeiros)));
                         break;
                     case "T Neves Campus":
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido_tneves_campus, android.R.layout.simple_dropdown_item_1line);
+                        Popup.showPopUp(mCallback,view,selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_tneves_campus)));
+
                         break;
                     case "Boi Morto":
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido_boi_morto, android.R.layout.simple_dropdown_item_1line);
+                        Popup.showPopUp(mCallback,view,selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_boi_morto)));
                         break;
                     case "Carolina Sao Jose":
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido_carolina_sao_jose, android.R.layout.simple_dropdown_item_1line);
+                        Popup.showPopUp(mCallback,view,selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_carolina_sao_jose)));
                         break;
                     case "Itarare Brigada":
                     case "Circular Cemiterio Sul":
@@ -137,25 +115,28 @@ public class LinhasFragment extends Fragment {
                     case "Circular Camobi":
                     case "Circular Barao":
                     case "Brigada Itarare":
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido_circular, android.R.layout.simple_dropdown_item_1line);
+                        mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
                         break;
                     case "UFSM Circular":
                     case "UFSM":
                     case "Seletivo UFSM":
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido_ufsm_centro, android.R.layout.simple_dropdown_item_1line);
+                        Popup.showPopUp(mCallback,view,selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_ufsm_centro)));
                         break;
                     case "UFSM Bombeiros":
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido_ufsm_bombeiros, android.R.layout.simple_dropdown_item_1line);
+                        Popup.showPopUp(mCallback,view,selectedItem,Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_ufsm_bombeiros)));
                         break;
                     default:
-
-                        adapter = ArrayAdapter.createFromResource(LinhasFragment.this.getActivity(), R.array.list_sentido, android.R.layout.simple_dropdown_item_1line);
-
+                        Popup.showPopUp(mCallback,view,selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido)));
                 }
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerSentido.setAdapter(adapter);
-                spinnerSentido.setSelection(0);
             }
         });
     }
+
+    public void selectedWay(String way){
+        mCallback.onSettingsDone(selectedItem, way);
+    }
+
+
 }
+
+

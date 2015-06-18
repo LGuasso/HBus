@@ -12,4 +12,5 @@
     <string name="useful">Dias úteis</string>
     <string name="code_of_bus">Código do ônibus</string>
     <string name="no_have_bus">Não existe ônibus neste dia!</string>
+    <string name="choose_the_way">Escolha o sentido</string>
 </resources>

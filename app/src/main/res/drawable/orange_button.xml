@@ -3,10 +3,10 @@
     <item android:state_pressed="true" >
         <shape>
             <solid
-                android:color="@color/color_default" />
+                android:color="@color/accent_color_light" />
             <stroke
                 android:width="2dp"
-                android:color="@color/accent_color_light" />
+                android:color="@color/accent_color_dark" />
             <corners
                 android:radius="2dp" />
             <padding
@@ -23,8 +23,8 @@
                 android:endColor="@color/color_default"
                 android:angle="270" />
             <stroke
-                android:width="0dp"
-                android:color="@color/accent_color_light" />
+                android:width="2dp"
+                android:color="@color/color_dark" />
             <corners
                 android:radius="2dp" />
             <padding

@@ -35,4 +35,10 @@
     <style name="ActionBarTabStyle.Orange" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_orange</item>
     </style>
+
+    <!-- POPUP WINDOW -->
+    <style name="PopupWindow">
+        <item name="android:windowEnterAnimation">@animator/fade_in</item>
+        <item name="android:windowExitAnimation">@animator/fade_out</item>
+    </style>
 </resources>
