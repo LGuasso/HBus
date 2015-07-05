@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:id="@+id/listView_background"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:baselineAligned="true">
 
     <!-- Primeiro layout com quadrado que tem as horas-->
     <LinearLayout
@@ -13,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/color_default">
+        android:background="@color/colorPrimary">
 
         <!-- TODO implementar diferentes cores -->
         <!-- Texto que exibe horário do ônibus -->
@@ -25,37 +26,31 @@
             android:paddingLeft="5dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
-            android:textSize="@dimen/horario_textsize"
-            android:text="10:00"
-            android:typeface="sans" />
+            android:textAppearance="@style/TextStyle.Hours.Title"
+            android:text="@string/example_hours" />
 
     </LinearLayout>
 
     <!-- Segundo Layout com o resto de informações -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:layout_weight="1"
-
         android:paddingLeft="10dp">
 
         <TextView
             android:id="@+id/item_list_textview_codigo"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:textColor="@color/background_full_dark"
-            android:text="155A"
-            android:textAlignment="center"
-            android:typeface="sans" />
+            android:textAppearance="@style/TextStyle.Large.Color"
+            android:text="@string/example_codigo_da_linha" />
         <TextView
             android:id="@+id/item_list_textview_tempo_faltando"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/red"
-            android:textAlignment="center"
-            android:textAppearance="@android:style/TextAppearance.Material.Caption"
+            android:textAppearance="@style/TextStyle.Accent.Caption"
             android:fadingEdge="vertical"
             android:fadingEdgeLength="20dp"
             android:focusable="false"
@@ -66,14 +61,11 @@
             android:id="@+id/item_list_textview_descricao_do_codigo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textAppearance="@style/TextStyle.Accent.Caption"
             android:lines="1"
-            android:textAllCaps="true"
             android:textColor="@color/black"
             android:ellipsize="marquee"
-
             android:textColorHighlight="#FFFFFF"
-            android:text="Exemplo de markeee rolando na tela com dicas, truques e muito mais!!!"
             android:marqueeRepeatLimit="marquee_forever"
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="20dp"

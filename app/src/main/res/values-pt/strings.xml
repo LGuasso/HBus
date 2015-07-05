@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HBus</string>
-    <string name="Choose_the_line">Escolha a linha</string>
-    <string name="Choose_the_local">Escolha o local</string>
+    <string name="choose_the_line">Escolha a linha</string>
+    <string name="choose_the_local">Escolha o local</string>
     <string name="action_settings">Configurações</string>
     <string name="look_line">Olhar horários da linha</string>
     <string name="title_activity_list_line">Horários da linha</string>
@@ -13,4 +13,7 @@
     <string name="code_of_bus">Código do ônibus</string>
     <string name="no_have_bus">Não existe ônibus neste dia!</string>
     <string name="choose_the_way">Escolha o sentido</string>
+    <string name="next_bus">Próximo ônibus</string>
+    <string name="all_lines">Todos itinerários</string>
+    <string name="favorites">Favoritos</string>
 </resources>

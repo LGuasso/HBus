@@ -1,6 +1,9 @@
 package br.com.expressobits.hbus.modelo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * Created by Rafael on 20/05/2015.
@@ -20,9 +23,17 @@ public class Linha {
      */
     private TipoDeDia dia;
 
-    private ArrayList<String> codigos;
 
-    ArrayList<Onibus> onibuses;
+    ArrayList<Bus> onibuses;
+
+
+    public void setOnibuses(ArrayList<Bus> onibuses) {
+        this.onibuses = onibuses;
+    }
+
+    public ArrayList<Bus> getOnibuses() {
+        return onibuses;
+    }
 
     public String getNome() {
         return nome;
@@ -48,11 +59,37 @@ public class Linha {
         this.dia = dia;
     }
 
-    public ArrayList<String> getCodigos(){
-        return codigos;
+
+    public static ArrayList<Bus> sortBusperHour(ArrayList<Bus> onibuses){
+
+        Collections.sort(onibuses);
+
+        Bus bus = new Bus();
+        bus.setTime(TimeUtils.getNowTimeinString());
+        ArrayList<Bus> busFinal = new ArrayList<>();
+        ArrayList<Bus> varFinal = new ArrayList<>();
+        for (int i=0;i<onibuses.size();i++){
+            if(onibuses.get(i).getHora()>bus.getHora()){
+                busFinal.add(onibuses.get(i));
+            }else if(onibuses.get(i).getHora()<bus.getHora()){
+                varFinal.add(onibuses.get(i));
+            }else{
+                if(onibuses.get(i).getMinutos()>=bus.getMinutos()){
+                    busFinal.add(onibuses.get(i));
+                }else if(onibuses.get(i).getMinutos()<bus.getMinutos()){
+                    varFinal.add(onibuses.get(i));
+                }
+            }
+        }
+        for(Bus bus1 : varFinal){
+            busFinal.add(bus1);
+        }
+
+        return busFinal;
+
     }
 
-    public void setCodigos(ArrayList<String> codigos) {
-        this.codigos = codigos;
-    }
+
+
+
 }

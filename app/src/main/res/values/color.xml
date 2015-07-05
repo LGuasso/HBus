@@ -1,30 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#ffbb33</color><!--255 187 51-->
-    <color name="background_dark">#ff8800</color>
-    <color name="background_full_dark">#f65100</color>
-    <color name="orange_light">#ffb74d</color>
-    <color name="orange_ultralight">#FFE0B2</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="red">#f00</color>
     <color name="green">#090</color>
-    <color name="text_color">#000000</color>
+
+    <color name="colorPrimary">@color/amber_500</color>
+    <color name="colorPrimaryDark">@color/amber_700</color>
+    <color name="colorPrimaryLight">@color/amber_100</color>
+    <color name="colorAccent">@color/blue_gray_500</color>
+    <color name="colorAccentDark">@color/blue_gray_700</color>
+
 
     <!-- Cor primaria do aplicativo  255 152 00-->
-    <color name="color_default">#FFC107</color>
-    <color name="color_light">#FFECB3</color>
-    <color name="color_dark">#FFA000</color>
+    <!-- Amber 500   255 193 007-->
+    <color name="amber_500">#FFC107</color>
+    <!-- Amber 500   255 193 007-->
+    <color name="amber_100">#FFECB3</color>
+    <!-- Amber 500   255 193 007-->
+    <color name="amber_700">#FFA000</color>
+    <!-- Amber 500   255 193 007-->
+    <color name="amber_900">#FF6F00</color>
 
-    <!-- Cor secundaria(acento) do aplicativo  255 152 00-->
-    <!-- 100 -->
-    <color name="accent_color_default">#536DFE</color>
-    <!-- 200 -->
-    <color name="accent_color_light">#8C9EFF</color>
-    <!-- 400 -->
-    <color name="accent_color_dark">#3D5AFE</color>
-    <!-- 700 -->
-    <color name="accent_color_ultra_dark">#304FFE</color>
+
+    <color name="amber_accent_100">#FFD180</color>
+    <color name="amber_accent_200">#FFAB40</color>
+    <color name="amber_accent_400">#FF9100</color>
+    <color name="amber_accent_700">#FF6D00</color>
+
+    <color name="indigo_accent_100">#8C9EFF</color>
+    <color name="indigo_accent_200">#536DFE</color>
+    <color name="indigo_accent_400">#3D5AFE</color>
+    <color name="indigo_accent_700">#304FFE</color>
+
+    <!-- Cor terciária -->
+    <!-- Blue Gray 700 -->
+    <color name="blue_gray_100">#CFD8DC</color>
+    <color name="blue_gray_500">#607D8B</color>
+    <color name="blue_gray_700">#455A64</color>
 
 
 

@@ -3,8 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="horario_textsize">26dp</dimen>
-
-    <dimen name="textsize">16dp</dimen>
+    <dimen name="horario_textsize">26sp</dimen>
+    <dimen name="textsize">16sp</dimen>
 
 </resources>

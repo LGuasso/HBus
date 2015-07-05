@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.utils;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -41,8 +42,12 @@ public class TimeUtils {
      * @return
      */
     public static String calendarToTimeString(Calendar time){
-        SimpleDateFormat s = new SimpleDateFormat(format);
-        String a = s.format(time.getTime());
+
+        String a = new String("");
+        if(time!=null) {
+            SimpleDateFormat s = new SimpleDateFormat(format);
+            a = s.format(time.getTime());
+        }
 
         return a;
     }
@@ -62,5 +67,39 @@ public class TimeUtils {
             default:
                 return 0;
         }
+    }
+
+    /**
+     * Retorna o atual horário na forma de String HH:mm
+     * @return String do horário atual em HH:mm
+     */
+    public static String getNowTimeinString(){
+        Calendar cal = GregorianCalendar.getInstance();
+        String  time;
+        time = cal.get(Calendar.HOUR_OF_DAY)+":";
+        time+=cal.get(Calendar.MINUTE);
+        Log.d(TAG,"Criado texto com atual hora "+time);
+        return time;
+    }
+
+
+    public static String getFaltaparaHorario(String timeBus){
+        String timeNow = getNowTimeinString();
+        int horaNow = Integer.parseInt(timeNow.split(":")[0]);
+        int horaBus = Integer.parseInt(timeBus.split(":")[0]);
+        int i = horaBus - horaNow;
+        String texto= new String();
+        if(i>0){
+            texto+="Em "+i+" hora(s)";
+        }else if(i<0){
+            i+=24;//SE HORARIO FOR NEGATIVO SIGNIFICA QUE SO DAQUI 24HORAS //TODO CODE VER ERRRO DE DIAS  DA SEMANA
+        }else{
+            //NADA
+        }
+
+
+
+
+        return texto;
     }
 }

@@ -3,9 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/menu_action_settings"
         android:title="@string/action_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:icon="@drawable/ic_material_settings"
         app:showAsAction="always"
-        android:orderInCategory="100"/>
+        android:orderInCategory="2"/>
+
+    <item android:id="@+id/menu_action_add"
+        android:title="@string/action_settings"
+        android:icon="@android:drawable/ic_menu_add"
+        app:showAsAction="never"
+        android:orderInCategory="1"/>
+
+    <item android:id="@+id/menu_action_about"
+        android:title="@string/action_settings"
+        android:icon="@android:drawable/ic_menu_info_details"
+        app:showAsAction="never"
+        android:orderInCategory="3"/>
 </menu>

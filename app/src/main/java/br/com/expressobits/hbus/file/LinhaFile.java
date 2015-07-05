@@ -7,13 +7,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import br.com.expressobits.hbus.BuildConfig;
+import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.modelo.Codigo;
+import br.com.expressobits.hbus.modelo.Itinerario;
 import br.com.expressobits.hbus.modelo.Linha;
-import br.com.expressobits.hbus.modelo.Onibus;
+import br.com.expressobits.hbus.modelo.Bus;
 import br.com.expressobits.hbus.modelo.TipoDeDia;
-import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * Created by Rafael on 20/05/2015.
@@ -21,21 +23,23 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  */
 public class LinhaFile {
 
-    public static LinhaFile instance;
     public static String TAG = "LinhaFile";
-    public static final String LINHAFILE = "linhas";
+    public static final String ITINERARIOFILE = "itinerarios";
+    public static final String ITINERARIOFILETODOS = "aaa_itinerarios";
     public static final String CODIGOFILE = "codigos";
-    private static ArrayList<Linha> linhas = new ArrayList<>();
     private static HashMap<String,Codigo> codigos = new HashMap<>();
-    private ArrayList<Onibus> onibuses = new ArrayList<>();
+    private static ArrayList<Itinerario> itinerarios = new ArrayList<>();
+    private ArrayList<Bus> onibuses = new ArrayList<>();
     private static Context context;
+
 
     public LinhaFile(Context context){
         this.context = context;
     }
 
+
     public void iniciarDados(){
-        iniciarLinhas();
+        iniciarItinerariosFavoritos();
         iniciarCodigos();
     }
 
@@ -51,29 +55,90 @@ public class LinhaFile {
         ManageFile file = new ManageFile(context);
         String nameFile = nome+".dat";
         String fileString = file.ReadFile(nameFile);
-        String[] fileStringarray=fileString.split("\n");
-        if(BuildConfig.DEBUG){
-            Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
+        String[] fileStringarray;
+        if(fileString!=null){
+            fileStringarray=fileString.split("\n");
+            if(BuildConfig.DEBUG){
+                Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
+            }
+        }else{
+            fileStringarray=new String[]{"ERRO","ERRO"};
+            Log.e(TAG, "File empty" + nameFile);
         }
+
         Log.d(TAG, "Read file " + nameFile);
         return new ArrayList<>(Arrays.asList(fileStringarray));
     }
+
+
 
     /**
      * Complementa o ArrayList com as linhas do arquivo
      * @since 02 de junho de 2015
      */
-    private void iniciarLinhas() {
-        linhas.clear();
-        ArrayList<String> texto = lerTexto(LINHAFILE);
+    private void iniciarItinerariosFavoritos() {
+        itinerarios.clear();
+        ArrayList<String> texto = lerTexto(ITINERARIOFILE);
         if(!texto.isEmpty() && !texto.get(0).equals("ERRO")) {
             for (String txt : texto) {
-                Linha linha = new Linha();
-                linha.setNome(txt.split(" - ")[0]);
-                linha.setCodigos(new ArrayList<>(Arrays.asList(txt.split(" - ")[1].split(":"))));
-                linhas.add(linha);
+                Itinerario itinerario = new Itinerario();
+                itinerario.setNome(txt.split(" - ")[0]);
+                itinerario.setCodigos(new ArrayList<>(Arrays.asList(txt.split(" - ")[1].split(":"))));
+                itinerario.setSentidos(getSentidos(context,itinerario.getNome()));
+
+
+                ArrayList<Linha> linhas = new ArrayList<>();
+
+                for(int i=0;i<itinerario.getSentidos().size();i++){
+
+                    linhas.add(createLinha(itinerario.getNome(), itinerario.getSentidos().get(i),TipoDeDia.UTEIS));
+                    linhas.add(createLinha(itinerario.getNome(), itinerario.getSentidos().get(i), TipoDeDia.SABADO));
+                    linhas.add(createLinha(itinerario.getNome(), itinerario.getSentidos().get(i),TipoDeDia.DOMINGO));
+
+                }
+                itinerario.setLinhas(linhas);
+                itinerarios.add(itinerario);
+
+
             }
         }
+        for (Itinerario itinerario1:itinerarios){
+            Log.e("TESTE05","itinerario "+itinerario1.getNome());
+            for (Linha linha1 : itinerario1.getLinhas() ){
+                Log.e("TESTE05"," - linha "+linha1.getOnibuses().size());
+            }
+        }
+    }
+
+    public List<String> getSentidos(Context ctx,String name){
+            switch (name) {
+                case "Big Rodoviaria":
+                    return (Arrays.asList(context.getResources().getStringArray(R.array.list_sentido_big_rodoviaria)));
+                case "Seletivo UFSM Bombeiros":
+                    return(Arrays.asList(context.getResources().getStringArray(R.array.list_sentido_ufsm_bombeiros)));
+                case "T Neves Campus":
+                    return(Arrays.asList(context.getResources().getStringArray(R.array.list_sentido_tneves_campus)));
+                case "Boi Morto":
+                    return(Arrays.asList(context.getResources().getStringArray(R.array.list_sentido_boi_morto)));
+                case "Carolina Sao Jose":
+                    return(Arrays.asList(context.getResources().getStringArray(R.array.list_sentido_carolina_sao_jose)));
+                case "Itarare Brigada":
+                case "Circular Cemiterio Sul":
+                case "Circular Cemiterio Norte":
+                case "Circular Camobi":
+                case "Circular Barao":
+                case "Brigada Itarare":
+                    return(Arrays.asList(context.getResources().getStringArray(R.array.list_sentido_circular)));
+                case "UFSM Circular":
+                case "UFSM":
+                case "Seletivo UFSM":
+                    return(Arrays.asList(context.getResources().getStringArray(R.array.list_sentido_ufsm_centro)));
+                case "UFSM Bombeiros":
+                    return(Arrays.asList(context.getResources().getStringArray(R.array.list_sentido_ufsm_bombeiros)));
+                default:
+                    return(Arrays.asList(context.getResources().getStringArray(R.array.list_sentido)));
+            }
+
     }
 
     /**
@@ -88,7 +153,7 @@ public class LinhaFile {
                 Codigo codigo = new Codigo();
                 codigo.setId(txt.split(":")[0].toUpperCase().trim());
                 codigo.setDescricao(txt.split(":")[1]);
-                codigos.put(codigo.getId(),codigo);
+                codigos.put(codigo.getId(), codigo);
 
             }
         }
@@ -104,18 +169,18 @@ public class LinhaFile {
      *             @see TipoDeDia
      */
     private void iniciarOnibuses(String nome,String sentido,TipoDeDia dias){
-        onibuses.clear();
+        onibuses = new ArrayList<Bus>();
         iniciarCodigos();
         if(onibuses.isEmpty()){
-            ArrayList<String> texto = lerTexto((nome + "_" + sentido + "_" + dias));
+            ArrayList<String> texto = lerTexto((toSimpleName(nome) + "_" + toSimpleName(sentido) + "_" + dias));
             //TODO implementar um relátorio para os arquivos que leiam e não existam horários!
             if(texto.size()>1){
                 if(!texto.get(0).equals("ERRO")) {
                     for (String txt : texto) {
-                        Onibus onibus = new Onibus();
-                        onibus.setTime(TimeUtils.stringToTimeCalendar(txt.split(" - ")[0]));
-                        onibus.setCodigo(getCodigoId(txt.split(" - ")[1]));
-                        onibuses.add(onibus);
+                        Bus bus = new Bus();
+                        bus.setTime(txt.split(" - ")[0]);
+                        bus.setCodigo(getCodigoId(txt.split(" - ")[1]));
+                        onibuses.add(bus);
                     }
                 }
             }
@@ -153,8 +218,8 @@ public class LinhaFile {
      * @see Linha
      * @return Lista de linhas.
      */
-    public static ArrayList<Linha> getLinhas(){
-        return linhas;
+    public static ArrayList<Itinerario> getItinerarios(){
+        return itinerarios;
     }
 
     public static HashMap<String,Codigo> getCodigos(){
@@ -170,9 +235,49 @@ public class LinhaFile {
      *             @see TipoDeDia
      * @return Lista com ônibus da linha definida.
      */
-    public ArrayList<Onibus> getOnibuses(String nome,String sentido,TipoDeDia dias){
+    public ArrayList<Bus> getOnibuses(String nome,String sentido,TipoDeDia dias){
         iniciarOnibuses(nome,sentido,dias);
         return onibuses;
+    }
+
+    /**
+     * Retorna nome sem espaço sem acentos e sem maiusculas.
+     * @param name
+     * @return
+     */
+    private String toSimpleName(String name){
+        if(name == null){
+            return "";
+        }else {
+            String ok = name;
+            ok = ok.replace(" > ","-");
+            ok = ok.replace(" < ","-");
+            ok = ok.replace(" ", "-");
+            ok = ok.replace("é", "e");
+            ok = ok.toLowerCase();
+            return ok;
+        }
+    }
+
+    public Linha createLinha(String nome,String sentido,TipoDeDia tipodeDia){
+        Linha linha = new Linha();
+        ArrayList<Bus> buses = new ArrayList<>();
+        buses = getOnibuses(nome,sentido,tipodeDia);
+        linha.setOnibuses(buses);
+        return linha;
+    }
+
+    public List<String> getNomeLinhas(){
+        ArrayList<String> linhas = new ArrayList<>();
+
+        ArrayList<String> linhasAux = lerTexto(ITINERARIOFILETODOS);
+
+        for (String txt :linhasAux){
+            if(txt.contains(" - ")) {
+               linhas.add(txt.split(" - ")[0]);
+            }
+        }
+        return linhas;
     }
 
 }

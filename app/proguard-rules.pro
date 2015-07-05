@@ -17,5 +17,5 @@
 #}
 
 -keep public class br.com.expressobits.hbus.ui.MainActivity
--keep public class br.com.expressobits.hbus.ui.LinhasFragment
--keep public class br.com.expressobits.hbus.ui.OnibusFragment
+-keep public class br.com.expressobits.hbus.ui.fragments.LinhasFragment
+-keep public class br.com.expressobits.hbus.ui.fragments.OnibusFragment
