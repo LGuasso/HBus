@@ -18,13 +18,13 @@ import br.com.expressobits.hbus.modelo.Bus;
 /**
  * Created by Rafael on 27/05/2015.
  */
-public class ListViewAdapterLines extends ArrayAdapter<Itinerario> {
+public class ListViewAdapterFavorite extends ArrayAdapter<Itinerario> {
 
     Context context;
     LayoutInflater layoutInflater;
     List<Itinerario> itinerarioList;
 
-    public ListViewAdapterLines(Context context, int id, List<Itinerario> lista){
+    public ListViewAdapterFavorite(Context context, int id, List<Itinerario> lista){
         super(context,id,lista);
         this.context = context;
         //this.lista = lista;

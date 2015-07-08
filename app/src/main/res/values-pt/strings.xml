@@ -16,4 +16,5 @@
     <string name="next_bus">Próximo ônibus</string>
     <string name="all_lines">Todos itinerários</string>
     <string name="favorites">Favoritos</string>
+    <string name="add_favorite">Add favorite</string>
 </resources>

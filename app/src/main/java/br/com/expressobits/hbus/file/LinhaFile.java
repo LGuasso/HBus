@@ -38,8 +38,8 @@ public class LinhaFile {
     }
 
 
-    public void iniciarDados(){
-        iniciarItinerariosFavoritos();
+    public void iniciarDados(ArrayList<String> favoritos){
+        iniciarItinerariosFavoritos(favoritos);
         iniciarCodigos();
     }
 
@@ -76,9 +76,10 @@ public class LinhaFile {
      * Complementa o ArrayList com as linhas do arquivo
      * @since 02 de junho de 2015
      */
-    private void iniciarItinerariosFavoritos() {
+    private void iniciarItinerariosFavoritos(ArrayList<String> texto) {
         itinerarios.clear();
-        ArrayList<String> texto = lerTexto(ITINERARIOFILE);
+        //ArrayList<String> texto = lerTexto(ITINERARIOFILE);
+
         if(!texto.isEmpty() && !texto.get(0).equals("ERRO")) {
             for (String txt : texto) {
                 Itinerario itinerario = new Itinerario();

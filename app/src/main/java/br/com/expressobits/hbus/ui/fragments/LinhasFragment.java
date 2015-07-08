@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.adapters.ListViewAdapterLines;
+import br.com.expressobits.hbus.adapters.ListViewAdapterFavorite;
+import br.com.expressobits.hbus.dao.FavoritosDAO;
 import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.modelo.Itinerario;
 import br.com.expressobits.hbus.ui.MainActivity;
@@ -30,12 +31,6 @@ public class LinhasFragment extends Fragment{
     ListView listViewLines;
     private ArrayList<Itinerario> itinerarios;
     OnSettingsListener mCallback;
-
-    int lastPosition = 0;
-
-    public LinhasFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -60,12 +55,9 @@ public class LinhasFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_linhas, null);
         initViews(view);
-
         return view;
-
     }
 
     private void initViews(View view){
@@ -75,9 +67,16 @@ public class LinhasFragment extends Fragment{
 
     private void initListViews(View view){
         listViewLines = (ListView) view.findViewById(R.id.list_lines);
-        new LinhaFile(this.getActivity()).iniciarDados();
+
+        FavoritosDAO dao = new FavoritosDAO(getActivity());
+        if(dao.getLista().size()>0){
+            dao.inserirOuAlterar("UFSM - 155A");
+        }
+
+        new LinhaFile(this.getActivity()).iniciarDados(dao.getLista());
+
         itinerarios = LinhaFile.getItinerarios();
-        final ListViewAdapterLines adapterLinesUteis = new ListViewAdapterLines(this.getActivity(),android.R.layout.simple_list_item_1, itinerarios);
+        final ListViewAdapterFavorite adapterLinesUteis = new ListViewAdapterFavorite(this.getActivity(),android.R.layout.simple_list_item_1, itinerarios);
         listViewLines.setAdapter(adapterLinesUteis);
 
         listViewLines.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,8 +95,20 @@ public class LinhasFragment extends Fragment{
                         break;
 
                     default:
-                        Popup.showPopUp(mCallback,view,selectedItem,itinerarios.get(position).getSentidos());
+                        Popup.showPopUp(mCallback, view, selectedItem, itinerarios.get(position).getSentidos());
                 }
+            }
+        });
+
+        listViewLines.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedItem = itinerarios.get(position).getNome();
+                FavoritosDAO dao = new FavoritosDAO(getActivity());
+                dao.deletar(selectedItem);
+                onResume();
+                return true;
             }
         });
     }

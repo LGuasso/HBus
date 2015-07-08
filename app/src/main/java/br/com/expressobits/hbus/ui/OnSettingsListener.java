@@ -11,4 +11,11 @@ public interface OnSettingsListener {
      * @param sentido
      */
     public void onSettingsDone(String linha,String sentido);
+
+
+    /**
+     * TODO fazer DOC
+     * @param type
+     */
+    public void onSettingsDone(boolean type);
 }

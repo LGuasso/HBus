@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.ui;
 
+import android.app.Fragment;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -27,11 +28,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.FavoritosDAO;
 import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.modelo.Bus;
 import br.com.expressobits.hbus.modelo.Itinerario;
 import br.com.expressobits.hbus.modelo.Linha;
 import br.com.expressobits.hbus.modelo.TipoDeDia;
+import br.com.expressobits.hbus.preferences.Preferences;
+import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.LinhasFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.utils.Popup;
@@ -89,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 .withOnDrawerItemClickListener(this)
                 .build();
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.favorites));
-        new LinhaFile(this).iniciarDados();
+        FavoritosDAO dao = new FavoritosDAO(this);
+        new LinhaFile(this).iniciarDados(dao.getLista());
         List<Itinerario> itinerarios = LinhaFile.getItinerarios();
         for(Itinerario itinerario:itinerarios){
             navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerario.getNome()).withIcon(getResources().getDrawable(R.mipmap.ic_launcher)));
@@ -116,7 +121,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
-            Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show();
+        }
+        if (id == R.id.menu_action_add) {
+            onSettingsDone(true);
+            Toast.makeText(this, getString(R.string.add_favorite), Toast.LENGTH_SHORT).show();
+
         }
         return false;
     }
@@ -159,6 +169,36 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         ft.addToBackStack("pilha");
         ft.commit();
         lastPosition = 1;
+    }
+
+    @Override
+    public void onSettingsDone(boolean type){
+        FragmentTransaction ft = fm.beginTransaction();
+
+        AddFavoriteFragment addFavoriteFragment = (AddFavoriteFragment)fm.findFragmentByTag("addFavoriteFragment");
+        if(findViewById(R.id.framelayout_main)!=null){
+
+                addFavoriteFragment = new AddFavoriteFragment();
+                // Troca o que quer que tenha na view do fragment_container por este fragment,
+                // e adiciona a transação novamente na pilha de navegação
+                ft.replace(R.id.framelayout_main, addFavoriteFragment, "addFavoriteFragment");
+                ft.addToBackStack("pilha");
+                lastPosition = 1;
+
+
+
+        }else if(findViewById(R.id.framelayout_content)!=null){
+                addFavoriteFragment = new AddFavoriteFragment();
+                // Troca o que quer que tenha na view do fragment_container por este fragment,
+                // e adiciona a transação novamente na pilha de navegação
+                ft.replace(R.id.framelayout_content, addFavoriteFragment, "onibusFragment");
+                lastPosition = 1;
+
+        }
+
+        // Finaliza a transção com sucesso
+        ft.commit();
+
     }
 
     @Override

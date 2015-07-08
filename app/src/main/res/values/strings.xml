@@ -22,5 +22,6 @@
     <string name="next_bus">Next bus</string>
     <string name="all_lines">All lines</string>
     <string name="favorites">Favorites</string>
+    <string name="add_favorite">Add favorite</string>
 
 </resources>

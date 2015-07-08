@@ -10,6 +10,8 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  */
 public class Linha {
 
+    private int id;
+
     private String nome;
     /**
      * Define o sentido da linha
