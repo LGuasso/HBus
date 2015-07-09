@@ -103,12 +103,6 @@ public class LinhaFile {
 
             }
         }
-        for (Itinerario itinerario1:itinerarios){
-            Log.e("TESTE05","itinerario "+itinerario1.getNome());
-            for (Linha linha1 : itinerario1.getLinhas() ){
-                Log.e("TESTE05"," - linha "+linha1.getOnibuses().size());
-            }
-        }
     }
 
     public List<String> getSentidos(Context ctx,String name){
