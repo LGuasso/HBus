@@ -23,5 +23,6 @@
     <string name="all_lines">All lines</string>
     <string name="favorites">Favorites</string>
     <string name="add_favorite">Add favorite</string>
+    <string name="added_favorite_itinerary_with_sucess">Added favorite itinerary with sucess</string>
 
 </resources>

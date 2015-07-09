@@ -69,13 +69,16 @@ public class AddFavoriteFragment extends Fragment {
         listViewLines.setAdapter(arrayAdapter);
         listViewLines.setClickable(true);
 
-        final FavoritosDAO dao = new FavoritosDAO(getActivity());
+
         listViewLines.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FavoritosDAO dao = new FavoritosDAO(AddFavoriteFragment.this.getActivity());
+                Toast.makeText(getActivity(),R.string.added_favorite_itinerary_with_sucess,Toast.LENGTH_SHORT).show();
                 dao.inserirOuAlterar(nomeItinerarios.get(position));
+                mCallback.onSettingsDone(false);
             }
         });
 

@@ -60,7 +60,7 @@ public class FavoritosDAO extends SQLiteOpenHelper {
         //TODO verificar se ja existe
         ContentValues c = new ContentValues();
         c.put("nome",linha.split(" - ")[0]);
-        if(linha.split(" - ")[1]==null){
+        if(!linha.contains(" - ")){
             c.put("codigo"," NO ");
         }else {
             c.put("codigo", linha.split(" - ")[1]);

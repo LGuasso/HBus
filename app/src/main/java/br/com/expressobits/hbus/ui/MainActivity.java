@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         if(savedInstanceState == null){
 
             LinhasFragment linhasFragment = new LinhasFragment();
@@ -77,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         initViews();
         initNavigationDrawer();
+        FavoritosDAO dao = new FavoritosDAO(this);
+        dao.inserirOuAlterar("Carlos Gomes");
     }
 
 
@@ -174,9 +178,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     @Override
     public void onSettingsDone(boolean type){
         FragmentTransaction ft = fm.beginTransaction();
+        if(!type){
+            getSupportFragmentManager().popBackStack();
+            //ft.remove(getSupportFragmentManager().findFragmentByTag("addFavoriteFragment"));
+        }else {
 
-        AddFavoriteFragment addFavoriteFragment = (AddFavoriteFragment)fm.findFragmentByTag("addFavoriteFragment");
-        if(findViewById(R.id.framelayout_main)!=null){
+
+            AddFavoriteFragment addFavoriteFragment = (AddFavoriteFragment) fm.findFragmentByTag("addFavoriteFragment");
+            if (findViewById(R.id.framelayout_main) != null) {
 
                 addFavoriteFragment = new AddFavoriteFragment();
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
@@ -186,14 +195,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 lastPosition = 1;
 
 
-
-        }else if(findViewById(R.id.framelayout_content)!=null){
+            } else if (findViewById(R.id.framelayout_content) != null) {
                 addFavoriteFragment = new AddFavoriteFragment();
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transação novamente na pilha de navegação
                 ft.replace(R.id.framelayout_content, addFavoriteFragment, "onibusFragment");
                 lastPosition = 1;
 
+            }
         }
 
         // Finaliza a transção com sucesso

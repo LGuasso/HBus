@@ -69,7 +69,7 @@ public class LinhasFragment extends Fragment{
         listViewLines = (ListView) view.findViewById(R.id.list_lines);
 
         FavoritosDAO dao = new FavoritosDAO(getActivity());
-        if(dao.getLista().size()>0){
+        if(dao.getLista().size()<=0){
             dao.inserirOuAlterar("UFSM - 155A");
         }
 
