@@ -2,7 +2,6 @@ package br.com.expressobits.hbus.file;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +58,7 @@ public class LinhaFile {
         if(fileString!=null){
             fileStringarray=fileString.split("\n");
             if(BuildConfig.DEBUG){
-                Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
+                //Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
             }
         }else{
             fileStringarray=new String[]{"ERRO","ERRO"};

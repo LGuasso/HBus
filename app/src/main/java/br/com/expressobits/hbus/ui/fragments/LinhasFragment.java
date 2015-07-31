@@ -4,11 +4,14 @@ package br.com.expressobits.hbus.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +32,7 @@ public class LinhasFragment extends Fragment{
 
     public String selectedItem;
     ListView listViewLines;
+    private ActionButton actionButton;
     private ArrayList<Itinerario> itinerarios;
     OnSettingsListener mCallback;
 
@@ -62,6 +66,7 @@ public class LinhasFragment extends Fragment{
 
     private void initViews(View view){
         initListViews(view);
+        initFAB(view);
     }
 
 
@@ -69,9 +74,6 @@ public class LinhasFragment extends Fragment{
         listViewLines = (ListView) view.findViewById(R.id.list_lines);
 
         FavoritosDAO dao = new FavoritosDAO(getActivity());
-        if(dao.getLista().size()<=0){
-            dao.inserirOuAlterar("UFSM - 155A");
-        }
 
         new LinhaFile(this.getActivity()).iniciarDados(dao.getLista());
 
@@ -111,6 +113,17 @@ public class LinhasFragment extends Fragment{
                 return true;
             }
         });
+    }
+
+    private void initFAB(View view){
+        actionButton = (ActionButton) view.findViewById(R.id.fab_button);
+        actionButton.playShowAnimation();
+        actionButton.setButtonColor(getActivity().getResources().getColor(R.color.amber_500));
+        actionButton.setButtonColorPressed(getActivity().getResources().getColor(R.color.amber_900));
+
+        actionButton.setShowAnimation(ActionButton.Animations.ROLL_FROM_DOWN);
+        actionButton.setHideAnimation(ActionButton.Animations.ROLL_TO_DOWN);
+        actionButton.setImageResource(R.drawable.plus);
     }
 
     public void selectedWay(String way){

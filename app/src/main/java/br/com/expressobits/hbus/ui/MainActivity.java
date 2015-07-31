@@ -5,6 +5,7 @@ import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -79,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         initViews();
         initNavigationDrawer();
-        FavoritosDAO dao = new FavoritosDAO(this);
-        dao.inserirOuAlterar("Carlos Gomes");
     }
 
 
@@ -101,12 +100,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         new LinhaFile(this).iniciarDados(dao.getLista());
         List<Itinerario> itinerarios = LinhaFile.getItinerarios();
         for(Itinerario itinerario:itinerarios){
-            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerario.getNome()).withIcon(getResources().getDrawable(R.mipmap.ic_launcher)));
+            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerario.getNome()).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
         }
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
         List<String>allItinerarios = new LinhaFile(this).getNomeLinhas();
         for(String txt:allItinerarios){
-            navigationDrawer.addItem(new SecondaryDrawerItem().withName(txt).withIcon(getResources().getDrawable(R.mipmap.ic_launcher_foreground)));
+            navigationDrawer.addItem(new SecondaryDrawerItem().withName(txt).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
         }
 
     }
@@ -144,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     /**
      * Iniciando o actionbar
      * <ul>
-     *     <li>Coloca uma imagem</li>
      *     <li>Mostra este logo como botão de HOME</li>
      * </ul>
      */
@@ -154,9 +152,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         //getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
-        pToolbar.setTitle("My lines");
-        pToolbar.setSubtitle("subtitle");
         setSupportActionBar(pToolbar);
+        //pToolbar.setTitle("My lines");
+        //pToolbar.setSubtitle("subtitle");
+
 
     }
 
