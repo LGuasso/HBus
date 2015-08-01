@@ -1,4 +1,4 @@
-package br.com.expressobits.hbus.modelo;
+package br.com.expressobits.hbus.model;
 
 import android.util.Log;
 
@@ -6,28 +6,30 @@ import android.util.Log;
  * Created by Rafael on 20/05/2015.
  * Define lista dos tipos de dia das linhas
  */
-public enum TipoDeDia {
+public enum TypeDay {
 
     /**
      * Dias úteis - Segunda á sexta
      */
-    UTEIS,
-    SABADO,DOMINGO;
+    USEFUL,
+    SATURDAY,SUNDAY;
 
     @Override
     public String toString() {
 
         switch (this){
-            case UTEIS:
+            case USEFUL:
                 return "uteis";
-            case SABADO:
+            case SATURDAY:
                 return "sabado";
-            case DOMINGO:
+            case SUNDAY:
                 return "domingo";
             default:
                 Log.e("ERRO","Erro ao preencher informação de dias!");
                 return "ERRO";
         }
     }
+
+
 
 }

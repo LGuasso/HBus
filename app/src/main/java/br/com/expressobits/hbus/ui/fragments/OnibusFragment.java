@@ -1,7 +1,6 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
@@ -20,12 +18,9 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.BusAdapter;
-import br.com.expressobits.hbus.adapters.ListViewAdapterBus;
 import br.com.expressobits.hbus.file.LinhaFile;
-import br.com.expressobits.hbus.modelo.Linha;
-import br.com.expressobits.hbus.modelo.Bus;
-import br.com.expressobits.hbus.modelo.TipoDeDia;
-import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
@@ -34,8 +29,8 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  */
 public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
-    public static final String ARGS_LINHA = "Linha";
-    public static final String ARGS_SENTIDO = "Sentido";
+    public static final String ARGS_LINHA = "Line";
+    public static final String ARGS_SENTIDO = "Way";
     RecyclerView recyclerViewUsefulDays;
     RecyclerView recyclerViewSaturday;
     RecyclerView recyclerViewSunday;
@@ -198,17 +193,17 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         linha = toSimpleName(linha);
         sentido = toSimpleName(sentido);
 
-        listBusUsefulDays = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.UTEIS);
+        listBusUsefulDays = new LinhaFile(getActivity()).getOnibuses(linha,sentido, TypeDay.USEFUL);
         BusAdapter adapterUeful = new BusAdapter(getActivity(), listBusUsefulDays);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerViewUsefulDays.setAdapter(adapterUeful);
 
-        listBusSaturday = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.SABADO);
+        listBusSaturday = new LinhaFile(getActivity()).getOnibuses(linha,sentido, TypeDay.SATURDAY);
         BusAdapter adapterSaturday = new BusAdapter(getActivity(), listBusSaturday);
         adapterSaturday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSaturday.setAdapter(adapterSaturday);
 
-        listBusSunday = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.DOMINGO);
+        listBusSunday = new LinhaFile(getActivity()).getOnibuses(linha,sentido, TypeDay.SUNDAY);
         BusAdapter adapterSunday = new BusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);
@@ -225,7 +220,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         List<Bus> list = new ArrayList<Bus>();
         switch (tipoDeDia){
             case 1:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.SABADO);
+                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TypeDay.SATURDAY);
                 if(contSaturday+10>list.size()-1){
                     listAux = list.subList(contSaturday,list.size()-1);
                 }else{
@@ -235,7 +230,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
                 contSaturday+=10;
                 break;
             case 2:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.DOMINGO);
+                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TypeDay.SUNDAY);
                 if(contSunday+10>list.size()-1){
                     listAux = list.subList(contSunday,list.size()-1);
                 }else{
@@ -244,7 +239,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
                 contSunday+=10;
                 break;
             default:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.UTEIS);
+                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TypeDay.USEFUL);
                 if(contUsefulDays+10>list.size()-1){
                     listAux = list.subList(contUsefulDays,list.size()-1);
                 }else{

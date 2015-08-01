@@ -1,6 +1,5 @@
 package br.com.expressobits.hbus.ui;
 
-import android.app.Fragment;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,13 +28,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoritosDAO;
 import br.com.expressobits.hbus.file.LinhaFile;
-import br.com.expressobits.hbus.modelo.Bus;
-import br.com.expressobits.hbus.modelo.Itinerario;
-import br.com.expressobits.hbus.modelo.Linha;
-import br.com.expressobits.hbus.modelo.TipoDeDia;
-import br.com.expressobits.hbus.preferences.Preferences;
+import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.LinhasFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
@@ -49,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     //Navigation Drawer
     private Drawer navigationDrawer;
 
+
+
     //Gerencia a atuação dos fragments
     FragmentManager fm = getSupportFragmentManager();
     int lastPosition = 0;
@@ -60,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        new LinhaFile(this).init();
 
 
         if(savedInstanceState == null){
@@ -96,16 +95,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 .withOnDrawerItemClickListener(this)
                 .build();
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.favorites));
-        FavoritosDAO dao = new FavoritosDAO(this);
-        new LinhaFile(this).iniciarDados(dao.getLista());
-        List<Itinerario> itinerarios = LinhaFile.getItinerarios();
-        for(Itinerario itinerario:itinerarios){
-            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerario.getNome()).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
+        BusDAO dao = new BusDAO(this);
+
+        List<Itinerary> itinerarieses = dao.getItineraries(true);
+        for(Itinerary itinerary : itinerarieses){
+            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerary.getName()).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
         }
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
-        List<String>allItinerarios = new LinhaFile(this).getNomeLinhas();
-        for(String txt:allItinerarios){
-            navigationDrawer.addItem(new SecondaryDrawerItem().withName(txt).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
+        List<Itinerary>allItinerarios = dao.getItineraries(false);
+        for(Itinerary itinerary:allItinerarios){
+            navigationDrawer.addItem(new SecondaryDrawerItem().withName(itinerary.getName()).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
         }
 
     }

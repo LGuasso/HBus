@@ -4,7 +4,6 @@ package br.com.expressobits.hbus.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,25 +14,28 @@ import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.adapters.ListViewAdapterFavorite;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoritosDAO;
-import br.com.expressobits.hbus.file.LinhaFile;
-import br.com.expressobits.hbus.modelo.Itinerario;
+import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
 import br.com.expressobits.hbus.utils.Popup;
 
 /**
  * A simple {@link Fragment} subclass.
+ * @author Rafael Correa
+ * @since 06/07/2015
  */
 public class LinhasFragment extends Fragment{
 
     public String selectedItem;
     ListView listViewLines;
     private ActionButton actionButton;
-    private ArrayList<Itinerario> itinerarios;
+    private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
 
     @Override
@@ -73,19 +75,18 @@ public class LinhasFragment extends Fragment{
     private void initListViews(View view){
         listViewLines = (ListView) view.findViewById(R.id.list_lines);
 
-        FavoritosDAO dao = new FavoritosDAO(getActivity());
 
-        new LinhaFile(this.getActivity()).iniciarDados(dao.getLista());
-
-        itinerarios = LinhaFile.getItinerarios();
-        final ListViewAdapterFavorite adapterLinesUteis = new ListViewAdapterFavorite(this.getActivity(),android.R.layout.simple_list_item_1, itinerarios);
+        BusDAO dao  = new BusDAO(getActivity());
+        itineraries = dao.getItineraries(true);
+        final ListViewAdapterFavorite adapterLinesUteis = new ListViewAdapterFavorite(this.getActivity(),android.R.layout.simple_list_item_1, itineraries);
         listViewLines.setAdapter(adapterLinesUteis);
 
+        //TODO implement background selection one way
         listViewLines.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedItem = itinerarios.get(position).getNome();
+                selectedItem = itineraries.get(position).getName();
                 switch (selectedItem) {
                     case "Itarare Brigada":
                     case "Circular Cemiterio Sul":
@@ -97,7 +98,7 @@ public class LinhasFragment extends Fragment{
                         break;
 
                     default:
-                        Popup.showPopUp(mCallback, view, selectedItem, itinerarios.get(position).getSentidos());
+                        Popup.showPopUp(mCallback, view, selectedItem, itineraries.get(position).getSentidos());
                 }
             }
         });
@@ -106,9 +107,12 @@ public class LinhasFragment extends Fragment{
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedItem = itinerarios.get(position).getNome();
-                FavoritosDAO dao = new FavoritosDAO(getActivity());
-                dao.deletar(selectedItem);
+                selectedItem = itineraries.get(position).getName();
+
+                BusDAO dao = new BusDAO(getActivity());
+                Itinerary itinerary = dao.getItinerary(selectedItem);
+                itinerary.setFavorite(false);
+                dao.update(itinerary);
                 onResume();
                 return true;
             }

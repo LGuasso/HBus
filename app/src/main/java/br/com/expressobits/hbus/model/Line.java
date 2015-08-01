@@ -1,4 +1,4 @@
-package br.com.expressobits.hbus.modelo;
+package br.com.expressobits.hbus.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,7 @@ import br.com.expressobits.hbus.utils.TimeUtils;
 /**
  * Created by Rafael on 20/05/2015.
  */
-public class Linha {
+public class Line {
 
     private int id;
 
@@ -21,9 +21,9 @@ public class Linha {
     private boolean sentido;
     /**
      * Define o dia da linha
-     * @see TipoDeDia
+     * @see TypeDay
      */
-    private TipoDeDia dia;
+    private TypeDay dia;
 
 
     ArrayList<Bus> onibuses;
@@ -53,11 +53,11 @@ public class Linha {
         this.sentido = sentido;
     }
 
-    public TipoDeDia getDia() {
+    public TypeDay getDia() {
         return dia;
     }
 
-    public void setDia(TipoDeDia dia) {
+    public void setDia(TypeDay dia) {
         this.dia = dia;
     }
 
