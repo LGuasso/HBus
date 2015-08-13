@@ -15,7 +15,7 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppThemeNavigationDrawer" parent="MaterialDrawerTheme.Light">
+    <style name="AppThemeNavigationDrawer" parent="MaterialDrawerTheme.Light.DarkToolbar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -27,12 +27,11 @@
         <item name="actionBarStyle">@style/ActionBarOrange</item>
         <item name="buttonStyle">@style/ButtonAppTheme</item>
 
-
     </style>
 
 
 
-    <style name="ActionBarOrange" parent="@style/Widget.AppCompat.ActionBar">
+    <style name="ActionBarOrange" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="android:background">@color/colorPrimary</item>
         <!-- Support library compatibility -->
         <item name="background">@color/colorPrimary</item>

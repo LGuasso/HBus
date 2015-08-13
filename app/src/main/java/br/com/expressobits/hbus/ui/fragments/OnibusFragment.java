@@ -1,7 +1,6 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
@@ -20,12 +18,10 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.BusAdapter;
-import br.com.expressobits.hbus.adapters.ListViewAdapterBus;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.file.LinhaFile;
-import br.com.expressobits.hbus.modelo.Linha;
-import br.com.expressobits.hbus.modelo.Bus;
-import br.com.expressobits.hbus.modelo.TipoDeDia;
-import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
@@ -34,14 +30,11 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  */
 public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
-    public static final String ARGS_LINHA = "Linha";
-    public static final String ARGS_SENTIDO = "Sentido";
+    public static final String ARGS_LINHA = "Line";
+    public static final String ARGS_SENTIDO = "Way";
     RecyclerView recyclerViewUsefulDays;
     RecyclerView recyclerViewSaturday;
     RecyclerView recyclerViewSunday;
-    List<Bus> listAuxBusUsefulDays;
-    List<Bus> listAuxBusSaturday;
-    List<Bus> listAuxBusSunday;
 
     int contUsefulDays=0;
     int contSaturday=0;
@@ -195,20 +188,23 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     }
 
     public void refresh(String linha,String sentido){
-        linha = toSimpleName(linha);
+        //linha = toSimpleName(linha);
         sentido = toSimpleName(sentido);
 
-        listBusUsefulDays = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.UTEIS);
+        BusDAO dao = new BusDAO(getActivity());
+
+
+        listBusUsefulDays = dao.getLista(linha,sentido,TypeDay.USEFUL.toString());
         BusAdapter adapterUeful = new BusAdapter(getActivity(), listBusUsefulDays);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerViewUsefulDays.setAdapter(adapterUeful);
 
-        listBusSaturday = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.SABADO);
+        listBusSaturday = dao.getLista(linha, sentido, TypeDay.SATURDAY.toString());
         BusAdapter adapterSaturday = new BusAdapter(getActivity(), listBusSaturday);
         adapterSaturday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSaturday.setAdapter(adapterSaturday);
 
-        listBusSunday = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.DOMINGO);
+        listBusSunday = dao.getLista(linha, sentido, TypeDay.SUNDAY.toString());
         BusAdapter adapterSunday = new BusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);
@@ -220,43 +216,6 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         adapter.removeListItem(position);
     }
 
-    public List<Bus> getSetBusList(int tipoDeDia,int qtd,String linha,String sentido){
-        List<Bus> listAux = new ArrayList<Bus>();
-        List<Bus> list = new ArrayList<Bus>();
-        switch (tipoDeDia){
-            case 1:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.SABADO);
-                if(contSaturday+10>list.size()-1){
-                    listAux = list.subList(contSaturday,list.size()-1);
-                }else{
-                    listAux = list.subList(contSaturday, contSaturday + 10);
-                }
-
-                contSaturday+=10;
-                break;
-            case 2:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.DOMINGO);
-                if(contSunday+10>list.size()-1){
-                    listAux = list.subList(contSunday,list.size()-1);
-                }else{
-                    listAux = list.subList(contSunday, contSunday + 10);
-                }
-                contSunday+=10;
-                break;
-            default:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.UTEIS);
-                if(contUsefulDays+10>list.size()-1){
-                    listAux = list.subList(contUsefulDays,list.size()-1);
-                }else{
-                    listAux = list.subList(contUsefulDays, contUsefulDays + 10);
-                }
-                contUsefulDays+=10;
-                break;
-
-        }
-
-        return(listAux);
-    }
 
 
     /**

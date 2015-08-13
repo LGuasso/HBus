@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.modelo.Bus;
+import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
@@ -51,11 +51,11 @@ public class ListViewAdapterBus extends ArrayAdapter<Bus>{
         TextView textViewCodigo = (TextView) view.findViewById(R.id.item_list_textview_codigo);
         //ImageView imageView = (ImageView) view.findViewById(R.id.item_list_imageview);
         textViewHorario.setText(bus.getTime());
-        textViewCodigo.setText(bus.getCodigo().getId());
+        textViewCodigo.setText(bus.getCode().getCode());
         //textViewCodigo.setText(context.getString(R.string.code_of_bus) + " " + onibus.getCodigo());
         // TODO Arrumar codigos que contem caracteres diferentes
         // TODO Separar a descrição por diferents Strings para poder trabalhar
-        textViewDescricaoCodigo.setText(bus.getCodigo().getDescricao());
+        textViewDescricaoCodigo.setText(bus.getCode().getDescrition());
         textViewDescricaoCodigo.setSelected(true);
         textViewTempoFaltando.setSelected(true);
         textViewTempoFaltando.setText(TimeUtils.getFaltaparaHorario(bus.getTime()));

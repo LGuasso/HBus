@@ -11,7 +11,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.modelo.Bus;
+import br.com.expressobits.hbus.model.Bus;
 
 /**
  * Created by Rafael on 24/06/2015.
@@ -39,8 +39,8 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         //Método que atualiza informações
         myViewHolder.txtViewHorario.setText(listBus.get(i).getTime());
-        myViewHolder.txtViewCode.setText(listBus.get(i).getCodigo().getId());
-        myViewHolder.txtViewDescrition.setText(listBus.get(i).getCodigo().getDescricao());
+        myViewHolder.txtViewCode.setText(listBus.get(i).getCode().getCode());
+        myViewHolder.txtViewDescrition.setText(listBus.get(i).getCode().getDescrition());
     }
 
     @Override

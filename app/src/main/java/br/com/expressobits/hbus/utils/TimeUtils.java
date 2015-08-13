@@ -1,12 +1,13 @@
 package br.com.expressobits.hbus.utils;
 
-import android.content.Intent;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import br.com.expressobits.hbus.model.TypeDay;
 
 /**
  * Created by Rafael on 15/06/2015.
@@ -66,6 +67,18 @@ public class TimeUtils {
                 return 2;
             default:
                 return 0;
+        }
+    }
+
+    public static TypeDay getTypeDayforString(String day){
+        switch (day){
+            case "uteis":
+                return TypeDay.USEFUL;
+            case "sabado":
+                return TypeDay.SATURDAY;
+            default:
+                return TypeDay.SUNDAY;
+
         }
     }
 

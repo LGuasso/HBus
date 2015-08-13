@@ -11,12 +11,13 @@ import java.util.ArrayList;
 
 /**
  * Created by Rafael on 05/07/2015.
+ * @deprecated
  */
 public class FavoritosDAO extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
     private static final String TABLE = "Favoritos";
-    private static String[] COLS = {"id","nome","codigo"};
+    private static String[] COLS = {"id","name","codigo"};
 
     public FavoritosDAO(Context context){
         super(context, TABLE, null, VERSION);
@@ -29,8 +30,8 @@ public class FavoritosDAO extends SQLiteOpenHelper {
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE " + TABLE + " ");
         sb.append("(id INTEGER PRIMARY KEY, ");
-        sb.append(" nome TEXT,");
-        sb.append(" codigo TEXT);");
+        sb.append(" name TEXT,");
+        sb.append(" code TEXT);");
         db.execSQL(sb.toString());
     }
 
@@ -59,7 +60,7 @@ public class FavoritosDAO extends SQLiteOpenHelper {
     public void inserirOuAlterar(String linha){
         //TODO verificar se ja existe
         ContentValues c = new ContentValues();
-        c.put("nome",linha.split(" - ")[0]);
+        c.put("name",linha.split(" - ")[0]);
         if(!linha.contains(" - ")){
             c.put("codigo"," NO ");
         }else {
@@ -71,7 +72,7 @@ public class FavoritosDAO extends SQLiteOpenHelper {
 
     public void deletar(String linha){
 
-       getWritableDatabase().delete(TABLE, "nome=?",new String[]{linha});
+       getWritableDatabase().delete(TABLE, "name=?",new String[]{linha});
     }
 
 

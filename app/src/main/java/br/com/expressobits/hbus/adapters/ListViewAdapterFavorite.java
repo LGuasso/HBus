@@ -12,28 +12,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.modelo.Itinerario;
-import br.com.expressobits.hbus.modelo.Bus;
+import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.model.Bus;
 
 /**
  * Created by Rafael on 27/05/2015.
  */
-public class ListViewAdapterFavorite extends ArrayAdapter<Itinerario> {
+public class ListViewAdapterFavorite extends ArrayAdapter<Itinerary> {
 
     Context context;
-    LayoutInflater layoutInflater;
-    List<Itinerario> itinerarioList;
+    List<Itinerary> itineraryList;
 
-    public ListViewAdapterFavorite(Context context, int id, List<Itinerario> lista){
+    public ListViewAdapterFavorite(Context context, int id, List<Itinerary> lista){
         super(context,id,lista);
         this.context = context;
-        //this.lista = lista;
-        this.itinerarioList = lista;
+        this.itineraryList = lista;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Itinerario itinerario = itinerarioList.get(position);
+        Itinerary Itinerary = itineraryList.get(position);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_list_line, null);
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.listView_background_line);
@@ -46,11 +44,11 @@ public class ListViewAdapterFavorite extends ArrayAdapter<Itinerario> {
 
         LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linear_layout_nextbuses);
 
-        textView.setText(itinerario.getNome());
+        textView.setText(Itinerary.getName());
         //textViewTipo.setText(linha.getCodigos().toString());
         String texto = new String(" ");
-        if(itinerario.getLinhas().size()>0){
-            ArrayList<Bus> onibuses = itinerario.getNextBuses();
+        if(Itinerary.getLines().size()>0){
+            ArrayList<Bus> onibuses = Itinerary.getNextBuses();
             int i=0;
             //TODO DESIGN melhorar visual
             for(Bus bus :onibuses){
@@ -60,7 +58,7 @@ public class ListViewAdapterFavorite extends ArrayAdapter<Itinerario> {
                     if(time!=null) {
                         TextView textViewNextbus = new TextView(context);
                         textViewNextbus.setTextAppearance(context,R.style.TextStyle_Medium_Color);
-                        textViewNextbus.setText(itinerario.getSentidos().get(i)+"  -  "+time);
+                        textViewNextbus.setText(Itinerary.getSentidos().get(i)+"  -  "+time);
                         linearLayout.addView(textViewNextbus);
                     }else{
                     }

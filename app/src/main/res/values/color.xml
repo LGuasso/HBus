@@ -2,15 +2,21 @@
 <resources>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="red">#f00</color>
+    <color name="redPure">#f00</color>
     <color name="green">#090</color>
+
+    <color name="pink">#E91E63</color>
+    <color name="deep_orange">#FF5722</color>
+    <color name="indigo">#3F51B5</color>
+    <color name="blue">#2196F3</color>
+    <color name="red">#F44336</color>
     
     <color name="text_color">#dd000000</color>
     <color name="subtext_color">#88000000</color>
     <color name="texthint_color">#44000000</color>
 
-    <color name="colorPrimary">@color/amber_500</color>
-    <color name="colorPrimaryDark">@color/amber_700</color>
+    <color name="colorPrimary">@color/red</color>
+    <color name="colorPrimaryDark">@color/red</color>
     <color name="colorPrimaryLight">@color/amber_100</color>
     <color name="colorAccent">@color/blue_gray_500</color>
     <color name="colorAccentDark">@color/blue_gray_700</color>
