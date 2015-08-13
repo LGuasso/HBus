@@ -117,4 +117,9 @@ public class Bus implements Comparable<Bus>{
         }
     }
 
+    @Override
+    public String toString() {
+        return getTime()+" - "+getCode()+" - "+getItinerary().getName()
+                +" - "+getTypeday()+" - "+getWay();
+    }
 }

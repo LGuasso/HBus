@@ -72,9 +72,9 @@ public class TimeUtils {
 
     public static TypeDay getTypeDayforString(String day){
         switch (day){
-            case "usefuls":
+            case "uteis":
                 return TypeDay.USEFUL;
-            case "saturday":
+            case "sabado":
                 return TypeDay.SATURDAY;
             default:
                 return TypeDay.SUNDAY;

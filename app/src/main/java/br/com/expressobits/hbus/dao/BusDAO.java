@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +35,7 @@ public class BusDAO extends SQLiteOpenHelper{
     private static final String TABLE_ITINERARY = "Itinerary";
     private static final String DATABASE_NAME = "HBusDB";
     private static final int DATABASE_VERSION = 1;
+    private static final String TAG= "DAO";
 
     public BusDAO(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -156,12 +159,15 @@ public class BusDAO extends SQLiteOpenHelper{
      * @param bus
      */
     public void insert(Bus bus){
+
+
         ContentValues c = new ContentValues();
         c.put("time", bus.getTime());
         c.put("code", bus.getCode().getCode());
         c.put("itinerary", bus.getItinerary().getName());
-        c.put("way", bus.getWay());
+        c.put("way", LinhaFile.toSimpleName(bus.getWay()));
         c.put("typeDay", bus.getTypeday().toString());
+        Log.i(TAG, "insert bus " + bus);
         getWritableDatabase().insert(TABLE_BUS, null, c);
     }
 

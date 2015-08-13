@@ -188,7 +188,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     }
 
     public void refresh(String linha,String sentido){
-        linha = toSimpleName(linha);
+        //linha = toSimpleName(linha);
         sentido = toSimpleName(sentido);
 
         BusDAO dao = new BusDAO(getActivity());
@@ -216,43 +216,6 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         adapter.removeListItem(position);
     }
 
-    public List<Bus> getSetBusList(int tipoDeDia,int qtd,String linha,String sentido){
-        List<Bus> listAux = new ArrayList<Bus>();
-        List<Bus> list = new ArrayList<Bus>();
-        switch (tipoDeDia){
-            case 1:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TypeDay.SATURDAY);
-                if(contSaturday+10>list.size()-1){
-                    listAux = list.subList(contSaturday,list.size()-1);
-                }else{
-                    listAux = list.subList(contSaturday, contSaturday + 10);
-                }
-
-                contSaturday+=10;
-                break;
-            case 2:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TypeDay.SUNDAY);
-                if(contSunday+10>list.size()-1){
-                    listAux = list.subList(contSunday,list.size()-1);
-                }else{
-                    listAux = list.subList(contSunday, contSunday + 10);
-                }
-                contSunday+=10;
-                break;
-            default:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TypeDay.USEFUL);
-                if(contUsefulDays+10>list.size()-1){
-                    listAux = list.subList(contUsefulDays,list.size()-1);
-                }else{
-                    listAux = list.subList(contUsefulDays, contUsefulDays + 10);
-                }
-                contUsefulDays+=10;
-                break;
-
-        }
-
-        return(listAux);
-    }
 
 
     /**
