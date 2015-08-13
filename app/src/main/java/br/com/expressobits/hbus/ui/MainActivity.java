@@ -13,6 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdView;
@@ -23,6 +26,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,13 +42,16 @@ import br.com.expressobits.hbus.ui.fragments.LinhasFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.utils.Popup;
 
-public class MainActivity extends AppCompatActivity implements OnSettingsListener,Drawer.OnDrawerItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener {
 
     public static final String TAG = "Atividade Principal";
 
     private Toolbar pToolbar;
     //Navigation Drawer
     private Drawer navigationDrawer;
+    private ProgressBar progressBar;
+    private TextView textViewLoadBus;
+    private FrameLayout frameLayout;
 
 
 
@@ -53,14 +61,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     String linha;
     String sentido;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        new LinhaFile(this).init();
-
-
+        //TODO model remove linhafile
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        textViewLoadBus = (TextView) findViewById(R.id.textViewLoadBusName);
+        frameLayout = (FrameLayout) findViewById(R.id.framelayout_main);
+        new LinhaFile(this).init(this);
         if(savedInstanceState == null){
 
             LinhasFragment linhasFragment = new LinhasFragment();
@@ -74,11 +84,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 ft.add(R.id.framelayout_content,new OnibusFragment(),"onibusFragment");
                 ft.commit();
             }
-
         }
-
         initViews();
         initNavigationDrawer();
+        setVisibleLayout();
     }
 
 
@@ -135,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     private void initViews() {
         initActionBar();
-        initAdView();
+        //initAdView();
 
     }
 
@@ -280,6 +289,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         mAdView.loadAd(adRequest);
     }
 
+    public void setVisibleLayout(){
+        progressBar.setVisibility(View.INVISIBLE);
+        textViewLoadBus.setVisibility(View.INVISIBLE);
+        frameLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void setLoadText(String text){
+        textViewLoadBus.setText(text);
+    }
+
 
     @Override
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
@@ -306,5 +325,19 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             }
 
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab_button:
+                onSettingsDone(true);
+            return;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

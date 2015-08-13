@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Rafael on 05/07/2015.
+ * @deprecated
  */
 public class FavoritosDAO extends SQLiteOpenHelper {
 

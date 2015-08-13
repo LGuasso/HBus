@@ -18,6 +18,7 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.BusAdapter;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
@@ -34,9 +35,6 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     RecyclerView recyclerViewUsefulDays;
     RecyclerView recyclerViewSaturday;
     RecyclerView recyclerViewSunday;
-    List<Bus> listAuxBusUsefulDays;
-    List<Bus> listAuxBusSaturday;
-    List<Bus> listAuxBusSunday;
 
     int contUsefulDays=0;
     int contSaturday=0;
@@ -193,17 +191,20 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         linha = toSimpleName(linha);
         sentido = toSimpleName(sentido);
 
-        listBusUsefulDays = new LinhaFile(getActivity()).getOnibuses(linha,sentido, TypeDay.USEFUL);
+        BusDAO dao = new BusDAO(getActivity());
+
+
+        listBusUsefulDays = dao.getLista(linha,sentido,TypeDay.USEFUL.toString());
         BusAdapter adapterUeful = new BusAdapter(getActivity(), listBusUsefulDays);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerViewUsefulDays.setAdapter(adapterUeful);
 
-        listBusSaturday = new LinhaFile(getActivity()).getOnibuses(linha,sentido, TypeDay.SATURDAY);
+        listBusSaturday = dao.getLista(linha, sentido, TypeDay.SATURDAY.toString());
         BusAdapter adapterSaturday = new BusAdapter(getActivity(), listBusSaturday);
         adapterSaturday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSaturday.setAdapter(adapterSaturday);
 
-        listBusSunday = new LinhaFile(getActivity()).getOnibuses(linha,sentido, TypeDay.SUNDAY);
+        listBusSunday = dao.getLista(linha, sentido, TypeDay.SUNDAY.toString());
         BusAdapter adapterSunday = new BusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);

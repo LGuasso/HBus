@@ -1,7 +1,9 @@
 package br.com.expressobits.hbus.file;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.Line;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
+import br.com.expressobits.hbus.ui.MainActivity;
 
 /**
  * Created by Rafael on 20/05/2015.
@@ -38,13 +41,37 @@ public class LinhaFile {
         this.context = context;
     }
 
-    public void init(){
+
+    /**
+     * Inicializa todas linhas e dados do banco.
+     * TODO implementar progressBar
+     */
+    public void init(MainActivity main){
 
         if(context.getSharedPreferences(TAG,context.MODE_PRIVATE).getBoolean(KEY_SQLINIT,true)){
+
+            BusDAO dao = new BusDAO(context);
+            dao.deleteAll();
             initItinerary();
+            main.setLoadText("Load itinerary index");
             initCodes();
-            // TODO escrever preferencia context.getSharedPreferences(TAG)
+            for(Itinerary itinerary : dao.getItineraries()){
+                for (String sentido:itinerary.getSentidos()){
+                    for (TypeDay typeDay:TypeDay.values()){
+                        initBusLine(itinerary.getName(), sentido, typeDay);
+
+                    }
+                }
+                main.setLoadText(itinerary.getName());
+
+            }
+            SharedPreferences sharedPref = context.getSharedPreferences(TAG,Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(KEY_SQLINIT, false);
+            editor.commit();
         }
+
+
 
 
     }
@@ -65,7 +92,7 @@ public class LinhaFile {
         if(fileString!=null){
             fileStringarray=fileString.split("\n");
             if(BuildConfig.DEBUG){
-                //Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
+                Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
             }
         }else{
             fileStringarray=new String[]{"ERRO","ERRO"};
@@ -109,14 +136,18 @@ public class LinhaFile {
 
     }
 
+    /**
+     * Inicializa os itinerários.
+     */
     public void initItinerary(){
         BusDAO dao = new BusDAO(context);
         ArrayList<String> texto = lerTexto(ITINERARIOFILETODOS);
         if(!texto.isEmpty() && !texto.get(0).equals("ERRO")) {
             for (String txt : texto) {
                 Itinerary itinerary = new Itinerary();
-                itinerary.setName(txt.split("-")[0].toUpperCase().trim());
+                itinerary.setName(txt.split(";")[0].trim());
                 itinerary.setFavorite(false);
+                itinerary.setSentidos(new ArrayList<String>(Arrays.asList(txt.split(";")[1].split(","))));
                 dao.insert(itinerary);
             }
         }
@@ -156,7 +187,6 @@ public class LinhaFile {
                     Itinerary itinerary = dao.getItinerary(itineraryName);
                     bus.setItinerary(itinerary);
                     bus.setTypeday(typeDay);
-
                     dao.insert(bus);
                 }
             }
@@ -245,7 +275,7 @@ public class LinhaFile {
      * @param name
      * @return
      */
-    private String toSimpleName(String name){
+    public static String toSimpleName(String name){
         if(name == null){
             return "";
         }else {
@@ -254,30 +284,12 @@ public class LinhaFile {
             ok = ok.replace(" < ","-");
             ok = ok.replace(" ", "-");
             ok = ok.replace("é", "e");
+            ok = ok.replace(",", "_");
             ok = ok.toLowerCase();
             return ok;
         }
     }
 
-    public Line createLinha(String nome,String sentido,TypeDay tipodeDia){
-        Line line = new Line();
-        ArrayList<Bus> buses = new ArrayList<>();
-        buses = getOnibuses(nome,sentido,tipodeDia);
-        line.setOnibuses(buses);
-        return line;
-    }
 
-    public List<String> getNomeLinhas(){
-        ArrayList<String> linhas = new ArrayList<>();
-
-        ArrayList<String> linhasAux = lerTexto(ITINERARIOFILETODOS);
-
-        for (String txt :linhasAux){
-            if(txt.contains(" - ")) {
-               linhas.add(txt.split(" - ")[0]);
-            }
-        }
-        return linhas;
-    }
 
 }

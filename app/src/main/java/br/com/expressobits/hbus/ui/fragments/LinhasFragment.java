@@ -122,12 +122,13 @@ public class LinhasFragment extends Fragment{
     private void initFAB(View view){
         actionButton = (ActionButton) view.findViewById(R.id.fab_button);
         actionButton.playShowAnimation();
-        actionButton.setButtonColor(getActivity().getResources().getColor(R.color.amber_500));
-        actionButton.setButtonColorPressed(getActivity().getResources().getColor(R.color.amber_900));
+        actionButton.setButtonColor(getActivity().getResources().getColor(R.color.colorPrimary));
+        actionButton.setButtonColorPressed(getActivity().getResources().getColor(R.color.colorPrimaryDark));
 
         actionButton.setShowAnimation(ActionButton.Animations.ROLL_FROM_DOWN);
         actionButton.setHideAnimation(ActionButton.Animations.ROLL_TO_DOWN);
         actionButton.setImageResource(R.drawable.plus);
+        actionButton.setOnClickListener((View.OnClickListener)getActivity());
     }
 
     public void selectedWay(String way){

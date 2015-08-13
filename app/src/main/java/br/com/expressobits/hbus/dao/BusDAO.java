@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
@@ -23,9 +25,9 @@ import br.com.expressobits.hbus.utils.TimeUtils;
 public class BusDAO extends SQLiteOpenHelper{
 
 
-    private static final String[] COLS_BUS = {"id","time","code","line","way","typeday"};
+    private static final String[] COLS_BUS = {"id","time","code","itinerary","way","typeday"};
     private static final String[] COLS_CODE = {"id","code","descrition"};
-    private static final String[] COLS_ITINERARY = {"id","name","favorite"};
+    private static final String[] COLS_ITINERARY = {"id","name","favorite","sentidos"};
     private static final String TABLE_BUS = "Bus";
     private static final String TABLE_CODE = "Code";
     private static final String TABLE_ITINERARY = "Itinerary";
@@ -55,6 +57,7 @@ public class BusDAO extends SQLiteOpenHelper{
         sb.append("DROP TABLE IF EXISTS "+ TABLE_ITINERARY);
         db.execSQL(sb.toString());
 
+        sb = new StringBuilder();
         sb.append("DROP TABLE IF EXISTS "+ TABLE_CODE);
         db.execSQL(sb.toString());
 
@@ -65,12 +68,31 @@ public class BusDAO extends SQLiteOpenHelper{
         onCreate(db);
     }
 
+    public void deleteAll(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("DROP TABLE IF EXISTS "+ TABLE_ITINERARY);
+        getWritableDatabase().execSQL(sb.toString());
+
+        sb = new StringBuilder();
+        sb.append("DROP TABLE IF EXISTS "+ TABLE_CODE);
+        getWritableDatabase().execSQL(sb.toString());
+
+        sb = new StringBuilder();
+        sb.append("DROP TABLE IF EXISTS " + TABLE_BUS);
+        getWritableDatabase().execSQL(sb.toString());
+
+        onCreate(getWritableDatabase());
+    }
+
     private void createTableItinerary(SQLiteDatabase db){
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE " + TABLE_ITINERARY + " ");
         sb.append("(id INTEGER PRIMARY KEY, ");
         sb.append(" name TEXT,");
-        sb.append(" favorite INTEGER);");
+        sb.append(" favorite INTEGER,");
+        sb.append(" sentidos TEXT);");
+
+
         db.execSQL(sb.toString());
     }
 
@@ -80,7 +102,7 @@ public class BusDAO extends SQLiteOpenHelper{
         sb.append("(id INTEGER PRIMARY KEY, ");
         sb.append(" time TEXT,");
         sb.append(" code TEXT,");
-        sb.append(" line TEXT,");
+        sb.append(" itinerary TEXT,");
         sb.append(" way TEXT,");
         sb.append(" typeday TEXT);");
         db.execSQL(sb.toString());
@@ -106,6 +128,14 @@ public class BusDAO extends SQLiteOpenHelper{
         ContentValues c = new ContentValues();
         c.put("name", itinerary.getName());
         c.put("favorite", itinerary.getFavorite());
+        String sentido="";
+
+        for (String sb : itinerary.getSentidos()){
+            sentido+=sb;
+            sentido+=",";
+        }
+        sentido=sentido.substring(0, sentido.length()-1);
+        c.put("sentidos", sentido);
         getWritableDatabase().insert(TABLE_ITINERARY, null, c);
     }
 
@@ -156,6 +186,14 @@ public class BusDAO extends SQLiteOpenHelper{
         while(c.moveToNext()){
             Itinerary itinerary = new Itinerary();
             itinerary.setName(c.getString(1));
+
+            if(c.getString(2).equals("0")){
+                itinerary.setFavorite(false);
+            }else{
+                itinerary.setFavorite(true);
+            }
+
+            itinerary.setSentidos(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
             itinerariess.add(itinerary);
 
         }
@@ -173,18 +211,20 @@ public class BusDAO extends SQLiteOpenHelper{
         ArrayList<Itinerary> itinerariess = new ArrayList<Itinerary>();
         Cursor c;
         String where = "favorite = ?";
+        String arguments[];
         if(favorite){
-            String arguments[] = {"1"};
+            arguments = new String[]{"1"};
         }else{
-            String arguments[] = {"0"};
+            arguments = new String[]{"0"};
         }
 
 
-        c = getWritableDatabase().query(TABLE_ITINERARY,COLS_ITINERARY,null,null,null,null,null);
+        c = getWritableDatabase().query(TABLE_ITINERARY,COLS_ITINERARY,where,arguments,null,null,null);
         while(c.moveToNext()){
             Itinerary itinerary = new Itinerary();
             itinerary.setName(c.getString(1));
             itinerary.setFavorite(favorite);
+            itinerary.setSentidos(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
             itinerariess.add(itinerary);
 
         }
@@ -205,7 +245,7 @@ public class BusDAO extends SQLiteOpenHelper{
         String where = "code = ?";
         String arguments[] = {codeName};
 
-        c = getWritableDatabase().query(TABLE_ITINERARY,COLS_ITINERARY,where,arguments,null,null,null);
+        c = getWritableDatabase().query(TABLE_CODE,COLS_CODE,where,arguments,null,null,null);
         while(c.moveToNext()){
             code = new Code();
             code.setCode(c.getString(1));
@@ -248,7 +288,7 @@ public class BusDAO extends SQLiteOpenHelper{
         ArrayList<Bus> buses = new ArrayList<Bus>();
 
         Cursor c;
-        String where = "line = ? AND way = ? AND typeday = ?";
+        String where = "itinerary = ? AND way = ? AND typeday = ?";
         String arguments[] = {nameLine,way,typeDay};
 
         c = getWritableDatabase().query(TABLE_BUS,COLS_BUS,where,arguments,null,null,null);

@@ -21,13 +21,11 @@ import br.com.expressobits.hbus.model.Bus;
 public class ListViewAdapterFavorite extends ArrayAdapter<Itinerary> {
 
     Context context;
-    LayoutInflater layoutInflater;
     List<Itinerary> itineraryList;
 
     public ListViewAdapterFavorite(Context context, int id, List<Itinerary> lista){
         super(context,id,lista);
         this.context = context;
-        //this.lista = lista;
         this.itineraryList = lista;
     }
 
