@@ -11,6 +11,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Bus;
 
 /**
@@ -22,8 +23,10 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
     private List<Bus> listBus;
     private LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
+    private Context context;
 
     public BusAdapter(Context context,List<Bus> listBus){
+        this.context = context;
         this.listBus = listBus;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -39,6 +42,8 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         //Método que atualiza informações
         myViewHolder.txtViewHorario.setText(listBus.get(i).getTime());
+
+        BusDAO dao = new BusDAO(context);
         myViewHolder.txtViewCode.setText(listBus.get(i).getCode().getCode());
         myViewHolder.txtViewDescrition.setText(listBus.get(i).getCode().getDescrition());
     }

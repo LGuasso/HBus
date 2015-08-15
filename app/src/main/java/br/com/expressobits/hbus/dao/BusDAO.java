@@ -40,10 +40,15 @@ public class BusDAO extends SQLiteOpenHelper{
     private static final String TAG= "DAO";
 
     public BusDAO(Context context) {
+
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //Cria banco de dados no armazenamento externo
         //super(context, Environment.getExternalStorageDirectory().getAbsolutePath()
                 //+ "/HBus/database/" + DATABASE_NAME, null, DATABASE_VERSION);
+        Log.d(TAG,getListaCode().size()+" codes");
+        for (Code code:getListaCode()){
+            Log.d(TAG,code+" "+code.getDescrition());
+        }
     }
 
 
@@ -161,15 +166,13 @@ public class BusDAO extends SQLiteOpenHelper{
      * @param bus
      */
     public void insert(Bus bus){
-
-
         ContentValues c = new ContentValues();
         c.put("time", bus.getTime());
         c.put("code", bus.getCode().getCode());
         c.put("itinerary", bus.getItinerary().getName());
         c.put("way", LinhaFile.toSimpleName(bus.getWay()));
         c.put("typeDay", bus.getTypeday().toString());
-        Log.i(TAG, "insert bus " + bus);
+        Log.d(TAG, "insert bus " + bus);
         getWritableDatabase().insert(TABLE_BUS, null, c);
     }
 
@@ -246,23 +249,21 @@ public class BusDAO extends SQLiteOpenHelper{
         //getWritableDatabase().delete(TABLE, "name=?", new String[]{linha});
     }
 
-    public Code getListaCode(String codeName){
-        //ArrayList<Code> codes = new ArrayList<Code>();
-        Code code = new Code();
+    public List<Code> getListaCode(){
+        ArrayList<Code> codes = new ArrayList<Code>();
+        Code code;
         Cursor c;
-        String where = "code = ?";
-        String arguments[] = {codeName};
 
-        c = getWritableDatabase().query(TABLE_CODE,COLS_CODE,where,arguments,null,null,null);
+        c = getWritableDatabase().query(TABLE_CODE,COLS_CODE,null,null,null,null,null);
         while(c.moveToNext()){
             code = new Code();
             code.setCode(c.getString(1));
             code.setDescrition(c.getString(2));
-            //codes.add(code);
+            codes.add(code);
         }
         c.close();
 
-        return code;
+        return codes;
     }
 
 
@@ -288,9 +289,35 @@ public class BusDAO extends SQLiteOpenHelper{
         return itinerary;
     }
 
+    public Code getCode(String codeName) {
+        Log.d(TAG,"getCode("+codeName+")");
+        Code code = new Code();
+        Cursor c;
+        String where = "code = ?";
+        String arguments[] = {codeName};
+        if(codeName== null || codeName.isEmpty()){
+            code = new Code();
+            code.setCode("NO CODE");
+            code.setDescrition(" NO DESCRITION");
+            return code;
+        }
+        code = new Code();
+        code.setCode("NO CODE");
+        code.setDescrition(" NO DESCRITION");
+        c = getWritableDatabase().query(TABLE_CODE,COLS_CODE, where, arguments, null, null, null);
+        while (c.moveToNext()) {
+            code = new Code();
+            code.setCode(c.getString(1));
+            code.setDescrition(c.getString(2));
+        }
+        c.close();
+        return code;
+    }
 
 
-        /**
+
+
+    /**
          * Busca no banco de dados lista de {@link Bus} baseado nos parâmetros
          * @param nameLine Nome da linha
          * @param way Sentido do ônibus
@@ -311,10 +338,10 @@ public class BusDAO extends SQLiteOpenHelper{
             Bus bus = new Bus();
             bus.setTime(c.getString(1));
 
+
             Code code = new Code();
             code.setCode(c.getString(2));
             bus.setCode(code);
-
             Itinerary itinerary = new Itinerary();
             itinerary.setName(c.getString(3));
             bus.setItinerary(itinerary);

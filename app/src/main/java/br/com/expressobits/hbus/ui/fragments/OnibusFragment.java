@@ -34,10 +34,6 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     RecyclerView recyclerViewSaturday;
     RecyclerView recyclerViewSunday;
 
-    int contUsefulDays=0;
-    int contSaturday=0;
-    int contSunday=0;
-
     List<Bus> listBusUsefulDays;
     List<Bus> listBusSaturday;
     List<Bus> listBusSunday;
@@ -82,63 +78,15 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         recyclerViewSunday = (RecyclerView)view.findViewById(R.id.rv_listline_line_sunday);
         recyclerViewSunday.setHasFixedSize(true);
 
-        recyclerViewUsefulDays.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-            }
-        });
-
 
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewUsefulDays.setLayoutManager(llmUseful);
 
-        recyclerViewSaturday.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
 
         LinearLayoutManager llmSaturday = new LinearLayoutManager(getActivity());
         llmSaturday.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewSaturday.setLayoutManager(llmSaturday);
-
-        recyclerViewSunday.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                /**LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-                 BusAdapter adapter = (BusAdapter) recyclerView.getAdapter();
-
-                 if (listBusSunday.size() == llm.findLastCompletelyVisibleItemPosition() + 1) {
-                 //TODO aonde vem meus dados?
-                 //List<Bus> listAux = getSetBusList(10);
-                 List<Bus> listAux = listBusSunday;
-
-                 for (int i = 0; i < listAux.size(); i++) {
-                 adapter.addListItem(listAux.get(i), listBusSunday.size());
-                 }
-                 }*/
-            }
-        });
 
 
         LinearLayoutManager llmSunday = new LinearLayoutManager(getActivity());

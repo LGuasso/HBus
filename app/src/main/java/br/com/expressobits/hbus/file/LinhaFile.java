@@ -181,7 +181,9 @@ public class LinhaFile {
                 for (String txt : texto) {
                     Bus bus = new Bus();
                     bus.setTime(txt.split(" - ")[0]);
-                    Code code = dao.getListaCode(txt.split(" - ")[1]);
+                    Code code = new Code();
+                    code.setCode(txt.split(" - ")[1]);
+                    //Log.d(TAG,"identify CODE "+txt.split(" - ")[1]+" RESult "+code);
                     bus.setCode(code);
                     bus.setWay(way);
                     Itinerary itinerary = dao.getItinerary(itineraryName);
