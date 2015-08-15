@@ -12,14 +12,12 @@ import android.widget.ListView;
 
 import com.software.shell.fab.ActionButton;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.adapters.ListViewAdapterFavorite;
+import br.com.expressobits.hbus.adapters.ItemFavoriteItineraryAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.dao.FavoritosDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
@@ -30,7 +28,7 @@ import br.com.expressobits.hbus.utils.Popup;
  * @author Rafael Correa
  * @since 06/07/2015
  */
-public class LinhasFragment extends Fragment{
+public class FavoritesItineraryFragment extends Fragment{
 
     public String selectedItem;
     ListView listViewLines;
@@ -78,7 +76,7 @@ public class LinhasFragment extends Fragment{
 
         BusDAO dao  = new BusDAO(getActivity());
         itineraries = dao.getItineraries(true);
-        final ListViewAdapterFavorite adapterLinesUteis = new ListViewAdapterFavorite(this.getActivity(),android.R.layout.simple_list_item_1, itineraries);
+        final ItemFavoriteItineraryAdapter adapterLinesUteis = new ItemFavoriteItineraryAdapter(this.getActivity(),android.R.layout.simple_list_item_1, itineraries);
         listViewLines.setAdapter(adapterLinesUteis);
 
         //TODO implement background selection one way
@@ -127,7 +125,7 @@ public class LinhasFragment extends Fragment{
 
         actionButton.setShowAnimation(ActionButton.Animations.ROLL_FROM_DOWN);
         actionButton.setHideAnimation(ActionButton.Animations.ROLL_TO_DOWN);
-        actionButton.setImageResource(R.drawable.plus);
+        actionButton.setImageResource(R.drawable.ic_add_white_24dp);
         actionButton.setOnClickListener((View.OnClickListener)getActivity());
     }
 

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.file.LinhaFile;
@@ -18,6 +19,7 @@ import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.Line;
+import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
@@ -275,7 +277,12 @@ public class BusDAO extends SQLiteOpenHelper{
         while (c.moveToNext()) {
             itinerary = new Itinerary();
             itinerary.setName(c.getString(1));
-            //codes.add(code);
+            if(c.getString(2).equals("0")){
+                itinerary.setFavorite(false);
+            } else {
+                itinerary.setFavorite(true);
+            }
+            itinerary.setSentidos(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
         }
         c.close();
         return itinerary;
@@ -290,8 +297,10 @@ public class BusDAO extends SQLiteOpenHelper{
          * @param typeDay tipo de dia {@link br.com.expressobits.hbus.model.TypeDay}
          * @return Lista de {@link Bus}
          */
-    public List<Bus> getLista(String nameLine,String way,String typeDay){
+    public List<Bus> getBusList(String nameLine, String way, String typeDay){
         ArrayList<Bus> buses = new ArrayList<Bus>();
+
+        way = LinhaFile.toSimpleName(way);
 
         Cursor c;
         String where = "itinerary = ? AND way = ? AND typeday = ?";
@@ -320,4 +329,77 @@ public class BusDAO extends SQLiteOpenHelper{
 
         return buses;
     }
+
+    /**
+     * Busca no banco de dados lista de {@link Bus} baseado nos parâmetros
+     * @param nameLine Nome da linha
+     * @return Lista de {@link Bus}
+     */
+    public List<Bus> getBusList(String nameLine){
+        ArrayList<Bus> buses = new ArrayList<Bus>();
+
+        Cursor c;
+        String where = "itinerary = ?";
+        String arguments[] = {nameLine};
+
+        c = getWritableDatabase().query(TABLE_BUS,COLS_BUS,where,arguments,null,null,null);
+        while(c.moveToNext()){
+            Bus bus = new Bus();
+            bus.setTime(c.getString(1));
+
+            Code code = new Code();
+            code.setCode(c.getString(2));
+            bus.setCode(code);
+
+            Itinerary itinerary = new Itinerary();
+            itinerary.setName(c.getString(3));
+            bus.setItinerary(itinerary);
+
+            bus.setWay(c.getString(4));
+
+
+            bus.setTypeday(TimeUtils.getTypeDayforString(c.getString(5)));
+            buses.add(bus);
+        }
+        c.close();
+
+        return buses;
+    }
+
+
+
+    public List<Bus> getNextBuses(Itinerary itinerary){
+
+        ArrayList<Bus> next = new ArrayList<Bus>();
+        //TODO Typeday set por dia identificar o dia do typeday
+        for(int j = 0;j< itinerary.getSentidos().size();j++) {
+            next.add(getNextBusforList(getBusList(itinerary.getName(), itinerary.getSentidos().get(j), TypeDay.USEFUL.toString())));
+        }
+        return next;
+    }
+
+    private Bus getNextBusforList(List<Bus> buses){
+        //TODO Create metodo separado
+        Bus nowBus = new Bus();
+        Bus nextBus;
+        nowBus.setTime(TimeUtils.getNowTimeinString());
+        if(buses.size() > 0) {
+            nextBus = buses.get(0);
+            for (int i = 0; i < buses.size(); i++) {
+                nextBus = buses.get(i);
+                if (nowBus.compareTo(nextBus) <= 0) {
+                    nextBus = buses.get(i);
+                    return nextBus;
+                } else {
+
+                }
+            }
+            return nextBus;
+        }else{
+            nowBus.setTime(" --- ");
+            return nowBus;
+        }
+    }
+
+
 }

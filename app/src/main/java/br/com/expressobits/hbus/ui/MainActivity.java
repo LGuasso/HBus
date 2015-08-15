@@ -27,18 +27,15 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import org.w3c.dom.Text;
-
 import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.dao.FavoritosDAO;
 import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
-import br.com.expressobits.hbus.ui.fragments.LinhasFragment;
+import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.utils.Popup;
 
@@ -73,14 +70,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         new LinhaFile(this).init(this);
         if(savedInstanceState == null){
 
-            LinhasFragment linhasFragment = new LinhasFragment();
+            FavoritesItineraryFragment favoritesItineraryFragment = new FavoritesItineraryFragment();
             if(findViewById(R.id.framelayout_main)!=null){
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.framelayout_main,linhasFragment,"linhasFragment");
+                ft.add(R.id.framelayout_main, favoritesItineraryFragment,"linhasFragment");
                 ft.commit();
             }else if(findViewById(R.id.framelayout_content)!=null){
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.framelayout_menu,linhasFragment,"linhasFragment");
+                ft.add(R.id.framelayout_menu, favoritesItineraryFragment,"linhasFragment");
                 ft.add(R.id.framelayout_content,new OnibusFragment(),"onibusFragment");
                 ft.commit();
             }

@@ -1,31 +1,23 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
-import br.com.expressobits.hbus.adapters.ListViewAdapterFavorite;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.dao.FavoritosDAO;
-import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
-import br.com.expressobits.hbus.utils.Popup;
 
 /**
  * Created by Rafael on 06/07/2015.

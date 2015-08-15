@@ -59,4 +59,7 @@
         <item name="android:windowEnterAnimation">@animator/fade_in</item>
         <item name="android:windowExitAnimation">@animator/fade_out</item>
     </style>
+
+
+
 </resources>

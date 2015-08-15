@@ -6,6 +6,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextAppearance.AppCompat.Large" parent="@android:style/TextAppearance.Large">
+        <item name="android:textColor">@color/subtext_color</item>
+    </style>
+
 
 
     <style name="TextStyle.Large" parent="TextAppearance.AppCompat.Large">
@@ -33,6 +37,10 @@
     </style>
 
     <style name="TextStyle.Button" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Button" parent="TextAppearance.AppCompat.Button">
         <item name="android:textStyle">bold</item>
     </style>
 </resources>

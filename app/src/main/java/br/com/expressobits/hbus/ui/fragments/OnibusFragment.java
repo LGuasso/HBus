@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.BusAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.TimeUtils;
@@ -49,7 +47,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_onibus, null);
+        View view = inflater.inflate(R.layout.fragment_bus, null);
         initViews(view);
 
         Bundle arguments = getArguments();
@@ -194,17 +192,17 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         BusDAO dao = new BusDAO(getActivity());
 
 
-        listBusUsefulDays = dao.getLista(linha,sentido,TypeDay.USEFUL.toString());
+        listBusUsefulDays = dao.getBusList(linha, sentido, TypeDay.USEFUL.toString());
         BusAdapter adapterUeful = new BusAdapter(getActivity(), listBusUsefulDays);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerViewUsefulDays.setAdapter(adapterUeful);
 
-        listBusSaturday = dao.getLista(linha, sentido, TypeDay.SATURDAY.toString());
+        listBusSaturday = dao.getBusList(linha, sentido, TypeDay.SATURDAY.toString());
         BusAdapter adapterSaturday = new BusAdapter(getActivity(), listBusSaturday);
         adapterSaturday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSaturday.setAdapter(adapterSaturday);
 
-        listBusSunday = dao.getLista(linha, sentido, TypeDay.SUNDAY.toString());
+        listBusSunday = dao.getBusList(linha, sentido, TypeDay.SUNDAY.toString());
         BusAdapter adapterSunday = new BusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);
