@@ -165,7 +165,7 @@ public class LinhaFile {
         if(!texto.isEmpty() && !texto.get(0).equals("ERRO")) {
             for (String txt : texto) {
                 Code codigo = new Code();
-                codigo.setCode(txt.split(":")[0].toUpperCase().trim());
+                codigo.setName(txt.split(":")[0].toUpperCase().trim());
                 codigo.setDescrition(txt.split(":")[1]);
                 dao.insert(codigo);
             }
@@ -182,7 +182,11 @@ public class LinhaFile {
                     Bus bus = new Bus();
                     bus.setTime(txt.split(" - ")[0]);
                     Code code = new Code();
-                    code.setCode(txt.split(" - ")[1]);
+                    String scode = txt.split(" - ")[1];
+                    scode = scode.replaceAll("\r", "");
+                    scode = scode.replaceAll("\t", "");
+                    scode = scode.replaceAll("\n", "");
+                    code.setName(scode);
                     //Log.d(TAG,"identify CODE "+txt.split(" - ")[1]+" RESult "+code);
                     bus.setCode(code);
                     bus.setWay(way);
@@ -245,7 +249,7 @@ public class LinhaFile {
         }else{
             codigo = new Code();
             //TODO implementar texto dinamico do res
-            codigo.setCode("Falta ID");
+            codigo.setName("Falta ID");
             codigo.setDescrition("Não há descrição");
         }
 

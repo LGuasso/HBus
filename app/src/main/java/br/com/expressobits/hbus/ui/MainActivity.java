@@ -306,6 +306,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(iDrawerItem instanceof PrimaryDrawerItem) {
             selectedItem = ((PrimaryDrawerItem) iDrawerItem).getName();
         }
+
+        //TODO implementar seleção dinamica se haverá ou não caixa de seleção
             switch (selectedItem) {
                 case "Itarare Brigada":
                 case "Circular Cemiterio Sul":

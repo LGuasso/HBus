@@ -1,6 +1,7 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabWidget;
+import android.widget.TextView;
 
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -73,10 +75,13 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     private void initRecyclerViews(View view){
         recyclerViewUsefulDays = (RecyclerView)view.findViewById(R.id.rv_listline_line_useful_days);
         recyclerViewUsefulDays.setHasFixedSize(true);
+        recyclerViewUsefulDays.setSelected(true);
         recyclerViewSaturday = (RecyclerView)view.findViewById(R.id.rv_listline_line_saturday);
         recyclerViewSaturday.setHasFixedSize(true);
+        recyclerViewSaturday.setSelected(true);
         recyclerViewSunday = (RecyclerView)view.findViewById(R.id.rv_listline_line_sunday);
         recyclerViewSunday.setHasFixedSize(true);
+        recyclerViewSunday.setSelected(true);
 
 
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
@@ -117,13 +122,15 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         int childCount = tabWidget.getChildCount();
         for(int i = 0; i < childCount; ++i) {
             View child = tabWidget.getChildTabViewAt(i);
+            TextView tv = (TextView) abas.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
+            tv.setTextColor(getActivity().getResources().getColor(R.color.white));
             // Que eh o mesmo que
             //View child = tabWidget.getChildAt(i);
             // Vide o codigo fonte
 
             // O Drawable vai variar conforme o nome do seu tema, confirme se tem
             // algum nome parecido com esse e altere aqui
-            //child.setBackgroundResource(R.drawable.tab_indicator_ab_orange);
+            child.setBackgroundResource(R.drawable.tab_indicator_ab_blue);
         }
 
         abas.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
@@ -140,17 +147,17 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         BusDAO dao = new BusDAO(getActivity());
 
 
-        listBusUsefulDays = dao.getBusList(linha, sentido, TypeDay.USEFUL.toString());
+        listBusUsefulDays = dao.getBusList(linha, sentido, TypeDay.USEFUL.toString(),false);
         BusAdapter adapterUeful = new BusAdapter(getActivity(), listBusUsefulDays);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerViewUsefulDays.setAdapter(adapterUeful);
 
-        listBusSaturday = dao.getBusList(linha, sentido, TypeDay.SATURDAY.toString());
+        listBusSaturday = dao.getBusList(linha, sentido, TypeDay.SATURDAY.toString(),false);
         BusAdapter adapterSaturday = new BusAdapter(getActivity(), listBusSaturday);
         adapterSaturday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSaturday.setAdapter(adapterSaturday);
 
-        listBusSunday = dao.getBusList(linha, sentido, TypeDay.SUNDAY.toString());
+        listBusSunday = dao.getBusList(linha, sentido, TypeDay.SUNDAY.toString(),false);
         BusAdapter adapterSunday = new BusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);

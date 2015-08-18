@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@drawable/circle"
+        android:background="@drawable/square"
 
         >
 
@@ -24,10 +24,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:paddingRight="4dp"
-            android:paddingLeft="4dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:paddingRight="1dp"
+            android:paddingLeft="1dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:textAppearance="@style/TextStyle.Hours.Title"
             android:text="@string/example_hours" />
 
@@ -46,22 +46,23 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:text="@string/example_codigo_da_linha" />
-        <TextView
+
+        <!-- TextView
             android:id="@+id/item_list_textview_tempo_faltando"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fadingEdge="vertical"
             android:fadingEdgeLength="20dp"
             android:focusable="false"
-            android:lines="1"/>
+            android:lines="1"/ -->
 
 
         <TextView
             android:id="@+id/item_list_textview_descricao_do_codigo"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="1"
             android:textColor="@color/black"
             android:ellipsize="marquee"
             android:textColorHighlight="#FFFFFF"
@@ -69,7 +70,7 @@
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="20dp"
             android:focusable="false"
-            android:singleLine="true" />
+            android:singleLine="true"/>
 
     </LinearLayout>
 
