@@ -2,17 +2,21 @@ package br.com.expressobits.hbus.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * Created by Rafael on 24/06/2015.
@@ -27,7 +31,7 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
 
     public BusAdapter(Context context,List<Bus> listBus){
         this.context = context;
-        this.listBus = listBus;
+        this.listBus = TimeUtils.sortByTimeBus(listBus);
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -43,9 +47,12 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
         //Método que atualiza informações
         myViewHolder.txtViewHorario.setText(listBus.get(i).getTime());
 
-        BusDAO dao = new BusDAO(context);
-        myViewHolder.txtViewCode.setText(listBus.get(i).getCode().getCode());
+        if(listBus.get(i).isTomorrow()) {
+            myViewHolder.relativeLayout.setSelected(true);
+        }
+        myViewHolder.txtViewCode.setText(listBus.get(i).getCode().getName());
         myViewHolder.txtViewDescrition.setText(listBus.get(i).getCode().getDescrition());
+        myViewHolder.txtViewDescrition.setSelected(true);
     }
 
     @Override
@@ -72,9 +79,12 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
         public TextView txtViewHorario;
         public TextView txtViewCode;
         public TextView txtViewDescrition;
+        public RelativeLayout relativeLayout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
+            relativeLayout = (RelativeLayout) itemView.findViewById(R.id.linear_layout_list_bus_square);
             txtViewHorario = (TextView) itemView.findViewById(R.id.item_list_textview_horario);
             txtViewCode = (TextView) itemView.findViewById(R.id.item_list_textview_codigo);
             txtViewDescrition = (TextView) itemView.findViewById(R.id.item_list_textview_descricao_do_codigo);
