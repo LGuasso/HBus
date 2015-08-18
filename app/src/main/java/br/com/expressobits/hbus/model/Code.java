@@ -9,7 +9,7 @@ public class Code {
     /**
      * Identificaçao do código.
      */
-    private String code;
+    private String name;
     /**
      * Descrição do código
      */
@@ -19,8 +19,8 @@ public class Code {
      * Retorna identificação do código
      * @return
      */
-    public String getCode() {
-        return code;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -31,8 +31,8 @@ public class Code {
         return descrition;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setName(String code) {
+        this.name = code;
     }
 
     public void setDescrition(String descrition) {
@@ -42,7 +42,7 @@ public class Code {
     @Override
     public boolean equals(Object o) {
         if(o instanceof Code){
-            if(this.getCode().equals(((Code)o).getCode())){
+            if(this.getName().equals(((Code)o).getName())){
                 return true;
             }else{
                 return false;
@@ -53,6 +53,6 @@ public class Code {
 
     @Override
     public String toString() {
-        return getCode();
+        return getName();
     }
 }
