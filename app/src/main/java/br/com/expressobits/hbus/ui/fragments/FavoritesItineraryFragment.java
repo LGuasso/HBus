@@ -4,6 +4,8 @@ package br.com.expressobits.hbus.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemFavoriteItineraryAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
@@ -28,10 +31,10 @@ import br.com.expressobits.hbus.utils.Popup;
  * @author Rafael Correa
  * @since 06/07/2015
  */
-public class FavoritesItineraryFragment extends Fragment{
+public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
     public String selectedItem;
-    ListView listViewLines;
+    RecyclerView recyclerViewLines;
     private ActionButton actionButton;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
@@ -71,50 +74,22 @@ public class FavoritesItineraryFragment extends Fragment{
 
 
     private void initListViews(View view){
-        listViewLines = (ListView) view.findViewById(R.id.list_lines);
+        recyclerViewLines = (RecyclerView) view.findViewById(R.id.list_lines);
+        recyclerViewLines.setHasFixedSize(true);
+        recyclerViewLines.setSelected(true);
+
+        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
+        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewLines.setLayoutManager(llmUseful);
+
 
 
         BusDAO dao  = new BusDAO(getActivity());
         itineraries = dao.getItineraries(true);
-        final ItemFavoriteItineraryAdapter adapterLinesUteis = new ItemFavoriteItineraryAdapter(this.getActivity(),android.R.layout.simple_list_item_1, itineraries);
-        listViewLines.setAdapter(adapterLinesUteis);
+        ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
+        adapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewLines.setAdapter(adapter);
 
-        //TODO implement background selection one way
-        listViewLines.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedItem = itineraries.get(position).getName();
-                switch (selectedItem) {
-                    case "Itarare Brigada":
-                    case "Circular Cemiterio Sul":
-                    case "Circular Cemiterio Norte":
-                    case "Circular Camobi":
-                    case "Circular Barao":
-                    case "Brigada Itarare":
-                        mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
-                        break;
-
-                    default:
-                        Popup.showPopUp(mCallback, view, selectedItem, itineraries.get(position).getSentidos());
-                }
-            }
-        });
-
-        listViewLines.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedItem = itineraries.get(position).getName();
-
-                BusDAO dao = new BusDAO(getActivity());
-                Itinerary itinerary = dao.getItinerary(selectedItem);
-                itinerary.setFavorite(false);
-                dao.update(itinerary);
-                onResume();
-                return true;
-            }
-        });
     }
 
     private void initFAB(View view){
@@ -126,14 +101,41 @@ public class FavoritesItineraryFragment extends Fragment{
         actionButton.setShowAnimation(ActionButton.Animations.ROLL_FROM_DOWN);
         actionButton.setHideAnimation(ActionButton.Animations.ROLL_TO_DOWN);
         actionButton.setImageResource(R.drawable.ic_add_white_24dp);
-        actionButton.setOnClickListener((View.OnClickListener)getActivity());
-    }
-
-    public void selectedWay(String way){
-        mCallback.onSettingsDone(selectedItem, way);
+        actionButton.setOnClickListener((View.OnClickListener) getActivity());
     }
 
 
+    @Override
+    public void onClickListener(View view, int position) {
+        //TODO implement background selection one way
+        selectedItem = itineraries.get(position).getName();
+        switch (selectedItem) {
+            case "Itarare Brigada":
+            case "Circular Cemiterio Sul":
+            case "Circular Cemiterio Norte":
+            case "Circular Camobi":
+            case "Circular Barao":
+            case "Brigada Itarare":
+                mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
+                break;
+
+            default:
+                Popup.showPopUp(mCallback, view, selectedItem, itineraries.get(position).getSentidos());
+
+         }
+    }
+
+    @Override
+    public boolean onLongClickListener(View view, int position) {
+        selectedItem = itineraries.get(position).getName();
+
+        BusDAO dao = new BusDAO(getActivity());
+        Itinerary itinerary = dao.getItinerary(selectedItem);
+        itinerary.setFavorite(false);
+        dao.update(itinerary);
+        onResume();
+        return false;
+    }
 }
 
 

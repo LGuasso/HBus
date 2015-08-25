@@ -1,73 +1,89 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/listView_background_line"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="16dp">
+    android:layout_marginBottom="0dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="false"
+    app:cardPreventCornerOverlap="false"
+    app:cardMaxElevation="3dp"
+    app:cardCornerRadius="4dp">
+
 
     <LinearLayout
+        android:id="@+id/listView_background_line"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/textViewItineraryName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="@string/itinerary_name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
-
-        <TextView
-            android:id="@+id/item_list_textview_line_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewItineraryName"
-            android:text="@string/next_bus"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-        <LinearLayout
-            android:id="@+id/linear_layout_nextbuses"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:orientation="vertical"></LinearLayout>
-
-    </LinearLayout>
-
-
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerInParent="true">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/btn_star_big_on" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <ImageView
+            <TextView
+                android:id="@+id/textViewItineraryName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/btn_star_big_on" />
+                android:layout_alignParentLeft="true"
+                android:text="@string/itinerary_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-            <ImageView
+            <TextView
+                android:id="@+id/item_list_textview_line_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@android:drawable/btn_star_big_on" />
+                android:layout_below="@id/textViewItineraryName"
+                android:text="@string/next_bus"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/linear_layout_nextbuses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"/>
+
         </LinearLayout>
 
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/btn_star_big_on" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/btn_star_big_on" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/btn_star_big_on" />
+            </LinearLayout>
 
 
+        </RelativeLayout>
 
+    </LinearLayout>
 
-    </RelativeLayout>
-
-</LinearLayout>
+</android.support.v7.widget.CardView>
