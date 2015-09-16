@@ -169,6 +169,10 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         adapter.removeListItem(position);
     }
 
+    @Override
+    public boolean onLongClickListener(View view, int position) {
+        return false;
+    }
 
 
     /**
