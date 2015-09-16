@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.software.shell.fab.ActionButton;
 
@@ -38,6 +39,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private ActionButton actionButton;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
+    View view;
 
     @Override
     public void onAttach(Activity activity) {
@@ -62,7 +64,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_linhas, null);
+        view = inflater.inflate(R.layout.fragment_linhas, null);
         initViews(view);
         return view;
     }
@@ -108,32 +110,43 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onClickListener(View view, int position) {
         //TODO implement background selection one way
-        selectedItem = itineraries.get(position).getName();
-        switch (selectedItem) {
-            case "Itarare Brigada":
-            case "Circular Cemiterio Sul":
-            case "Circular Cemiterio Norte":
-            case "Circular Camobi":
-            case "Circular Barao":
-            case "Brigada Itarare":
-                mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
+
+        switch (view.getId()){
+            case R.id.linearlayout_background_info:
+                selectedItem = itineraries.get(position).getName();
+                switch (selectedItem) {
+                    case "Itarare Brigada":
+                    case "Circular Cemiterio Sul":
+                    case "Circular Cemiterio Norte":
+                    case "Circular Camobi":
+                    case "Circular Barao":
+                    case "Brigada Itarare":
+                        mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
+                        break;
+
+                    default:
+                        Popup.showPopUp(mCallback, view, selectedItem, itineraries.get(position).getSentidos());
+
+                }
                 break;
+            case R.id.imageButtonDelete:
+                selectedItem = itineraries.get(position).getName();
 
-            default:
-                Popup.showPopUp(mCallback, view, selectedItem, itineraries.get(position).getSentidos());
+                BusDAO dao = new BusDAO(getActivity());
+                Itinerary itinerary = dao.getItinerary(selectedItem);
+                itinerary.setFavorite(false);
+                dao.update(itinerary);
+                this.initListViews(this.view);
+                Toast.makeText(this.getActivity(),String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName()),Toast.LENGTH_LONG).show();
 
-         }
+                break;
+        }
+
     }
 
     @Override
     public boolean onLongClickListener(View view, int position) {
-        selectedItem = itineraries.get(position).getName();
 
-        BusDAO dao = new BusDAO(getActivity());
-        Itinerary itinerary = dao.getItinerary(selectedItem);
-        itinerary.setFavorite(false);
-        dao.update(itinerary);
-        onResume();
         return false;
     }
 }

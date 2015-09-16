@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -99,14 +101,19 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
 
         public TextView textItineraryName;
         public TextView linearLayout;
+        public ImageButton imageButtonDelete;
+        public LinearLayout linearLayoutInfo;
 
         public HolderFavoriteItinerary(View itemView,List<Itinerary> list) {
             super(itemView);
 
             textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
             linearLayout  = (TextView) itemView.findViewById(R.id.linear_layout_nextbuses);
+            linearLayoutInfo = (LinearLayout) itemView.findViewById(R.id.linearlayout_background_info);
+            imageButtonDelete = (ImageButton) itemView.findViewById(R.id.imageButtonDelete);
 
-            itemView.setOnClickListener(this);
+            linearLayoutInfo.setOnClickListener(this);
+            imageButtonDelete.setOnClickListener(this);
 
         }
 

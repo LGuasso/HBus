@@ -18,4 +18,5 @@
     <string name="favorites">Favoritos</string>
     <string name="add_favorite">Add favorite</string>
     <string name="added_favorite_itinerary_with_sucess">Added favorite itinerary with sucess</string>
+    <string name="delete_itinerary_with_sucess">Deletado itinerário %1$s com sucesso!</string>
 </resources>
