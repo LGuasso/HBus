@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         textViewLoadBus = (TextView) findViewById(R.id.textViewLoadBusName);
         frameLayout = (FrameLayout) findViewById(R.id.framelayout_main);
-        new LinhaFile(this).init(this);
+        //new LinhaFile(this).init(this);
         if(savedInstanceState == null){
 
             FavoritesItineraryFragment favoritesItineraryFragment = new FavoritesItineraryFragment();

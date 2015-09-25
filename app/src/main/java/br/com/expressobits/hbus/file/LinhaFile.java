@@ -1,6 +1,7 @@
 package br.com.expressobits.hbus.file;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
@@ -46,14 +47,14 @@ public class LinhaFile {
      * Inicializa todas linhas e dados do banco.
      * TODO implementar progressBar
      */
-    public void init(MainActivity main){
+    public void init(){
 
         if(context.getSharedPreferences(TAG,context.MODE_PRIVATE).getBoolean(KEY_SQLINIT,true)){
 
             BusDAO dao = new BusDAO(context);
             dao.deleteAll();
             initItinerary();
-            main.setLoadText("Load itinerary index");
+            //main.setLoadText("Load itinerary index");
             initCodes();
             for(Itinerary itinerary : dao.getItineraries()){
                 for (String sentido:itinerary.getSentidos()){
@@ -62,13 +63,15 @@ public class LinhaFile {
 
                     }
                 }
-                main.setLoadText(itinerary.getName());
+                //TODO texto para exibir load
+                //main.setLoadText(itinerary.getName());
 
             }
             SharedPreferences sharedPref = context.getSharedPreferences(TAG,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(KEY_SQLINIT, false);
             editor.commit();
+
         }
 
 
@@ -92,7 +95,7 @@ public class LinhaFile {
         if(fileString!=null){
             fileStringarray=fileString.split("\n");
             if(BuildConfig.DEBUG){
-                Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
+                //Toast.makeText(context,nameFile,Toast.LENGTH_LONG).show();
             }
         }else{
             fileStringarray=new String[]{"ERRO","ERRO"};
