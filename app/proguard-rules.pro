@@ -19,3 +19,4 @@
 -keep public class br.com.expressobits.hbus.ui.MainActivity
 -keep public class br.com.expressobits.hbus.ui.fragments.LinhasFragment
 -keep public class br.com.expressobits.hbus.ui.fragments.OnibusFragment
+-keep public class com.mikepenz:materialdrawer.**
