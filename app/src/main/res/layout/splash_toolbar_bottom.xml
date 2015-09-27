@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ *************************************************************************************************
+  ~ Juramento do Programador no desenvolvimento de Código Limpo:
+  ~
+  ~  Antes de codificar, me colocarei na posição dos outros colaboradores desenvolvedores,
+  ~  buscando me expressar de maneira simples, logo:
+  ~
+  ~  - Nomearei as entidades como classes, métodos e variáveis com nomes significativos, pronunciáveis
+  ~  e pesquisável, que revelem a sua verdadeira e atual intenção;
+  ~
+  ~  - Farei com que cada método e cada deve ter apenas uma única responsabilidade, caso contrário,
+  ~  deve ser refatorados em métodos unitários;
+  ~
+  ~  - Ao comentar sobre uma entidade, deixarei claro qual é o seu papel atual e sugerirei  melhorias
+  ~  futuras, se for o caso; Atualizar comentários sempre quando atualizar código;
+  ~ *************************************************************************************************
+  -->
+
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbarBottom"
+    android:background="@android:color/transparent"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@android:color/transparent"
+        >
+        <Button
+            android:id="@+id/previousText"
+            android:text="@string/jump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:visibility="visible"
+            android:textColor="#FFFFFF"
+            android:background="@android:color/transparent"
+            />
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator_default"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            app:ci_width="6dp"
+            app:ci_height="6dp"
+            app:ci_animator="@animator/indicator_animator"
+            app:ci_drawable="@drawable/white_radius"
+            app:ci_drawable_unselected="@drawable/black_radius"
+            />
+
+        <!-- O botão de próximo foi implementado usando menu -->
+    </RelativeLayout>
+
+
+
+</android.support.v7.widget.Toolbar>

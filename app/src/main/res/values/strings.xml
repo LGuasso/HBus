@@ -28,5 +28,6 @@
     <string name="delete_itinerary_with_sucess">Deleted itinerary %1$s with sucess!</string>
     <string name="delete">Delete</string>
     <string name="title_activity_load">LoadActivity</string>
+    <string name="jump">Jump</string>
 
 </resources>

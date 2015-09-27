@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 import br.com.expressobits.hbus.file.LinhaFile;
-import br.com.expressobits.hbus.ui.LoadActivity;
 import br.com.expressobits.hbus.ui.MainActivity;
 
 /**
