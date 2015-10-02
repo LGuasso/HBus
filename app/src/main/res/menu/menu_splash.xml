@@ -6,6 +6,6 @@
         android:id="@+id/action_next"
         app:showAsAction="always"
         android:icon="@drawable/ic_navigate_next_white_48dp"
-        android:title=""
+        android:title="@string/next"
         />
 </menu>
