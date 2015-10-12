@@ -16,7 +16,7 @@
  * ************************************************************************************************
  */
 
-package br.com.expressobits.hbus.ui.intro;
+package br.com.expressobits.hbus.ui.tour;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -107,7 +107,7 @@ public class PagerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.splash_relative, container, false);
+        View view = inflater.inflate(R.layout.tour_relative, container, false);
 
         ImageView iconImage = (ImageView) view.findViewById(R.id.iconImage);
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ *************************************************************************************************
   ~ Juramento do Programador no desenvolvimento de Código Limpo:
   ~
@@ -17,65 +16,60 @@
   ~ *************************************************************************************************
   -->
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorPrimary"
-    tools:context="com.tapdoc.tapdocapp.ui.intro.PagerFragment"
-    >
+    tools:context="com.tapdoc.tapdocapp.ui.intro.PagerFragment">
 
     <ImageView
         android:id="@+id/iconImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:background="@color/colorPrimary"
-        android:src="@drawable/modelo"
-        android:layout_centerInParent="true"
-        />
+        android:paddingTop="@dimen/activity_splash_margin_image_to_text"
+        android:src="@drawable/modelo" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="@dimen/activity_splash_margin_image_to_text"
         android:paddingLeft="@dimen/activity_splash_margin_image_to_text"
         android:paddingRight="@dimen/activity_splash_margin_image_to_text"
-        android:paddingBottom="@dimen/activity_splash_margin_image_to_text"
-        android:paddingTop="@dimen/activity_splash_margin_image_to_text"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        >
+        android:paddingTop="@dimen/activity_splash_margin_image_to_text">
+
         <TextView
             android:id="@+id/titleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:text="@string/app_name"
-            android:textColor="@color/white"
-            />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white" />
+
         <TextView
             android:id="@+id/subtitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="Medium TextMedium Text\nMedium TextMedium Text\nMedium TextMedium Text"
-            android:singleLine="false"
             android:gravity="left"
-            android:textColor="@color/white"
-            />
+            android:singleLine="false"
+            android:text="Medium TextMedium Text\nMedium TextMedium Text\nMedium TextMedium Text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white" />
     </LinearLayout>
 
+
     <View
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:drawable/divider_horizontal_bright"/>
-
-
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:drawable/divider_horizontal_bright" />
 
 
 </RelativeLayout>

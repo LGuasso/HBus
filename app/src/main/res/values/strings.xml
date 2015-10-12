@@ -30,5 +30,6 @@
     <string name="title_activity_load">Splash screen</string>
     <string name="jump">Jump</string>
     <string name="next">Next</string>
+    <string name="finish">Finish</string>
 
 </resources>

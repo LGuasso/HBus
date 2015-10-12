@@ -16,7 +16,7 @@
  * ************************************************************************************************
  */
 
-package br.com.expressobits.hbus.ui.intro;
+package br.com.expressobits.hbus.ui.tour;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,7 +29,6 @@ import java.util.Random;
 public class ContentPagerAdapter extends FragmentPagerAdapter {
 
 //    public static int pagerCount = 3;
-    private Random random = new Random();
     private final ArrayList<Fragment> mFragments;
 
 
@@ -51,6 +50,8 @@ public class ContentPagerAdapter extends FragmentPagerAdapter {
 //        return pagerCount;
         return mFragments.size();
     }
+
+
 
 
 
