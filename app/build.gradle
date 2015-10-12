@@ -6,14 +6,14 @@ android {
     compileOptions.encoding = 'ISO-8859-1'
     defaultConfig {
         applicationId "br.com.expressobits.hbus"
-        minSdkVersion 10
+        minSdkVersion 11
         targetSdkVersion 22
-        versionCode 15
-        versionName "0.1.5"
+        versionCode 20
+        versionName "0.2.0"
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -30,4 +30,6 @@ dependencies {
         transitive = true
     }
     compile 'com.github.shell-software:fab:1.1.2'
+    // Circleindicator
+    compile 'me.relex:circleindicator:1.1.5@aar'
 }

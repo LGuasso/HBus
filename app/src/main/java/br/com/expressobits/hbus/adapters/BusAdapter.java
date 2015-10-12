@@ -19,7 +19,9 @@ import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
- * Created by Rafael on 24/06/2015.
+ *
+ * @author Rafael
+ * @since 24/06/2015
  */
 public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
 

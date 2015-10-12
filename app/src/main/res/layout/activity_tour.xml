@@ -1,0 +1,48 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    tools:context="br.com.expressobits.hbus.ui.tour.TourActivity"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager_default"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <include
+                android:id="@+id/inc_splash_relative"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                layout="@layout/tour_relative"
+                />
+
+        </android.support.v4.view.ViewPager>
+
+
+
+    </RelativeLayout>
+
+
+    <include
+        android:id="@+id/inc_splash_toolbar"
+        layout="@layout/tour_toolbar_bottom"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        />
+
+
+
+</LinearLayout>
