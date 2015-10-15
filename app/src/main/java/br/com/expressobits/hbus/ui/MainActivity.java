@@ -1,6 +1,8 @@
 package br.com.expressobits.hbus.ui;
 
+import android.content.Intent;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
+import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.Popup;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener {
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
-            Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this,SettingsActivity.class));
         }
         if (id == R.id.menu_action_add) {
             onSettingsDone(true);
@@ -158,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
         setSupportActionBar(pToolbar);
+
         //pToolbar.setTitle("My lines");
         //pToolbar.setSubtitle("subtitle");
 
@@ -220,6 +224,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.linha = linha;
         this.sentido = sentido;
 
+
+
         getSupportActionBar().setTitle(linha);
         getSupportActionBar().setSubtitle(sentido);
 
@@ -277,6 +283,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setActionBarTitle(String title,String subtitle){
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setSubtitle(subtitle);
+        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString("city","Sem cidade");
+        pToolbar.setTitle(cityname);
         Log.i(TAG, "Trocando o título da action bar para " + title + " ,trocando o subtítulo para " + subtitle);
     }
 

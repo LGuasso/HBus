@@ -35,7 +35,9 @@
         <item name="android:background">@color/colorPrimary</item>
         <!-- Support library compatibility -->
         <item name="background">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">#fff</item>
         <item name="android:actionBarItemBackground">@color/colorPrimaryDark</item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="Text" parent="@style/TextAppearance.AppCompat.Large">

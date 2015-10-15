@@ -1,0 +1,23 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:id="@+id/general"
+        android:fragment="br.com.expressobits.hbus.ui.settings.SettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/pref_header_general"
+        android:icon="@android:drawable/ic_menu_preferences"/>
+
+    <header
+        android:fragment="br.com.expressobits.hbus.ui.settings.SettingsActivity$NotificationPreferenceFragment"
+        android:title="@string/pref_header_notifications"
+        android:icon="@android:drawable/stat_notify_chat"/>
+
+    <header
+        android:fragment="br.com.expressobits.hbus.ui.settings.SettingsActivity$DataSyncPreferenceFragment"
+        android:title="@string/pref_header_data_sync"
+        android:icon="@android:drawable/stat_notify_sync"/>
+
+
+</preference-headers>
