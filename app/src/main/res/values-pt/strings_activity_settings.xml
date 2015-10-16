@@ -62,4 +62,8 @@
     <string name="pref_title_ringtone">Toque</string>
     <string name="pref_ringtone_silent">Silêncio</string>
     <string name="pref_title_vibrate">Vibratório</string>
+
+    <string name="pref_header_about">Sobre</string>
+    <string name="pref_title_tour_of_product">Tour do produto</string>
+    <string name="pref_summary_tour_of_product">Informações sobre o aplicativo</string>
 </resources>

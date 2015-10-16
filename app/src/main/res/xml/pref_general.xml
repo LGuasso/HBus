@@ -1,8 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="general">
+    android:key="general"
+    android:title="@string/pref_header_general">
 
     <ListPreference
-        android:icon="@android:drawable/ic_btn_speak_now"
         android:key="city"
         android:title="@string/pref_title_select_your_city"
         android:defaultValue=""
@@ -17,13 +17,6 @@
         android:title="@string/pref_title_time_on_the_home_screen"
         android:summary="@string/pref_description_time_on_the_home_screen"
         android:defaultValue="true"/>
-
-
-    <Preference
-        android:icon="@drawable/ic_delete_grey600_24dp"
-        android:key="tour"
-        android:title="@string/tour"
-        android:summary="@string/summary_tour"/>
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
