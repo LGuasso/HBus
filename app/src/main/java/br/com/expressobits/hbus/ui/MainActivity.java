@@ -39,6 +39,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.Popup;
 
@@ -62,8 +63,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String sentido;
 
 
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //TODO model remove linhafile
@@ -345,6 +352,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
-        super.onResume();
+
+            super.onResume();
+
+
     }
 }
