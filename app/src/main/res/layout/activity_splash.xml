@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/common_ic_googleplayservices"
+        android:src="@drawable/ic_launcher_web"
         android:layout_centerInParent="true"/>
 
 
