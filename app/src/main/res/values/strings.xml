@@ -31,5 +31,10 @@
     <string name="jump">Jump</string>
     <string name="next">Next</string>
     <string name="finish">Finish</string>
+    <string name="title_activity_select_city">Select city</string>
+    <string name="not_found">Not found</string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+
 
 </resources>

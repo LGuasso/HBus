@@ -25,4 +25,5 @@
     <string name="next">Próximo</string>
     <string name="title_activity_load">Tela inicial</string>
     <string name="finish">Finalizar</string>
-</resources>
+    <string name="title_activity_select_city">Selecione cidade</string>
+    </resources>

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.ui.splash.SplashActivity;
 
 /**
  * Created by rafael on 15/09/15.
@@ -43,7 +44,7 @@ public class TPCDataBaseInit extends Application{
 
 
     private void call(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, SplashActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(intent);
     }
