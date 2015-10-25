@@ -1,6 +1,8 @@
 package br.com.expressobits.hbus.ui.tour;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +29,7 @@ import me.relex.circleindicator.CircleIndicator;
  */
 public class TourActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
 
-    private static final String TAG = "Tour";
+    public static final String TAG = "Tour";
     private ViewPager defaultViewpager;
     private ContentPagerAdapter defaultPagerAdapter;
 
@@ -38,6 +40,9 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putBoolean(TAG,true);
         setContentView(R.layout.activity_tour);
 
         referencesLayoutXML();

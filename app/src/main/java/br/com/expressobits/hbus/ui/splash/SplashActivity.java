@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
+import br.com.expressobits.hbus.ui.tour.TourActivity;
 
 public class SplashActivity extends AppCompatActivity{
 
@@ -32,7 +33,10 @@ public class SplashActivity extends AppCompatActivity{
             @Override
             public void run() {
                 Class cl;
-                if(PreferenceManager.getDefaultSharedPreferences(SplashActivity.this).getString("city",null)==null){
+
+                if(PreferenceManager.getDefaultSharedPreferences(SplashActivity.this).getString(TourActivity.TAG,null)==null){
+                    cl = TourActivity.class;
+                }else if(PreferenceManager.getDefaultSharedPreferences(SplashActivity.this).getString("city",null)==null){
                     cl = SelectCityActivity.class;
                 }else {
                     cl = MainActivity.class;

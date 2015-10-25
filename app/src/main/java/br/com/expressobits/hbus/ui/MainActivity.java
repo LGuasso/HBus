@@ -34,8 +34,9 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.file.LinhaFile;
+import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.model.Sentido;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
@@ -321,22 +322,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(iDrawerItem instanceof PrimaryDrawerItem) {
             selectedItem = ((PrimaryDrawerItem) iDrawerItem).getName();
         }
+        BusDAO dao = new BusDAO(this);
 
-        //TODO implementar seleção dinamica se haverá ou não caixa de seleção
-            switch (selectedItem) {
-                case "Itarare Brigada":
-                case "Circular Cemiterio Sul":
-                case "Circular Cemiterio Norte":
-                case "Circular Camobi":
-                case "Circular Barao":
-                case "Brigada Itarare":
-                    onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
-                    break;
-
-                default:
-
-                    Popup.showPopUp(this, view, selectedItem,new LinhaFile(this).getSentidos(this,selectedItem));
-            }
+        List<String> sentidos = dao.getItinerary(selectedItem).getSentidos();
+        if(sentidos.size()>1){
+            Popup.showPopUp(this, view, selectedItem, dao.getItinerary(selectedItem).getSentidos());
+        }else{
+            onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
+        }
 
         return false;
     }

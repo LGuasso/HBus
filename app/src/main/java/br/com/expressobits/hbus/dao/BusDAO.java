@@ -4,72 +4,48 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.expressobits.hbus.file.LinhaFile;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
+import br.com.expressobits.hbus.utils.TextUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * @author Rafael Correa
  * @since 31/07/2015
  */
-public class BusDAO extends SQLiteOpenHelper{
+public class BusDAO extends SQLiteAssetHelper{
 
 
-    private static final String[] COLS_BUS = {"id","time","code","itinerary","way","typeday"};
-    private static final String[] COLS_CODE = {"id","name","descrition"};
-    private static final String[] COLS_ITINERARY = {"id","name","favorite","sentidos"};
+    private static final String[] COLS_BUS = {"_id","time","code","itinerary","way","typeday"};
+    private static final String[] COLS_CODE = {"_id","name","descrition"};
+    private static final String[] COLS_ITINERARY = {"_id","name","favorite","sentidos"};
     private static final String TABLE_BUS = "Bus";
     private static final String TABLE_CODE = "Code";
     private static final String TABLE_ITINERARY = "Itinerary";
-    private static final String DATABASE_NAME = "HBusDB";
+
+
+
+    private static final String DB_PATH = "/data/data/br.com.expressobits.hbus/databases/";
+    private static final String DATABASE_NAME = "santa_maria_rs_bus_data.db";
     private static final int DATABASE_VERSION = 1;
+
     private static final String TAG= "DAO";
 
     public BusDAO(Context context) {
-
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        //Cria banco de dados no armazenamento externo
-        //super(context, Environment.getExternalStorageDirectory().getAbsolutePath()
-                //+ "/HBus/database/" + DATABASE_NAME, null, DATABASE_VERSION);
+        super(context,DATABASE_NAME, null, DATABASE_VERSION);
         Log.d(TAG,"Have "+getListaCode().size()+" codes in bd");
     }
 
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        createTableItinerary(db);
-        createTableCode(db);
-        createTableBus(db);
-    }
-
-
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("DROP TABLE IF EXISTS "+ TABLE_ITINERARY);
-        db.execSQL(sb.toString());
-
-        sb = new StringBuilder();
-        sb.append("DROP TABLE IF EXISTS "+ TABLE_CODE);
-        db.execSQL(sb.toString());
-
-        sb = new StringBuilder();
-        sb.append("DROP TABLE IF EXISTS " + TABLE_BUS);
-        db.execSQL(sb.toString());
-
-        onCreate(db);
-    }
 
     public void deleteAll(){
         StringBuilder sb = new StringBuilder();
@@ -90,7 +66,7 @@ public class BusDAO extends SQLiteOpenHelper{
     private void createTableItinerary(SQLiteDatabase db){
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE " + TABLE_ITINERARY + " ");
-        sb.append("(id INTEGER PRIMARY KEY, ");
+        sb.append("(_id INTEGER PRIMARY KEY, ");
         sb.append(" name TEXT,");
         sb.append(" favorite INTEGER,");
         sb.append(" sentidos TEXT);");
@@ -102,7 +78,7 @@ public class BusDAO extends SQLiteOpenHelper{
     private void createTableBus(SQLiteDatabase db) {
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE " + TABLE_BUS + " ");
-        sb.append("(id INTEGER PRIMARY KEY, ");
+        sb.append("(_id INTEGER PRIMARY KEY, ");
         sb.append(" time TEXT,");
         sb.append(" code TEXT,");
         sb.append(" itinerary TEXT,");
@@ -114,13 +90,11 @@ public class BusDAO extends SQLiteOpenHelper{
     private void createTableCode(SQLiteDatabase db) {
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE " + TABLE_CODE + " ");
-        sb.append("(id INTEGER PRIMARY KEY, ");
+        sb.append("(_id INTEGER PRIMARY KEY, ");
         sb.append(" name TEXT,");
         sb.append(" descrition TEXT);");
         db.execSQL(sb.toString());
     }
-
-
 
 
     /**
@@ -163,7 +137,7 @@ public class BusDAO extends SQLiteOpenHelper{
         c.put("time", bus.getTime());
         c.put("code", bus.getCode().getName());
         c.put("itinerary", bus.getItinerary().getName());
-        c.put("way", LinhaFile.toSimpleName(bus.getWay()));
+        //c.put("way", LinhaFile.toSimpleName(bus.getWay()));
         c.put("typeDay", bus.getTypeday().toString());
         getWritableDatabase().insert(TABLE_BUS, null, c);
     }
@@ -185,7 +159,7 @@ public class BusDAO extends SQLiteOpenHelper{
         ArrayList<Itinerary> itinerariess = new ArrayList<Itinerary>();
         Cursor c;
 
-        c = getWritableDatabase().query(TABLE_ITINERARY,COLS_ITINERARY,null,null,null,null,null);
+        c = getWritableDatabase().query(TABLE_ITINERARY, COLS_ITINERARY, null, null, null, null, null);
         while(c.moveToNext()){
             Itinerary itinerary = new Itinerary();
             itinerary.setName(c.getString(1));
@@ -222,7 +196,7 @@ public class BusDAO extends SQLiteOpenHelper{
         }
 
 
-        c = getWritableDatabase().query(TABLE_ITINERARY,COLS_ITINERARY,where,arguments,null,null,null);
+        c = getWritableDatabase().query(TABLE_ITINERARY, COLS_ITINERARY, where, arguments, null, null, null);
         while(c.moveToNext()){
             Itinerary itinerary = new Itinerary();
             itinerary.setName(c.getString(1));
@@ -251,7 +225,7 @@ public class BusDAO extends SQLiteOpenHelper{
         String where = "name = ?";
         String arguments[] = {itineraryName};
 
-        c = getWritableDatabase().query(TABLE_ITINERARY,COLS_ITINERARY, where, arguments, null, null, null);
+        c = getWritableDatabase().query(TABLE_ITINERARY, COLS_ITINERARY, where, arguments, null, null, null);
         while (c.moveToNext()) {
             itinerary = new Itinerary();
             itinerary.setName(c.getString(1));
@@ -270,7 +244,7 @@ public class BusDAO extends SQLiteOpenHelper{
         Code code;
         Cursor c;
 
-        c = getWritableDatabase().query(TABLE_CODE,COLS_CODE,null,null,null,null,null);
+        c = getWritableDatabase().query(TABLE_CODE, COLS_CODE, null, null, null, null, null);
         while(c.moveToNext()){
             code = new Code();
             code.setName(c.getString(1));
@@ -288,7 +262,7 @@ public class BusDAO extends SQLiteOpenHelper{
         String where = "name = ?";
         String[] arguments = {codeName};
 
-        c = getWritableDatabase().query(TABLE_CODE,COLS_CODE,where,arguments,null,null,null);
+        c = getWritableDatabase().query(TABLE_CODE, COLS_CODE, where, arguments, null, null, null);
         while(c.moveToNext()){
             code = new Code();
             code.setName(c.getString(1));
@@ -313,13 +287,13 @@ public class BusDAO extends SQLiteOpenHelper{
     public List<Bus> getBusList(String nameLine, String way, String typeDay,boolean fastMode){
         ArrayList<Bus> buses = new ArrayList<Bus>();
 
-        way = LinhaFile.toSimpleName(way);
+        way = TextUtils.toSimpleName(way);
 
         Cursor c;
         String where = "itinerary = ? AND way = ? AND typeday = ?";
         String arguments[] = {nameLine,way,typeDay};
 
-        c = getWritableDatabase().query(TABLE_BUS,COLS_BUS,where,arguments,null,null,null);
+        c = getWritableDatabase().query(TABLE_BUS, COLS_BUS, where, arguments, null, null, null);
         while(c.moveToNext()){
             Bus bus = new Bus();
             bus.setTime(c.getString(1));
@@ -360,7 +334,7 @@ public class BusDAO extends SQLiteOpenHelper{
         String where = "itinerary = ?";
         String arguments[] = {nameLine};
 
-        c = getWritableDatabase().query(TABLE_BUS,COLS_BUS,where,arguments,null,null,null);
+        c = getWritableDatabase().query(TABLE_BUS, COLS_BUS, where, arguments, null, null, null);
         while(c.moveToNext()){
             Bus bus = new Bus();
             bus.setTime(c.getString(1));
@@ -390,7 +364,7 @@ public class BusDAO extends SQLiteOpenHelper{
         ArrayList<Bus> next = new ArrayList<Bus>();
         //TODO Typeday set por dia identificar o dia do typeday
         for(int j = 0;j< itinerary.getSentidos().size();j++) {
-            next.add(getNextBusforList(getBusList(itinerary.getName(), itinerary.getSentidos().get(j), TypeDay.USEFUL.toString(),true)));
+            next.add(getNextBusforList(getBusList(itinerary.getName(), itinerary.getSentidos().get(j), TypeDay.USEFUL.toString(),false)));
         }
         return next;
     }
@@ -417,6 +391,5 @@ public class BusDAO extends SQLiteOpenHelper{
             return nowBus;
         }
     }
-
 
 }
