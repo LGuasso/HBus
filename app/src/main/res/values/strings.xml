@@ -34,7 +34,7 @@
     <string name="title_activity_select_city">Select city</string>
     <string name="not_found">Not found</string>
     <string name="title_activity_splash">SplashActivity</string>
-
+    <string name="about">About</string>
 
 
 </resources>

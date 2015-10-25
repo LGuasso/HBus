@@ -142,11 +142,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.menu_action_settings) {
             startActivity(new Intent(this,SettingsActivity.class));
         }
-        if (id == R.id.menu_action_add) {
-            onSettingsDone(true);
-            Toast.makeText(this, getString(R.string.add_favorite), Toast.LENGTH_SHORT).show();
-
-        }
         return false;
     }
 
