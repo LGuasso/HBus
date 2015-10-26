@@ -114,19 +114,11 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         switch (view.getId()){
             case R.id.linearlayout_background_info:
                 selectedItem = itineraries.get(position).getName();
-                switch (selectedItem) {
-                    case "Itarare Brigada":
-                    case "Circular Cemiterio Sul":
-                    case "Circular Cemiterio Norte":
-                    case "Circular Camobi":
-                    case "Circular Barao":
-                    case "Brigada Itarare":
-                        mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
-                        break;
-
-                    default:
-                        Popup.showPopUp(mCallback, view, selectedItem, itineraries.get(position).getSentidos());
-
+                List<String> sentidos = itineraries.get(position).getSentidos();
+                if(sentidos.size()>1) {
+                    Popup.showPopUp(mCallback, view, selectedItem,sentidos);
+                }else{
+                    mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
                 }
                 break;
             case R.id.imageButtonDelete:

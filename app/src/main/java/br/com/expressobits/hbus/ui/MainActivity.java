@@ -34,8 +34,9 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.file.LinhaFile;
+import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.model.Sentido;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
@@ -71,9 +72,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
 
 
+        if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("city",null)==null){
+            Intent intent = new Intent(this,SelectCityActivity.class);
+            startActivity(intent);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //TODO model remove linhafile
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         textViewLoadBus = (TextView) findViewById(R.id.textViewLoadBusName);
         frameLayout = (FrameLayout) findViewById(R.id.framelayout_main);
@@ -139,12 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
-            startActivity(new Intent(this,SettingsActivity.class));
-        }
-        if (id == R.id.menu_action_add) {
-            onSettingsDone(true);
-            Toast.makeText(this, getString(R.string.add_favorite), Toast.LENGTH_SHORT).show();
-
+            startActivity(new Intent(this, SettingsActivity.class));
         }
         return false;
     }
@@ -321,22 +321,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(iDrawerItem instanceof PrimaryDrawerItem) {
             selectedItem = ((PrimaryDrawerItem) iDrawerItem).getName();
         }
+        BusDAO dao = new BusDAO(this);
 
-        //TODO implementar seleção dinamica se haverá ou não caixa de seleção
-            switch (selectedItem) {
-                case "Itarare Brigada":
-                case "Circular Cemiterio Sul":
-                case "Circular Cemiterio Norte":
-                case "Circular Camobi":
-                case "Circular Barao":
-                case "Brigada Itarare":
-                    onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
-                    break;
-
-                default:
-
-                    Popup.showPopUp(this, view, selectedItem,new LinhaFile(this).getSentidos(this,selectedItem));
-            }
+        List<String> sentidos = dao.getItinerary(selectedItem).getSentidos();
+        if(sentidos.size()>1){
+            Popup.showPopUp(this, view, selectedItem, dao.getItinerary(selectedItem).getSentidos());
+        }else{
+            onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
+        }
 
         return false;
     }

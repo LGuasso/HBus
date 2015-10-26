@@ -4,6 +4,8 @@
 
     <!-- Permissão para ler memória externa -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Permissão para ler memória externa -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- Permissão para acesso á internet -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Permissão para saber o estatus da rede -->
