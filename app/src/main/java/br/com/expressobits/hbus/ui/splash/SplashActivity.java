@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity{
             public void run() {
                 Class cl;
 
-                if(PreferenceManager.getDefaultSharedPreferences(SplashActivity.this).getString(TourActivity.TAG,null)==null){
+                if(!PreferenceManager.getDefaultSharedPreferences(SplashActivity.this).getBoolean(TourActivity.TAG,false)){
                     cl = TourActivity.class;
                 }else if(PreferenceManager.getDefaultSharedPreferences(SplashActivity.this).getString("city",null)==null){
                     cl = SelectCityActivity.class;

@@ -72,9 +72,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
 
 
+        if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("city",null)==null){
+            Intent intent = new Intent(this,SelectCityActivity.class);
+            startActivity(intent);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //TODO model remove linhafile
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         textViewLoadBus = (TextView) findViewById(R.id.textViewLoadBusName);
         frameLayout = (FrameLayout) findViewById(R.id.framelayout_main);
@@ -140,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
-            startActivity(new Intent(this,SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity.class));
         }
         return false;
     }

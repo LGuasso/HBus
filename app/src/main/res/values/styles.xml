@@ -45,11 +45,11 @@
     </style>
 
     <style name="ButtonAppTheme" parent="@style/Widget.AppCompat.Button">
-        <item name="android:background">@drawable/orange_button</item>
+        <item name="android:background">@drawable/button</item>
         <item name="android:minHeight">48dip</item>
         <item name="android:minWidth">64dip</item>
         <item name="android:textAppearance">@style/TextStyle.Button</item>
-        <item name="background">@drawable/orange_button</item>
+        <item name="background">@drawable/button</item>
     </style>
 
     <style name="ActionBarTabStyle.Orange" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
