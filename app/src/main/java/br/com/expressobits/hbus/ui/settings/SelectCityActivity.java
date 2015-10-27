@@ -63,11 +63,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         cities = new ArrayList<City>();
         City city = new City();
         city.setName("Santa Maria");
-        city.setImage(getResources().getDrawable(R.drawable.ic_bus));
-        cities.add(city);
-        city = new City();
-        city.setName("Porto Alegre");
-        city.setImage(getResources().getDrawable(R.drawable.ic_delete_grey600_24dp));
+        city.setImage(getResources().getDrawable(R.drawable.default_city));
         cities.add(city);
 
         //TODO lista que vem apartir do parse

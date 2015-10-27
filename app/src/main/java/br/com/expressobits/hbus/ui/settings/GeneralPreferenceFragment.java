@@ -1,11 +1,14 @@
 package br.com.expressobits.hbus.ui.settings;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.ui.tour.TourActivity;
 
 /**
  * @author Rafael Correa
@@ -13,10 +16,22 @@ import br.com.expressobits.hbus.R;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class GeneralPreferenceFragment extends PreferenceFragment {
+
+    Preference preferenceCity;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
+
+        preferenceCity = findPreference("city");
+        preferenceCity.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(preference.getContext(), SelectCityActivity.class));
+                return false;
+            }
+        });
 
 
 

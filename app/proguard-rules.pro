@@ -16,7 +16,34 @@
 #   public *;
 #}
 
+#depuração
+-verbose
+#desabilita o opção de otimização
+-dontoptimize
+
+-repackageclasses ''
+
+#desabilita o opção para metodos onClick
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+-keepclassmembers public class * extends android.view.View {
+   void set*(***);
+   *** get*();
+}
+
+-keep class com.google.inject.** { *; }
+
 -keep public class br.com.expressobits.hbus.ui.MainActivity
 -keep public class br.com.expressobits.hbus.ui.fragments.LinhasFragment
 -keep public class br.com.expressobits.hbus.ui.fragments.OnibusFragment
--keep public class com.mikepenz:materialdrawer.**
+
+-keep class com.mikepenz.materialdrawer.** { *; }
+
+-dontwarn android.support.**
+
+-keep public class com.google.android.gms.* { public *; }
+
+-dontwarn com.google.android.gms.**
+
+-keep class org.slf4j.**
