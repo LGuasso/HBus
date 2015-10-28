@@ -73,12 +73,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.add(R.id.framelayout_main, favoritesItineraryFragment,"linhasFragment");
                 ft.commit();
-            }else if(findViewById(R.id.framelayout_content)!=null){
+            }/**else if(findViewById(R.id.framelayout_content)!=null){
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.add(R.id.framelayout_menu, favoritesItineraryFragment,"linhasFragment");
                 ft.add(R.id.framelayout_content,new OnibusFragment(),"onibusFragment");
                 ft.commit();
-            }
+            }*/
         }
         initViews();
         initNavigationDrawer();
@@ -207,14 +207,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 lastPosition = 1;
 
 
-            } else if (findViewById(R.id.framelayout_content) != null) {
+            } /**else if (findViewById(R.id.framelayout_content) != null) {
                 addFavoriteFragment = new AddFavoriteFragment();
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transação novamente na pilha de navegação
                 ft.replace(R.id.framelayout_content, addFavoriteFragment, "onibusFragment");
                 lastPosition = 1;
 
-            }
+            }*/
         }
 
         // Finaliza a transção com sucesso
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
-        }else if(findViewById(R.id.framelayout_content)!=null){
+        }else/** if(findViewById(R.id.framelayout_content)!=null){
             if(onibusFragment != null){
                 onibusFragment.refresh(linha, sentido);
             }else{
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ft.replace(R.id.framelayout_content, onibusFragment, "onibusFragment");
                 lastPosition = 1;
             }
-        }
+        }*/
 
         // Finaliza a transção com sucesso
         ft.commit();

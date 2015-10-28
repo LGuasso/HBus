@@ -27,4 +27,6 @@
     <string name="finish">Finalizar</string>
     <string name="title_activity_select_city">Selecione cidade</string>
     <string name="title_activity_splash"></string>
+    <string name="not_found">Não encontrado</string>
+    <string name="no_have_itinerary">Não há itinerários favoritos</string>
 </resources>

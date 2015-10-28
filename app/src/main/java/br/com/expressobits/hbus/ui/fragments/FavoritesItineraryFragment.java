@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private ActionButton actionButton;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
+    LinearLayout linearLayoutEmptyList;
     View view;
 
     @Override
@@ -58,6 +60,13 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onResume() {
         super.onResume();
+        if(recyclerViewLines.getAdapter().getItemCount()<1){
+            recyclerViewLines.setVisibility(View.GONE);
+            linearLayoutEmptyList.setVisibility(View.VISIBLE);
+        }else{
+            recyclerViewLines.setVisibility(View.VISIBLE);
+            linearLayoutEmptyList.setVisibility(View.GONE);
+        }
         ((MainActivity)getActivity()).setActionBarTitle(getResources().getString(R.string.app_name), "");
     }
 
@@ -72,6 +81,12 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private void initViews(View view){
         initListViews(view);
         initFAB(view);
+        initEmptyList(view);
+    }
+
+    private void initEmptyList(View view) {
+        linearLayoutEmptyList = (LinearLayout)view.findViewById(R.id.list_empty);
+
     }
 
 
@@ -79,6 +94,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         recyclerViewLines = (RecyclerView) view.findViewById(R.id.list_lines);
         recyclerViewLines.setHasFixedSize(true);
         recyclerViewLines.setSelected(true);
+
 
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
@@ -141,6 +157,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
         return false;
     }
+
+
 }
 
 
