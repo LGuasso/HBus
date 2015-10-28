@@ -41,9 +41,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        editor.putBoolean(TAG,true);
-        editor.commit();
+
         setContentView(R.layout.activity_tour);
 
         referencesLayoutXML();
@@ -71,7 +69,12 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
         jumpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TourActivity.this,MainActivity.class));
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TourActivity.this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(TAG, true);
+                editor.apply();
+                startActivity(new Intent(TourActivity.this, MainActivity.class));
+                TourActivity.this.finish();
             }
         });
 
@@ -81,6 +84,10 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                 if (defaultPagerAdapter.getCount() == defaultViewpager.getCurrentItem() + 1) {
                     //startActivity(new Intent(TourActivity.this, MainActivity.class));
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TourActivity.this);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(TAG, true);
+                    editor.apply();
                     finish();
                 }
                 if(defaultViewpager.getCurrentItem() + 2 == defaultPagerAdapter.getCount()){

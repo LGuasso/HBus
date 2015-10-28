@@ -15,13 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.AdRequest;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -34,14 +28,13 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.model.Sentido;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
+import br.com.expressobits.hbus.ui.tour.TourActivity;
 import br.com.expressobits.hbus.utils.Popup;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener {
@@ -51,10 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar pToolbar;
     //Navigation Drawer
     private Drawer navigationDrawer;
-    private ProgressBar progressBar;
-    private TextView textViewLoadBus;
-    private FrameLayout frameLayout;
-
 
 
     //Gerencia a atuação dos fragments
@@ -72,16 +61,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("city",null)==null){
-            Intent intent = new Intent(this,SelectCityActivity.class);
-            startActivity(intent);
-        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        textViewLoadBus = (TextView) findViewById(R.id.textViewLoadBusName);
-        frameLayout = (FrameLayout) findViewById(R.id.framelayout_main);
+
         //new LinhaFile(this).init(this);
         if(savedInstanceState == null){
 
@@ -102,6 +85,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setVisibleLayout();
     }
 
+    private void initialsActivities() {
+        if(!PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(TourActivity.TAG,false)){
+            Intent intent = new Intent(this,TourActivity.class);
+            startActivity(intent);
+        }else{
+            if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(SelectCityActivity.TAG,null)==null){
+                Intent intent = new Intent(this,SelectCityActivity.class);
+                startActivity(intent);
+            }
+        }
+
+
+
+    }
 
 
     private void initNavigationDrawer() {
@@ -282,8 +279,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString(OnibusFragment.ARGS_LINHA,linha);
-        outState.putString(OnibusFragment.ARGS_SENTIDO,sentido);
+        outState.putString(OnibusFragment.ARGS_LINHA, linha);
+        outState.putString(OnibusFragment.ARGS_SENTIDO, sentido);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
@@ -296,19 +293,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initAdView(){
+        /** TODO add adview
         AdView mAdView = (AdView) findViewById(R.id.ad_view);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+         */
     }
 
     public void setVisibleLayout(){
-        progressBar.setVisibility(View.INVISIBLE);
-        textViewLoadBus.setVisibility(View.INVISIBLE);
-        frameLayout.setVisibility(View.VISIBLE);
+        //TODO set visiblity in frame fragment list itinerary
+
     }
 
     public void setLoadText(String text){
-        textViewLoadBus.setText(text);
+        //textViewLoadBus.setText(text);
     }
 
 
@@ -344,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
-
+        initialsActivities();
             super.onResume();
 
 

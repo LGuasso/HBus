@@ -28,6 +28,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private Toolbar pToolbar;
     private RecyclerView recyclerViewCities;
     private List<City> cities;
+    public static final String TAG = "city";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +63,8 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         cities = new ArrayList<City>();
         City city = new City();
-        city.setName("Santa Maria");
-        city.setImage(getResources().getDrawable(R.drawable.ic_bus));
-        cities.add(city);
-        city = new City();
-        city.setName("Porto Alegre");
-        city.setImage(getResources().getDrawable(R.drawable.ic_delete_grey600_24dp));
+        city.setName("Santa Maria - RS");
+        city.setImage(getResources().getDrawable(R.drawable.santa_maria_rs));
         cities.add(city);
 
         //TODO lista que vem apartir do parse
@@ -83,10 +80,11 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("city",cities.get(position).getName());
+        editor.putString(TAG,cities.get(position).getName());
         editor.apply();
 
-        startActivity(new Intent(this, MainActivity.class));
+        //startActivity(new Intent(this, MainActivity.class));
+        this.finish();
     }
 
     @Override

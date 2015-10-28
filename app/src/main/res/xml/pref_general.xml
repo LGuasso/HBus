@@ -2,15 +2,9 @@
     android:key="general"
     android:title="@string/pref_header_general">
 
-    <ListPreference
+    <Preference
         android:key="city"
-        android:title="@string/pref_title_select_your_city"
-        android:defaultValue=""
-        android:entries="@array/pref_city"
-        android:entryValues="@array/pref_city"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        />
+        android:title="@string/pref_title_select_your_city"/>
 
     <CheckBoxPreference
         android:key="time_home_screen"

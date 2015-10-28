@@ -16,7 +16,47 @@
 #   public *;
 #}
 
+#depuração
+-verbose
+#desabilita o opção de otimização
+-dontoptimize
+
+-repackageclasses ''
+
+#desabilita o opção para metodos onClick
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+-keepclassmembers public class * extends android.view.View {
+   void set*(***);
+   *** get*();
+}
+
+-keep class com.google.inject.** { *; }
+
 -keep public class br.com.expressobits.hbus.ui.MainActivity
--keep public class br.com.expressobits.hbus.ui.fragments.LinhasFragment
+
+-keep public class br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment
 -keep public class br.com.expressobits.hbus.ui.fragments.OnibusFragment
--keep public class com.mikepenz:materialdrawer.**
+-keep public class br.com.expressobits.hbus.ui.fragments.FavoriteItineraryFragment
+-keep public class br.com.expressobits.hbus.ui.splash.SplashActivty
+-keep public class br.com.expressobits.hbus.ui.tour.TourActivity
+-keep public class br.com.expressobits.hbus.ui.tour.PagerFragment
+-keep public class br.com.expressobits.hbus.ui.tour.ContentPagerAdapter
+-keep public class br.com.expressobits.hbus.ui.settings.SettingsActivity
+-keep public class br.com.expressobits.hbus.ui.settings.AboutPreferenceFragment
+-keep public class br.com.expressobits.hbus.ui.settings.SelectCityFragment
+-keep public class br.com.expressobits.hbus.ui.settings.DataSyncPreferenceFragment
+-keep public class br.com.expressobits.hbus.ui.settings.GeneralPreferenceFragment
+-keep public class br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment
+
+
+-keep class com.mikepenz.materialdrawer.** { *; }
+
+-dontwarn android.support.**
+
+-keep public class com.google.android.gms.* { public *; }
+
+-dontwarn com.google.android.gms.**
+
+-keep class org.slf4j.**
