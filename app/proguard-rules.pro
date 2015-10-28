@@ -35,8 +35,21 @@
 -keep class com.google.inject.** { *; }
 
 -keep public class br.com.expressobits.hbus.ui.MainActivity
--keep public class br.com.expressobits.hbus.ui.fragments.LinhasFragment
+
+-keep public class br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment
 -keep public class br.com.expressobits.hbus.ui.fragments.OnibusFragment
+-keep public class br.com.expressobits.hbus.ui.fragments.FavoriteItineraryFragment
+-keep public class br.com.expressobits.hbus.ui.splash.SplashActivty
+-keep public class br.com.expressobits.hbus.ui.tour.TourActivity
+-keep public class br.com.expressobits.hbus.ui.tour.PagerFragment
+-keep public class br.com.expressobits.hbus.ui.tour.ContentPagerAdapter
+-keep public class br.com.expressobits.hbus.ui.settings.SettingsActivity
+-keep public class br.com.expressobits.hbus.ui.settings.AboutPreferenceFragment
+-keep public class br.com.expressobits.hbus.ui.settings.SelectCityFragment
+-keep public class br.com.expressobits.hbus.ui.settings.DataSyncPreferenceFragment
+-keep public class br.com.expressobits.hbus.ui.settings.GeneralPreferenceFragment
+-keep public class br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment
+
 
 -keep class com.mikepenz.materialdrawer.** { *; }
 

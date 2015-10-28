@@ -61,17 +61,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("city",null)==null){
-            Intent intent = new Intent(this,SelectCityActivity.class);
-            startActivity(intent);
-        }
-
-        if(!PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean("tour",false)){
-            Intent intent = new Intent(this,TourActivity.class);
-            startActivity(intent);
-        }
-
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -96,6 +85,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setVisibleLayout();
     }
 
+    private void initialsActivities() {
+        if(!PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(TourActivity.TAG,false)){
+            Intent intent = new Intent(this,TourActivity.class);
+            startActivity(intent);
+        }else{
+            if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(SelectCityActivity.TAG,null)==null){
+                Intent intent = new Intent(this,SelectCityActivity.class);
+                startActivity(intent);
+            }
+        }
+
+
+
+    }
 
 
     private void initNavigationDrawer() {
@@ -339,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
-
+        initialsActivities();
             super.onResume();
 
 

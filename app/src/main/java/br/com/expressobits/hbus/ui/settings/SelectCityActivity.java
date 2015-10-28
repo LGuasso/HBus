@@ -28,6 +28,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private Toolbar pToolbar;
     private RecyclerView recyclerViewCities;
     private List<City> cities;
+    public static final String TAG = "city";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +80,11 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("city",cities.get(position).getName());
+        editor.putString(TAG,cities.get(position).getName());
         editor.apply();
 
-        startActivity(new Intent(this, MainActivity.class));
+        //startActivity(new Intent(this, MainActivity.class));
+        this.finish();
     }
 
     @Override
