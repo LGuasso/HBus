@@ -13,10 +13,7 @@
     <string name="code_of_bus">Code of bus</string>
     <string name="no_have_bus">No have bus</string>
     <string name="choose_the_way">Choose the way</string>
-    <!-- Banner Normal WARNING Somente usado na produção -->
-    <!-- string name="banner_ad_unit_id" translatable="false">ca-app-pub-3074923165940773/7875100197</string -->
-    <!-- Banner de testes -->
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+
     <string name="example_hours" translatable="false">10:00</string>
     <string name="example_codigo_da_linha" translatable="false">155A</string>
     <string name="next_bus">Next bus</string>

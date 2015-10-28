@@ -305,13 +305,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.i(TAG, "Trocando o título da action bar para " + title + " ,trocando o subtítulo para " + subtitle);
     }
 
-    public void initAdView(){
-        /** TODO add adview
-        AdView mAdView = (AdView) findViewById(R.id.ad_view);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-         */
-    }
+
 
     public void setVisibleLayout(){
         //TODO set visiblity in frame fragment list itinerary

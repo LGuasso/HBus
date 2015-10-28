@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.software.shell.fab.ActionButton;
 
 import java.util.Arrays;
@@ -80,6 +82,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         initListViews(view);
         initFAB(view);
         initEmptyList(view);
+        initAdView(view);
     }
 
     private void initEmptyList(View view) {
@@ -105,6 +108,13 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewLines.setAdapter(adapter);
+
+    }
+
+    public void initAdView(View view){
+        AdView mAdView = (AdView) view.findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 
