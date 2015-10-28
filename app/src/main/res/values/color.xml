@@ -11,6 +11,8 @@
 
     <color name="red">#F44336</color>
 
+    <color name="transparent_card_view_image">#99000000</color>
+
     
     <color name="text_color">#dd000000</color>
     <color name="subtext_color">#88000000</color>

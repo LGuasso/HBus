@@ -32,15 +32,8 @@ public class SplashActivity extends AppCompatActivity{
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Class cl;
+                Class cl = MainActivity.class;
 
-                if(!PreferenceManager.getDefaultSharedPreferences(SplashActivity.this).getBoolean(TourActivity.TAG,false)){
-                    cl = TourActivity.class;
-                }else if(PreferenceManager.getDefaultSharedPreferences(SplashActivity.this).getString("city",null)==null){
-                    cl = SelectCityActivity.class;
-                }else {
-                    cl = MainActivity.class;
-                }
                 /* Create an Intent that will start the Menu-Activity. */
                 Intent mainIntent = new Intent(SplashActivity.this, cl);
                 SplashActivity.this.startActivity(mainIntent);
