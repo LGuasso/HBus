@@ -40,7 +40,7 @@ import br.com.expressobits.hbus.utils.Popup;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener {
 
     public static final String TAG = "Atividade Principal";
-
+    public static final String DEBUG = "debug";
     private Toolbar pToolbar;
     //Navigation Drawer
     private Drawer navigationDrawer;
@@ -117,12 +117,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         List<Itinerary> itinerarieses = dao.getItineraries(true);
         for(Itinerary itinerary : itinerarieses){
-            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerary.getName()).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
+            String name = "";
+            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
+                name+=itinerary.getId()+" - "+itinerary.getName();
+            }else{
+                name+=itinerary.getName();
+            }
+            navigationDrawer.addItem(new PrimaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
         }
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
         List<Itinerary>allItinerarios = dao.getItineraries(false);
+
         for(Itinerary itinerary:allItinerarios){
-            navigationDrawer.addItem(new SecondaryDrawerItem().withName(itinerary.getName()).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
+            String name = "";
+            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
+                name+=itinerary.getId()+" - "+itinerary.getName();
+            }else{
+                name+=itinerary.getName();
+            }
+            navigationDrawer.addItem(new SecondaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
         }
 
     }
@@ -287,18 +300,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setActionBarTitle(String title,String subtitle){
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setSubtitle(subtitle);
-        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString("city","Sem cidade");
+        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString("city", "Sem cidade");
         pToolbar.setTitle(cityname);
         Log.i(TAG, "Trocando o título da action bar para " + title + " ,trocando o subtítulo para " + subtitle);
     }
 
-    public void initAdView(){
-        /** TODO add adview
-        AdView mAdView = (AdView) findViewById(R.id.ad_view);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-         */
-    }
+
 
     public void setVisibleLayout(){
         //TODO set visiblity in frame fragment list itinerary

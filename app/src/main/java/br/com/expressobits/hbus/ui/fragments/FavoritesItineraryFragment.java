@@ -9,10 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.software.shell.fab.ActionButton;
 
 import java.util.Arrays;
@@ -39,6 +40,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private ActionButton actionButton;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
+    LinearLayout linearLayoutEmptyList;
     View view;
 
     @Override
@@ -58,13 +60,20 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onResume() {
         super.onResume();
+        if(recyclerViewLines.getAdapter().getItemCount()<1){
+            recyclerViewLines.setVisibility(View.GONE);
+            linearLayoutEmptyList.setVisibility(View.VISIBLE);
+        }else{
+            recyclerViewLines.setVisibility(View.VISIBLE);
+            linearLayoutEmptyList.setVisibility(View.GONE);
+        }
         ((MainActivity)getActivity()).setActionBarTitle(getResources().getString(R.string.app_name), "");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_linhas, null);
+        view = inflater.inflate(R.layout.fragment_favorite_itinerary, null);
         initViews(view);
         return view;
     }
@@ -72,6 +81,13 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private void initViews(View view){
         initListViews(view);
         initFAB(view);
+        initEmptyList(view);
+        initAdView(view);
+    }
+
+    private void initEmptyList(View view) {
+        linearLayoutEmptyList = (LinearLayout)view.findViewById(R.id.list_empty);
+
     }
 
 
@@ -79,6 +95,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         recyclerViewLines = (RecyclerView) view.findViewById(R.id.list_lines);
         recyclerViewLines.setHasFixedSize(true);
         recyclerViewLines.setSelected(true);
+
 
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
@@ -91,6 +108,13 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewLines.setAdapter(adapter);
+
+    }
+
+    public void initAdView(View view){
+        AdView mAdView = (AdView) view.findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 
@@ -141,6 +165,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
         return false;
     }
+
+
 }
 
 

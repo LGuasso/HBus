@@ -75,7 +75,7 @@ public class AddFavoriteFragment extends Fragment{
                 BusDAO dao = new BusDAO(AddFavoriteFragment.this.getActivity());
                 Toast.makeText(getActivity(),R.string.added_favorite_itinerary_with_sucess,Toast.LENGTH_SHORT).show();
                 itinerarios.get(position).setFavorite(true);
-                dao.insert(itinerarios.get(position));
+                dao.update(itinerarios.get(position));
                 mCallback.onSettingsDone(false);
             }
         });

@@ -1,6 +1,8 @@
 package br.com.expressobits.hbus.adapters;
 
 import android.content.Context;
+import android.media.MediaActionSound;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.ui.MainActivity;
 
 /**
  * @author Rafael
@@ -54,8 +57,13 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     @Override
     public void onBindViewHolder(HolderFavoriteItinerary holder, int position) {
         BusDAO dao = new BusDAO(context);
-
-        holder.textItineraryName.setText(itineraryList.get(position).getName());
+        String name  = "";
+        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(MainActivity.DEBUG,false)){
+            name += itineraryList.get(position).getId()+" - "+itineraryList.get(position).getName();
+        }else{
+            name += itineraryList.get(position).getName();
+        }
+        holder.textItineraryName.setText(name);
         holder.linearLayout  = (TextView) holder.itemView.findViewById(R.id.linear_layout_nextbuses);
         if(itineraryList.get(position).getSentidos().size()>0){
             ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBuses(itineraryList.get(position)));
