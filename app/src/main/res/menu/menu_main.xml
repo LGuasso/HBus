@@ -5,18 +5,12 @@
 
     <item android:id="@+id/menu_action_settings"
         android:title="@string/action_settings"
-        android:icon="@drawable/ic_material_settings"
+        android:icon="@drawable/ic_settings_white_24dp"
         app:showAsAction="always"
         android:orderInCategory="2"/>
 
-    <item android:id="@+id/menu_action_add"
-        android:title="@string/add_favorite"
-        android:icon="@drawable/plus"
-        app:showAsAction="always"
-        android:orderInCategory="1"/>
-
     <item android:id="@+id/menu_action_about"
-        android:title="@string/status_bar_notification_info_overflow"
+        android:title="@string/about"
         android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="never"
         android:orderInCategory="3"/>

@@ -18,4 +18,13 @@
     <string name="favorites">Favoritos</string>
     <string name="add_favorite">Add favorite</string>
     <string name="added_favorite_itinerary_with_sucess">Added favorite itinerary with sucess</string>
+    <string name="delete_itinerary_with_sucess">Deletado itinerário %1$s com sucesso!</string>
+    <string name="delete">Deletar</string>
+    <string name="itinerary_name">Nome do itinerário</string>
+    <string name="jump">Pular</string>
+    <string name="next">Próximo</string>
+    <string name="title_activity_load">Tela inicial</string>
+    <string name="finish">Finalizar</string>
+    <string name="title_activity_select_city">Selecione cidade</string>
+    <string name="title_activity_splash"></string>
 </resources>

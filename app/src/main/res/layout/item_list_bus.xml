@@ -5,15 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:id="@+id/listView_background"
-    android:padding="15dp">
+    android:padding="16dp">
 
     <!-- Primeiro layout com quadrado que tem as horas-->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linear_layout_list_bus_square"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/square"
+
         >
 
         <!-- TODO implementar diferentes cores -->
@@ -21,15 +22,16 @@
         <TextView
             android:id="@+id/item_list_textview_horario"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingRight="1dp"
+            android:paddingLeft="1dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:textAppearance="@style/TextStyle.Hours.Title"
             android:text="@string/example_hours" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- Segundo Layout com o resto de informações -->
     <LinearLayout
@@ -44,25 +46,23 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/example_codigo_da_linha"
-            android:textAppearance="@style/TextStyle.Large.Color" />
-        <TextView
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:text="@string/example_codigo_da_linha" />
+
+        <!-- TextView
             android:id="@+id/item_list_textview_tempo_faltando"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextStyle.Accent.Caption"
             android:fadingEdge="vertical"
             android:fadingEdgeLength="20dp"
             android:focusable="false"
-            android:lines="1"/>
+            android:lines="1"/ -->
 
 
         <TextView
             android:id="@+id/item_list_textview_descricao_do_codigo"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextStyle.Accent.Caption"
-            android:lines="1"
             android:textColor="@color/black"
             android:ellipsize="marquee"
             android:textColorHighlight="#FFFFFF"
@@ -70,7 +70,7 @@
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="20dp"
             android:focusable="false"
-            android:singleLine="true" />
+            android:singleLine="true"/>
 
     </LinearLayout>
 

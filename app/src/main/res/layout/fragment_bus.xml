@@ -1,0 +1,95 @@
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tab_indicator_ab_blue"/>
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linear_layout_uteis"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id = "@+id/rv_listline_line_useful_days"
+                    android:scrollbars = "vertical"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent" />
+
+                <ListView
+                    android:id="@+id/listview_listline_line_uteis"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <TextView android:id="@android:id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAccent"
+                    android:text="@string/no_have_bus"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linear_layout_sabado"
+                android:orientation="horizontal">
+                <android.support.v7.widget.RecyclerView
+                    android:id = "@+id/rv_listline_line_saturday"
+                    android:scrollbars = "vertical"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent" />
+                <ListView
+                    android:id="@+id/listview_listline_line_sabado"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <TextView android:id="@android:id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/no_have_bus"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linear_layout_domingo"
+                android:orientation="horizontal">
+                <android.support.v7.widget.RecyclerView
+                    android:id = "@+id/rv_listline_line_sunday"
+                    android:scrollbars = "vertical"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent" />
+                <ListView
+                    android:id="@+id/listview_listline_line_domingo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <TextView android:id="@android:id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/no_have_bus"/>
+            </LinearLayout>
+
+
+
+
+        </FrameLayout>
+    </LinearLayout>
+
+
+</TabHost>

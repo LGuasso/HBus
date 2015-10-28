@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -31,7 +32,7 @@ public class Popup {
             final Button button = new Button(view.getContext());
             button.setText(way);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(30,30,30,30);
+            params.setMargins(15,15,15,15);
             button.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -51,4 +52,5 @@ public class Popup {
         popupWindow.setBackgroundDrawable(view.getContext().getResources().getDrawable(android.R.color.transparent));
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
+
 }

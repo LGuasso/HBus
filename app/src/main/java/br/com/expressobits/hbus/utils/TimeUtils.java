@@ -1,12 +1,17 @@
 package br.com.expressobits.hbus.utils;
 
-import android.content.Intent;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.List;
+
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.TypeDay;
 
 /**
  * Created by Rafael on 15/06/2015.
@@ -69,6 +74,18 @@ public class TimeUtils {
         }
     }
 
+    public static TypeDay getTypeDayforString(String day){
+        switch (day){
+            case "uteis":
+                return TypeDay.USEFUL;
+            case "sabado":
+                return TypeDay.SATURDAY;
+            default:
+                return TypeDay.SUNDAY;
+
+        }
+    }
+
     /**
      * Retorna o atual horário na forma de String HH:mm
      * @return String do horário atual em HH:mm
@@ -101,5 +118,33 @@ public class TimeUtils {
 
 
         return texto;
+    }
+
+    public static List<Bus> sortByTimeBus(List<Bus> busList){
+
+        Collections.sort(busList);
+        Bus bus = new Bus();
+        bus.setTime(TimeUtils.getNowTimeinString());
+        ArrayList<Bus> busFinal = new ArrayList<>();
+        ArrayList<Bus> varFinal = new ArrayList<>();
+        for (int i=0;i<busList.size();i++){
+            if(busList.get(i).getHora()>bus.getHora()){
+                busFinal.add(busList.get(i));
+            }else if(busList.get(i).getHora()<bus.getHora()){
+                varFinal.add(busList.get(i));
+            }else{
+                if(busList.get(i).getMinutos()>=bus.getMinutos()){
+                    busFinal.add(busList.get(i));
+                }else if(busList.get(i).getMinutos()<bus.getMinutos()){
+                    varFinal.add(busList.get(i));
+                }
+            }
+        }
+        for(Bus bus1 : varFinal){
+            bus1.setTomorrow(true);
+            busFinal.add(bus1);
+        }
+
+        return busFinal;
     }
 }

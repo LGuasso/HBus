@@ -1,7 +1,8 @@
 package br.com.expressobits.hbus.ui;
 
-import android.app.Fragment;
+import android.content.Intent;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -14,10 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.AdRequest;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -29,19 +27,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.FavoritosDAO;
-import br.com.expressobits.hbus.file.LinhaFile;
-import br.com.expressobits.hbus.modelo.Bus;
-import br.com.expressobits.hbus.modelo.Itinerario;
-import br.com.expressobits.hbus.modelo.Linha;
-import br.com.expressobits.hbus.modelo.TipoDeDia;
-import br.com.expressobits.hbus.preferences.Preferences;
+import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
-import br.com.expressobits.hbus.ui.fragments.LinhasFragment;
+import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
+import br.com.expressobits.hbus.ui.settings.SettingsActivity;
+import br.com.expressobits.hbus.ui.tour.TourActivity;
 import br.com.expressobits.hbus.utils.Popup;
 
-public class MainActivity extends AppCompatActivity implements OnSettingsListener,Drawer.OnDrawerItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener {
 
     public static final String TAG = "Atividade Principal";
 
@@ -49,39 +45,60 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     //Navigation Drawer
     private Drawer navigationDrawer;
 
+
     //Gerencia a atuação dos fragments
     FragmentManager fm = getSupportFragmentManager();
     int lastPosition = 0;
     String linha;
     String sentido;
 
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
+        //new LinhaFile(this).init(this);
         if(savedInstanceState == null){
 
-            LinhasFragment linhasFragment = new LinhasFragment();
+            FavoritesItineraryFragment favoritesItineraryFragment = new FavoritesItineraryFragment();
             if(findViewById(R.id.framelayout_main)!=null){
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.framelayout_main,linhasFragment,"linhasFragment");
+                ft.add(R.id.framelayout_main, favoritesItineraryFragment,"linhasFragment");
                 ft.commit();
             }else if(findViewById(R.id.framelayout_content)!=null){
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.framelayout_menu,linhasFragment,"linhasFragment");
+                ft.add(R.id.framelayout_menu, favoritesItineraryFragment,"linhasFragment");
                 ft.add(R.id.framelayout_content,new OnibusFragment(),"onibusFragment");
                 ft.commit();
             }
-
         }
-
         initViews();
         initNavigationDrawer();
+        setVisibleLayout();
     }
 
+    private void initialsActivities() {
+        if(!PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(TourActivity.TAG,false)){
+            Intent intent = new Intent(this,TourActivity.class);
+            startActivity(intent);
+        }else{
+            if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(SelectCityActivity.TAG,null)==null){
+                Intent intent = new Intent(this,SelectCityActivity.class);
+                startActivity(intent);
+            }
+        }
+
+
+
+    }
 
 
     private void initNavigationDrawer() {
@@ -96,16 +113,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 .withOnDrawerItemClickListener(this)
                 .build();
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.favorites));
-        FavoritosDAO dao = new FavoritosDAO(this);
-        new LinhaFile(this).iniciarDados(dao.getLista());
-        List<Itinerario> itinerarios = LinhaFile.getItinerarios();
-        for(Itinerario itinerario:itinerarios){
-            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerario.getNome()).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
+        BusDAO dao = new BusDAO(this);
+
+        List<Itinerary> itinerarieses = dao.getItineraries(true);
+        for(Itinerary itinerary : itinerarieses){
+            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerary.getName()).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
         }
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
-        List<String>allItinerarios = new LinhaFile(this).getNomeLinhas();
-        for(String txt:allItinerarios){
-            navigationDrawer.addItem(new SecondaryDrawerItem().withName(txt).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
+        List<Itinerary>allItinerarios = dao.getItineraries(false);
+        for(Itinerary itinerary:allItinerarios){
+            navigationDrawer.addItem(new SecondaryDrawerItem().withName(itinerary.getName()).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
         }
 
     }
@@ -124,19 +141,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
-            Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show();
-        }
-        if (id == R.id.menu_action_add) {
-            onSettingsDone(true);
-            Toast.makeText(this, getString(R.string.add_favorite), Toast.LENGTH_SHORT).show();
-
+            startActivity(new Intent(this, SettingsActivity.class));
         }
         return false;
     }
 
     private void initViews() {
         initActionBar();
-        initAdView();
+        //initAdView();
 
     }
 
@@ -153,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
         setSupportActionBar(pToolbar);
+
         //pToolbar.setTitle("My lines");
         //pToolbar.setSubtitle("subtitle");
 
@@ -215,6 +228,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         this.linha = linha;
         this.sentido = sentido;
 
+
+
         getSupportActionBar().setTitle(linha);
         getSupportActionBar().setSubtitle(sentido);
 
@@ -264,21 +279,34 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString(OnibusFragment.ARGS_LINHA,linha);
-        outState.putString(OnibusFragment.ARGS_SENTIDO,sentido);
+        outState.putString(OnibusFragment.ARGS_LINHA, linha);
+        outState.putString(OnibusFragment.ARGS_SENTIDO, sentido);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
     public void setActionBarTitle(String title,String subtitle){
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setSubtitle(subtitle);
+        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString("city","Sem cidade");
+        pToolbar.setTitle(cityname);
         Log.i(TAG, "Trocando o título da action bar para " + title + " ,trocando o subtítulo para " + subtitle);
     }
 
     public void initAdView(){
+        /** TODO add adview
         AdView mAdView = (AdView) findViewById(R.id.ad_view);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+         */
+    }
+
+    public void setVisibleLayout(){
+        //TODO set visiblity in frame fragment list itinerary
+
+    }
+
+    public void setLoadText(String text){
+        //textViewLoadBus.setText(text);
     }
 
 
@@ -291,21 +319,32 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         if(iDrawerItem instanceof PrimaryDrawerItem) {
             selectedItem = ((PrimaryDrawerItem) iDrawerItem).getName();
         }
-            switch (selectedItem) {
-                case "Itarare Brigada":
-                case "Circular Cemiterio Sul":
-                case "Circular Cemiterio Norte":
-                case "Circular Camobi":
-                case "Circular Barao":
-                case "Brigada Itarare":
-                    onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
-                    break;
+        BusDAO dao = new BusDAO(this);
 
-                default:
-
-                    Popup.showPopUp(this, view, selectedItem,new LinhaFile(this).getSentidos(this,selectedItem));
-            }
+        List<String> sentidos = dao.getItinerary(selectedItem).getSentidos();
+        if(sentidos.size()>1){
+            Popup.showPopUp(this, view, selectedItem, dao.getItinerary(selectedItem).getSentidos());
+        }else{
+            onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
+        }
 
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab_button:
+                onSettingsDone(true);
+            return;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        initialsActivities();
+            super.onResume();
+
+
     }
 }

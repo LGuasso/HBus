@@ -24,5 +24,17 @@
     <string name="favorites">Favorites</string>
     <string name="add_favorite">Add favorite</string>
     <string name="added_favorite_itinerary_with_sucess">Added favorite itinerary with sucess</string>
+    <string name="itinerary_name">Itinerary Name</string>
+    <string name="delete_itinerary_with_sucess">Deleted itinerary %1$s with sucess!</string>
+    <string name="delete">Delete</string>
+    <string name="title_activity_load">Splash screen</string>
+    <string name="jump">Jump</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
+    <string name="title_activity_select_city">Select city</string>
+    <string name="not_found">Not found</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="about">About</string>
+
 
 </resources>

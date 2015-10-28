@@ -7,32 +7,29 @@
     tools:context=".MainActivity">
 
     <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/primary_toolbar"
         android:elevation="4dp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        style="@style/ActionBarOrange"
         android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
         <FrameLayout
             android:id="@+id/framelayout_main"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"/>
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/ad_view"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:gravity="center"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id" />
-    </LinearLayout>
+    </RelativeLayout>
+
 
 
 

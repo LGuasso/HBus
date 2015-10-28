@@ -1,7 +1,7 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
-import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,23 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
+import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.BusAdapter;
-import br.com.expressobits.hbus.adapters.ListViewAdapterBus;
-import br.com.expressobits.hbus.file.LinhaFile;
-import br.com.expressobits.hbus.modelo.Linha;
-import br.com.expressobits.hbus.modelo.Bus;
-import br.com.expressobits.hbus.modelo.TipoDeDia;
-import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
@@ -34,18 +30,11 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  */
 public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
-    public static final String ARGS_LINHA = "Linha";
-    public static final String ARGS_SENTIDO = "Sentido";
+    public static final String ARGS_LINHA = "Line";
+    public static final String ARGS_SENTIDO = "Way";
     RecyclerView recyclerViewUsefulDays;
     RecyclerView recyclerViewSaturday;
     RecyclerView recyclerViewSunday;
-    List<Bus> listAuxBusUsefulDays;
-    List<Bus> listAuxBusSaturday;
-    List<Bus> listAuxBusSunday;
-
-    int contUsefulDays=0;
-    int contSaturday=0;
-    int contSunday=0;
 
     List<Bus> listBusUsefulDays;
     List<Bus> listBusSaturday;
@@ -56,7 +45,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_onibus, null);
+        View view = inflater.inflate(R.layout.fragment_bus, null);
         initViews(view);
 
         Bundle arguments = getArguments();
@@ -86,68 +75,23 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     private void initRecyclerViews(View view){
         recyclerViewUsefulDays = (RecyclerView)view.findViewById(R.id.rv_listline_line_useful_days);
         recyclerViewUsefulDays.setHasFixedSize(true);
+        recyclerViewUsefulDays.setSelected(true);
         recyclerViewSaturday = (RecyclerView)view.findViewById(R.id.rv_listline_line_saturday);
         recyclerViewSaturday.setHasFixedSize(true);
+        recyclerViewSaturday.setSelected(true);
         recyclerViewSunday = (RecyclerView)view.findViewById(R.id.rv_listline_line_sunday);
         recyclerViewSunday.setHasFixedSize(true);
-
-        recyclerViewUsefulDays.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-            }
-        });
+        recyclerViewSunday.setSelected(true);
 
 
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewUsefulDays.setLayoutManager(llmUseful);
 
-        recyclerViewSaturday.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
 
         LinearLayoutManager llmSaturday = new LinearLayoutManager(getActivity());
         llmSaturday.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewSaturday.setLayoutManager(llmSaturday);
-
-        recyclerViewSunday.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                /**LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-                 BusAdapter adapter = (BusAdapter) recyclerView.getAdapter();
-
-                 if (listBusSunday.size() == llm.findLastCompletelyVisibleItemPosition() + 1) {
-                 //TODO aonde vem meus dados?
-                 //List<Bus> listAux = getSetBusList(10);
-                 List<Bus> listAux = listBusSunday;
-
-                 for (int i = 0; i < listAux.size(); i++) {
-                 adapter.addListItem(listAux.get(i), listBusSunday.size());
-                 }
-                 }*/
-            }
-        });
 
 
         LinearLayoutManager llmSunday = new LinearLayoutManager(getActivity());
@@ -178,13 +122,15 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         int childCount = tabWidget.getChildCount();
         for(int i = 0; i < childCount; ++i) {
             View child = tabWidget.getChildTabViewAt(i);
+            TextView tv = (TextView) abas.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
+            tv.setTextColor(getActivity().getResources().getColor(R.color.white));
             // Que eh o mesmo que
             //View child = tabWidget.getChildAt(i);
             // Vide o codigo fonte
 
             // O Drawable vai variar conforme o nome do seu tema, confirme se tem
             // algum nome parecido com esse e altere aqui
-            //child.setBackgroundResource(R.drawable.tab_indicator_ab_orange);
+            child.setBackgroundResource(R.drawable.tab_indicator_ab_blue);
         }
 
         abas.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
@@ -195,20 +141,23 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     }
 
     public void refresh(String linha,String sentido){
-        linha = toSimpleName(linha);
+        //linha = toSimpleName(linha);
         sentido = toSimpleName(sentido);
 
-        listBusUsefulDays = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.UTEIS);
+        BusDAO dao = new BusDAO(getActivity());
+
+
+        listBusUsefulDays = dao.getBusList(linha, sentido, TypeDay.USEFUL.toString(),false);
         BusAdapter adapterUeful = new BusAdapter(getActivity(), listBusUsefulDays);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerViewUsefulDays.setAdapter(adapterUeful);
 
-        listBusSaturday = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.SABADO);
+        listBusSaturday = dao.getBusList(linha, sentido, TypeDay.SATURDAY.toString(),false);
         BusAdapter adapterSaturday = new BusAdapter(getActivity(), listBusSaturday);
         adapterSaturday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSaturday.setAdapter(adapterSaturday);
 
-        listBusSunday = new LinhaFile(getActivity()).getOnibuses(linha,sentido,TipoDeDia.DOMINGO);
+        listBusSunday = dao.getBusList(linha, sentido, TypeDay.SUNDAY.toString(),false);
         BusAdapter adapterSunday = new BusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);
@@ -220,42 +169,9 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         adapter.removeListItem(position);
     }
 
-    public List<Bus> getSetBusList(int tipoDeDia,int qtd,String linha,String sentido){
-        List<Bus> listAux = new ArrayList<Bus>();
-        List<Bus> list = new ArrayList<Bus>();
-        switch (tipoDeDia){
-            case 1:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.SABADO);
-                if(contSaturday+10>list.size()-1){
-                    listAux = list.subList(contSaturday,list.size()-1);
-                }else{
-                    listAux = list.subList(contSaturday, contSaturday + 10);
-                }
-
-                contSaturday+=10;
-                break;
-            case 2:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.DOMINGO);
-                if(contSunday+10>list.size()-1){
-                    listAux = list.subList(contSunday,list.size()-1);
-                }else{
-                    listAux = list.subList(contSunday, contSunday + 10);
-                }
-                contSunday+=10;
-                break;
-            default:
-                list = new LinhaFile(getActivity()).getOnibuses(linha, sentido, TipoDeDia.UTEIS);
-                if(contUsefulDays+10>list.size()-1){
-                    listAux = list.subList(contUsefulDays,list.size()-1);
-                }else{
-                    listAux = list.subList(contUsefulDays, contUsefulDays + 10);
-                }
-                contUsefulDays+=10;
-                break;
-
-        }
-
-        return(listAux);
+    @Override
+    public boolean onLongClickListener(View view, int position) {
+        return false;
     }
 
 
