@@ -148,6 +148,8 @@ public class BusDAO extends SQLiteAssetHelper{
      */
     public void update(Itinerary itinerary){
         ContentValues c = new ContentValues();
+        Log.e(TAG,"itinerary "+itinerary.getId()+" "+itinerary.getName());
+        c.put("_id",itinerary.getId());
         c.put("name", itinerary.getName());
         c.put("favorite", itinerary.getFavorite());
         String where = "name = ?";
@@ -162,6 +164,7 @@ public class BusDAO extends SQLiteAssetHelper{
         c = getWritableDatabase().query(TABLE_ITINERARY, COLS_ITINERARY, null, null, null, null, null);
         while(c.moveToNext()){
             Itinerary itinerary = new Itinerary();
+            itinerary.setId(c.getLong(0));
             itinerary.setName(c.getString(1));
 
             if(c.getString(2).equals("0")){
@@ -199,6 +202,7 @@ public class BusDAO extends SQLiteAssetHelper{
         c = getWritableDatabase().query(TABLE_ITINERARY, COLS_ITINERARY, where, arguments, null, null, null);
         while(c.moveToNext()){
             Itinerary itinerary = new Itinerary();
+            itinerary.setId(c.getLong(0));
             itinerary.setName(c.getString(1));
             itinerary.setFavorite(favorite);
             itinerary.setSentidos(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
@@ -228,6 +232,7 @@ public class BusDAO extends SQLiteAssetHelper{
         c = getWritableDatabase().query(TABLE_ITINERARY, COLS_ITINERARY, where, arguments, null, null, null);
         while (c.moveToNext()) {
             itinerary = new Itinerary();
+            itinerary.setId(c.getLong(0));
             itinerary.setName(c.getString(1));
             if(c.getString(2).equals("0")){
                 itinerary.setFavorite(false);

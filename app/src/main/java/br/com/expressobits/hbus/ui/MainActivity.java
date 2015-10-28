@@ -40,7 +40,7 @@ import br.com.expressobits.hbus.utils.Popup;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener {
 
     public static final String TAG = "Atividade Principal";
-
+    public static final String DEBUG = "debug";
     private Toolbar pToolbar;
     //Navigation Drawer
     private Drawer navigationDrawer;
@@ -73,12 +73,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.add(R.id.framelayout_main, favoritesItineraryFragment,"linhasFragment");
                 ft.commit();
-            }/**else if(findViewById(R.id.framelayout_content)!=null){
+            }else if(findViewById(R.id.framelayout_content)!=null){
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.add(R.id.framelayout_menu, favoritesItineraryFragment,"linhasFragment");
                 ft.add(R.id.framelayout_content,new OnibusFragment(),"onibusFragment");
                 ft.commit();
-            }*/
+            }
         }
         initViews();
         initNavigationDrawer();
@@ -117,12 +117,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         List<Itinerary> itinerarieses = dao.getItineraries(true);
         for(Itinerary itinerary : itinerarieses){
-            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerary.getName()).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
+            String name = "";
+            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
+                name+=itinerary.getId()+" - "+itinerary.getName();
+            }else{
+                name+=itinerary.getName();
+            }
+            navigationDrawer.addItem(new PrimaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
         }
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
         List<Itinerary>allItinerarios = dao.getItineraries(false);
+
         for(Itinerary itinerary:allItinerarios){
-            navigationDrawer.addItem(new SecondaryDrawerItem().withName(itinerary.getName()).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
+            String name = "";
+            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
+                name+=itinerary.getId()+" - "+itinerary.getName();
+            }else{
+                name+=itinerary.getName();
+            }
+            navigationDrawer.addItem(new SecondaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
         }
 
     }
@@ -207,14 +220,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 lastPosition = 1;
 
 
-            } /**else if (findViewById(R.id.framelayout_content) != null) {
+            } else if (findViewById(R.id.framelayout_content) != null) {
                 addFavoriteFragment = new AddFavoriteFragment();
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transação novamente na pilha de navegação
                 ft.replace(R.id.framelayout_content, addFavoriteFragment, "onibusFragment");
                 lastPosition = 1;
 
-            }*/
+            }
         }
 
         // Finaliza a transção com sucesso
@@ -257,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
-        }else/** if(findViewById(R.id.framelayout_content)!=null){
+        }else if(findViewById(R.id.framelayout_content)!=null){
             if(onibusFragment != null){
                 onibusFragment.refresh(linha, sentido);
             }else{
@@ -271,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ft.replace(R.id.framelayout_content, onibusFragment, "onibusFragment");
                 lastPosition = 1;
             }
-        }*/
+        }
 
         // Finaliza a transção com sucesso
         ft.commit();
@@ -287,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setActionBarTitle(String title,String subtitle){
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setSubtitle(subtitle);
-        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString("city","Sem cidade");
+        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString("city", "Sem cidade");
         pToolbar.setTitle(cityname);
         Log.i(TAG, "Trocando o título da action bar para " + title + " ,trocando o subtítulo para " + subtitle);
     }

@@ -12,6 +12,8 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  */
 public class Itinerary {
 
+
+    private long id;
     /**
      * Nome do itinerário.
      */
@@ -21,6 +23,14 @@ public class Itinerary {
      */
     private boolean favorite;
 
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

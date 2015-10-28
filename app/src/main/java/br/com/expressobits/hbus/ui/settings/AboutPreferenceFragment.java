@@ -34,5 +34,6 @@ public class AboutPreferenceFragment extends PreferenceFragment{
         // updated to reflect the new value, per the Android Design
         // guidelines.
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("tour"));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference("debug"));
     }
 }

@@ -7,4 +7,9 @@
         android:title="@string/pref_title_tour_of_product"
         android:summary="@string/pref_summary_tour_of_product"/>
 
+    <CheckBoxPreference
+        android:key="debug"
+        android:title="@string/pref_title_active_debug_mode"
+        android:defaultValue="false"/>
+
 </PreferenceScreen>
