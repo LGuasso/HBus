@@ -36,4 +36,16 @@ public class TextUtils {
             return ok;
         }
     }
+
+    public static String toSimpleNameFile(String name){
+        if(name == null){
+            return "";
+        }else {
+            String ok = name;
+            ok = ok.replace(" ","_");
+            ok = ok.replace(" - ","_");
+            ok = ok.toLowerCase();
+            return ok;
+        }
+    }
 }

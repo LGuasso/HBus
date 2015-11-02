@@ -1,6 +1,7 @@
 package br.com.expressobits.hbus.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,8 +47,8 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
     @Override
     public void onBindViewHolder(HolderCity holder, int position) {
 
-        holder.textViewCity.setText(listCities.get(position).getName());
-        holder.imageViewCity.setImageDrawable(listCities.get(position).getImageDrawable());
+        holder.textViewCity.setText(listCities.get(position).getName()+" - "+listCities.get(position).getCountry());
+        holder.imageViewCity.setImageDrawable(new BitmapDrawable(listCities.get(position).getImage()));
 
     }
 

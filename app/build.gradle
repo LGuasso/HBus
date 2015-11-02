@@ -8,8 +8,8 @@ android {
         applicationId "br.com.expressobits.hbus"
         minSdkVersion 11
         targetSdkVersion 23
-        versionCode 57
-        versionName "0.5.7"
+        versionCode 58
+        versionName "0.5.8"
     }
     buildTypes {
         release {
@@ -34,4 +34,6 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'me.relex:circleindicator:1.1.5@aar'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile 'com.parse:parse-android:1.+'
 }
