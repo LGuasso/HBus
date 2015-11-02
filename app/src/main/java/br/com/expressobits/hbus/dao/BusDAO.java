@@ -211,7 +211,7 @@ public class BusDAO extends SQLiteAssetHelper{
     public List<Bus> getBusList(String nameLine, String way, String typeDay,boolean fastMode){
         ArrayList<Bus> buses = new ArrayList<Bus>();
 
-        way = TextUtils.toSimpleName(way);
+        way = TextUtils.toSimpleNameWay(way);
 
         Cursor c;
         String where = "itinerary = ? AND way = ? AND typeday = ?";

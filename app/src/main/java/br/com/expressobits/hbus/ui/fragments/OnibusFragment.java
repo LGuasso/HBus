@@ -22,6 +22,7 @@ import br.com.expressobits.hbus.adapters.BusAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
+import br.com.expressobits.hbus.utils.TextUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
@@ -142,7 +143,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
 
     public void refresh(String linha,String sentido){
         //linha = toSimpleName(linha);
-        sentido = toSimpleName(sentido);
+        sentido = TextUtils.toSimpleNameWay(sentido);
 
         BusDAO dao = new BusDAO(getActivity());
 
@@ -161,6 +162,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         BusAdapter adapterSunday = new BusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);
+        dao.close();
     }
 
     @Override
@@ -175,24 +177,6 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     }
 
 
-    /**
-     * Retorna nome sem espaço sem acentos e sem maiusculas.
-     * @param name
-     * @return
-     */
-    private String toSimpleName(String name){
-        if(name == null){
-            return "";
-        }else {
-            String ok = name;
-            ok = ok.replace(" > ","-");
-            ok = ok.replace(" < ","-");
-            ok = ok.replace(" ", "-");
-            ok = ok.replace("é", "e");
-            ok = ok.toLowerCase();
-            return ok;
-        }
-    }
 
 
 

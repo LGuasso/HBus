@@ -37,6 +37,24 @@ public class TextUtils {
         }
     }
 
+    /**
+     * Retorna nome sem espaco sem acentos e sem maiusculas.
+     * @param name
+     * @return
+     */
+    public static String toSimpleNameWay(String name){
+        if(name == null){
+            return "";
+        }else {
+            String ok = name;
+            ok = ok.replace(" > ","-");
+            ok = ok.replace(" < ","-");
+            ok = ok.replace(",", "_");
+            ok = ok.toLowerCase();
+            return ok;
+        }
+    }
+
     public static String toSimpleNameFile(String name){
         if(name == null){
             return "";

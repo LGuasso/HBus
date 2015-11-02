@@ -108,6 +108,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewLines.setAdapter(adapter);
+        dao.close();
 
     }
 
@@ -154,7 +155,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                 dao.update(itinerary);
                 this.initListViews(this.view);
                 Toast.makeText(this.getActivity(),String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName()),Toast.LENGTH_LONG).show();
-
+                dao.close();
                 break;
         }
 

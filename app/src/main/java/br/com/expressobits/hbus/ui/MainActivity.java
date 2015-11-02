@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 navigationDrawer.addItem(new SecondaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
             }
+            dao.close();
         }
 
 
@@ -323,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else{
             onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
         }
+        dao.close();
 
         return false;
     }

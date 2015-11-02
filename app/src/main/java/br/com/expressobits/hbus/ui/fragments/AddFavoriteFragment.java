@@ -65,6 +65,7 @@ public class AddFavoriteFragment extends Fragment{
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),android.R.layout.simple_list_item_1,itinerarios);
         listViewLines.setAdapter(arrayAdapter);
         listViewLines.setClickable(true);
+        dao.close();
 
 
         listViewLines.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,6 +78,7 @@ public class AddFavoriteFragment extends Fragment{
                 itinerarios.get(position).setFavorite(true);
                 dao.update(itinerarios.get(position));
                 mCallback.onSettingsDone(false);
+                dao.close();
             }
         });
 
