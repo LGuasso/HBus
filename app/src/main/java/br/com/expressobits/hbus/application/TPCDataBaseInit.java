@@ -14,6 +14,8 @@ import com.parse.ParseObject;
 
 import java.io.File;
 
+import br.com.expressobits.hbus.dao.BusDAO;
+
 /**
  * @author  Rafael
  * @since  15/09/15.
@@ -39,6 +41,9 @@ public class TPCDataBaseInit extends Application{
         int version = pInfo.versionCode;
         if(56> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             clearApplicationData(this);
+        }
+        if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            this.deleteDatabase("santa_maria_rs_bus_data.db");
         }
         if(pInfo.versionCode > PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

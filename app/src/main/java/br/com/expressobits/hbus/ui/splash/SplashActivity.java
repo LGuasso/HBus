@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.tour.TourActivity;
 
@@ -32,11 +33,7 @@ public class SplashActivity extends AppCompatActivity{
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Class cl = MainActivity.class;
-
-                /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(SplashActivity.this, cl);
-                SplashActivity.this.startActivity(mainIntent);
+                ManagerInit.manager(SplashActivity.this);
                 SplashActivity.this.finish();
             }
         }, SPLASH_DISPLAY_LENGTH);

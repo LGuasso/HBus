@@ -1,5 +1,7 @@
 package br.com.expressobits.hbus.dao;
 
+import android.content.Context;
+
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -8,6 +10,7 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.FileUtils;
@@ -20,6 +23,13 @@ public class ParseDAO {
     public static final String NAME = "name";
     public static final String COUNTRY = "country";
     public static final String IMAGE = "image";
+
+    Context context;
+
+
+    public ParseDAO(Context context){
+        this.context = context;
+    }
 
     /**
      * Método que puxa do parse todas informaçãoes de cidades
@@ -51,11 +61,17 @@ public class ParseDAO {
      * @param parseObject
      * @return
      */
-    public static City parseToCity(ParseObject parseObject){
+    public City parseToCity(ParseObject parseObject){
         City city = new City();
         city.setName(parseObject.getString(NAME));
         city.setCountry(parseObject.getString(COUNTRY));
-        city.setImage(FileUtils.getProfilepciture(parseObject.getParseFile(IMAGE)));
+        try {
+            city.setImage(FileUtils.getProfilepciture(parseObject.getParseFile(IMAGE)));
+        } catch (ParseException e) {
+            city.setImage(context.getResources().getDrawable(R.drawable.default_city));
+        }catch (OutOfMemoryError e) {
+            city.setImage(context.getResources().getDrawable(R.drawable.default_city));
+        }
         return city;
     }
 }

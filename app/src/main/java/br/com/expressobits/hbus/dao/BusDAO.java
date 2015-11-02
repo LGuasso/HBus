@@ -40,8 +40,11 @@ public class BusDAO extends SQLiteAssetHelper{
     private static final String TAG= "BusDAO";
 
     public BusDAO(Context context) {
-        super(context,getNameFile(context), null, DATABASE_VERSION);
-        Log.d(TAG,"Have "+getListaCode().size()+" codes in bd");
+        super(context, getNameFile(context), null, DATABASE_VERSION);
+        Log.d(TAG, "Have " + getListaCode().size() + " codes in bd");
+
+
+        //setForcedUpgrade(DATABASE_VERSION);
     }
 
     /**
@@ -57,100 +60,6 @@ public class BusDAO extends SQLiteAssetHelper{
     }
 
 
-    public void deleteAll(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("DROP TABLE IF EXISTS "+ TABLE_ITINERARY);
-        getWritableDatabase().execSQL(sb.toString());
-
-        sb = new StringBuilder();
-        sb.append("DROP TABLE IF EXISTS "+ TABLE_CODE);
-        getWritableDatabase().execSQL(sb.toString());
-
-        sb = new StringBuilder();
-        sb.append("DROP TABLE IF EXISTS " + TABLE_BUS);
-        getWritableDatabase().execSQL(sb.toString());
-
-        onCreate(getWritableDatabase());
-    }
-
-    private void createTableItinerary(SQLiteDatabase db){
-        StringBuilder sb = new StringBuilder();
-        sb.append("CREATE TABLE " + TABLE_ITINERARY + " ");
-        sb.append("(_id INTEGER PRIMARY KEY, ");
-        sb.append(" name TEXT,");
-        sb.append(" favorite INTEGER,");
-        sb.append(" sentidos TEXT);");
-
-
-        db.execSQL(sb.toString());
-    }
-
-    private void createTableBus(SQLiteDatabase db) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("CREATE TABLE " + TABLE_BUS + " ");
-        sb.append("(_id INTEGER PRIMARY KEY, ");
-        sb.append(" time TEXT,");
-        sb.append(" code TEXT,");
-        sb.append(" itinerary TEXT,");
-        sb.append(" way TEXT,");
-        sb.append(" typeday TEXT);");
-        db.execSQL(sb.toString());
-    }
-
-    private void createTableCode(SQLiteDatabase db) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("CREATE TABLE " + TABLE_CODE + " ");
-        sb.append("(_id INTEGER PRIMARY KEY, ");
-        sb.append(" name TEXT,");
-        sb.append(" descrition TEXT);");
-        db.execSQL(sb.toString());
-    }
-
-
-    /**
-     * Insere novo codigo de ônibus no banco de dados
-     * @param itinerary
-     */
-    public void insert(Itinerary itinerary){
-        ContentValues c = new ContentValues();
-        c.put("name", itinerary.getName());
-        c.put("favorite", itinerary.getFavorite());
-        String sentido="";
-
-        for (String sb : itinerary.getSentidos()){
-            sentido+=sb;
-            sentido+=",";
-        }
-        sentido=sentido.substring(0, sentido.length()-1);
-        c.put("sentidos", sentido);
-        getWritableDatabase().insert(TABLE_ITINERARY, null, c);
-    }
-
-
-    /**
-     * Insere novo codigo de ônibus no banco de dados
-     * @param code
-     */
-    public void insert(Code code){
-        ContentValues c = new ContentValues();
-        c.put("name", code.getName());
-        c.put("descrition", code.getDescrition());
-        getWritableDatabase().insert(TABLE_CODE, null, c);
-    }
-
-    /**
-     * Insere novo horário de ônibus no banco de dados
-     * @param bus
-     */
-    public void insert(Bus bus){
-        ContentValues c = new ContentValues();
-        c.put("time", bus.getTime());
-        c.put("code", bus.getCode().getName());
-        c.put("itinerary", bus.getItinerary().getName());
-        //c.put("way", LinhaFile.toSimpleName(bus.getWay()));
-        c.put("typeDay", bus.getTypeday().toString());
-        getWritableDatabase().insert(TABLE_BUS, null, c);
-    }
 
     /**
      * Insere novo codigo de ônibus no banco de dados

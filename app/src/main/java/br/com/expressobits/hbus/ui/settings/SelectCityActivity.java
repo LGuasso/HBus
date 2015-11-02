@@ -28,12 +28,14 @@ import br.com.expressobits.hbus.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.dao.ParseDAO;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.ui.ManagerInit;
 
 public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FindCallback<ParseObject> {
 
     private Toolbar pToolbar;
     private RecyclerView recyclerViewCities;
     private List<City> cities;
+    public boolean initial = false;
     public static final String TAG = "city";
 
     @Override
@@ -44,17 +46,11 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     }
 
     private void initActionBar() {
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        //getSupportActionBar().setDisplayUseLogoEnabled(true);
 
+        //Define se é primeira vez do app ou se tem alguma cidade definida...
+        initial = (PreferenceManager.getDefaultSharedPreferences(this).getString(TAG,null)==null);
         pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
         setSupportActionBar(pToolbar);
-
-        //pToolbar.setTitle("My lines");
-        //pToolbar.setSubtitle("subtitle");
-
-
     }
 
     private void initViews(){
@@ -93,8 +89,12 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         editor.putString(TAG,cities.get(position).getName()+" - "+cities.get(position).getCountry());
         editor.apply();
 
-        //startActivity(new Intent(this, MainActivity.class));
-        this.finish();
+        if(initial){
+            ManagerInit.manager(this);
+        }else{
+            this.finish();
+        }
+
     }
 
     @Override
@@ -104,8 +104,9 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void done(List<ParseObject> objects, ParseException e) {
+        ParseDAO dao = new ParseDAO(this);
         for (ParseObject object : objects) {
-            cities.add(ParseDAO.parseToCity(object));
+            cities.add(dao.parseToCity(object));
         }
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
         itemCityAdapter.setRecyclerViewOnClickListenerHack(this);

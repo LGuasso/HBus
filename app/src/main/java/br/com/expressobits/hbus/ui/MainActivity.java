@@ -85,21 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setVisibleLayout();
     }
 
-    private void initialsActivities() {
-        if(!PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(TourActivity.TAG,false)){
-            Intent intent = new Intent(this,TourActivity.class);
-            startActivity(intent);
-        }else{
-            if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(SelectCityActivity.TAG,null)==null){
-                Intent intent = new Intent(this,SelectCityActivity.class);
-                startActivity(intent);
-            }
-        }
-
-
-
-    }
-
 
     private void initNavigationDrawer() {
 
@@ -112,31 +97,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .withActionBarDrawerToggle(true)
                 .withOnDrawerItemClickListener(this)
                 .build();
+        //TODO atualizar a lista de navigationDrawer no onResume
         navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.favorites));
-        BusDAO dao = new BusDAO(this);
+        if(PreferenceManager.getDefaultSharedPreferences(this).getString("city","").length()>1){
+            BusDAO dao = new BusDAO(this);
 
-        List<Itinerary> itinerarieses = dao.getItineraries(true);
-        for(Itinerary itinerary : itinerarieses){
-            String name = "";
-            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
-                name+=itinerary.getId()+" - "+itinerary.getName();
-            }else{
-                name+=itinerary.getName();
+            List<Itinerary> itinerarieses = dao.getItineraries(true);
+            for(Itinerary itinerary : itinerarieses){
+                String name = "";
+                if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
+                    name+=itinerary.getId()+" - "+itinerary.getName();
+                }else{
+                    name+=itinerary.getName();
+                }
+                navigationDrawer.addItem(new PrimaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
             }
-            navigationDrawer.addItem(new PrimaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
-        }
-        navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
-        List<Itinerary>allItinerarios = dao.getItineraries(false);
+            navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
+            List<Itinerary>allItinerarios = dao.getItineraries(false);
 
-        for(Itinerary itinerary:allItinerarios){
-            String name = "";
-            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
-                name+=itinerary.getId()+" - "+itinerary.getName();
-            }else{
-                name+=itinerary.getName();
+            for(Itinerary itinerary:allItinerarios){
+                String name = "";
+                if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
+                    name+=itinerary.getId()+" - "+itinerary.getName();
+                }else{
+                    name+=itinerary.getName();
+                }
+                navigationDrawer.addItem(new SecondaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
             }
-            navigationDrawer.addItem(new SecondaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
         }
+
 
     }
 
@@ -345,13 +334,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 onSettingsDone(true);
             return;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        initialsActivities();
-            super.onResume();
-
-
     }
 }

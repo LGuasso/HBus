@@ -42,8 +42,8 @@ public class TextUtils {
             return "";
         }else {
             String ok = name;
-            ok = ok.replace(" ","_");
             ok = ok.replace(" - ","_");
+            ok = ok.replace(" ","_");
             ok = ok.toLowerCase();
             return ok;
         }

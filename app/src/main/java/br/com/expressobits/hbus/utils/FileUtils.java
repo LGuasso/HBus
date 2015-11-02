@@ -56,16 +56,12 @@ public class FileUtils {
      * @param
      * @return
      */
-    public static Bitmap getProfilepciture(ParseFile file) {
+    public static Bitmap getProfilepciture(ParseFile file) throws ParseException,OutOfMemoryError {
         Bitmap bitmap = null;
 
         if(file !=null){
             byte[] bites = new byte[0];
-            try {
                 bites = file.getData();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
             bitmap = BitmapFactory.decodeByteArray(bites, 0, bites.length);
         }
 
