@@ -8,6 +8,10 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParseObject;
+
 import java.io.File;
 
 /**
@@ -21,6 +25,11 @@ public class TPCDataBaseInit extends Application{
 
     @Override
     public void onCreate() {
+
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, "pmozmo0oSDUsmX5xWxIjqG1ZRKlT5EDMdld9cMyE", "XKZQXJhT9MIERWpmAYBIj2qAWdsx9oOZ7fpsYNdr");
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+
         PackageInfo pInfo = null;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);

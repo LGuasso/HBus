@@ -11,6 +11,7 @@ public class City {
     private String name;
     private Bitmap imageBitmap;
     private Drawable imageDrawable;
+    private String country;
 
 
     public String getName() {
@@ -25,6 +26,10 @@ public class City {
         return imageDrawable;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
     public void setImage(Bitmap image) {
         this.imageBitmap = image;
     }
@@ -35,5 +40,9 @@ public class City {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

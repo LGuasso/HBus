@@ -14,16 +14,22 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemCityAdapter;
+import br.com.expressobits.hbus.dao.ParseDAO;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.MainActivity;
 
-public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack {
+public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FindCallback<ParseObject> {
 
     private Toolbar pToolbar;
     private RecyclerView recyclerViewCities;
@@ -65,7 +71,11 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         City city = new City();
         city.setName("Santa Maria - RS");
         city.setImage(getResources().getDrawable(R.drawable.santa_maria_rs));
-        cities.add(city);
+        //cities.add(city);
+
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
+        query.findInBackground(this);
 
         //TODO lista que vem apartir do parse
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
@@ -80,7 +90,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(TAG,cities.get(position).getName());
+        editor.putString(TAG,cities.get(position).getName()+" - "+cities.get(position).getCountry());
         editor.apply();
 
         //startActivity(new Intent(this, MainActivity.class));
@@ -90,5 +100,15 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     @Override
     public boolean onLongClickListener(View view, int position) {
         return false;
+    }
+
+    @Override
+    public void done(List<ParseObject> objects, ParseException e) {
+        for (ParseObject object : objects) {
+            cities.add(ParseDAO.parseToCity(object));
+        }
+        ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
+        itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewCities.setAdapter(itemCityAdapter);
     }
 }

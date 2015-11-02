@@ -1,5 +1,12 @@
 package br.com.expressobits.hbus.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,5 +49,27 @@ public class FileUtils {
                 }
             }
         }
+
+
+    /**
+     * Puxa e converte imagem para bitmap
+     * @param
+     * @return
+     */
+    public static Bitmap getProfilepciture(ParseFile file) {
+        Bitmap bitmap = null;
+
+        if(file !=null){
+            byte[] bites = new byte[0];
+            try {
+                bites = file.getData();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            bitmap = BitmapFactory.decodeByteArray(bites, 0, bites.length);
+        }
+
+        return bitmap;
+    }
 
 }
