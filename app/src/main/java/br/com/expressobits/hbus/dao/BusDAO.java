@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -16,6 +17,7 @@ import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.TextUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
@@ -32,18 +34,26 @@ public class BusDAO extends SQLiteAssetHelper{
     private static final String TABLE_BUS = "Bus";
     private static final String TABLE_CODE = "Code";
     private static final String TABLE_ITINERARY = "Itinerary";
-
-
-
-    private static final String DB_PATH = "/data/data/br.com.expressobits.hbus/databases/";
-    private static final String DATABASE_NAME = "santa_maria_rs_bus_data.db";
+    private static final String DATABASE_NAME = "bus_data.db";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String TAG= "DAO";
+    private static final String TAG= "BusDAO";
 
     public BusDAO(Context context) {
-        super(context,DATABASE_NAME, null, DATABASE_VERSION);
+        super(context,getNameFile(context), null, DATABASE_VERSION);
         Log.d(TAG,"Have "+getListaCode().size()+" codes in bd");
+    }
+
+    /**
+     * Retorna o nome do arquivo baseado nas prefêrencias de cidade
+     * @param context
+     * @return
+     */
+    public static String getNameFile(Context context){
+        String nameFile = TextUtils.toSimpleNameFile(
+                PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG,null));
+        nameFile+="_"+DATABASE_NAME;
+        return nameFile;
     }
 
 
