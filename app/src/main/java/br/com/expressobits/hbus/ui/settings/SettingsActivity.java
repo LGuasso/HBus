@@ -36,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import br.com.expressobits.hbus.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import java.util.List;
 
@@ -55,6 +56,11 @@ public class SettingsActivity extends PreferenceActivity {
 
     private static final String TAG = "Settings";
     Toolbar toolbar;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected boolean isValidFragment(String fragmentName) {

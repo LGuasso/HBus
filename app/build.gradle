@@ -8,8 +8,8 @@ android {
         applicationId "br.com.expressobits.hbus"
         minSdkVersion 11
         targetSdkVersion 23
-        versionCode 60
-        versionName "0.6.0"
+        versionCode 63
+        versionName "0.6.3"
     }
     buildTypes {
         release {
@@ -28,12 +28,17 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:support-v4:23.1.0'
     compile 'com.google.android.gms:play-services-ads:8.1.0'
+    compile 'com.google.android.gms:play-services-analytics:8.1.0'
     compile 'com.android.support:cardview-v7:23.1.0'
     compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.github.shell-software:fab:1.1.2'
     compile 'com.android.support:design:23.1.0'
     compile 'me.relex:circleindicator:1.1.5@aar'
+    // Caligraphy lib: use to custom fonts
+    compile 'uk.co.chrisjenx:calligraphy:2.1.0'
+    //SQLiteAsset
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    //Parse
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.parse:parse-android:1.+'
 }

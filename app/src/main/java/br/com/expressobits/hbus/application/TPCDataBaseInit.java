@@ -8,13 +8,17 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 
 import java.io.File;
 
+import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * @author  Rafael
@@ -24,6 +28,8 @@ import br.com.expressobits.hbus.dao.BusDAO;
 public class TPCDataBaseInit extends Application{
 
     public static final String TAG = "TPCDataBaseInit";
+    public static GoogleAnalytics analytics;
+    public static Tracker tracker;
 
     @Override
     public void onCreate() {
@@ -51,6 +57,21 @@ public class TPCDataBaseInit extends Application{
             editor.putInt("version",pInfo.versionCode);
             editor.apply();
         }
+
+        analytics = GoogleAnalytics.getInstance(this);
+        analytics.setLocalDispatchPeriod(1800);
+
+        tracker = analytics.newTracker(getString(R.string.analytics_id_tracker)); // Replace with actual tracker/property Id
+        tracker.enableExceptionReporting(true);
+        tracker.enableAdvertisingIdCollection(true);
+        tracker.enableAutoActivityTracking(true);
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/ubuntutitlingbold.ttf")
+                        //.setDefaultFontPath("fonts/proximanova_regular.otf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+        );
         super.onCreate();
     }
 

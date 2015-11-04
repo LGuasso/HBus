@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.ui.settings;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import br.com.expressobits.hbus.dao.ParseDAO;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.ManagerInit;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FindCallback<ParseObject> {
 
@@ -111,5 +113,9 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
         itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewCities.setAdapter(itemCityAdapter);
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

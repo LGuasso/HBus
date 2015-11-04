@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.ui.splash;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,6 +17,7 @@ import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.tour.TourActivity;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SplashActivity extends AppCompatActivity{
 
@@ -47,5 +49,9 @@ public class SplashActivity extends AppCompatActivity{
         super.onResume();
 
 
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

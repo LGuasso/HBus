@@ -182,18 +182,29 @@ public class BusDAO extends SQLiteAssetHelper{
 
     public Code getCode(String codeName) {
         Code code=new Code();
-        Cursor c;
+        Cursor c = null;
         String where = "name = ?";
         String[] arguments = {codeName};
 
-        c = getWritableDatabase().query(TABLE_CODE, COLS_CODE, where, arguments, null, null, null);
-        while(c.moveToNext()){
-            code = new Code();
-            code.setName(c.getString(1));
-            code.setDescrition(c.getString(2));
-            return code;
+        //Try and finally evita o erro de carregar sqlite
+        //Na maioria das vezes a causa para este erro são cursores não fechadas. Certifique-se de fechar todos os cursores após usá-los (mesmo no caso de um erro).
+        //@link{http://stackoverflow.com/questions/31361618/cursor-window-allocation-of-2048-kb-failed-open-cursors-1-cursors-opened-b}
+        try{
+            c = getWritableDatabase().query(TABLE_CODE, COLS_CODE, where, arguments, null, null, null);
+            while(c.moveToNext()){
+                code = new Code();
+                code.setName(c.getString(1));
+                code.setDescrition(c.getString(2));
+                return code;
+            }
+        }finally {
+            if(c!=null){
+                c.close();
+            }
         }
-        c.close();
+
+
+
 
         return code;
     }

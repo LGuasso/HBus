@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
@@ -36,6 +37,7 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.ui.tour.TourActivity;
 import br.com.expressobits.hbus.utils.Popup;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener {
 
@@ -337,4 +339,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }

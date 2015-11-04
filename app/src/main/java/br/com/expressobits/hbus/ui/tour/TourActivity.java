@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.ui.tour;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.MainActivity;
 import me.relex.circleindicator.CircleIndicator;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Tela de tour(intro)
@@ -59,6 +61,10 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
         defaultViewpager.setCurrentItem(0);
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     private void referencesLayoutXML() {
         mToolbarBottom = (Toolbar) findViewById(R.id.inc_splash_toolbar);
         jumpButton = (Button) mToolbarBottom.findViewById(R.id.previousText);
