@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui.fragments;
 
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,12 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.software.shell.fab.ActionButton;
 
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemFavoriteItineraryAdapter;

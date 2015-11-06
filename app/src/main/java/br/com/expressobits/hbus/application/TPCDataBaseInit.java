@@ -16,6 +16,7 @@ import com.parse.ParseObject;
 
 import java.io.File;
 
+import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -33,6 +34,7 @@ public class TPCDataBaseInit extends Application{
 
     @Override
     public void onCreate() {
+
 
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "pmozmo0oSDUsmX5xWxIjqG1ZRKlT5EDMdld9cMyE", "XKZQXJhT9MIERWpmAYBIj2qAWdsx9oOZ7fpsYNdr");
@@ -58,13 +60,16 @@ public class TPCDataBaseInit extends Application{
             editor.apply();
         }
 
-        analytics = GoogleAnalytics.getInstance(this);
-        analytics.setLocalDispatchPeriod(1800);
+        if(!BuildConfig.DEBUG){
+            analytics = GoogleAnalytics.getInstance(this);
+            analytics.setLocalDispatchPeriod(1800);
 
-        tracker = analytics.newTracker(getString(R.string.analytics_id_tracker)); // Replace with actual tracker/property Id
-        tracker.enableExceptionReporting(true);
-        tracker.enableAdvertisingIdCollection(true);
-        tracker.enableAutoActivityTracking(true);
+            tracker = analytics.newTracker(getString(R.string.analytics_id_tracker)); // Replace with actual tracker/property Id
+            tracker.enableExceptionReporting(true);
+            tracker.enableAdvertisingIdCollection(true);
+            tracker.enableAutoActivityTracking(true);
+        }
+
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                         .setDefaultFontPath("fonts/ubuntutitlingbold.ttf")
