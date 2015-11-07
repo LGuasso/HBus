@@ -149,7 +149,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                     mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
                 }
                 break;
-            case R.id.imageButtonDelete:
+            case R.id.buttonRemove:
                 selectedItem = itineraries.get(position).getName();
 
                 BusDAO dao = new BusDAO(getActivity());

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -88,7 +89,6 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                 }else{
                 }
             }
-            holder.linearLayout.setTextAppearance(context,R.style.TextStyle_Medium_Color);
             holder.linearLayout.setText(texto);
         }
         dao.close();
@@ -109,7 +109,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
 
         public TextView textItineraryName;
         public TextView linearLayout;
-        public ImageButton imageButtonDelete;
+        public Button buttonRemove;
         public LinearLayout linearLayoutInfo;
 
         public HolderFavoriteItinerary(View itemView,List<Itinerary> list) {
@@ -118,10 +118,10 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
             linearLayout  = (TextView) itemView.findViewById(R.id.linear_layout_nextbuses);
             linearLayoutInfo = (LinearLayout) itemView.findViewById(R.id.linearlayout_background_info);
-            imageButtonDelete = (ImageButton) itemView.findViewById(R.id.imageButtonDelete);
+            buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
 
             linearLayoutInfo.setOnClickListener(this);
-            imageButtonDelete.setOnClickListener(this);
+            buttonRemove.setOnClickListener(this);
 
         }
 

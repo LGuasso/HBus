@@ -33,6 +33,7 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="about">About</string>
     <string name="no_have_itinerary">No have favorite itinerary</string>
+    <string name="remove">Remove</string>
 
 
 </resources>

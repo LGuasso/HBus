@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <style name="ActionBarOrange" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+                <item name="android:background">@color/colorPrimary</item>
+                <!-- Support library compatibility -->
+                <item name="background">@color/colorPrimary</item>
+                <item name="android:textColorPrimary">#fff</item>
+                <item name="android:actionBarItemBackground">@color/colorPrimaryDark</item>
+                <item name="android:textColor">#FFFFFF</item>
+                <item name="android:colorAccent">@color/colorAccent</item>
+        </style>
+</resources>
