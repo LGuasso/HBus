@@ -10,7 +10,7 @@
     android:layout_marginLeft="6dp"
     android:layout_marginRight="6dp"
     app:cardElevation="3dp"
-    app:cardUseCompatPadding="false"
+    app:cardUseCompatPadding="true"
     app:cardPreventCornerOverlap="true"
     app:cardMaxElevation="3dp"
     app:cardCornerRadius="2dp"
@@ -21,16 +21,17 @@
         android:id="@+id/listView_background_line"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
         <LinearLayout
             android:id="@+id/linearlayout_background_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:background="@color/white"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textViewItineraryName"
@@ -63,17 +64,11 @@
             android:layout_height="wrap_content"
             android:background="@android:drawable/divider_horizontal_bright"/-->
 
-
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-
-
-                android:background="@color/white"
                 android:padding="8dp">
-
 
                 <Button
                     android:id="@+id/buttonRemove"
