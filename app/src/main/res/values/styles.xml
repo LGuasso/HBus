@@ -1,4 +1,5 @@
-<resources>
+<resources
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <style name="AppTheme" parent="AppThemeNavigationDrawer">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -69,6 +70,10 @@
         <item name="android:textAllCaps">true</item>
         <item name="background">@drawable/button_cardview</item>
         <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
+    </style>
+
+    <style name="AppTheme.CardView" parent="CardView">
+        <item name="android:background">@drawable/cardview</item>
     </style>
 
 

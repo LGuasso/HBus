@@ -14,7 +14,9 @@
     app:cardPreventCornerOverlap="true"
     app:cardMaxElevation="3dp"
     app:cardCornerRadius="2dp"
-    tools:context=".ui.MainActivity">
+
+    tools:context=".ui.MainActivity"
+    >
 
 
     <LinearLayout
@@ -22,14 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:background="@drawable/cardview"
+        >
 
         <LinearLayout
             android:id="@+id/linearlayout_background_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -68,14 +73,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:padding="8dp">
+                android:padding="8dp"
+                >
 
-                <Button
-                    android:id="@+id/buttonRemove"
-                    style="@style/AppTheme.Button.Flat"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/remove"/>
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:id="@+id/buttonLookTime"
+                        style="@style/AppTheme.Button.Flat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/look_times"/>
+                    <Button
+                        android:id="@+id/buttonRemove"
+                        style="@style/AppTheme.Button.Flat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remove"/>
+                </LinearLayout>
+
+
 
 
             </RelativeLayout>

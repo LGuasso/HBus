@@ -31,4 +31,5 @@
     <string name="no_have_itinerary">Não há itinerários favoritos</string>
     <string name="pref_title_active_debug_mode">Ativar o modo de depuração</string>
     <string name="remove">Remover</string>
+    <string name="look_times">Ver horários</string>
 </resources>

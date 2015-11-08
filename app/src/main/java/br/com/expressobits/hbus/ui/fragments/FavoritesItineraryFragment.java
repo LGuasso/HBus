@@ -137,10 +137,9 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
     @Override
     public void onClickListener(View view, int position) {
-        //TODO implement background selection one way
 
         switch (view.getId()){
-            case R.id.linearlayout_background_info:
+            case R.id.buttonLookTime:
                 selectedItem = itineraries.get(position).getName();
                 List<String> sentidos = itineraries.get(position).getSentidos();
                 if(sentidos.size()>1) {
@@ -157,7 +156,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                 itinerary.setFavorite(false);
                 dao.update(itinerary);
                 this.initListViews(this.view);
-                Toast.makeText(this.getActivity(),String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName()),Toast.LENGTH_LONG).show();
+                //TODO dialog confirmation
+                //Toast.makeText(this.getActivity(),String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName()),Toast.LENGTH_LONG).show();
                 dao.close();
                 break;
         }

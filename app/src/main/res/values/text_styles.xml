@@ -21,6 +21,7 @@
     <style name="AppTheme.TextAppearance.Button.Flat" parent="Base.Widget.AppCompat.Button">
         <!-- Splash screen titulo -->
         <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppTheme.TextAppearance.Time" parent="AppTheme.TextAppearance.Large.Mono">

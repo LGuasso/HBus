@@ -28,6 +28,6 @@
                         @color/material_drawer_header_selection_text
                 </item>
                 <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-                <item name="android:navigationBarColor">@color/white</item>
+                <item name="android:navigationBarColor">@color/colorPrimary</item>
         </style>
 </resources>

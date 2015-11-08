@@ -110,6 +110,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
         public TextView textItineraryName;
         public TextView linearLayout;
         public Button buttonRemove;
+        public Button buttonLookHours;
         public LinearLayout linearLayoutInfo;
 
         public HolderFavoriteItinerary(View itemView,List<Itinerary> list) {
@@ -119,8 +120,9 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             linearLayout  = (TextView) itemView.findViewById(R.id.linear_layout_nextbuses);
             linearLayoutInfo = (LinearLayout) itemView.findViewById(R.id.linearlayout_background_info);
             buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
+            buttonLookHours = (Button) itemView.findViewById(R.id.buttonLookTime);
 
-            linearLayoutInfo.setOnClickListener(this);
+            buttonLookHours.setOnClickListener(this);
             buttonRemove.setOnClickListener(this);
 
         }
