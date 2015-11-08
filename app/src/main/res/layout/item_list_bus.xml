@@ -28,7 +28,7 @@
             android:paddingLeft="1dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:textAppearance="@style/TextStyle.Hours.Title"
+            android:textAppearance="@style/AppTheme.TextAppearance.Time"
             android:text="@string/example_hours" />
 
     </RelativeLayout>

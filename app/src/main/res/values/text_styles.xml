@@ -18,7 +18,12 @@
         <!-- Splash screen titulo -->
     </style>
 
-    <style name="AppTheme.CardView.Button.TextAppearance" parent="TextAppearance.AppCompat.Widget.Button">
+    <style name="AppTheme.TextAppearance.Button.Flat" parent="Base.Widget.AppCompat.Button">
+        <!-- Splash screen titulo -->
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Time" parent="AppTheme.TextAppearance.Large.Mono">
         <!-- Splash screen titulo -->
     </style>
 
@@ -66,10 +71,10 @@
         <item name="android:textColor">@color/colorAccentDark</item>
     </style>
 
-    <style name="TextStyle.Hours.Title" parent="TextAppearance.AppCompat.Large">
+    <style name="AppTheme.TextAppearance.Large.Mono" parent="TextAppearance.AppCompat.Large">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/horario_textsize</item>
-        <item name="fontPath">fonts/UbuntuTitling-B.ttf"</item>
+        <item name="fontPath">fonts/UbuntuMono-R"</item>
     </style>
 
     <style name="TextStyle.Button" parent="TextAppearance.AppCompat.Button">

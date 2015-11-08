@@ -7,8 +7,6 @@
     android:layout_height="wrap_content"
     android:elevation="4dp"
     android:minHeight="?attr/actionBarSize"
-    android:background="?attr/colorAccent"
-    app:theme="@style/ThemeOverlay.AppCompat"
-
+    app:theme="@style/ActionBar"
     app:navigationIcon="@drawable/abc_ic_ab_back_mtrl_am_alpha"
     app:title="@string/action_settings"/>
