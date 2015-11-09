@@ -2,7 +2,6 @@ package br.com.expressobits.hbus.ui.fragments;
 
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,17 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.software.shell.fab.ActionButton;
 
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemFavoriteItineraryAdapter;
@@ -29,14 +25,15 @@ import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
-import br.com.expressobits.hbus.utils.Popup;
+import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
+import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 
 /**
  * A simple {@link Fragment} subclass.
  * @author Rafael Correa
  * @since 06/07/2015
  */
-public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack{
+public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack,ChooseWayDialogListener{
 
     public String selectedItem;
     RecyclerView recyclerViewLines;
@@ -141,9 +138,11 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         switch (view.getId()){
             case R.id.buttonLookTime:
                 selectedItem = itineraries.get(position).getName();
-                List<String> sentidos = itineraries.get(position).getSentidos();
-                if(sentidos.size()>1) {
-                    Popup.showPopUp(mCallback, view, selectedItem,sentidos);
+                List<String> ways = itineraries.get(position).getSentidos();
+                if(ways.size()>1) {
+                    ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
+                    chooseWayDialogFragment.setParameters(this,selectedItem,ways);
+                    chooseWayDialogFragment.show(this.getFragmentManager(),ChooseWayDialogFragment.TAG);
                 }else{
                     mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
                 }
@@ -171,6 +170,10 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     }
 
 
+    @Override
+    public void onItemClick(String way) {
+        mCallback.onSettingsDone(selectedItem,way);
+    }
 }
 
 

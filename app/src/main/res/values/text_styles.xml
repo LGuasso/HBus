@@ -2,11 +2,11 @@
 <resources>
 
 
-    <style name="AppTheme.TitleSplash" parent="TextStyle.Display1">
+    <style name="AppTheme.TitleSplash" parent="AppTheme.TextAppearance.AppCompat.Display1">
         <!-- Splash screen titulo -->
     </style>
 
-    <style name="AppTheme.TitleItinerary" parent="TextStyle.Display1">
+    <style name="AppTheme.TitleItinerary" parent="AppTheme.TextAppearance.AppCompat.Display1">
         <!-- Itinerario titulo -->
     </style>
 
@@ -28,6 +28,10 @@
         <!-- Splash screen titulo -->
     </style>
 
+    <style name="AppTheme.TextAppearance.Code" parent="AppTheme.TextAppearance.AppCompat.Display1">
+        <!-- Splash screen titulo -->
+    </style>
+
     <!-- TODO implementar todo app com AppTheme -->
 
 
@@ -35,7 +39,7 @@
 
 
     <!--BASE -->
-    <style name="TextStyle.Display1" parent="@style/Base.TextAppearance.AppCompat.Display1">
+    <style name="AppTheme.TextAppearance.AppCompat.Display1" parent="@style/Base.TextAppearance.AppCompat.Display1">
         <item name="fontPath">fonts/UbuntuTitling-B.ttf"</item>
     </style>
 

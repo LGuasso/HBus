@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textAppearance="@style/AppTheme.TextAppearance.Code"
             android:text="@string/example_codigo_da_linha" />
 
         <!-- TextView
