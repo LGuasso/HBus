@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onItemClick(String way) {
-
+    public void onItemClick(String itinerary,String way) {
+        onSettingsDone(itinerary, way);
     }
 }

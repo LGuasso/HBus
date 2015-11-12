@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         style="@style/ActionBar"
+        fontPath="fonts/UbuntuTitling-B.ttf"
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"

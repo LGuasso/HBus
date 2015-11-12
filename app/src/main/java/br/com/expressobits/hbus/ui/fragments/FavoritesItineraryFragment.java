@@ -171,8 +171,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
 
     @Override
-    public void onItemClick(String way) {
-        mCallback.onSettingsDone(selectedItem,way);
+    public void onItemClick(String itinerary,String way) {
+        mCallback.onSettingsDone(itinerary,way);
     }
 }
 

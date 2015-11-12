@@ -50,6 +50,6 @@ public class ChooseWayDialogFragment extends DialogFragment implements DialogInt
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        mCallback.onItemClick(ways.get(which));
+        mCallback.onItemClick(itinerary,ways.get(which));
     }
 }
