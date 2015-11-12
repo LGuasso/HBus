@@ -18,4 +18,15 @@ public interface OnSettingsListener {
      * @param type
      */
     public void onSettingsDone(boolean type);
+
+
+    /**
+     * Notifica que foi removido favorito da lista de favoritos
+     */
+    public void onRemoveFavorite();
+
+    /**
+     * Notifica que foi adicionado itinerário na lista de favoritos
+     */
+    public void onAddFavorite();
 }

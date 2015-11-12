@@ -24,6 +24,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -201,8 +202,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             getSupportFragmentManager().popBackStack();
             //ft.remove(getSupportFragmentManager().findFragmentByTag("addFavoriteFragment"));
         }else {
-
-
             AddFavoriteFragment addFavoriteFragment = (AddFavoriteFragment) fm.findFragmentByTag("addFavoriteFragment");
             if (findViewById(R.id.framelayout_main) != null) {
 
@@ -212,15 +211,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ft.replace(R.id.framelayout_main, addFavoriteFragment, "addFavoriteFragment");
                 ft.addToBackStack("pilha");
                 lastPosition = 1;
-
-
             } else if (findViewById(R.id.framelayout_content) != null) {
                 addFavoriteFragment = new AddFavoriteFragment();
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transação novamente na pilha de navegação
                 ft.replace(R.id.framelayout_content, addFavoriteFragment, "onibusFragment");
                 lastPosition = 1;
-
             }
         }
 
@@ -230,18 +226,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onSettingsDone(String linha, String sentido) {
+    public void onRemoveFavorite() {
+        onUpdateNavigationDrawer();
+    }
 
+    @Override
+    public void onAddFavorite() {
+        onUpdateNavigationDrawer();
+    }
+
+    private void onUpdateNavigationDrawer() {
+        navigationDrawer.getDrawerItems().clear();
+        navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.favorites));
+        if(PreferenceManager.getDefaultSharedPreferences(this).getString("city","").length()>1) {
+            BusDAO dao = new BusDAO(this);
+
+            List<Itinerary> itinerarieses = dao.getItineraries(true);
+            for (Itinerary itinerary : itinerarieses) {
+                String name = "";
+                if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG, false)) {
+                    name += itinerary.getId() + " - " + itinerary.getName();
+                } else {
+                    name += itinerary.getName();
+                }
+                navigationDrawer.addItem(new PrimaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
+            }
+            navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
+            List<Itinerary> allItinerarios = dao.getItineraries(false);
+
+            for (Itinerary itinerary : allItinerarios) {
+                String name = "";
+                if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG, false)) {
+                    name += itinerary.getId() + " - " + itinerary.getName();
+                } else {
+                    name += itinerary.getName();
+                }
+                navigationDrawer.addItem(new SecondaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
+            }
+            dao.close();
+        }
+    }
+
+    @Override
+    public void onSettingsDone(String linha, String sentido) {
         this.linha = linha;
         this.sentido = sentido;
-
-
-
         getSupportActionBar().setTitle(linha);
         getSupportActionBar().setSubtitle(sentido);
-
         FragmentTransaction ft = fm.beginTransaction();
-
         /** Se for acessodado de um smartphone o espaço main existirá */
         /** Adiciona o fragment com o novo conteúdo no único espaço */
         OnibusFragment onibusFragment = (OnibusFragment)fm.findFragmentByTag("onibusFragment");
@@ -303,7 +335,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void setVisibleLayout(){
         //TODO set visiblity in frame fragment list itinerary
-
     }
 
     public void setLoadText(String text){

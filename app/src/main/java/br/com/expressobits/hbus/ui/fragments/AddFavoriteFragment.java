@@ -78,6 +78,7 @@ public class AddFavoriteFragment extends Fragment{
                 itinerarios.get(position).setFavorite(true);
                 dao.update(itinerarios.get(position));
                 mCallback.onSettingsDone(false);
+                mCallback.onAddFavorite();
                 dao.close();
             }
         });

@@ -60,6 +60,11 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onResume() {
         super.onResume();
+        updateEmptyListView();
+        ((MainActivity)getActivity()).setActionBarTitle(getResources().getString(R.string.app_name), "");
+    }
+
+    private void updateEmptyListView() {
         if(recyclerViewLines.getAdapter().getItemCount()<1){
             recyclerViewLines.setVisibility(View.GONE);
             linearLayoutEmptyList.setVisibility(View.VISIBLE);
@@ -67,7 +72,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
             recyclerViewLines.setVisibility(View.VISIBLE);
             linearLayoutEmptyList.setVisibility(View.GONE);
         }
-        ((MainActivity)getActivity()).setActionBarTitle(getResources().getString(R.string.app_name), "");
     }
 
     @Override
@@ -155,7 +159,9 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                 itinerary.setFavorite(false);
                 dao.update(itinerary);
                 this.initListViews(this.view);
+                mCallback.onRemoveFavorite();
                 //TODO dialog confirmation
+                updateEmptyListView();
                 //Toast.makeText(this.getActivity(),String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName()),Toast.LENGTH_LONG).show();
                 dao.close();
                 break;
