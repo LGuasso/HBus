@@ -41,8 +41,7 @@ public class ChooseWayDialogFragment extends DialogFragment implements DialogInt
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.choose_the_way);
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_selectable_list_item,ways);
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),R.layout.simple_way_list_item,ways);
         builder.setAdapter(arrayAdapter,this);
         // Create the AlertDialog object and return it
 

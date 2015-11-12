@@ -30,6 +30,8 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
+import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
@@ -39,7 +41,7 @@ import br.com.expressobits.hbus.ui.tour.TourActivity;
 import br.com.expressobits.hbus.utils.Popup;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener,ChooseWayDialogListener {
 
     public static final String TAG = "Atividade Principal";
     public static final String DEBUG = "debug";
@@ -320,9 +322,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         BusDAO dao = new BusDAO(this);
 
-        List<String> sentidos = dao.getItinerary(selectedItem).getSentidos();
-        if(sentidos.size()>1){
-            Popup.showPopUp(this, view, selectedItem, dao.getItinerary(selectedItem).getSentidos());
+        List<String> ways = dao.getItinerary(selectedItem).getSentidos();
+        if(ways.size()>1){
+            ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
+            chooseWayDialogFragment.setParameters(this,selectedItem,ways);
+            chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(),ChooseWayDialogFragment.TAG);
+            //TODO excluir classe
+            //Popup.showPopUp(this, view, selectedItem, dao.getItinerary(selectedItem).getSentidos());
         }else{
             onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
         }
@@ -345,4 +351,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @Override
+    public void onItemClick(String way) {
+
+    }
 }
