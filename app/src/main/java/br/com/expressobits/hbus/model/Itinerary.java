@@ -13,7 +13,8 @@ import br.com.expressobits.hbus.utils.TimeUtils;
 public class Itinerary {
 
 
-    private long id;
+    private Long id;
+    private Long idFavorite;
     /**
      * Nome do itinerário.
      */
@@ -23,6 +24,15 @@ public class Itinerary {
      */
     private boolean favorite;
 
+    private City city;
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 
     public long getId() {
         return id;
@@ -48,15 +58,15 @@ public class Itinerary {
         this.favorite = favorite;
     }
 
-    public List<String> sentidos;
+    public List<String> ways;
 
 
-    public List<String> getSentidos() {
-        return sentidos;
+    public List<String> getWays() {
+        return ways;
     }
 
-    public void setSentidos(List<String> sentidos) {
-        this.sentidos = sentidos;
+    public void setWays(List<String> ways) {
+        this.ways = ways;
     }
 
     private ArrayList<String> codigos;

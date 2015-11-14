@@ -8,7 +8,8 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.tour.TourActivity;
 
 /**
- * Created by rafael on 02/11/15.
+ * @author Rafael Correa
+ * @since 02/11/15.
  */
 public class ManagerInit {
 

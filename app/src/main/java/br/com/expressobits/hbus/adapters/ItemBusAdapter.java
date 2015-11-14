@@ -2,19 +2,16 @@ package br.com.expressobits.hbus.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.sql.Time;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
@@ -23,7 +20,7 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  * @author Rafael
  * @since 24/06/2015
  */
-public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
+public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHolder> {
 
 
     private List<Bus> listBus;
@@ -31,7 +28,7 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
     private Context context;
 
-    public BusAdapter(Context context,List<Bus> listBus){
+    public ItemBusAdapter(Context context, List<Bus> listBus){
         this.context = context;
         this.listBus = TimeUtils.sortByTimeBus(listBus);
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -48,10 +45,10 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         //Método que atualiza informações
         myViewHolder.txtViewHorario.setText(listBus.get(i).getTime());
-
-        if(listBus.get(i).isTomorrow()) {
-            myViewHolder.relativeLayout.setSelected(true);
-        }
+        //TODO fixar bug de tomorrow no bus
+         //if(listBus.get(i).isTomorrow()) {
+        //    myViewHolder.relativeLayout.setSelected(true);
+        //}
         myViewHolder.txtViewCode.setText(listBus.get(i).getCode().getName());
         myViewHolder.txtViewDescrition.setText(listBus.get(i).getCode().getDescrition());
         myViewHolder.txtViewDescrition.setSelected(true);

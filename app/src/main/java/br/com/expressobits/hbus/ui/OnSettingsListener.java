@@ -5,8 +5,9 @@ package br.com.expressobits.hbus.ui;
  * A Activity que contém o fragment deve implementar esta interface
  */
 public interface OnSettingsListener {
+
     /**
-     * TODO fazer DOC
+     * Escolhe atividade deve iniciar com horários da linha e sentido selecionado
      * @param linha
      * @param sentido
      */
@@ -14,7 +15,7 @@ public interface OnSettingsListener {
 
 
     /**
-     * TODO fazer DOC
+     * Escolhe atividade de favoritos deve ser selecionada
      * @param type
      */
     public void onSettingsDone(boolean type);

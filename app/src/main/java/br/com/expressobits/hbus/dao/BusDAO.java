@@ -30,7 +30,7 @@ public class BusDAO extends SQLiteAssetHelper{
 
     private static final String[] COLS_BUS = {"_id","time","code","itinerary","way","typeday"};
     private static final String[] COLS_CODE = {"_id","name","descrition"};
-    private static final String[] COLS_ITINERARY = {"_id","name","favorite","sentidos"};
+    private static final String[] COLS_ITINERARY = {"_id","name","favorite","ways"};
     private static final String TABLE_BUS = "Bus";
     private static final String TABLE_CODE = "Code";
     private static final String TABLE_ITINERARY = "Itinerary";
@@ -67,7 +67,7 @@ public class BusDAO extends SQLiteAssetHelper{
      */
     public void update(Itinerary itinerary){
         ContentValues c = new ContentValues();
-        Log.e(TAG,"itinerary "+itinerary.getId()+" "+itinerary.getName());
+        Log.e(TAG, "itinerary " + itinerary.getId() + " " + itinerary.getName());
         c.put("_id",itinerary.getId());
         c.put("name", itinerary.getName());
         c.put("favorite", itinerary.getFavorite());
@@ -92,7 +92,7 @@ public class BusDAO extends SQLiteAssetHelper{
                 itinerary.setFavorite(true);
             }
 
-            itinerary.setSentidos(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
+            itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
             itinerariess.add(itinerary);
 
         }
@@ -124,7 +124,7 @@ public class BusDAO extends SQLiteAssetHelper{
             itinerary.setId(c.getLong(0));
             itinerary.setName(c.getString(1));
             itinerary.setFavorite(favorite);
-            itinerary.setSentidos(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
+            itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
             itinerariess.add(itinerary);
 
         }
@@ -158,7 +158,7 @@ public class BusDAO extends SQLiteAssetHelper{
             } else {
                 itinerary.setFavorite(true);
             }
-            itinerary.setSentidos(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
+            itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
         }
         c.close();
         return itinerary;
@@ -298,8 +298,8 @@ public class BusDAO extends SQLiteAssetHelper{
 
         ArrayList<Bus> next = new ArrayList<Bus>();
         //TODO Typeday set por dia identificar o dia do typeday
-        for(int j = 0;j< itinerary.getSentidos().size();j++) {
-            next.add(getNextBusforList(getBusList(itinerary.getName(), itinerary.getSentidos().get(j), TypeDay.USEFUL.toString(),false)));
+        for(int j = 0;j< itinerary.getWays().size();j++) {
+            next.add(getNextBusforList(getBusList(itinerary.getName(), itinerary.getWays().get(j), TypeDay.USEFUL.toString(),false)));
         }
         return next;
     }
@@ -327,4 +327,15 @@ public class BusDAO extends SQLiteAssetHelper{
         }
     }
 
+    public void deleteAllItinerary() {
+        getWritableDatabase().delete(TABLE_ITINERARY, null, null);
+    }
+
+    public void insert(Itinerary itinerary) {
+        ContentValues values = new ContentValues();
+        values.put("name",itinerary.getName());
+        values.put("ways",TextUtils.getSentidosinString(itinerary.getWays()));
+        values.put("favorite",false);
+        getWritableDatabase().insert(TABLE_ITINERARY,null,values);
+    }
 }

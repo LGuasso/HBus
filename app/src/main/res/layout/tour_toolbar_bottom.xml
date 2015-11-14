@@ -39,7 +39,7 @@
                 app:ci_height="12dp"
                 app:ci_animator="@animator/indicator_animator"
                 app:ci_drawable="@drawable/white_radius"
-                app:ci_drawable_unselected="@drawable/black_radius"
+                app:ci_drawable_unselected="@drawable/circleindicator_black_radius"
                 />
 
         <LinearLayout

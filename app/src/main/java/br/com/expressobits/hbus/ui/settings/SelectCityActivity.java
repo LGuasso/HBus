@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.ui.settings;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,10 +68,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         recyclerViewCities.setLayoutManager(llmUseful);
 
         cities = new ArrayList<City>();
-        City city = new City();
-        city.setName("Santa Maria - RS");
-        city.setImage(getResources().getDrawable(R.drawable.santa_maria_rs));
-        //cities.add(city);
 
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
@@ -88,8 +86,12 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(TAG,cities.get(position).getName()+" - "+cities.get(position).getCountry());
+        editor.putString(TAG, cities.get(position).getName() + " - " + cities.get(position).getCountry());
         editor.apply();
+
+        //TODO implementa download do parse
+        ParseDAO parseDAO = new ParseDAO(this);
+        parseDAO.insertItineraries();
 
         if(initial){
             ManagerInit.manager(this);

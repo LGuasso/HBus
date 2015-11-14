@@ -73,7 +73,7 @@
     </style>
 
     <style name="AppTheme.CardView" parent="CardView">
-        <item name="android:background">@drawable/cardview</item>
+        <item name="android:background">@color/cardview_light_background</item>
     </style>
 
 

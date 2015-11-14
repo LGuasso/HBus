@@ -1,18 +1,13 @@
 package br.com.expressobits.hbus.adapters;
 
 import android.content.Context;
-import android.media.MediaActionSound;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -66,7 +61,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
         }
         holder.textItineraryName.setText(name);
         holder.linearLayout  = (TextView) holder.itemView.findViewById(R.id.linear_layout_nextbuses);
-        if(itineraryList.get(position).getSentidos().size()>0){
+        if(itineraryList.get(position).getWays().size()>0){
             ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBuses(itineraryList.get(position)));
             LinearLayout linearLayout = new LinearLayout(context);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -79,7 +74,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                     String time = bus.getTime();
                     if(time!=null) {
 
-                        texto+=itineraryList.get(position).getSentidos().get(i)+"  -  "+time;
+                        texto+=itineraryList.get(position).getWays().get(i)+"  -  "+time;
                         if(i!=onibuses.size()-1){
                             texto+="\n";
                         }

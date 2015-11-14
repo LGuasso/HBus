@@ -9,6 +9,19 @@ import br.com.expressobits.hbus.model.Sentido;
  */
 public class TextUtils {
 
+    public static String getSentidosinString(List<String> sentidos){
+        String result = "";
+        for(int i=0;i<sentidos.size();i++){
+            String s = sentidos.get(i);
+            result+=s;
+            if(i!=sentidos.size()-1){
+                result+=",";
+            }
+        }
+        return result;
+    }
+
+
     public static String getUnderlineText(String text){
         return text.replaceAll(" ", "_");
     }

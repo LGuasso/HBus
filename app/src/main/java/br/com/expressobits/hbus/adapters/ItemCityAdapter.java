@@ -48,7 +48,8 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
     public void onBindViewHolder(HolderCity holder, int position) {
 
         holder.textViewCity.setText(listCities.get(position).getName()+" - "+listCities.get(position).getCountry());
-        holder.imageViewCity.setImageDrawable(new BitmapDrawable(listCities.get(position).getImage()));
+        //holder.imageViewCity.setImageDrawable(new BitmapDrawable(listCities.get(position).getImage()));
+        holder.imageViewCity.setImageDrawable(listCities.get(position).getImageDrawable());
 
     }
 

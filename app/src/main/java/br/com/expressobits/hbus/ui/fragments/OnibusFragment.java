@@ -1,7 +1,6 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +17,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.adapters.BusAdapter;
+import br.com.expressobits.hbus.adapters.ItemBusAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
@@ -149,17 +148,17 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
 
 
         listBusUsefulDays = dao.getBusList(linha, sentido, TypeDay.USEFUL.toString(),false);
-        BusAdapter adapterUeful = new BusAdapter(getActivity(), listBusUsefulDays);
+        ItemBusAdapter adapterUeful = new ItemBusAdapter(getActivity(), listBusUsefulDays);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerViewUsefulDays.setAdapter(adapterUeful);
 
         listBusSaturday = dao.getBusList(linha, sentido, TypeDay.SATURDAY.toString(),false);
-        BusAdapter adapterSaturday = new BusAdapter(getActivity(), listBusSaturday);
+        ItemBusAdapter adapterSaturday = new ItemBusAdapter(getActivity(), listBusSaturday);
         adapterSaturday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSaturday.setAdapter(adapterSaturday);
 
         listBusSunday = dao.getBusList(linha, sentido, TypeDay.SUNDAY.toString(),false);
-        BusAdapter adapterSunday = new BusAdapter(getActivity(), listBusSunday);
+        ItemBusAdapter adapterSunday = new ItemBusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);
         dao.close();
@@ -167,7 +166,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
 
     @Override
     public void onClickListener(View view, int position) {
-        BusAdapter adapter = (BusAdapter) recyclerViewUsefulDays.getAdapter();
+        ItemBusAdapter adapter = (ItemBusAdapter) recyclerViewUsefulDays.getAdapter();
         adapter.removeListItem(position);
     }
 

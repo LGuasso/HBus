@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         BusDAO dao = new BusDAO(this);
 
-        List<String> ways = dao.getItinerary(selectedItem).getSentidos();
+        List<String> ways = dao.getItinerary(selectedItem).getWays();
         if(ways.size()>1){
             ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
             chooseWayDialogFragment.setParameters(this,selectedItem,ways);

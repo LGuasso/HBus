@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -74,7 +73,6 @@ public class AddFavoriteFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BusDAO dao = new BusDAO(AddFavoriteFragment.this.getActivity());
-                Toast.makeText(getActivity(),R.string.added_favorite_itinerary_with_sucess,Toast.LENGTH_SHORT).show();
                 itinerarios.get(position).setFavorite(true);
                 dao.update(itinerarios.get(position));
                 mCallback.onSettingsDone(false);

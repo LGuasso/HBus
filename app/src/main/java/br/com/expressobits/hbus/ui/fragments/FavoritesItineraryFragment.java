@@ -142,7 +142,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         switch (view.getId()){
             case R.id.buttonLookTime:
                 selectedItem = itineraries.get(position).getName();
-                List<String> ways = itineraries.get(position).getSentidos();
+                List<String> ways = itineraries.get(position).getWays();
                 if(ways.size()>1) {
                     ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
                     chooseWayDialogFragment.setParameters(this,selectedItem,ways);
