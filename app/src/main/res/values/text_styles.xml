@@ -43,24 +43,13 @@
         <item name="fontPath">fonts/UbuntuTitling-B.ttf</item>
     </style>
 
-    <style name="TextAppearance.AppCompat.Large" parent="@android:style/TextAppearance.Large">
-        <item name="android:textColor">@color/subtext_color</item>
-        <item name="fontPath">fonts/UbuntuTitling-B.ttf</item>
-    </style>
-    
-    <style name="TextStyle.Accent.Caption" parent="Base.TextAppearance.AppCompat.Caption">
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-
 ,
 
 
     <style name="TextStyle.Large" parent="TextAppearance.AppCompat.Large">
         <item name="android:textColor">@color/text_color</item>
         <item name="fontPath">fonts/UbuntuTitling-B.ttf</item>
-    </style>
+    </style>+
     <style name="TextStyle.Medium" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">@color/black</item>
     </style>

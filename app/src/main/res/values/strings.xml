@@ -35,6 +35,7 @@
     <string name="no_have_itinerary">No have favorite itinerary</string>
     <string name="remove">Remove</string>
     <string name="look_times">Look times</string>
+    <string name="not_found_city">Not found city</string>
 
 
 </resources>

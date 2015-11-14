@@ -2,15 +2,14 @@ package br.com.expressobits.hbus.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +23,6 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,8 +36,6 @@ import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
-import br.com.expressobits.hbus.ui.tour.TourActivity;
-import br.com.expressobits.hbus.utils.Popup;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,OnSettingsListener,Drawer.OnDrawerItemClickListener,ChooseWayDialogListener {
@@ -49,18 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar pToolbar;
     //Navigation Drawer
     private Drawer navigationDrawer;
-
-
     //Gerencia a atuação dos fragments
     FragmentManager fm = getSupportFragmentManager();
-    int lastPosition = 0;
     String linha;
     String sentido;
-
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,53 +74,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         initViews();
-        initNavigationDrawer();
-        setVisibleLayout();
     }
 
 
     private void initNavigationDrawer() {
-
         navigationDrawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(pToolbar)
                 .withActionBarDrawerToggleAnimated(true)
-                .withDrawerGravity(Gravity.LEFT)
+                .withDrawerGravity(Gravity.START)
                 .withSelectedItem(0)
                 .withActionBarDrawerToggle(true)
                 .withOnDrawerItemClickListener(this)
                 .build();
-        //TODO atualizar a lista de navigationDrawer no onResume
-        navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.favorites));
-        if(PreferenceManager.getDefaultSharedPreferences(this).getString("city","").length()>1){
-            BusDAO dao = new BusDAO(this);
-
-            List<Itinerary> itinerarieses = dao.getItineraries(true);
-            for(Itinerary itinerary : itinerarieses){
-                String name = "";
-                if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
-                    name+=itinerary.getId()+" - "+itinerary.getName();
-                }else{
-                    name+=itinerary.getName();
-                }
-                navigationDrawer.addItem(new PrimaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
-            }
-            navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
-            List<Itinerary>allItinerarios = dao.getItineraries(false);
-
-            for(Itinerary itinerary:allItinerarios){
-                String name = "";
-                if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG,false)){
-                    name+=itinerary.getId()+" - "+itinerary.getName();
-                }else{
-                    name+=itinerary.getName();
-                }
-                navigationDrawer.addItem(new SecondaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
-            }
-            dao.close();
-        }
-
-
+       onUpdateNavigationDrawer();
     }
 
     @Override
@@ -156,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initViews() {
         initActionBar();
-        //initAdView();
-
+        initNavigationDrawer();
     }
 
     /**
@@ -167,32 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * </ul>
      */
     private void initActionBar() {
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        //getSupportActionBar().setDisplayUseLogoEnabled(true);
-
         pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
         setSupportActionBar(pToolbar);
-
-        //pToolbar.setTitle("My lines");
-        //pToolbar.setSubtitle("subtitle");
-
-
-    }
-
-    /**
-     * Gerencia forma dos {@link android.support.v4.app.Fragment}
-     */
-    public void addOnibusFragment(){
-        FragmentTransaction ft = fm.beginTransaction();
-        OnibusFragment onibusFragment = (OnibusFragment)fm.findFragmentByTag("onibusFragment");
-        if(onibusFragment == null){
-            onibusFragment = new OnibusFragment();
-        }
-        ft.replace(R.id.framelayout_main, onibusFragment, "onibusFragment");
-        ft.addToBackStack("pilha");
-        ft.commit();
-        lastPosition = 1;
     }
 
     @Override
@@ -200,9 +130,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentTransaction ft = fm.beginTransaction();
         if(!type){
             getSupportFragmentManager().popBackStack();
-            //ft.remove(getSupportFragmentManager().findFragmentByTag("addFavoriteFragment"));
         }else {
-            AddFavoriteFragment addFavoriteFragment = (AddFavoriteFragment) fm.findFragmentByTag("addFavoriteFragment");
+            AddFavoriteFragment addFavoriteFragment;
             if (findViewById(R.id.framelayout_main) != null) {
 
                 addFavoriteFragment = new AddFavoriteFragment();
@@ -210,13 +139,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // e adiciona a transação novamente na pilha de navegação
                 ft.replace(R.id.framelayout_main, addFavoriteFragment, "addFavoriteFragment");
                 ft.addToBackStack("pilha");
-                lastPosition = 1;
             } else if (findViewById(R.id.framelayout_content) != null) {
                 addFavoriteFragment = new AddFavoriteFragment();
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transação novamente na pilha de navegação
                 ft.replace(R.id.framelayout_content, addFavoriteFragment, "onibusFragment");
-                lastPosition = 1;
             }
         }
 
@@ -271,8 +198,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onSettingsDone(String linha, String sentido) {
         this.linha = linha;
         this.sentido = sentido;
-        getSupportActionBar().setTitle(linha);
-        getSupportActionBar().setSubtitle(sentido);
+        pToolbar.setTitle(linha);
+        pToolbar.setSubtitle(sentido);
         FragmentTransaction ft = fm.beginTransaction();
         /** Se for acessodado de um smartphone o espaço main existirá */
         /** Adiciona o fragment com o novo conteúdo no único espaço */
@@ -292,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // e adiciona a transação novamente na pilha de navegação
                 ft.replace(R.id.framelayout_main, onibusFragment, "onibusFragment");
                 ft.addToBackStack("pilha");
-                lastPosition = 1;
 
             }
 
@@ -308,11 +234,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transação novamente na pilha de navegação
                 ft.replace(R.id.framelayout_content, onibusFragment, "onibusFragment");
-                lastPosition = 1;
             }
         }
-
-        // Finaliza a transção com sucesso
         ft.commit();
     }
 
@@ -324,27 +247,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setActionBarTitle(String title,String subtitle){
-        getSupportActionBar().setTitle(title);
-        getSupportActionBar().setSubtitle(subtitle);
-        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString("city", "Sem cidade");
+        pToolbar.setTitle(title);
+        pToolbar.setSubtitle(subtitle);
+        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG,getString(R.string.not_found_city));
         pToolbar.setTitle(cityname);
-        Log.i(TAG, "Trocando o título da action bar para " + title + " ,trocando o subtítulo para " + subtitle);
     }
-
-
-
-    public void setVisibleLayout(){
-        //TODO set visiblity in frame fragment list itinerary
-    }
-
-    public void setLoadText(String text){
-        //textViewLoadBus.setText(text);
-    }
-
 
     @Override
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-        String selectedItem = new String("");
+        String selectedItem = "";
         if(iDrawerItem instanceof SecondaryDrawerItem) {
                  selectedItem = ((SecondaryDrawerItem) iDrawerItem).getName();
         }
@@ -358,8 +269,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
             chooseWayDialogFragment.setParameters(this,selectedItem,ways);
             chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(),ChooseWayDialogFragment.TAG);
-            //TODO excluir classe
-            //Popup.showPopUp(this, view, selectedItem, dao.getItinerary(selectedItem).getSentidos());
         }else{
             onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
         }
@@ -373,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.fab_button:
                 onSettingsDone(true);
-            return;
+            break;
         }
     }
 
