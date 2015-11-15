@@ -18,16 +18,16 @@ import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 
 /**
- * Created by rafael on 29/10/15.
+ * Classe que encapsula chamadas ao Parse
+ * @author Rafael Correa
+ * @since 29/10/15.
  */
-public class ParseDAO {
+public class ParseDAO{
 
     public static final String TAG = "ParseDAO";
     public static final String NAME = "name";
     public static final String COUNTRY = "country";
-    public static final String IMAGE = "image";
     public static final String WAYS = "ways";
-    public static final String CITY = "city";
     public static final String DESCRIPTION = "description";
 
     Context context;
@@ -42,25 +42,10 @@ public class ParseDAO {
      *
      * @return Lista de cidades
      */
-    public List<City> getCities(){
+    public List<City> getCities(FindCallback<ParseObject> result){
         final ArrayList<City> cities = new ArrayList<>();
-
         ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
-
-
-        query.findInBackground(new FindCallback<ParseObject>() {
-
-
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                for (ParseObject object : objects) {
-                    cities.add(parseToCity(object));
-                    //object.pinInBackground();
-                }
-
-            }
-        });
-
+        query.findInBackground(result);
         return cities;
     }
 

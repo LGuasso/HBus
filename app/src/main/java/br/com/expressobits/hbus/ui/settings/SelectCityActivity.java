@@ -69,9 +69,12 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         cities = new ArrayList<City>();
 
+        ParseDAO dao = new ParseDAO(this);
+        cities = dao.getCities(this);
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
-        query.findInBackground(this);
+
+        //ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
+        //query.findInBackground(this);
 
         //TODO lista que vem apartir do parse
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
@@ -106,6 +109,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     public boolean onLongClickListener(View view, int position) {
         return false;
     }
+
 
     @Override
     public void done(List<ParseObject> objects, ParseException e) {
