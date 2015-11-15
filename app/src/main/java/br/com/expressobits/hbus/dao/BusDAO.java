@@ -213,12 +213,12 @@ public class BusDAO extends SQLiteAssetHelper{
 
 
     /**
-         * Busca no banco de dados lista de {@link Bus} baseado nos parâmetros
-         * @param nameLine Nome da linha
-         * @param way Sentido do ônibus
-         * @param typeDay tipo de dia {@link br.com.expressobits.hbus.model.TypeDay}
-         * @return Lista de {@link Bus}
-         */
+     * Busca no banco de dados lista de {@link Bus} baseado nos parâmetros
+     * @param nameLine Nome da linha
+     * @param way Sentido do ônibus
+     * @param typeDay tipo de dia {@link br.com.expressobits.hbus.model.TypeDay}
+     * @return Lista de {@link Bus}
+     */
     public List<Bus> getBusList(String nameLine, String way, String typeDay,boolean fastMode){
         ArrayList<Bus> buses = new ArrayList<Bus>();
 
@@ -327,15 +327,62 @@ public class BusDAO extends SQLiteAssetHelper{
         }
     }
 
+    /**
+     * Deleta todos itinerários
+     */
     public void deleteAllItinerary() {
         getWritableDatabase().delete(TABLE_ITINERARY, null, null);
     }
 
+    /**
+     * Deleta todos os Códigos
+     */
+    public void deleteAllCodes(){
+        getWritableDatabase().delete(TABLE_CODE, null, null);
+    }
+
+    /**
+     * Deleta todos os onibus
+     */
+    public void deleteAllBuses(){
+        getWritableDatabase().delete(TABLE_BUS, null, null);
+    }
+
+
+    /**
+     * Insere novo itinerário no banco de dados
+     * @param itinerary
+     */
     public void insert(Itinerary itinerary) {
         ContentValues values = new ContentValues();
         values.put("name",itinerary.getName());
         values.put("ways",TextUtils.getSentidosinString(itinerary.getWays()));
         values.put("favorite",false);
-        getWritableDatabase().insert(TABLE_ITINERARY,null,values);
+        getWritableDatabase().insert(TABLE_ITINERARY, null, values);
+    }
+
+    /**
+     * Insere novo código no banco de dados
+     * @param code
+     */
+    public void insert(Code code){
+        ContentValues values = new ContentValues();
+        values.put("name",code.getName());
+        values.put("descrition",code.getDescrition());
+        getWritableDatabase().insert(TABLE_CODE,null,values);
+    }
+
+    /**
+     * Insere novo bus no banco de dados
+     * @param bus
+     */
+    public void insert(Bus bus){
+        ContentValues values = new ContentValues();
+        values.put("time",bus.getTime());
+        values.put("code",bus.getCode().getName());
+        values.put("itinerary",bus.getItinerary().getName());
+        values.put("way",bus.getWay());
+        values.put("typeday",bus.getTypeday().toString());
+        getWritableDatabase().insert(TABLE_BUS,null,values);
     }
 }

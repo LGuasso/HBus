@@ -1,6 +1,7 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,7 +20,9 @@ import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
 
 /**
- * Created by Rafael on 06/07/2015.
+ * @author Rafael
+ * @since 06/07/2015.
+ * Fragmento que exibe todos itinerários que não forma adicionados.
  */
 public class AddFavoriteFragment extends Fragment{
 
@@ -28,12 +31,12 @@ public class AddFavoriteFragment extends Fragment{
     OnSettingsListener mCallback;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mCallback = (OnSettingsListener) activity;
+            mCallback = (OnSettingsListener) getActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(getActivity().toString()
                     + " precisa implementar OnSettingsListener");
         }
     }
@@ -58,15 +61,12 @@ public class AddFavoriteFragment extends Fragment{
 
     private void initListViews(View view){
         listViewLines = (ListView) view.findViewById(R.id.list_lines_all);
-
         BusDAO dao = new BusDAO(getActivity());
         itinerarios = new ArrayList<>(dao.getItineraries(false));
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),android.R.layout.simple_list_item_1,itinerarios);
         listViewLines.setAdapter(arrayAdapter);
         listViewLines.setClickable(true);
         dao.close();
-
-
         listViewLines.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
@@ -80,8 +80,5 @@ public class AddFavoriteFragment extends Fragment{
                 dao.close();
             }
         });
-
     }
-
-
 }

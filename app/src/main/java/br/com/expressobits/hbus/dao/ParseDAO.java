@@ -14,6 +14,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 
 /**
@@ -27,6 +28,7 @@ public class ParseDAO {
     public static final String IMAGE = "image";
     public static final String WAYS = "ways";
     public static final String CITY = "city";
+    public static final String DESCRIPTION = "description";
 
     Context context;
 
@@ -62,6 +64,7 @@ public class ParseDAO {
         return cities;
     }
 
+    //TODO implementar pesquisa de cidade
     public void insertItineraries(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Itinerary");
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -71,7 +74,22 @@ public class ParseDAO {
                 dao.deleteAllItinerary();
                 for (ParseObject object:objects){
                     dao.insert(parseToItinerary(object));
-                    Log.i(TAG,"insert parse object itinerary"+object.getString(NAME));
+                    Log.i(TAG, "insert parse object itinerary" + object.getString(NAME));
+                }
+            }
+        });
+    }
+
+    public void insertCodes(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Codes");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                BusDAO dao = new BusDAO(context);
+                dao.deleteAllCodes();
+                for (ParseObject object:objects){
+                    dao.insert(parseToCode(object));
+                    Log.i(TAG,"insert parse object code"+object.getString(NAME));
                 }
             }
         });
@@ -99,7 +117,7 @@ public class ParseDAO {
     }
 
     /**
-     * Converte um obejto do parse em cidade
+     * Converte um obejto do parse em itinerário
      * com convenções especificas
      * @param parseObject
      * @return
@@ -109,6 +127,19 @@ public class ParseDAO {
         itinerary.setName(parseObject.getString(NAME));
         itinerary.setWays(new ArrayList<String>(Arrays.asList(parseObject.getString(WAYS).split(","))));
         return itinerary;
+    }
+
+    /**
+     * Converte um obejto do parse em codigo
+     * com convenções especificas
+     * @param parseObject
+     * @return
+     */
+    public Code parseToCode(ParseObject parseObject){
+        Code code = new Code();
+        code.setName(parseObject.getString(NAME));
+        code.setDescrition(parseObject.getString(DESCRIPTION));
+        return code;
     }
 
 

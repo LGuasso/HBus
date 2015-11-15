@@ -77,7 +77,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
         itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewCities.setAdapter(itemCityAdapter);
-
         initActionBar();
     }
 
@@ -90,8 +89,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         editor.apply();
 
         //TODO implementa download do parse
-        ParseDAO parseDAO = new ParseDAO(this);
-        parseDAO.insertItineraries();
+        //ParseDAO parseDAO = new ParseDAO(this);
+        //parseDAO.insertItineraries();
+        //parseDAO.insertCodes();
+
 
         if(initial){
             ManagerInit.manager(this);
