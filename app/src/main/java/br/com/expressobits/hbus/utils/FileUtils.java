@@ -3,9 +3,9 @@ package br.com.expressobits.hbus.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.parse.ParseException;
+/**import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
+import com.parse.ParseUser;*/
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -55,7 +55,7 @@ public class FileUtils {
      * Puxa e converte imagem para bitmap
      * @param
      * @return
-     */
+
     public static Bitmap getProfilepciture(ParseFile file) throws ParseException,OutOfMemoryError {
         Bitmap bitmap = null;
 
@@ -66,6 +66,6 @@ public class FileUtils {
         }
 
         return bitmap;
-    }
+    }*/
 
 }

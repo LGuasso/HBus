@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui.settings;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.app.Activity;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,10 +19,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+//import com.parse.FindCallback;
+//import com.parse.ParseException;
+//import com.parse.ParseObject;
+//import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +30,14 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemCityAdapter;
-import br.com.expressobits.hbus.dao.ParseDAO;
+import br.com.expressobits.hbus.dao.FirebaseDAO;
+//import br.com.expressobits.hbus.dao.ParseDAO;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FindCallback<ParseObject> {
+public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack/**,FindCallback<ParseObject> */{
 
     private Toolbar pToolbar;
     private RecyclerView recyclerViewCities;
@@ -67,10 +70,11 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewCities.setLayoutManager(llmUseful);
 
+
         cities = new ArrayList<City>();
 
-        ParseDAO dao = new ParseDAO(this);
-        cities = dao.getCities(this);
+        //ParseDAO dao = new ParseDAO(this);
+        //cities = dao.getCities(this);
 
 
         //ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
@@ -92,9 +96,21 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         editor.apply();
 
         //TODO implementa download do parse
-        //ParseDAO parseDAO = new ParseDAO(this);
-        //parseDAO.insertItineraries();
-        //parseDAO.insertCodes();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Choose");
+        builder.setNegativeButton("Não", null);
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //ParseDAO parseDAO = new ParseDAO(getBaseContext());
+                //parseDAO.insertItineraries();
+                //parseDAO.insertCodes();
+            }
+        });
+        builder.show();
+
+
 
 
         if(initial){
@@ -111,7 +127,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     }
 
 
-    @Override
+    /**@Override
     public void done(List<ParseObject> objects, ParseException e) {
         ParseDAO dao = new ParseDAO(this);
         for (ParseObject object : objects) {
@@ -120,7 +136,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
         itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewCities.setAdapter(itemCityAdapter);
-    }
+    }*/
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

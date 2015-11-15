@@ -8,18 +8,22 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.parse.Parse;
-import com.parse.ParseInstallation;
-import com.parse.ParseObject;
 
 import java.io.File;
 
 import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.dao.FirebaseDAO;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
+/**
+ * import com.parse.Parse;
+ * import com.parse.ParseInstallation;
+ * import com.parse.ParseObject;
+ */
 
 /**
  * @author  Rafael
@@ -36,9 +40,20 @@ public class TPCDataBaseInit extends Application{
     public void onCreate() {
 
 
-        Parse.enableLocalDatastore(this);
+        //FIREBASE
+        Firebase.setAndroidContext(this);
+
+        //TEST
+
+        FirebaseDAO firebaseDAO = new FirebaseDAO();
+
+
+
+        //PARSE
+
+        /**Parse.enableLocalDatastore(this);
         Parse.initialize(this, "pmozmo0oSDUsmX5xWxIjqG1ZRKlT5EDMdld9cMyE", "XKZQXJhT9MIERWpmAYBIj2qAWdsx9oOZ7fpsYNdr");
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        ParseInstallation.getCurrentInstallation().saveInBackground();*/
 
         PackageInfo pInfo = null;
         try {
@@ -46,18 +61,20 @@ public class TPCDataBaseInit extends Application{
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        int version = pInfo.versionCode;
+
         if(56> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             clearApplicationData(this);
         }
         if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("santa_maria_rs_bus_data.db");
         }
-        if(pInfo.versionCode > PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("version",pInfo.versionCode);
-            editor.apply();
+        if (pInfo != null) {
+            if(pInfo.versionCode > PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("version",pInfo.versionCode);
+                editor.apply();
+            }
         }
 
         if(!BuildConfig.DEBUG){
@@ -99,13 +116,14 @@ public class TPCDataBaseInit extends Application{
     private static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
+            for (String aChildren : children) {
+                boolean success = deleteDir(new File(dir, aChildren));
                 if (!success) {
                     return false;
                 }
             }
         }
+        assert dir != null;
         return dir.delete();
     }
 }
