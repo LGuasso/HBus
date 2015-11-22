@@ -11,6 +11,8 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.Bus;
@@ -297,9 +299,8 @@ public class BusDAO extends SQLiteAssetHelper{
     public List<Bus> getNextBuses(Itinerary itinerary){
 
         ArrayList<Bus> next = new ArrayList<Bus>();
-        //TODO Typeday set por dia identificar o dia do typeday
         for(int j = 0;j< itinerary.getWays().size();j++) {
-            next.add(getNextBusforList(getBusList(itinerary.getName(), itinerary.getWays().get(j), TypeDay.USEFUL.toString(),false)));
+            next.add(getNextBusforList(getBusList(itinerary.getName(), itinerary.getWays().get(j), TimeUtils.getStringTipoDeDia(Calendar.getInstance()).toString(), false)));
         }
         return next;
     }

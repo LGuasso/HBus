@@ -21,7 +21,6 @@
     <style name="AppTheme.TextAppearance.Button.Flat" parent="Base.Widget.AppCompat.Button">
         <!-- Splash screen titulo -->
         <item name="android:textSize">16dp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppTheme.TextAppearance.Time" parent="AppTheme.TextAppearance.Large.Mono">
@@ -41,6 +40,9 @@
     <!--BASE -->
     <style name="AppTheme.TextAppearance.AppCompat.Display1" parent="@style/Base.TextAppearance.AppCompat.Display1">
         <item name="fontPath">fonts/UbuntuTitling-B.ttf</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.AppCompat" parent="TextAppearance.AppCompat">
     </style>
 
 ,
@@ -76,6 +78,5 @@
     </style>
 
     <style name="TextAppearance.AppCompat.Button" parent="TextAppearance.AppCompat.Button">
-        <item name="android:textStyle">bold</item>
     </style>
 </resources>

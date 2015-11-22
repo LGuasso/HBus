@@ -74,6 +74,22 @@ public class TimeUtils {
         }
     }
 
+    /**
+     * Retorna um inteiro referente ao tipo de dia da semana
+     * @param calendar
+     * @return
+     */
+    public static TypeDay getStringTipoDeDia(Calendar calendar) {
+        switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.SATURDAY:
+                return TypeDay.SATURDAY;
+            case Calendar.SUNDAY:
+                return TypeDay.SUNDAY;
+            default:
+                return TypeDay.USEFUL;
+        }
+    }
+
     public static TypeDay getTypeDayforString(String day){
         switch (day){
             case "uteis":

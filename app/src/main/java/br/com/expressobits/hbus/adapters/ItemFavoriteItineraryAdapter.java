@@ -57,21 +57,25 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             name += itineraryList.get(position).getName();
         }
         holder.textItineraryName.setText(name);
-        holder.linearLayout  = (TextView) holder.itemView.findViewById(R.id.linear_layout_nextbuses);
         if(itineraryList.get(position).getWays().size()>0){
             ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBuses(itineraryList.get(position)));
-            LinearLayout linearLayout = new LinearLayout(context);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-            linearLayout.setLayoutParams(params);
             String texto = "";
+
             for(int i=0;i<onibuses.size();i++){
+                View view = layoutInflater.inflate(R.layout.item_next_bus,null);
+                TextView textViewHour = (TextView)view.findViewById(R.id.textViewHourforNextBus);
+                TextView textViewWay = (TextView)view.findViewById(R.id.textViewWayforNextBus);
+
+
                 Bus bus = onibuses.get(i);
 
                 if(onibuses!=null){
                     String time = bus.getTime();
                     if(time!=null) {
 
-                        texto+=itineraryList.get(position).getWays().get(i)+"  -  "+time;
+                        //texto+=itineraryList.get(position).getWays().get(i)+"  -  "+time;
+                        textViewWay.setText(itineraryList.get(position).getWays().get(i));
+                        textViewHour.setText(time);
                         if(i!=onibuses.size()-1){
                             texto+="\n";
                         }
@@ -80,8 +84,9 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                     }
                 }else{
                 }
+                holder.linearLayoutHours.addView(view);
             }
-            holder.linearLayout.setText(texto);
+
         }
         dao.close();
 
@@ -100,17 +105,19 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     public class HolderFavoriteItinerary extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         public TextView textItineraryName;
-        public TextView linearLayout;
+        //public TextView textViewItineraryHours;
         public Button buttonRemove;
         public Button buttonLookHours;
         public LinearLayout linearLayoutInfo;
+        public LinearLayout linearLayoutHours;
 
         public HolderFavoriteItinerary(View itemView,List<Itinerary> list) {
             super(itemView);
 
             textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
-            linearLayout  = (TextView) itemView.findViewById(R.id.linear_layout_nextbuses);
+            //textViewItineraryHours = (TextView) itemView.findViewById(R.id.linear_layout_nextbuses);
             linearLayoutInfo = (LinearLayout) itemView.findViewById(R.id.linearlayout_background_info);
+            linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
             buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
             buttonLookHours = (Button) itemView.findViewById(R.id.buttonLookTime);
 
