@@ -37,8 +37,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = layoutInflater.inflate(R.layout.item_list_bus,viewGroup,false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
-        return myViewHolder;
+        return new MyViewHolder(view);
     }
 
     @Override
@@ -46,9 +45,9 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         //Método que atualiza informações
         myViewHolder.txtViewHorario.setText(listBus.get(i).getTime());
         //TODO fixar bug de tomorrow no bus
-         //if(listBus.get(i).isTomorrow()) {
-        //    myViewHolder.relativeLayout.setSelected(true);
-        //}
+         if(i%2==0) {
+          myViewHolder.relativeLayout.setSelected(true);
+        }
         myViewHolder.txtViewCode.setText(listBus.get(i).getCode().getName());
         myViewHolder.txtViewDescrition.setText(listBus.get(i).getCode().getDescrition());
         myViewHolder.txtViewDescrition.setSelected(true);

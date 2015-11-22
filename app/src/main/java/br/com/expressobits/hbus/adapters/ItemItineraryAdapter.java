@@ -1,45 +1,74 @@
 package br.com.expressobits.hbus.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.model.Itinerary;
 
 /**
- * Created by rafael on 13/08/15.
+ * Adapter usado para exibir {@link Itinerary}
+ * @author Rafael Correa
+ * @since 13/08/15.
  */
-public class ItemItineraryAdapter extends ArrayAdapter<Itinerary>{
+public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdapter.MyViewHolder> {
 
-    Context context;
-    List<Itinerary> list;
+    private Context context;
+    private List<Itinerary> listItineraries;
+    private LayoutInflater layoutInflater;
+    private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
+    int resource;
 
-    public ItemItineraryAdapter(Context context, int resource,List<Itinerary> list) {
-        super(context, resource, list);
+    public ItemItineraryAdapter(Context context,List<Itinerary> listItineraries) {
         this.context = context;
-        this.list = list;
-
+        this.listItineraries = listItineraries;
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = layoutInflater.inflate(R.layout.item_list_simple_itinerary,parent,false);
+        return new MyViewHolder(view);
+    }
 
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        holder.textViewName.setText(listItineraries.get(position).getName());
+    }
 
-        Itinerary itinerary = list.get(position);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_list_line_add, null);
-        TextView textViewItineraryName = (TextView)view.findViewById(R.id.textViewItineraryName);
-        textViewItineraryName.setText(itinerary.getName());
+    @Override
+    public int getItemCount() {
+        return listItineraries.size();
+    }
 
-        return  view;
+    public void setRecyclerViewOnClickListenerHack(RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack){
+        this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        public TextView textViewName;
+        public LinearLayout linearLayout;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
+            textViewName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
+            textViewName.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v) {
+            if(recyclerViewOnClickListenerHack != null){
+                recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
+            }
+        }
     }
 }

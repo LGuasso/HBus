@@ -3,15 +3,17 @@ package br.com.expressobits.hbus.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
@@ -23,9 +25,9 @@ import br.com.expressobits.hbus.ui.OnSettingsListener;
  * @since 06/07/2015.
  * Fragmento que exibe todos itinerários que não forma adicionados.
  */
-public class AddFavoriteFragment extends Fragment{
+public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClickListenerHack {
 
-    ListView listViewItineraries;
+    RecyclerView recyclerViewItineraries;
     private ArrayList<Itinerary> itineraries;
     OnSettingsListener onSettingsListener;
 
@@ -59,25 +61,32 @@ public class AddFavoriteFragment extends Fragment{
     }
 
     private void initListViews(View view){
-        listViewItineraries = (ListView) view.findViewById(R.id.list_lines_all);
+        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewAddItineraries);
         BusDAO dao = new BusDAO(getActivity());
         itineraries = new ArrayList<>(dao.getItineraries(false));
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),android.R.layout.simple_list_item_1, itineraries);
-        listViewItineraries.setAdapter(arrayAdapter);
-        listViewItineraries.setClickable(true);
+        Log.e("TAG","SIZE"+itineraries.size());
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),itineraries);
+        recyclerViewItineraries.setAdapter(arrayAdapter);
+
+        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
+        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewItineraries.setLayoutManager(llmUseful);
+
         dao.close();
-        listViewItineraries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    }
 
+    @Override
+    public void onClickListener(View view, int position) {
+        BusDAO dao = new BusDAO(AddFavoriteFragment.this.getActivity());
+        itineraries.get(position).setFavorite(true);
+        dao.update(itineraries.get(position));
+        onSettingsListener.onSettingsDone(false);
+        onSettingsListener.onAddFavorite();
+        dao.close();
+    }
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BusDAO dao = new BusDAO(AddFavoriteFragment.this.getActivity());
-                itineraries.get(position).setFavorite(true);
-                dao.update(itineraries.get(position));
-                onSettingsListener.onSettingsDone(false);
-                onSettingsListener.onAddFavorite();
-                dao.close();
-            }
-        });
+    @Override
+    public boolean onLongClickListener(View view, int position) {
+        return false;
     }
 }

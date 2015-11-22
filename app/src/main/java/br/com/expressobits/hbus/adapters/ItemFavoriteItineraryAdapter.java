@@ -42,10 +42,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     @Override
     public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
-        HolderFavoriteItinerary myViewHolder = new HolderFavoriteItinerary(view,itineraryList);
-
-
-        return myViewHolder;
+        return new HolderFavoriteItinerary(view,itineraryList);
     }
 
 

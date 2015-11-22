@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +15,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
@@ -29,9 +33,9 @@ import br.com.expressobits.hbus.ui.OnSettingsListener;
  * @author Rafael Correa
  * @since 16/11/15
  */
-public class ItinerariesFragment extends Fragment {
+public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack {
 
-    private ListView listViewItineraries;
+    private RecyclerView recyclerViewItineraries;
     private List<Itinerary> listItineraries;
     private OnSettingsListener onSettingsListener;
 
@@ -49,7 +53,6 @@ public class ItinerariesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_itineraries,null);
         initViews(view);
         return view;
@@ -66,20 +69,27 @@ public class ItinerariesFragment extends Fragment {
     }
 
     private void initListViews(View view){
-        listViewItineraries = (ListView) view.findViewById(R.id.listViewItineraries);
+        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
+        recyclerViewItineraries.setHasFixedSize(true);
         BusDAO dao = new BusDAO(getActivity());
         listItineraries = dao.getItineraries();
-        ArrayAdapter<Itinerary> arrayAdapter = new ArrayAdapter<Itinerary>(getContext(),android.R.layout.simple_list_item_1);
-        listViewItineraries.setAdapter(arrayAdapter);
-        listViewItineraries.setClickable(true);
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),listItineraries);
+        arrayAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewItineraries.setAdapter(arrayAdapter);
+
+        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
+        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewItineraries.setLayoutManager(llmUseful);
         dao.close();
-        listViewItineraries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BusDAO dao = new BusDAO(getContext());
-                //onSettingsListener.
-            }
-        });
     }
 
+    @Override
+    public void onClickListener(View view, int position) {
+        Log.d("OLAAAA","dsad");
+    }
+
+    @Override
+    public boolean onLongClickListener(View view, int position) {
+        return false;
+    }
 }
