@@ -62,7 +62,8 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
             super(itemView);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
             textViewName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
-            textViewName.setOnClickListener(this);
+            linearLayout.setOnClickListener(this);
+            linearLayout.setClickable(true);
         }
         @Override
         public void onClick(View v) {

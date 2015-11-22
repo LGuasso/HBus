@@ -64,10 +64,10 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
         recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewAddItineraries);
         BusDAO dao = new BusDAO(getActivity());
         itineraries = new ArrayList<>(dao.getItineraries(false));
-        Log.e("TAG","SIZE"+itineraries.size());
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),itineraries);
+        arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
-
+        recyclerViewItineraries.setClickable(true);
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewItineraries.setLayoutManager(llmUseful);
