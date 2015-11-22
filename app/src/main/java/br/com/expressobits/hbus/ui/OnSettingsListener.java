@@ -20,6 +20,11 @@ public interface OnSettingsListener {
      */
     public void onSettingsDone(boolean type);
 
+    /**
+     *
+     */
+    public void onPopStackBack();
+
 
     /**
      * Notifica que foi removido favorito da lista de favoritos

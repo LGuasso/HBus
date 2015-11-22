@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -23,12 +23,10 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
@@ -43,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "Atividade Principal";
     public static final String DEBUG = "debug";
+    private static String STACK = "pilha";
     private Toolbar pToolbar;
     //Navigation Drawer
     private Drawer navigationDrawer;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .withActionBarDrawerToggle(true)
                 .withOnDrawerItemClickListener(this)
                 .build();
-        onUpdateNavigationDrawer();
+        createNavigationDrawer();
     }
 
     @Override
@@ -126,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    @Deprecated
     public void onSettingsDone(boolean type) {
         FragmentTransaction ft = fragmentManager.beginTransaction();
         if (!type) {
@@ -153,45 +153,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onPopStackBack() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    //TODO ver listener de criar navigation drawer
+    @Override
     public void onRemoveFavorite() {
-        onUpdateNavigationDrawer();
+        createNavigationDrawer();
     }
 
     @Override
     public void onAddFavorite() {
-        onUpdateNavigationDrawer();
+        createNavigationDrawer();
     }
 
-    private void onUpdateNavigationDrawer() {
+    private void createNavigationDrawer() {
+        BusDAO dao  = new BusDAO(this);
         navigationDrawer.getDrawerItems().clear();
-        navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.favorites));
-        if (PreferenceManager.getDefaultSharedPreferences(this).getString("city", "").length() > 1) {
-            BusDAO dao = new BusDAO(this);
+        navigationDrawer.addItem(new SectionDrawerItem());
+        navigationDrawer.addItem(new PrimaryDrawerItem()
+                .withName(R.string.favorites)
+                .withBadge(getString(R.string.number_of_itineraries, dao.getItineraries(true).size()))
+                .withIdentifier(0)
+                .withIcon(android.R.drawable.star_on));
+        navigationDrawer.addItem(new PrimaryDrawerItem()
+                .withName(R.string.all_lines)
+                .withBadge(getString(R.string.number_of_itineraries,dao.getItineraries().size()))
+                .withIdentifier(1)
+                .withIcon(R.drawable.ic_bus));
+        navigationDrawer.addItem(new SectionDrawerItem());
+        navigationDrawer.addItem(new SecondaryDrawerItem()
+                .withName(R.string.action_settings)
+                .withIdentifier(2)
+                .withIcon(android.R.drawable.ic_menu_preferences));
 
-            List<Itinerary> itinerarieses = dao.getItineraries(true);
-            for (Itinerary itinerary : itinerarieses) {
-                String name = "";
-                if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG, false)) {
-                    name += itinerary.getId() + " - " + itinerary.getName();
-                } else {
-                    name += itinerary.getName();
-                }
-                navigationDrawer.addItem(new PrimaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
-            }
-            navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
-            List<Itinerary> allItinerarios = dao.getItineraries(false);
-
-            for (Itinerary itinerary : allItinerarios) {
-                String name = "";
-                if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(DEBUG, false)) {
-                    name += itinerary.getId() + " - " + itinerary.getName();
-                } else {
-                    name += itinerary.getName();
-                }
-                navigationDrawer.addItem(new SecondaryDrawerItem().withName(name).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
-            }
-            dao.close();
-        }
     }
 
     @Override
@@ -237,22 +233,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ft.commit();
     }
 
-    public void addFragment() {
+    public void addFragment(String TAG) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ItinerariesFragment itinerariesFragment;
-        if (findViewById(R.id.framelayout_main) != null) {
-            itinerariesFragment = new ItinerariesFragment();
-            // Troca o que quer que tenha na view do fragment_container por este fragment,
-            // e adiciona a transação novamente na pilha de navegação
-            fragmentTransaction.replace(R.id.framelayout_main, itinerariesFragment, "itinerariesFragment");
-            fragmentTransaction.addToBackStack("pilha");
-        } else if (findViewById(R.id.framelayout_content) != null) {
-            itinerariesFragment = new ItinerariesFragment();
-            // Troca o que quer que tenha na view do fragment_container por este fragment,
-            // e adiciona a transação novamente na pilha de navegação
-            fragmentTransaction.replace(R.id.framelayout_content, itinerariesFragment, "itinerariesFragment");
+        Fragment fragment;
+        if(TAG.equals(ItinerariesFragment.TAG)){
+            fragment = new ItinerariesFragment();
+        }else{ //if(TAG.equals(AddFavoriteFragment.TAG)){
+            fragment = new AddFavoriteFragment();
         }
-
+        if (findViewById(R.id.framelayout_main) != null) {
+            // Troca o que quer que tenha na view do fragment_container por este fragment,
+            // e adiciona a transação novamente na pilha de navegação
+            fragmentTransaction.replace(R.id.framelayout_main, fragment,TAG);
+            fragmentTransaction.addToBackStack(STACK);
+        } else if (findViewById(R.id.framelayout_content) != null) {
+            // Troca o que quer que tenha na view do fragment_container por este fragment,
+            // e adiciona a transação novamente na pilha de navegação
+            fragmentTransaction.replace(R.id.framelayout_content, fragment,TAG);
+        }
         // Finaliza a transção com sucesso
         fragmentTransaction.commit();
     }
@@ -273,13 +271,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-        String selectedItem = "";
-        if (iDrawerItem instanceof SecondaryDrawerItem) {
-            selectedItem = ((SecondaryDrawerItem) iDrawerItem).getName();
+        switch (i){
+            case 1:
+                break;
+            case 2:
+                addFragment(ItinerariesFragment.TAG);
+                break;
+            case 4:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
         }
-        if (iDrawerItem instanceof PrimaryDrawerItem) {
-            selectedItem = ((PrimaryDrawerItem) iDrawerItem).getName();
-        }
+
+        return false;
+    }
+
+    public void onCreateDialogChooseWay(String selectedItem) {
         BusDAO dao = new BusDAO(this);
 
         List<String> ways = dao.getItinerary(selectedItem).getWays();
@@ -288,20 +294,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             chooseWayDialogFragment.setParameters(this, selectedItem, ways);
             chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
         } else {
-            onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
+            onSettingsDone(selectedItem, ways.get(0));
         }
         dao.close();
-
-        return false;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_button:
-                //TODO criar um só método para adicionar fragment
-                onSettingsDone(true);
-                //addFragment();
+                addFragment(AddFavoriteFragment.TAG);
                 break;
         }
     }

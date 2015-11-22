@@ -27,7 +27,8 @@ import br.com.expressobits.hbus.ui.OnSettingsListener;
  */
 public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClickListenerHack {
 
-    RecyclerView recyclerViewItineraries;
+    public static final String TAG = "AddFavoriteFragment";
+    private RecyclerView recyclerViewItineraries;
     private ArrayList<Itinerary> itineraries;
     OnSettingsListener onSettingsListener;
 
@@ -71,7 +72,6 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewItineraries.setLayoutManager(llmUseful);
-
         dao.close();
     }
 
@@ -80,7 +80,7 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
         BusDAO dao = new BusDAO(AddFavoriteFragment.this.getActivity());
         itineraries.get(position).setFavorite(true);
         dao.update(itineraries.get(position));
-        onSettingsListener.onSettingsDone(false);
+        onSettingsListener.onPopStackBack();
         onSettingsListener.onAddFavorite();
         dao.close();
     }

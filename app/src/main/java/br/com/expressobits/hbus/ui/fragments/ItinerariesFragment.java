@@ -37,6 +37,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     private RecyclerView recyclerViewItineraries;
     private List<Itinerary> listItineraries;
+    public static final String TAG = "ItinerariesFragment";
     private OnSettingsListener onSettingsListener;
 
     @Override
@@ -85,7 +86,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     @Override
     public void onClickListener(View view, int position) {
-        Log.d("OLAAAA","dsad");
+        ((MainActivity)getActivity()).onCreateDialogChooseWay(listItineraries.get(position).getName());
     }
 
     @Override

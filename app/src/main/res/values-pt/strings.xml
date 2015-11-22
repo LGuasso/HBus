@@ -32,4 +32,7 @@
     <string name="pref_title_active_debug_mode">Ativar o modo de depuração</string>
     <string name="remove">Remover</string>
     <string name="look_times">Ver horários</string>
+    <string name="number_of_itineraries">%1$s itinerários</string>
+    <string name="not_found_city">Não há cidade</string>
+    <string name="about">Sobre</string>
 </resources>

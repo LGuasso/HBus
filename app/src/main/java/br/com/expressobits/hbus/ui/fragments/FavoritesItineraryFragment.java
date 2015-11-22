@@ -2,14 +2,18 @@ package br.com.expressobits.hbus.ui.fragments;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -124,13 +128,13 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     }
 
     private void initFAB(View view){
+        //TODO procurar saber quando descenmos a lista
         actionButton = (ActionButton) view.findViewById(R.id.fab_button);
-        actionButton.playShowAnimation();
         actionButton.setButtonColor(getActivity().getResources().getColor(R.color.colorPrimary));
         actionButton.setButtonColorPressed(getActivity().getResources().getColor(R.color.colorPrimaryDark));
-
         actionButton.setShowAnimation(ActionButton.Animations.ROLL_FROM_DOWN);
         actionButton.setHideAnimation(ActionButton.Animations.ROLL_TO_DOWN);
+        actionButton.playShowAnimation();
         actionButton.setImageResource(R.drawable.ic_add_white_24dp);
         actionButton.setOnClickListener((View.OnClickListener) getActivity());
     }
@@ -148,22 +152,35 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                     chooseWayDialogFragment.setParameters(this,selectedItem,ways);
                     chooseWayDialogFragment.show(this.getFragmentManager(),ChooseWayDialogFragment.TAG);
                 }else{
-                    mCallback.onSettingsDone(selectedItem, Arrays.asList(getActivity().getResources().getStringArray(R.array.list_sentido_circular)).get(0));
+                    mCallback.onSettingsDone(selectedItem, ways.get(0));
                 }
                 break;
             case R.id.buttonRemove:
                 selectedItem = itineraries.get(position).getName();
 
-                BusDAO dao = new BusDAO(getActivity());
-                Itinerary itinerary = dao.getItinerary(selectedItem);
-                itinerary.setFavorite(false);
-                dao.update(itinerary);
-                this.initListViews(this.view);
-                mCallback.onRemoveFavorite();
-                //TODO dialog confirmation
-                updateEmptyListView();
-                //Toast.makeText(this.getActivity(),String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName()),Toast.LENGTH_LONG).show();
-                dao.close();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.dialog_alert_title_confirm_remove);
+                builder.setNegativeButton(android.R.string.no, null);
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BusDAO dao = new BusDAO(getActivity());
+                        Itinerary itinerary = dao.getItinerary(selectedItem);
+                        itinerary.setFavorite(false);
+                        dao.update(itinerary);
+                        FavoritesItineraryFragment.this.initListViews(FavoritesItineraryFragment.this.view);
+                        mCallback.onRemoveFavorite();
+                        //TODO dialog confirmation
+                        updateEmptyListView();
+                        if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
+                            Toast.makeText(getContext(), String.format(getResources().getString(R.string.delete_itinerary_with_sucess), itinerary.getName()), Toast.LENGTH_LONG).show();
+                        }
+                        dao.close();
+                    }
+                });
+                builder.show();
+
                 break;
         }
 

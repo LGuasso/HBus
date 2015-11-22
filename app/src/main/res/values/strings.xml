@@ -30,12 +30,14 @@
     <string name="finish">Finish</string>
     <string name="title_activity_select_city">Select city</string>
     <string name="not_found">Not found</string>
-    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_splash" translatable="false">SplashActivity</string>
     <string name="about">About</string>
     <string name="no_have_itinerary">No have favorite itinerary</string>
     <string name="remove">Remove</string>
     <string name="look_times">Look times</string>
     <string name="not_found_city">Not found city</string>
+    <string name="number_of_itineraries">%1$s itineraries</string>
+    <string name="dialog_alert_title_confirm_remove">Confirm remove favorite?</string>
 
 
 </resources>
