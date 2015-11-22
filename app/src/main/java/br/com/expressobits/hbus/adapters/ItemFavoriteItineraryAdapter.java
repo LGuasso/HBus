@@ -42,7 +42,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     @Override
     public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
-        return new HolderFavoriteItinerary(view,itineraryList);
+        return new HolderFavoriteItinerary(view);
     }
 
 
@@ -59,30 +59,21 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
         holder.textItineraryName.setText(name);
         if(itineraryList.get(position).getWays().size()>0){
             ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBuses(itineraryList.get(position)));
-            String texto = "";
-
             for(int i=0;i<onibuses.size();i++){
-                View view = layoutInflater.inflate(R.layout.item_next_bus,null);
+                View view = layoutInflater.inflate(R.layout.item_next_bus,holder.linearLayoutHours,false);
                 TextView textViewHour = (TextView)view.findViewById(R.id.textViewHourforNextBus);
                 TextView textViewWay = (TextView)view.findViewById(R.id.textViewWayforNextBus);
 
 
                 Bus bus = onibuses.get(i);
 
-                if(onibuses!=null){
-                    String time = bus.getTime();
-                    if(time!=null) {
+                String time = bus.getTime();
+                if(time!=null) {
 
-                        //texto+=itineraryList.get(position).getWays().get(i)+"  -  "+time;
-                        textViewWay.setText(itineraryList.get(position).getWays().get(i));
-                        textViewHour.setText(time);
-                        if(i!=onibuses.size()-1){
-                            texto+="\n";
-                        }
+                    //texto+=itineraryList.get(position).getWays().get(i)+"  -  "+time;
+                    textViewWay.setText(itineraryList.get(position).getWays().get(i));
+                    textViewHour.setText(time);
 
-                    }else{
-                    }
-                }else{
                 }
                 holder.linearLayoutHours.addView(view);
             }
@@ -111,7 +102,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
         public LinearLayout linearLayoutInfo;
         public LinearLayout linearLayoutHours;
 
-        public HolderFavoriteItinerary(View itemView,List<Itinerary> list) {
+        public HolderFavoriteItinerary(View itemView) {
             super(itemView);
 
             textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
@@ -138,10 +129,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
 
         @Override
         public boolean onLongClick(View v) {
-            if(recyclerViewOnClickListenerHack != null){
-                return recyclerViewOnClickListenerHack.onLongClickListener(v, getPosition());
-            }
-            return false;
+            return recyclerViewOnClickListenerHack != null && recyclerViewOnClickListenerHack.onLongClickListener(v, getPosition());
         }
     }
 }

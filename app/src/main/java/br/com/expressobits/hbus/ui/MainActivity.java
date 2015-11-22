@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String TAG = "Atividade Principal";
     public static final String DEBUG = "debug";
-    private static String STACK = "pilha";
+    public static final String STACK = "pilha";
     private Toolbar pToolbar;
     //Navigation Drawer
     private Drawer navigationDrawer;
@@ -125,39 +125,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    @Deprecated
-    public void onSettingsDone(boolean type) {
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        if (!type) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            AddFavoriteFragment addFavoriteFragment;
-            if (findViewById(R.id.framelayout_main) != null) {
-
-                addFavoriteFragment = new AddFavoriteFragment();
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transação novamente na pilha de navegação
-                ft.replace(R.id.framelayout_main, addFavoriteFragment, "addFavoriteFragment");
-                ft.addToBackStack("pilha");
-            } else if (findViewById(R.id.framelayout_content) != null) {
-                addFavoriteFragment = new AddFavoriteFragment();
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transação novamente na pilha de navegação
-                ft.replace(R.id.framelayout_content, addFavoriteFragment, "onibusFragment");
-            }
-        }
-
-        // Finaliza a transção com sucesso
-        ft.commit();
-
-    }
-
-    @Override
     public void onPopStackBack() {
         getSupportFragmentManager().popBackStack();
     }
 
-    //TODO ver listener de criar navigation drawer
     @Override
     public void onRemoveFavorite() {
         createNavigationDrawer();

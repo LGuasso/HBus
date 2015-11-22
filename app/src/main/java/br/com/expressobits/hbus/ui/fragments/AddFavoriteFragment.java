@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import br.com.expressobits.hbus.ui.OnSettingsListener;
 public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClickListenerHack {
 
     public static final String TAG = "AddFavoriteFragment";
-    private RecyclerView recyclerViewItineraries;
     private ArrayList<Itinerary> itineraries;
     OnSettingsListener onSettingsListener;
 
@@ -52,7 +50,7 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_favorite, null);
+        View view = inflater.inflate(R.layout.fragment_add_favorite,container,false);
         initViews(view);
         return view;
     }
@@ -62,7 +60,7 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
     }
 
     private void initListViews(View view){
-        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewAddItineraries);
+        RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewAddItineraries);
         BusDAO dao = new BusDAO(getActivity());
         itineraries = new ArrayList<>(dao.getItineraries(false));
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),itineraries);

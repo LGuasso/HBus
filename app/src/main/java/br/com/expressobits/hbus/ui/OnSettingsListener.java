@@ -13,13 +13,6 @@ public interface OnSettingsListener {
      */
     public void onSettingsDone(String linha,String sentido);
 
-
-    /**
-     * Escolhe atividade de favoritos deve ser selecionada
-     * @param type
-     */
-    public void onSettingsDone(boolean type);
-
     /**
      *
      */
