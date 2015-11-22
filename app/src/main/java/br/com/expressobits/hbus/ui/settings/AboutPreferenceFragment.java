@@ -9,7 +9,8 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.tour.TourActivity;
 
 /**
- * Created by rafael on 16/10/15.
+ * @author Rafael Correa
+ * @since 16/10/15
  */
 public class AboutPreferenceFragment extends PreferenceFragment{
 

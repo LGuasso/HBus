@@ -17,7 +17,7 @@ public class Code {
 
     /**
      * Retorna identificação do código
-     * @return
+     * @return Nome
      */
     public String getName() {
         return name;
@@ -25,7 +25,7 @@ public class Code {
 
     /**
      * Retorna descrição do código.
-     * @return
+     * @return Descrição
      */
     public String getDescrition() {
         return descrition;
@@ -41,14 +41,7 @@ public class Code {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof Code){
-            if(this.getName().equals(((Code)o).getName())){
-                return true;
-            }else{
-                return false;
-            }
-        }
-        return false;
+        return o instanceof Code && this.getName().equals(((Code) o).getName());
     }
 
     @Override

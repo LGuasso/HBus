@@ -1,8 +1,9 @@
 package br.com.expressobits.hbus.ui.dialog;
 
 /**
- * Created by rafael on 08/11/15.
+ * @author Rafael Correa
+ * @since 08/11/15
  */
 public interface ChooseWayDialogListener {
-    public void onItemClick(String itinerary,String way);
+    void onItemClick(String itinerary, String way);
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import br.com.expressobits.hbus.ui.tour.TourActivity;
 
 /**
  * @author Rafael Correa

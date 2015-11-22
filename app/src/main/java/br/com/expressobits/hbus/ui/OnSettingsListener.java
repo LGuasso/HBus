@@ -8,10 +8,10 @@ public interface OnSettingsListener {
 
     /**
      * Escolhe atividade deve iniciar com horários da linha e sentido selecionado
-     * @param linha
-     * @param sentido
+     * @param itinerary itinerario
+     * @param way sentido
      */
-    public void onSettingsDone(String linha,String sentido);
+    public void onSettingsDone(String itinerary,String way);
 
     /**
      *

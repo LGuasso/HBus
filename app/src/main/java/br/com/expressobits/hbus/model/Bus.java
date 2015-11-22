@@ -1,5 +1,7 @@
 package br.com.expressobits.hbus.model;
 
+import android.support.annotation.NonNull;
+
 /**
  * @author Rafael Correa
  * @since 21/05/2015.
@@ -34,11 +36,6 @@ public class Bus implements Comparable<Bus>{
      */
     private TypeDay typeday;
 
-    /**
-     * @deprecated
-     */
-    private boolean tomorrow;
-
     public void setTime(String horario) {
         this.time = horario;
     }
@@ -55,21 +52,13 @@ public class Bus implements Comparable<Bus>{
         return code;
     }
 
-    public boolean isTomorrow(){
-        return this.tomorrow;
-    }
-
-    public void setTomorrow(boolean tomorrow){
-        this.tomorrow = tomorrow;
-    }
-
     public int getHora(){
         return Integer.parseInt(time.split(":")[0]);
     }
 
     /**
      * Retorna minutos do horário do ônibus
-     * @return
+     * @return Inteiro
      */
     public int getMinutos(){
         return Integer.parseInt(time.split(":")[1]);
@@ -100,7 +89,7 @@ public class Bus implements Comparable<Bus>{
     }
 
     @Override
-    public int compareTo(Bus another) {
+    public int compareTo(@NonNull Bus another) {
 
         if(this.getHora()>another.getHora()){
             return 1;

@@ -4,7 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 /**
- * Created by rafael on 18/10/15.
+ * @author Rafael Correa
+ * @since 18/10/15
  */
 public class City {
 

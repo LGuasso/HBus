@@ -1,19 +1,19 @@
 package br.com.expressobits.hbus.utils;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-/**import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseUser;*/
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 /**
- * Created by rafael on 21/10/15.
+ * import com.parse.ParseException;
+ * import com.parse.ParseFile;
+ * import com.parse.ParseUser;
+ */
+
+/**
+ * @author Rafael Correa
+ * @since 21/10/15
  */
 public class FileUtils {
         /**

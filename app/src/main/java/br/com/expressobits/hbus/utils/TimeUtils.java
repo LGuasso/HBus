@@ -2,8 +2,6 @@ package br.com.expressobits.hbus.utils;
 
 import android.util.Log;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -14,22 +12,21 @@ import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
 
 /**
- * Created by Rafael on 15/06/2015.
+ * @author Rafael Correa
+ * @since 15/06/2015
  */
 public class TimeUtils {
-
-    private static String format = "HH:mm";
 
     public static final String TAG = "TimeUtils";
 
     /**
      * Converte o horário no formato {@link Calendar} em {@link String}
-     * @param time
-     * @return
-     */
+     * @param time Tempo
+     * @return Calendario
+
     public static Calendar stringToTimeCalendar(String time){
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
             Calendar cal = GregorianCalendar.getInstance();
             cal.setTime(sdf.parse(time));
             Log.d(TAG,"Parser String="+time+" Calendar="+cal.toString());
@@ -39,13 +36,13 @@ public class TimeUtils {
             return null;
         }
 
-    }
+    }*/
 
     /**
      * Converte o horário no formato {@link String} em {@link Calendar}
      * @param time
      * @return
-     */
+
     public static String calendarToTimeString(Calendar time){
 
         String a = new String("");
@@ -55,13 +52,13 @@ public class TimeUtils {
         }
 
         return a;
-    }
+    }*/
 
 
     /**
      * Retorna um inteiro referente ao tipo de dia da semana
-     * @param calendar
-     * @return
+     * @param calendar Calendar
+     * @return inteiro
      */
     public static int getTipoDeDia(Calendar calendar){
         switch (calendar.get(Calendar.DAY_OF_WEEK)){
@@ -76,8 +73,8 @@ public class TimeUtils {
 
     /**
      * Retorna um inteiro referente ao tipo de dia da semana
-     * @param calendar
-     * @return
+     * @param calendar Calendario
+     * @return TypeDay
      */
     public static TypeDay getStringTipoDeDia(Calendar calendar) {
         switch (calendar.get(Calendar.DAY_OF_WEEK)) {
@@ -116,7 +113,7 @@ public class TimeUtils {
     }
 
 
-    public static String getFaltaparaHorario(String timeBus){
+    /**public static String getFaltaparaHorario(String timeBus){
         String timeNow = getNowTimeinString();
         int horaNow = Integer.parseInt(timeNow.split(":")[0]);
         int horaBus = Integer.parseInt(timeBus.split(":")[0]);
@@ -125,16 +122,12 @@ public class TimeUtils {
         if(i>0){
             texto+="Em "+i+" hora(s)";
         }else if(i<0){
-            i+=24;//SE HORARIO FOR NEGATIVO SIGNIFICA QUE SO DAQUI 24HORAS //TODO CODE VER ERRRO DE DIAS  DA SEMANA
+            i+=24;//SE HORARIO FOR NEGATIVO SIGNIFICA QUE SO DAQUI 24HORAS //TODO CODE VER ERRO DE DIAS  DA SEMANA
         }else{
             //NADA
         }
-
-
-
-
         return texto;
-    }
+    }*/
 
     public static List<Bus> sortByTimeBus(List<Bus> busList){
 
@@ -157,7 +150,6 @@ public class TimeUtils {
             }
         }
         for(Bus bus1 : varFinal){
-            bus1.setTomorrow(true);
             busFinal.add(bus1);
         }
 

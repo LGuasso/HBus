@@ -1,19 +1,14 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import java.util.List;
 
@@ -23,7 +18,6 @@ import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
-import br.com.expressobits.hbus.ui.OnSettingsListener;
 
 /**
  * Fragmento que exibe todos {@link br.com.expressobits.hbus.model.Itinerary}
@@ -35,26 +29,13 @@ import br.com.expressobits.hbus.ui.OnSettingsListener;
  */
 public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack {
 
-    private RecyclerView recyclerViewItineraries;
     private List<Itinerary> listItineraries;
     public static final String TAG = "ItinerariesFragment";
-    private OnSettingsListener onSettingsListener;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            onSettingsListener = (OnSettingsListener) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " precisa implementar OnSettingsListener");
-        }
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_itineraries,null);
+        View view = inflater.inflate(R.layout.fragment_itineraries,container,false);
         initViews(view);
         return view;
     }
@@ -70,7 +51,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     }
 
     private void initListViews(View view){
-        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
+        RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
         recyclerViewItineraries.setHasFixedSize(true);
         BusDAO dao = new BusDAO(getActivity());
         listItineraries = dao.getItineraries();

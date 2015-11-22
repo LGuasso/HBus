@@ -9,15 +9,12 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
-import android.preference.SwitchPreference;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatCheckedTextView;
@@ -27,7 +24,6 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,10 +31,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.util.List;
+
 import br.com.expressobits.hbus.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
-import java.util.List;
 
 
 /**
@@ -54,7 +50,6 @@ import java.util.List;
  */
 public class SettingsActivity extends PreferenceActivity {
 
-    private static final String TAG = "Settings";
     Toolbar toolbar;
 
     @Override
@@ -262,9 +257,9 @@ public class SettingsActivity extends PreferenceActivity {
                     }
                 }
 
-            } else if(preference instanceof CheckBoxPreference) {
+            } else/*if(preference instanceof CheckBoxPreference) {
 
-            }else{
+            }else*/{
 
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -287,15 +282,15 @@ public class SettingsActivity extends PreferenceActivity {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-        if (preference instanceof CheckBoxPreference) {
+        /**if (preference instanceof CheckBoxPreference) {
 
         } else if (preference instanceof SwitchPreference) {
-        } else {
+        } else {*/
             sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                     PreferenceManager
                             .getDefaultSharedPreferences(preference.getContext())
                             .getString(preference.getKey(), ""));
-        }
+        //}
 
 
         // Trigger the listener immediately with the preference's

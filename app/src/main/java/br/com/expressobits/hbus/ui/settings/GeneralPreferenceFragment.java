@@ -8,7 +8,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.ui.tour.TourActivity;
 
 /**
  * @author Rafael Correa

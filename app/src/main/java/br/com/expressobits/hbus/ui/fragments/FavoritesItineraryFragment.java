@@ -19,7 +19,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.software.shell.fab.ActionButton;
 
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -41,7 +40,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
     public String selectedItem;
     RecyclerView recyclerViewLines;
-    private ActionButton actionButton;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
     LinearLayout linearLayoutEmptyList;
@@ -81,7 +79,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_favorite_itinerary, null);
+        view = inflater.inflate(R.layout.fragment_favorite_itinerary, container,false);
         initViews(view);
         return view;
     }
@@ -129,7 +127,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
     private void initFAB(View view){
         //TODO procurar saber quando descenmos a lista
-        actionButton = (ActionButton) view.findViewById(R.id.fab_button);
+        ActionButton actionButton = (ActionButton) view.findViewById(R.id.fab_button);
         actionButton.setButtonColor(getActivity().getResources().getColor(R.color.colorPrimary));
         actionButton.setButtonColorPressed(getActivity().getResources().getColor(R.color.colorPrimaryDark));
         actionButton.setShowAnimation(ActionButton.Animations.ROLL_FROM_DOWN);

@@ -1,10 +1,7 @@
 package br.com.expressobits.hbus.model;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
-
-import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * @author Rafael Correa.
@@ -14,7 +11,6 @@ public class Itinerary {
 
 
     private Long id;
-    private Long idFavorite;
     /**
      * Nome do itinerário.
      */

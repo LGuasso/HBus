@@ -45,7 +45,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bus, null);
+        View view = inflater.inflate(R.layout.fragment_bus, container,false);
         initViews(view);
 
         Bundle arguments = getArguments();
@@ -70,7 +70,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
 
     /**
      * Inicizaliza os recycler views
-     * @param view
+     * @param view View pai
      */
     private void initRecyclerViews(View view){
         recyclerViewUsefulDays = (RecyclerView)view.findViewById(R.id.rv_listline_line_useful_days);
