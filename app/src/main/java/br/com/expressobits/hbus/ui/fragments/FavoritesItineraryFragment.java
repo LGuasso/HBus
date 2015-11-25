@@ -22,7 +22,7 @@ import com.software.shell.fab.ActionButton;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemFavoriteItineraryAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
@@ -38,6 +38,7 @@ import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
  */
 public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack,ChooseWayDialogListener{
 
+    public static final String TAG = "FavoritesItineraryFragment";
     public String selectedItem;
     RecyclerView recyclerViewLines;
     private List<Itinerary> itineraries;

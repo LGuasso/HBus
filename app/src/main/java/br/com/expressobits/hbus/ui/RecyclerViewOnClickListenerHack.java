@@ -1,4 +1,4 @@
-package br.com.expressobits.hbus;
+package br.com.expressobits.hbus.ui;
 
 import android.view.View;
 

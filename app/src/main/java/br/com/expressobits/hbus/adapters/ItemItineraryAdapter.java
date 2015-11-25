@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.model.Itinerary;
 
 /**

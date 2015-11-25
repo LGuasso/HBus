@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemBusAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Bus;
@@ -30,6 +30,7 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  */
 public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
+    public static final String TAG = "OnibusFragment";
     public static final String ARGS_LINHA = "Line";
     public static final String ARGS_SENTIDO = "Way";
     RecyclerView recyclerViewUsefulDays;

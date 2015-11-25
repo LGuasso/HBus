@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             FavoritesItineraryFragment favoritesItineraryFragment = new FavoritesItineraryFragment();
             if (findViewById(R.id.framelayout_main) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_main, favoritesItineraryFragment, "linhasFragment");
+                ft.add(R.id.framelayout_main, favoritesItineraryFragment,FavoritesItineraryFragment.TAG);
                 ft.commit();
             } else if (findViewById(R.id.framelayout_content) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_menu, favoritesItineraryFragment, "linhasFragment");
-                ft.add(R.id.framelayout_content, new OnibusFragment(), "onibusFragment");
+                ft.add(R.id.framelayout_menu, favoritesItineraryFragment,FavoritesItineraryFragment.TAG);
+                ft.add(R.id.framelayout_content, new OnibusFragment(),OnibusFragment.TAG);
                 ft.commit();
             }
         }
@@ -147,17 +147,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .withName(R.string.favorites)
                 .withBadge(getString(R.string.number_of_itineraries, dao.getItineraries(true).size()))
                 .withIdentifier(0)
-                .withIcon(android.R.drawable.star_on));
+                .withIcon(R.drawable.ic_star_grey600_24dp));
         navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.all_lines)
                 .withBadge(getString(R.string.number_of_itineraries,dao.getItineraries().size()))
                 .withIdentifier(1)
-                .withIcon(R.drawable.ic_bus));
+                .withIcon(R.drawable.ic_format_list_bulleted_grey600_24dp));
         navigationDrawer.addItem(new SectionDrawerItem());
-        navigationDrawer.addItem(new SecondaryDrawerItem()
+        navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.action_settings)
                 .withIdentifier(2)
-                .withIcon(android.R.drawable.ic_menu_preferences));
+                .withIcon(R.drawable.ic_settings_grey600_24dp));
 
     }
 
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 onibusFragment.setArguments(args);
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transação novamente na pilha de navegação
-                ft.replace(R.id.framelayout_main, onibusFragment, "onibusFragment");
+                ft.replace(R.id.framelayout_main, onibusFragment,OnibusFragment.TAG);
                 ft.addToBackStack("pilha");
             }
         } else if (findViewById(R.id.framelayout_content) != null) {
@@ -198,32 +198,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 onibusFragment.setArguments(args);
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transação novamente na pilha de navegação
-                ft.replace(R.id.framelayout_content, onibusFragment, "onibusFragment");
+                ft.replace(R.id.framelayout_content, onibusFragment,OnibusFragment.TAG);
             }
         }
         ft.commit();
     }
 
     public void addFragment(String TAG) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment;
+        Fragment fragment = new Fragment();
         if(TAG.equals(ItinerariesFragment.TAG)){
             fragment = new ItinerariesFragment();
-        }else{ //if(TAG.equals(AddFavoriteFragment.TAG)){
+        }else if(TAG.equals(AddFavoriteFragment.TAG)){
             fragment = new AddFavoriteFragment();
+        }else{
+
+            if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                getSupportFragmentManager().popBackStack();
+            }
+            if(getSupportFragmentManager().findFragmentByTag(AddFavoriteFragment.TAG)!=null){
+                getSupportFragmentManager().popBackStack();
+            }
         }
-        if (findViewById(R.id.framelayout_main) != null) {
-            // Troca o que quer que tenha na view do fragment_container por este fragment,
-            // e adiciona a transação novamente na pilha de navegação
-            fragmentTransaction.replace(R.id.framelayout_main, fragment,TAG);
-            fragmentTransaction.addToBackStack(STACK);
-        } else if (findViewById(R.id.framelayout_content) != null) {
-            // Troca o que quer que tenha na view do fragment_container por este fragment,
-            // e adiciona a transação novamente na pilha de navegação
-            fragmentTransaction.replace(R.id.framelayout_content, fragment,TAG);
+        if(getSupportFragmentManager().findFragmentByTag(TAG)==null){
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            if (findViewById(R.id.framelayout_main) != null) {
+                // Troca o que quer que tenha na view do fragment_container por este fragment,
+                // e adiciona a transação novamente na pilha de navegação
+                fragmentTransaction.replace(R.id.framelayout_main, fragment,TAG);
+                fragmentTransaction.addToBackStack(STACK);
+            } else if (findViewById(R.id.framelayout_content) != null) {
+                // Troca o que quer que tenha na view do fragment_container por este fragment,
+                // e adiciona a transação novamente na pilha de navegação
+                fragmentTransaction.replace(R.id.framelayout_content, fragment,TAG);
+            }
+            // Finaliza a transção com sucesso
+            fragmentTransaction.commit();
         }
-        // Finaliza a transção com sucesso
-        fragmentTransaction.commit();
+
+
     }
 
     @Override
@@ -244,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
         switch (i){
             case 1:
+                addFragment(FavoritesItineraryFragment.TAG);
                 break;
             case 2:
                 addFragment(ItinerariesFragment.TAG);

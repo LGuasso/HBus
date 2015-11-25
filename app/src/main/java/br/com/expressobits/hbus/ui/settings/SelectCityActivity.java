@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.ManagerInit;
