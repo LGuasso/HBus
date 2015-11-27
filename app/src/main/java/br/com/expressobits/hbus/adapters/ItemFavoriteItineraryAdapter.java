@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +43,11 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
 
 
     @Override
-    public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
-        return new HolderFavoriteItinerary(view);
+    public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int j) {
+        View viewP = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
+        HolderFavoriteItinerary holder = new HolderFavoriteItinerary(viewP);
+
+        return holder;
     }
 
 
@@ -59,6 +64,8 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
         holder.textItineraryName.setText(name);
         if(itineraryList.get(position).getWays().size()>0){
             ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBuses(itineraryList.get(position)));
+
+            holder.linearLayoutHours.removeAllViews();
             for(int i=0;i<onibuses.size();i++){
                 View view = layoutInflater.inflate(R.layout.item_next_bus,holder.linearLayoutHours,false);
                 TextView textViewHour = (TextView)view.findViewById(R.id.textViewHourforNextBus);
@@ -75,11 +82,19 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                     textViewHour.setText(time);
 
                 }
-                holder.linearLayoutHours.addView(view);
+                holder.linearLayoutHours.addView(view, i);
             }
 
         }
         dao.close();
+
+        try{
+            YoYo.with(Techniques.FadeIn)
+                    .duration(700)
+                    .playOn(holder.itemView.findViewById(R.id.card_view));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -111,6 +126,8 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
             buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
             buttonLookHours = (Button) itemView.findViewById(R.id.buttonLookTime);
+
+
 
             buttonLookHours.setOnClickListener(this);
             buttonRemove.setOnClickListener(this);
