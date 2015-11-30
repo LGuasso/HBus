@@ -10,15 +10,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.ui.MainActivity;
@@ -54,7 +51,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
 
     @Override
     public void onBindViewHolder(HolderFavoriteItinerary holder, int position) {
-        BusDAO dao = new BusDAO(context);
+        TimesDbHelper dao = new TimesDbHelper(context);
         String name  = "";
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(MainActivity.DEBUG,false)){
             name += itineraryList.get(position).getId()+" - "+itineraryList.get(position).getName();
@@ -87,14 +84,6 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
 
         }
         dao.close();
-
-        try{
-            YoYo.with(Techniques.FadeIn)
-                    .duration(700)
-                    .playOn(holder.itemView.findViewById(R.id.card_view));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
     }
 

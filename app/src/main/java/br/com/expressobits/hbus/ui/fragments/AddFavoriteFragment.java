@@ -12,9 +12,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
@@ -61,8 +62,9 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
 
     private void initListViews(View view){
         RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewAddItineraries);
-        BusDAO dao = new BusDAO(getActivity());
-        itineraries = new ArrayList<>(dao.getItineraries(false));
+        TimesDbHelper dao = new TimesDbHelper(getActivity());
+        //TODO implementar linhas que ainda n existem no FAVORITeDAO favoritos
+        itineraries = new ArrayList<>(dao.getItineraries());
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),itineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
@@ -75,9 +77,11 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
 
     @Override
     public void onClickListener(View view, int position) {
-        BusDAO dao = new BusDAO(AddFavoriteFragment.this.getActivity());
-        itineraries.get(position).setFavorite(true);
-        dao.update(itineraries.get(position));
+        TimesDbHelper dao = new TimesDbHelper(AddFavoriteFragment.this.getActivity());
+        FavoriteDAO favoriteDAO = new FavoriteDAO(AddFavoriteFragment.this.getActivity());
+        favoriteDAO.addFavorite(itineraries.get(position));
+        //itineraries.get(position).setFavorite(true);
+        //dao.update(itineraries.get(position));
         onSettingsListener.onPopStackBack();
         onSettingsListener.onAddFavorite();
         dao.close();

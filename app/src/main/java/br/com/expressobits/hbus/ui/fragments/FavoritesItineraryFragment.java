@@ -22,9 +22,9 @@ import com.software.shell.fab.ActionButton;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemFavoriteItineraryAdapter;
-import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
@@ -110,8 +110,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
 
 
-        BusDAO dao  = new BusDAO(getActivity());
-        itineraries = dao.getItineraries(true);
+        FavoriteDAO dao  = new FavoriteDAO(getActivity());
+        itineraries = dao.getItineraries();
         ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewLines.setAdapter(adapter);
@@ -164,13 +164,11 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                 builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        BusDAO dao = new BusDAO(getActivity());
+                        FavoriteDAO dao = new FavoriteDAO(getActivity());
                         Itinerary itinerary = dao.getItinerary(selectedItem);
-                        itinerary.setFavorite(false);
-                        dao.update(itinerary);
+                        dao.removeFavorite(itinerary);
                         FavoritesItineraryFragment.this.initListViews(FavoritesItineraryFragment.this.view);
                         mCallback.onRemoveFavorite();
-                        //TODO dialog confirmation
                         updateEmptyListView();
                         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
                             Toast.makeText(getContext(), String.format(getResources().getString(R.string.delete_itinerary_with_sucess), itinerary.getName()), Toast.LENGTH_LONG).show();

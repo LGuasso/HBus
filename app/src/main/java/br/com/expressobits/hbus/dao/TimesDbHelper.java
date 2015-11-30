@@ -16,6 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
@@ -27,56 +28,47 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  * @author Rafael Correa
  * @since 31/07/2015
  */
-public class BusDAO extends SQLiteAssetHelper{
+public class TimesDbHelper extends SQLiteAssetHelper{
 
-
-    private static final String[] COLS_BUS = {"_id","time","code","itinerary","way","typeday"};
-    private static final String[] COLS_CODE = {"_id","name","descrition"};
-    private static final String[] COLS_ITINERARY = {"_id","name","favorite","ways"};
-    private static final String TABLE_BUS = "Bus";
-    private static final String TABLE_CODE = "Code";
-    private static final String TABLE_ITINERARY = "Itinerary";
     private static final String DATABASE_NAME = "bus_data.db";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String TAG= "BusDAO";
+    private static final String SQL_DELETE_ITINERARIES =
+            "DROP TABLE IF EXISTS " + ItineraryContract.Itinerary.TABLE_NAME;
 
-    public BusDAO(Context context) {
-        super(context, getNameFile(context), null, DATABASE_VERSION);
-        Log.d(TAG, "Have " + getListaCode().size() + " codes in bd");
+    private static final String[] COLS_CITY = {"_id","name","country","position"};
+    private static final String[] COLS_BUS = {"_id","time","code","itinerary","way","typeday","city"};
+    private static final String[] COLS_CODE = {"_id","name","description","city"};
+    private static final String[] COLS_ITINERARY = {"_id","name","ways","city"};
+    private static final String TABLE_CITY = "City";
+    private static final String TABLE_BUS = "Bus";
+    private static final String TABLE_CODE = "Code";
+    private static final String TABLE_ITINERARY = "Itinerary";
 
 
+    public TimesDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //setForcedUpgrade(DATABASE_VERSION);
     }
 
-    /**
-     * Retorna o nome do arquivo baseado nas prefêrencias de cidade
-     * @param context
-     * @return
-     */
-    public static String getNameFile(Context context){
-        String nameFile = TextUtils.toSimpleNameFile(
-                PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG,null));
-        nameFile+="_"+DATABASE_NAME;
-        return nameFile;
+    public List<City> getCities(){
+        ArrayList<City> cities = new ArrayList<City>();
+        Cursor c;
+
+        c = getWritableDatabase().query(TABLE_CITY, COLS_CITY, null, null, null, null, null);
+        while(c.moveToNext()){
+            City city = new City();
+            city.setId(c.getLong(0));
+            city.setName(c.getString(1));
+            city.setCountry(c.getString(2));
+            city.setPosition(c.getString(3));
+            cities.add(city);
+
+        }
+        c.close();
+        return cities;
     }
 
-
-
-    /**
-     * Insere novo codigo de ônibus no banco de dados
-     * @param itinerary
-     */
-    public void update(Itinerary itinerary){
-        ContentValues c = new ContentValues();
-        Log.e(TAG, "itinerary " + itinerary.getId() + " " + itinerary.getName());
-        c.put("_id",itinerary.getId());
-        c.put("name", itinerary.getName());
-        c.put("favorite", itinerary.getFavorite());
-        String where = "name = ?";
-        String arguments[] = {itinerary.getName()};
-        getWritableDatabase().update(TABLE_ITINERARY, c, where, arguments);
-    }
 
     public List<Itinerary> getItineraries(){
         ArrayList<Itinerary> itinerariess = new ArrayList<Itinerary>();
@@ -87,46 +79,8 @@ public class BusDAO extends SQLiteAssetHelper{
             Itinerary itinerary = new Itinerary();
             itinerary.setId(c.getLong(0));
             itinerary.setName(c.getString(1));
-
-            if(c.getString(2).equals("0")){
-                itinerary.setFavorite(false);
-            }else{
-                itinerary.setFavorite(true);
-            }
-
-            itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
-            itinerariess.add(itinerary);
-
-        }
-        c.close();
-        return itinerariess;
-    }
-
-    /**
-     * Retorna linhas favoritas ou não favoritas baseadas no flag.
-     * @param favorite flag que define se queremos uma linha favorita ou não favorita
-     * @return Lista de itinerários
-     * @since 01/08/2015
-     */
-    public List<Itinerary> getItineraries(boolean favorite){
-        ArrayList<Itinerary> itinerariess = new ArrayList<Itinerary>();
-        Cursor c;
-        String where = "favorite = ?";
-        String arguments[];
-        if(favorite){
-            arguments = new String[]{"1"};
-        }else{
-            arguments = new String[]{"0"};
-        }
-
-
-        c = getWritableDatabase().query(TABLE_ITINERARY, COLS_ITINERARY, where, arguments, null, null, null);
-        while(c.moveToNext()){
-            Itinerary itinerary = new Itinerary();
-            itinerary.setId(c.getLong(0));
-            itinerary.setName(c.getString(1));
-            itinerary.setFavorite(favorite);
-            itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
+            itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(2).split(","))));
+            //itinerary.setCity(getCity(c.getString(3)));
             itinerariess.add(itinerary);
 
         }
@@ -140,7 +94,24 @@ public class BusDAO extends SQLiteAssetHelper{
         //getWritableDatabase().delete(TABLE, "name=?", new String[]{linha});
     }
 
+    public City getCity(String cityName) {
+        //ArrayList<Code> codes = new ArrayList<Code>();
+        City city = new City();
+        Cursor c;
+        String where = "name = ? AND country = ?";
+        String arguments[] = {cityName.split(" - ")[0],cityName.split(" - ")[1]};
 
+        c = getWritableDatabase().query(TABLE_CITY, COLS_CITY, where, arguments, null, null, null);
+        while (c.moveToNext()) {
+            city = new City();
+            city.setId(c.getLong(0));
+            city.setName(c.getString(1));
+            city.setCountry(c.getString(2));
+            city.setPosition(c.getString(3));
+        }
+        c.close();
+        return city;
+    }
 
 
     public Itinerary getItinerary(String itineraryName) {
@@ -155,12 +126,8 @@ public class BusDAO extends SQLiteAssetHelper{
             itinerary = new Itinerary();
             itinerary.setId(c.getLong(0));
             itinerary.setName(c.getString(1));
-            if(c.getString(2).equals("0")){
-                itinerary.setFavorite(false);
-            } else {
-                itinerary.setFavorite(true);
-            }
-            itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(3).split(","))));
+            itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(2).split(","))));
+            //itinerary.setCity(getCity(c.getString(3)));
         }
         c.close();
         return itinerary;
@@ -175,6 +142,7 @@ public class BusDAO extends SQLiteAssetHelper{
             code = new Code();
             code.setName(c.getString(1));
             code.setDescrition(c.getString(2));
+            code.setCity(getCity(c.getString(3)));
             codes.add(code);
         }
         c.close();
@@ -197,6 +165,7 @@ public class BusDAO extends SQLiteAssetHelper{
                 code = new Code();
                 code.setName(c.getString(1));
                 code.setDescrition(c.getString(2));
+                code.setCity(getCity(c.getString(3)));
                 return code;
             }
         }finally {
@@ -204,10 +173,6 @@ public class BusDAO extends SQLiteAssetHelper{
                 c.close();
             }
         }
-
-
-
-
         return code;
     }
 
@@ -252,6 +217,7 @@ public class BusDAO extends SQLiteAssetHelper{
 
 
             bus.setTypeday(TimeUtils.getTypeDayforString(c.getString(5)));
+            bus.setCity(getCity(c.getString(6)));
             buses.add(bus);
         }
         c.close();
@@ -287,6 +253,7 @@ public class BusDAO extends SQLiteAssetHelper{
 
 
             bus.setTypeday(TimeUtils.getTypeDayforString(c.getString(5)));
+            bus.setCity(getCity(c.getString(6)));
             buses.add(bus);
         }
         c.close();
@@ -328,62 +295,4 @@ public class BusDAO extends SQLiteAssetHelper{
         }
     }
 
-    /**
-     * Deleta todos itinerários
-     */
-    public void deleteAllItinerary() {
-        getWritableDatabase().delete(TABLE_ITINERARY, null, null);
-    }
-
-    /**
-     * Deleta todos os Códigos
-     */
-    public void deleteAllCodes(){
-        getWritableDatabase().delete(TABLE_CODE, null, null);
-    }
-
-    /**
-     * Deleta todos os onibus
-     */
-    public void deleteAllBuses(){
-        getWritableDatabase().delete(TABLE_BUS, null, null);
-    }
-
-
-    /**
-     * Insere novo itinerário no banco de dados
-     * @param itinerary
-     */
-    public void insert(Itinerary itinerary) {
-        ContentValues values = new ContentValues();
-        values.put("name",itinerary.getName());
-        values.put("ways",TextUtils.getSentidosinString(itinerary.getWays()));
-        values.put("favorite",false);
-        getWritableDatabase().insert(TABLE_ITINERARY, null, values);
-    }
-
-    /**
-     * Insere novo código no banco de dados
-     * @param code
-     */
-    public void insert(Code code){
-        ContentValues values = new ContentValues();
-        values.put("name",code.getName());
-        values.put("descrition",code.getDescrition());
-        getWritableDatabase().insert(TABLE_CODE,null,values);
-    }
-
-    /**
-     * Insere novo bus no banco de dados
-     * @param bus
-     */
-    public void insert(Bus bus){
-        ContentValues values = new ContentValues();
-        values.put("time",bus.getTime());
-        values.put("code",bus.getCode().getName());
-        values.put("itinerary",bus.getItinerary().getName());
-        values.put("way",bus.getWay());
-        values.put("typeday",bus.getTypeday().toString());
-        getWritableDatabase().insert(TABLE_BUS,null,values);
-    }
 }

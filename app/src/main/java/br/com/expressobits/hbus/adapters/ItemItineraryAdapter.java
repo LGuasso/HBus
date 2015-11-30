@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -42,6 +45,9 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.textViewName.setText(listItineraries.get(position).getName());
+        YoYo.with(Techniques.Wave)
+                .duration(1000)
+                .playOn(holder.itemView);
     }
 
     @Override

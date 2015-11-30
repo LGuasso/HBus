@@ -15,7 +15,7 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 
@@ -53,7 +53,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     private void initListViews(View view){
         RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
         recyclerViewItineraries.setHasFixedSize(true);
-        BusDAO dao = new BusDAO(getActivity());
+        TimesDbHelper dao = new TimesDbHelper(getActivity());
         listItineraries = dao.getItineraries();
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),listItineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);

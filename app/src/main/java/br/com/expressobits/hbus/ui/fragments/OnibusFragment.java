@@ -18,7 +18,7 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemBusAdapter;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.TextUtils;
@@ -145,7 +145,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         //linha = toSimpleName(linha);
         sentido = TextUtils.toSimpleNameWay(sentido);
 
-        BusDAO dao = new BusDAO(getActivity());
+        TimesDbHelper dao = new TimesDbHelper(getActivity());
 
 
         listBusUsefulDays = dao.getBusList(linha, sentido, TypeDay.USEFUL.toString(),false);

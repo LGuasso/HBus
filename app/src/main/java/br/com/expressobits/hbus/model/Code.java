@@ -15,6 +15,8 @@ public class Code {
      */
     private String descrition;
 
+    private City city;
+
     /**
      * Retorna identificação do código
      * @return Nome
@@ -37,6 +39,14 @@ public class Code {
 
     public void setDescrition(String descrition) {
         this.descrition = descrition;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public City getCity() {
+        return city;
     }
 
     @Override

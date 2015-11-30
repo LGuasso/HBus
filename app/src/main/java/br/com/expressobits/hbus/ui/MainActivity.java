@@ -19,14 +19,14 @@ import android.widget.AdapterView;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.dao.TimesDbHelper;
+import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
@@ -140,12 +140,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void createNavigationDrawer() {
-        BusDAO dao  = new BusDAO(this);
+        TimesDbHelper dao  = new TimesDbHelper(this);
+        FavoriteDAO favoriteDAO = new FavoriteDAO(this);
         navigationDrawer.getDrawerItems().clear();
         navigationDrawer.addItem(new SectionDrawerItem());
         navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.favorites)
-                .withBadge(getString(R.string.number_of_itineraries, dao.getItineraries(true).size()))
+                .withBadge(getString(R.string.number_of_itineraries, favoriteDAO.getItineraries().size()))
                 .withIdentifier(0)
                 .withIcon(R.drawable.ic_star_grey600_24dp));
         navigationDrawer.addItem(new PrimaryDrawerItem()
@@ -158,6 +159,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .withName(R.string.action_settings)
                 .withIdentifier(2)
                 .withIcon(R.drawable.ic_settings_grey600_24dp));
+
+        dao.close();
+        favoriteDAO.close();
 
     }
 
@@ -270,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onCreateDialogChooseWay(String selectedItem) {
-        BusDAO dao = new BusDAO(this);
+        TimesDbHelper dao = new TimesDbHelper(this);
 
         List<String> ways = dao.getItinerary(selectedItem).getWays();
         if (ways.size() > 1) {

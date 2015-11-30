@@ -36,6 +36,11 @@ public class Bus implements Comparable<Bus>{
      */
     private TypeDay typeday;
 
+    /**
+     * Cidade onde esse ônibus passa
+     */
+    private City city;
+
     public void setTime(String horario) {
         this.time = horario;
     }
@@ -86,6 +91,14 @@ public class Bus implements Comparable<Bus>{
 
     public void setTypeday(TypeDay typeday) {
         this.typeday = typeday;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     @Override

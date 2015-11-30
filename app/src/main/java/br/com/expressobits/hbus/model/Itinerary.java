@@ -30,11 +30,11 @@ public class Itinerary {
         this.city = city;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,9 +74,5 @@ public class Itinerary {
     public void setCodigos(ArrayList<String> codigos) {
         this.codigos = codigos;
     }
-
-
-
-
 
 }
