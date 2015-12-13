@@ -20,7 +20,7 @@ public class TimeUtils {
     public static final String TAG = "TimeUtils";
 
     /**
-     * Converte o horário no formato {@link Calendar} em {@link String}
+     * Converte o horario no formato {@link Calendar} em {@link String}
      * @param time Tempo
      * @return Calendario
 
@@ -39,7 +39,7 @@ public class TimeUtils {
     }*/
 
     /**
-     * Converte o horário no formato {@link String} em {@link Calendar}
+     * Converte o horario no formato {@link String} em {@link Calendar}
      * @param time
      * @return
 
@@ -100,8 +100,8 @@ public class TimeUtils {
     }
 
     /**
-     * Retorna o atual horário na forma de String HH:mm
-     * @return String do horário atual em HH:mm
+     * Retorna o atual horario na forma de String HH:mm
+     * @return String do horario atual em HH:mm
      */
     public static String getNowTimeinString(){
         Calendar cal = GregorianCalendar.getInstance();

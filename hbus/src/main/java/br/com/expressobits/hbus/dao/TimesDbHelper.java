@@ -54,6 +54,12 @@ public class TimesDbHelper extends SQLiteAssetHelper{
         return TimesHelper.getBuses(getReadableDatabase());
     }
 
+    public List<Bus> getBuses(Long itineraryId,String way,String typeday){
+        return TimesHelper.getBuses(getReadableDatabase(),itineraryId,way,typeday);
+    }
+
+    public List<Bus> getNextBus(Itinerary itinerary){ return TimesHelper.getNextBuses(getReadableDatabase(),itinerary);}
+
 
 
 

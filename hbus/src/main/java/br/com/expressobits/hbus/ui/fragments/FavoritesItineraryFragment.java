@@ -30,6 +30,7 @@ import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +40,7 @@ import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack,ChooseWayDialogListener{
 
     public static final String TAG = "FavoritesItineraryFragment";
-    public String selectedItem;
+    public Long selectedItem;
     RecyclerView recyclerViewLines;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
@@ -49,8 +50,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // Este código serve para nos certificarmos que a Activity que contém o Fragment
-        // implementa a interface do callback. Se não, lança uma exceção
+        // Este cï¿½digo serve para nos certificarmos que a Activity que contï¿½m o Fragment
+        // implementa a interface do callback. Se nï¿½o, lanï¿½a uma exceï¿½ï¿½o
         try {
             mCallback = (OnSettingsListener) activity;
         } catch (ClassCastException e) {
@@ -111,7 +112,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
 
         FavoriteDAO dao  = new FavoriteDAO(getActivity());
-        itineraries = dao.getItineraries();
+        Long cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong(SelectCityActivity.TAG, 0l);
+        itineraries = dao.getItineraries(cityId);
         ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewLines.setAdapter(adapter);
@@ -144,7 +146,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
         switch (view.getId()){
             case R.id.buttonLookTime:
-                selectedItem = itineraries.get(position).getName();
+                selectedItem = itineraries.get(position).getId();
                 List<String> ways = itineraries.get(position).getWays();
                 if(ways.size()>1) {
                     ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
@@ -155,7 +157,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                 }
                 break;
             case R.id.buttonRemove:
-                selectedItem = itineraries.get(position).getName();
+                selectedItem = itineraries.get(position).getId();
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -191,8 +193,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
 
     @Override
-    public void onItemClick(String itinerary,String way) {
-        mCallback.onSettingsDone(itinerary,way);
+    public void onItemClick(Long itineraryId,String way) {
+        mCallback.onSettingsDone(itineraryId,way);
     }
 }
 

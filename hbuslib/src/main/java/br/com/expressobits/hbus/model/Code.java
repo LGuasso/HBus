@@ -8,11 +8,11 @@ public class Code {
 
     private Long id;
     /**
-     * Identificaçao do código.
+     * Identificacao do codigo.
      */
     private String name;
     /**
-     * Descrição do código
+     * Descricao do codigo
      */
     private String descrition;
 
@@ -23,7 +23,7 @@ public class Code {
     }
 
     /**
-     * Retorna identificação do código
+     * Retorna identificaï¿½ï¿½o do cï¿½digo
      *
      * @return Nome
      */
@@ -32,9 +32,9 @@ public class Code {
     }
 
     /**
-     * Retorna descrição do código.
+     * Retorna descriï¿½ï¿½o do cï¿½digo.
      *
-     * @return Descrição
+     * @return Descriï¿½ï¿½o
      */
     public String getDescrition() {
         return descrition;

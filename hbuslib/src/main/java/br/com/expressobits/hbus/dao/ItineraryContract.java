@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
  * Seguindo regras especificadas no treino de android
  * http://developer.android.com/intl/pt-br/training/basics/data-storage/databases.html
  *
- * Especifica um contrato para nomes de colunas da tabela de itinerários
+ * Especifica um contrato para nomes de colunas da tabela de itinerarios
  *
  * @author Rafael
  * @since 30/11/15.
@@ -15,6 +15,14 @@ public final class ItineraryContract {
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
     public ItineraryContract(){}
+
+    public static final String SQL_CREATE_TABLE =
+            "CREATE TABLE "+Itinerary.TABLE_NAME+" "+
+                    "("+Itinerary._ID+"INTEGER PRIMARY KEY, "+
+                    " "+Itinerary.COLUMN_NAME_NAME+" TEXT, "+
+                    " "+Itinerary.COLUMN_NAME_WAYS+" TEXT, "+
+                    " "+Itinerary.COLUMN_NAME_CITY_ID+" INTEGER);";
+
 
     public static final String[] COLS = {
             Itinerary._ID,

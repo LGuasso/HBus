@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.model.City;
@@ -43,7 +44,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     private void initActionBar() {
 
-        //Define se é primeira vez do app ou se tem alguma cidade definida...
+        //Define se ï¿½ primeira vez do app ou se tem alguma cidade definida...
         initial = (PreferenceManager.getDefaultSharedPreferences(this).getString(TAG,null)==null);
         Toolbar pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
         setSupportActionBar(pToolbar);
@@ -59,13 +60,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewCities.setLayoutManager(llmUseful);
 
+        TimesDbHelper db = new TimesDbHelper(this);
+        cities = db.getCities();
 
-        cities = new ArrayList<>();
-
-        City city = new City();
-        city.setName("Santa Maria");
-        city.setCountry("RS");
-        city.setImage(getResources().getDrawable(R.drawable.default_city));
+        //city.setImage(getResources().getDrawable(R.drawable.default_city));
 
         //ParseDAO dao = new ParseDAO(this);
         //cities = dao.getCities(this);
@@ -87,14 +85,14 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(TAG, cities.get(position).getName() + " - " + cities.get(position).getCountry());
+        editor.putLong(TAG, cities.get(position).getId());
         editor.apply();
 
         //TODO implementa download do parse
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Choose");
-        builder.setNegativeButton("Não", null);
+        builder.setNegativeButton("Nao", null);
         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -63,7 +63,7 @@ public class TimesHelper {
     public static final String NOT_FOUND_TIME = " --:-- ";
 
     //CONTENT VALUES
-    private static ContentValues toContentValues(City city){
+    protected static ContentValues toContentValues(City city){
         ContentValues values = new ContentValues();
         values.put(CityContract.City._ID,city.getId());
         values.put(CityContract.City.COLUMN_NAME_NAME,city.getName());
@@ -72,7 +72,7 @@ public class TimesHelper {
         return values;
     }
 
-    private static ContentValues toContentValues(Itinerary itinerary){
+    protected static ContentValues toContentValues(Itinerary itinerary){
         ContentValues values = new ContentValues();
         values.put(ItineraryContract.Itinerary._ID,itinerary.getId());
         values.put(ItineraryContract.Itinerary.COLUMN_NAME_NAME,itinerary.getName());
@@ -81,7 +81,7 @@ public class TimesHelper {
         return values;
     }
 
-    private static ContentValues toContentValues(Code code){
+    protected static ContentValues toContentValues(Code code){
         ContentValues values = new ContentValues();
         values.put(CodeContract.Code._ID,code.getId());
         values.put(CodeContract.Code.COLUMN_NAME_NAME,code.getName());
@@ -90,7 +90,7 @@ public class TimesHelper {
         return values;
     }
 
-    private static ContentValues toContentValues(Bus bus){
+    protected static ContentValues toContentValues(Bus bus){
         ContentValues values = new ContentValues();
         values.put(BusContract.Bus._ID,bus.getId());
         values.put(BusContract.Bus.COLUMN_NAME_TIME,bus.getTime());
@@ -145,7 +145,7 @@ public class TimesHelper {
     }
 
     //CURSORTOOBJET
-    private static City cursorToCity(Cursor c){
+    protected static City cursorToCity(Cursor c){
         City city = new City();
         city.setId(c.getLong(c.getColumnIndexOrThrow(CityContract.City._ID)));
         city.setName(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_NAME)));
@@ -154,7 +154,7 @@ public class TimesHelper {
         return city;
     }
 
-    private static Itinerary cursorToItinerary(Cursor c){
+    protected static Itinerary cursorToItinerary(Cursor c){
         Itinerary itinerary = new Itinerary();
         itinerary.setId(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary._ID)));
         itinerary.setName(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_NAME)));
@@ -163,7 +163,7 @@ public class TimesHelper {
         return itinerary;
     }
 
-    private static Code cursorToCode(Cursor c){
+    protected static Code cursorToCode(Cursor c){
         Code code = new Code();
         code.setId(c.getLong(c.getColumnIndexOrThrow(CodeContract.Code._ID)));
         code.setName(c.getString(c.getColumnIndexOrThrow(CodeContract.Code.COLUMN_NAME_NAME)));
@@ -172,7 +172,7 @@ public class TimesHelper {
         return code;
     }
 
-    private static Bus cursorToBus(Cursor c){
+    protected static Bus cursorToBus(Cursor c){
         Bus bus = new Bus();
         bus.setId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus._ID)));
         bus.setTime(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TIME)));
@@ -414,7 +414,7 @@ public class TimesHelper {
         return buses;
     }
 
-    public List<Bus> getNextBuses(SQLiteDatabase db,Itinerary itinerary){
+    public static List<Bus> getNextBuses(SQLiteDatabase db,Itinerary itinerary){
 
         ArrayList<Bus> next = new ArrayList<Bus>();
         for(int j = 0;j< itinerary.getWays().size();j++) {
@@ -428,7 +428,7 @@ public class TimesHelper {
         return next;
     }
 
-    private Bus getNextBusforList(List<Bus> buses){
+    private static Bus getNextBusforList(List<Bus> buses){
         //TODO Create metodo separado
         Bus nowBus = new Bus();
         Bus nextBus;

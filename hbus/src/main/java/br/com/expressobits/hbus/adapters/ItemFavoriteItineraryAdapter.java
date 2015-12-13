@@ -37,8 +37,6 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
-
     @Override
     public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int j) {
         View viewP = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
@@ -60,7 +58,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
         }
         holder.textItineraryName.setText(name);
         if(itineraryList.get(position).getWays().size()>0){
-            ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBuses(itineraryList.get(position)));
+            ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBus(itineraryList.get(position)));
 
             holder.linearLayoutHours.removeAllViews();
             for(int i=0;i<onibuses.size();i++){
@@ -115,9 +113,6 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
             buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
             buttonLookHours = (Button) itemView.findViewById(R.id.buttonLookTime);
-
-
-
             buttonLookHours.setOnClickListener(this);
             buttonRemove.setOnClickListener(this);
 

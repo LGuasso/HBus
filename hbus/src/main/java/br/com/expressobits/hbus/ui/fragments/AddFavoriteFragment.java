@@ -23,7 +23,7 @@ import br.com.expressobits.hbus.ui.OnSettingsListener;
 /**
  * @author Rafael
  * @since 06/07/2015.
- * Fragmento que exibe todos itinerários que não forma adicionados.
+ * Fragmento que exibe todos itinerï¿½rios que nï¿½o forma adicionados.
  */
 public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClickListenerHack {
 
@@ -79,7 +79,7 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
     public void onClickListener(View view, int position) {
         TimesDbHelper dao = new TimesDbHelper(AddFavoriteFragment.this.getActivity());
         FavoriteDAO favoriteDAO = new FavoriteDAO(AddFavoriteFragment.this.getActivity());
-        favoriteDAO.addFavorite(itineraries.get(position));
+        favoriteDAO.insert(itineraries.get(position));
         //itineraries.get(position).setFavorite(true);
         //dao.update(itineraries.get(position));
         onSettingsListener.onPopStackBack();

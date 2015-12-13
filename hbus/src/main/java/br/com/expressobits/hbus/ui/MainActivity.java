@@ -146,7 +146,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationDrawer.addItem(new SectionDrawerItem());
         navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.favorites)
-                .withBadge(getString(R.string.number_of_itineraries, favoriteDAO.getItineraries().size()))
+                .withBadge(getString(R.string.number_of_itineraries,
+                        favoriteDAO.getItineraries(PreferenceManager.getDefaultSharedPreferences(this).getLong(SelectCityActivity.TAG,0))))
                 .withIdentifier(0)
                 .withIcon(R.drawable.ic_star_grey600_24dp));
         navigationDrawer.addItem(new PrimaryDrawerItem()
@@ -253,7 +254,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setActionBarTitle(String title, String subtitle) {
         pToolbar.setTitle(title);
         pToolbar.setSubtitle(subtitle);
-        String cityname = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, getString(R.string.not_found_city));
+        Long cityId = PreferenceManager.getDefaultSharedPreferences(this).getLong(SelectCityActivity.TAG, 0l);
+        TimesDbHelper db = new TimesDbHelper(this);
+        String cityname = db.getCity(cityId).getName();
+        db.close();
         pToolbar.setTitle(cityname);
     }
 
