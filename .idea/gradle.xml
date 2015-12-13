@@ -10,7 +10,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/hbus" />
+            <option value="$PROJECT_DIR$/hbusgenerator" />
+            <option value="$PROJECT_DIR$/hbuslib" />
           </set>
         </option>
       </GradleProjectSettings>
