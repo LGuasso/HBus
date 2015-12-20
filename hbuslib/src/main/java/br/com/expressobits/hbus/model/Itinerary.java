@@ -12,7 +12,7 @@ public class Itinerary {
 
     private Long id;
     /**
-     * Nome do itiner·rio.
+     * Nome do itiner√°rio.
      */
     private String name;
 

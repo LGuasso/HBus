@@ -15,7 +15,7 @@ import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.utils.TimeUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  *
@@ -32,7 +32,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
 
     public ItemBusAdapter(Context context, List<Bus> listBus){
         this.context = context;
-        this.listBus = TimeUtils.sortByTimeBus(listBus);
+        this.listBus = HoursUtils.sortByTimeBus(listBus);
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -46,7 +46,8 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         TimesDbHelper db = new TimesDbHelper(context);
 
-        //M�todo que atualiza informa��es
+
+        //Metodo que atualiza informacoes
         myViewHolder.txtViewHorario.setText(listBus.get(i).getTime());
         //TODO fixar bug de tomorrow no bus
          if(i%2==0) {

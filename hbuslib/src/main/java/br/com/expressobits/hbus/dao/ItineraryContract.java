@@ -18,7 +18,7 @@ public final class ItineraryContract {
 
     public static final String SQL_CREATE_TABLE =
             "CREATE TABLE "+Itinerary.TABLE_NAME+" "+
-                    "("+Itinerary._ID+"INTEGER PRIMARY KEY, "+
+                    "("+Itinerary._ID+" INTEGER PRIMARY KEY, "+
                     " "+Itinerary.COLUMN_NAME_NAME+" TEXT, "+
                     " "+Itinerary.COLUMN_NAME_WAYS+" TEXT, "+
                     " "+Itinerary.COLUMN_NAME_CITY_ID+" INTEGER);";

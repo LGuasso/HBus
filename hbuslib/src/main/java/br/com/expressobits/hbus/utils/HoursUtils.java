@@ -15,7 +15,7 @@ import br.com.expressobits.hbus.model.TypeDay;
  * @author Rafael Correa
  * @since 15/06/2015
  */
-public class TimeUtils {
+public class HoursUtils {
 
     public static final String TAG = "TimeUtils";
 
@@ -133,7 +133,7 @@ public class TimeUtils {
 
         Collections.sort(busList);
         Bus bus = new Bus();
-        bus.setTime(TimeUtils.getNowTimeinString());
+        bus.setTime(HoursUtils.getNowTimeinString());
         ArrayList<Bus> busFinal = new ArrayList<>();
         ArrayList<Bus> varFinal = new ArrayList<>();
         for (int i=0;i<busList.size();i++){

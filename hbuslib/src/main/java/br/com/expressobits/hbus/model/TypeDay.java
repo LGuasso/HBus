@@ -8,7 +8,7 @@ package br.com.expressobits.hbus.model;
 public enum TypeDay {
 
     /**
-     * Dias úteis - Segunda á sexta
+     * Dias Ã™teis - Segunda Ã¡ sexta
      */
     USEFUL,
     SATURDAY,SUNDAY;

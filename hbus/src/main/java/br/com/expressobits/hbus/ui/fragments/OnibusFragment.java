@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,11 @@ import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.TextUtils;
-import br.com.expressobits.hbus.utils.TimeUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * A simple {@link Fragment} subclass.
- * Que exibe as listas de hor�rios
+ * Que exibe as listas de horarios
  */
 public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
@@ -50,7 +51,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         initViews(view);
 
         Bundle arguments = getArguments();
-        if(arguments!=null && arguments.getString(ARGS_LINHA)!=null && arguments.getString(ARGS_SENTIDO)!=null){
+        if(arguments!=null && arguments.getLong(ARGS_LINHA, 0l)!=0l && arguments.getString(ARGS_SENTIDO)!=null){
             refresh(arguments.getLong(ARGS_LINHA),arguments.getString(ARGS_SENTIDO));
         }
         return view;
@@ -66,7 +67,7 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        abas.setCurrentTab(TimeUtils.getTipoDeDia(GregorianCalendar.getInstance()));
+        abas.setCurrentTab(HoursUtils.getTipoDeDia(GregorianCalendar.getInstance()));
     }
 
     /**
@@ -141,24 +142,28 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         });
     }
 
-    public void refresh(Long linha,String sentido){
+    public void refresh(Long itineraryId,String way){
         //linha = toSimpleName(linha);
-        sentido = TextUtils.toSimpleNameWay(sentido);
+        //way = TextUtils.toSimpleNameWay(way);
+        Log.e(TAG,"Sentido "+way);
+        Log.e(TAG,"Linha "+itineraryId);
 
         TimesDbHelper dao = new TimesDbHelper(getActivity());
 
+        //TODO ALTERACAO
+        //listBusUsefulDays = dao.getBuses();
+        listBusUsefulDays = dao.getBuses(itineraryId,way,TypeDay.USEFUL.toString());
 
-        listBusUsefulDays = dao.getBuses(linha, sentido, TypeDay.USEFUL.toString());
         ItemBusAdapter adapterUeful = new ItemBusAdapter(getActivity(), listBusUsefulDays);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerViewUsefulDays.setAdapter(adapterUeful);
 
-        listBusSaturday = dao.getBuses(linha, sentido, TypeDay.SATURDAY.toString());
+        listBusSaturday = dao.getBuses(itineraryId, way, TypeDay.SATURDAY.toString());
         ItemBusAdapter adapterSaturday = new ItemBusAdapter(getActivity(), listBusSaturday);
         adapterSaturday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSaturday.setAdapter(adapterSaturday);
 
-        listBusSunday = dao.getBuses(linha, sentido, TypeDay.SUNDAY.toString());
+        listBusSunday = dao.getBuses(itineraryId, way, TypeDay.SUNDAY.toString());
         ItemBusAdapter adapterSunday = new ItemBusAdapter(getActivity(), listBusSunday);
         adapterSunday.setRecyclerViewOnClickListenerHack(this);
         recyclerViewSunday.setAdapter(adapterSunday);

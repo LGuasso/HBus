@@ -3,7 +3,7 @@ package br.com.expressobits.hbus.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,12 +15,13 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
-import br.com.expressobits.hbus.utils.TimeUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * Created by rafael on 08/12/15.
  */
 public class TimesHelper {
+    private static final String TAG = "TimesHelper";
     protected static final String DATABASE_NAME = "bus_data.db";
     protected static final int DATABASE_VERSION = 1;
     private static final String TEXT_TYPE = " TEXT";
@@ -180,7 +181,7 @@ public class TimesHelper {
         bus.setCityid(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CITY_ID)));
         bus.setItineraryId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_ITINERARY_ID)));
         bus.setWay(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_WAY)));
-        bus.setTypeday(TimeUtils.getTypeDayforString(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TYPEDAY))));
+        bus.setTypeday(HoursUtils.getTypeDayforString(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TYPEDAY))));
         return bus;
     }
 
@@ -366,6 +367,7 @@ public class TimesHelper {
         while(c.moveToNext()){
             buses.add(cursorToBus(c));
         }
+        Log.e(TAG,"BUSES "+buses.size());
         c.close();
         return buses;
     }
@@ -392,7 +394,7 @@ public class TimesHelper {
 
     public static List<Bus> getBuses(SQLiteDatabase db,Long itineraryId,String way,String typeday){
         ArrayList<Bus> buses = new ArrayList<Bus>();
-        way = TextUtils.toSimpleNameWay(way);
+        //way = TextUtils.toSimpleNameWay(way);
         Cursor c;
         String where = BusContract.Bus.COLUMN_NAME_ITINERARY_ID+" = ? AND "+
                 BusContract.Bus.COLUMN_NAME_WAY+" = ? AND "+
@@ -423,7 +425,7 @@ public class TimesHelper {
                             db,
                             itinerary.getId(),
                             itinerary.getWays().get(j),
-                            TimeUtils.getStringTipoDeDia(Calendar.getInstance()).toString())));
+                            HoursUtils.getStringTipoDeDia(Calendar.getInstance()).toString())));
         }
         return next;
     }
@@ -432,7 +434,7 @@ public class TimesHelper {
         //TODO Create metodo separado
         Bus nowBus = new Bus();
         Bus nextBus;
-        nowBus.setTime(TimeUtils.getNowTimeinString());
+        nowBus.setTime(HoursUtils.getNowTimeinString());
         if(buses.size() > 0) {
             nextBus = buses.get(0);
             for (int i = 0; i < buses.size(); i++) {

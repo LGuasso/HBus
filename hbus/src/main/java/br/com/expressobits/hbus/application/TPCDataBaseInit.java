@@ -17,6 +17,7 @@ import java.io.File;
 import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.FirebaseDAO;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -68,8 +69,16 @@ public class TPCDataBaseInit extends Application{
         if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("santa_maria_rs_bus_data.db");
         }
-        if(66> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(70> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("bus_data.db");
+            Log.e(TAG,"DELETE BUS DATA");
+        }
+        if(70> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(SelectCityActivity.TAG);
+            editor.apply();
+
         }
         if (pInfo != null) {
             if(pInfo.versionCode > PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){

@@ -8,8 +8,8 @@ android {
         applicationId "br.com.expressobits.hbus"
         minSdkVersion 11
         targetSdkVersion 23
-        versionCode 66
-        versionName "0.6.6"
+        versionCode 69
+        versionName "0.6.9"
         multiDexEnabled true
     }
     buildTypes {

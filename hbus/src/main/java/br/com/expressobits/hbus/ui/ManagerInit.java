@@ -18,7 +18,7 @@ public class ManagerInit {
         //if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(TourActivity.TAG, false)){
         //    cl=TourActivity.class;
         //}else
-        if(PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG,null)==null){
+        if(PreferenceManager.getDefaultSharedPreferences(context).getLong(SelectCityActivity.TAG,0l)==0l){
             cl=SelectCityActivity.class;
         }else{
             cl = MainActivity.class;

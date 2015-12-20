@@ -171,7 +171,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.itineraryId = itineraryId;
         this.sentido = sentido;
         //TODO corrige nome
-        //pToolbar.setTitle(itineraryId);
+        TimesDbHelper db = new TimesDbHelper(this);
+        pToolbar.setTitle(db.getItinerary(itineraryId).getName());
+        db.close();
         pToolbar.setSubtitle(sentido);
         FragmentTransaction ft = fragmentManager.beginTransaction();
         /** Se for acessodado de um smartphone o espa�o main existir� */
@@ -229,15 +231,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (findViewById(R.id.framelayout_main) != null) {
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transa��o novamente na pilha de navega��o
+                // e adiciona a transa��o novamente na pilha de navegacao
                 fragmentTransaction.replace(R.id.framelayout_main, fragment,TAG);
                 fragmentTransaction.addToBackStack(STACK);
             } else if (findViewById(R.id.framelayout_content) != null) {
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transa��o novamente na pilha de navega��o
+                // e adiciona a transa��o novamente na pilha de navegacaoo
                 fragmentTransaction.replace(R.id.framelayout_content, fragment,TAG);
             }
-            // Finaliza a trans��o com sucesso
+            // Finaliza a transacao com sucesso
             fragmentTransaction.commit();
         }
 

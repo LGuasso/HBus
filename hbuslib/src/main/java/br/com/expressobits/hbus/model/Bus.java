@@ -3,7 +3,7 @@ package br.com.expressobits.hbus.model;
 /**
  * @author Rafael Correa
  * @since 21/05/2015.
- * Classe que modela o 鮪ibus que passa num 鷑ico hor醨io em 鷑ico sentido.
+ * Classe que modela o onibus que passa num 煤nico horario em unico sentido.
  */
 public class Bus implements Comparable<Bus>{
 
@@ -14,20 +14,20 @@ public class Bus implements Comparable<Bus>{
     private Long id;
 
     /**
-     * Sentido do 鬾ibus expresso em {@link String}
+     * Sentido do 么nibus expresso em {@link String}
      */
     private String way;
 
     /**
-     * Nome da linha do 鬾ibus expresso em {@link String}
+     * Nome da linha do 么nibus expresso em {@link String}
      */
     private Long itineraryId;
     /**
-     * Hor醨io do bus expresso em {@link String}
+     * Hor谩rio do bus expresso em {@link String}
      */
     private String time;
     /**
-     * Codigo 鷑ico desse 鬾ibus {@link Code}
+     * Codigo 煤nico desse 么nibus {@link Code}
      */
     private Long codeId;
 
@@ -37,7 +37,7 @@ public class Bus implements Comparable<Bus>{
     private TypeDay typeday;
 
     /**
-     * Cidade onde esse 鬾ibus passa
+     * Cidade onde esse 么nibus passa
      */
     private Long cityid;
 
@@ -66,7 +66,7 @@ public class Bus implements Comparable<Bus>{
     }
 
     /**
-     * Retorna minutos do hor醨io do 鬾ibus
+     * Retorna minutos do hor谩rio do 么nibus
      * @return Inteiro
      */
     public int getMinutos(){
