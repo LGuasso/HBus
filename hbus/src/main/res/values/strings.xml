@@ -37,7 +37,8 @@
     <string name="look_times">Look times</string>
     <string name="not_found_city">Not found city</string>
     <string name="number_of_itineraries">%1$s itineraries</string>
-    <string name="dialog_alert_title_confirm_remove">Confirm remove favorite?</string>
+    <string name="dialog_alert_title_confirm_remove">Remove favorite itinerary?</string>
+    <string name="confirm_donwload_data_for_city">Download data for city %1$s?</string>
 
 
 </resources>

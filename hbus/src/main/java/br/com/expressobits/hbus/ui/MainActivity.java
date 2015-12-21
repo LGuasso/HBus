@@ -257,9 +257,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pToolbar.setTitle(title);
         pToolbar.setSubtitle(subtitle);
         Long cityId = PreferenceManager.getDefaultSharedPreferences(this).getLong(SelectCityActivity.TAG, 0l);
-        TimesDbHelper db = new TimesDbHelper(this);
-        String cityname = db.getCity(cityId).getName();
-        db.close();
+        String cityname = getString(R.string.not_found_city);
+        if(cityId>0l) {
+            TimesDbHelper db = new TimesDbHelper(this);
+            cityname = db.getCity(cityId).getName();
+            db.close();
+        }
+
         pToolbar.setTitle(cityname);
     }
 

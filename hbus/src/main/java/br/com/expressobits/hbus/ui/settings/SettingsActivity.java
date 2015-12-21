@@ -36,6 +36,7 @@ import android.widget.ListView;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.TimesDbHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -223,8 +224,8 @@ public class SettingsActivity extends PreferenceActivity {
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
 
+            String stringValue = value.toString();
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
                 // the preference's 'entries' list.
@@ -262,10 +263,17 @@ public class SettingsActivity extends PreferenceActivity {
             } else if(preference instanceof CheckBoxPreference) {
 
             }else{
+                if(preference.getKey().equals(SelectCityActivity.TAG)){
+                    TimesDbHelper db = new TimesDbHelper(preference.getContext());
+                    String name = db.getCity((Long)value).getName();
+                    preference.setSummary(name);
+                }else{
+                    // For all other preferences, set the summary to the value's
+                    // simple string representation.
+                    preference.setSummary(stringValue);
+                }
 
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
+
             }
             return true;
         }
@@ -286,12 +294,19 @@ public class SettingsActivity extends PreferenceActivity {
 
         if (preference instanceof CheckBoxPreference) {
 
-        } else if (preference instanceof SwitchPreference) {
-        } else {
-            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                    PreferenceManager
-                            .getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), ""));
+        } else{
+            if(preference.getKey().equals(SelectCityActivity.TAG)){
+
+                sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                        PreferenceManager
+                                .getDefaultSharedPreferences(preference.getContext())
+                                .getLong(preference.getKey(), 0l));
+            }else {
+                sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                        PreferenceManager
+                                .getDefaultSharedPreferences(preference.getContext())
+                                .getString(preference.getKey(), ""));
+            }
         }
 
 

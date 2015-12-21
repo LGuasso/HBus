@@ -22,7 +22,7 @@ import br.com.expressobits.hbus.utils.TextUtils;
 public class FavoriteDAO extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASENAME = "Favorites";
+    private static final String DATABASENAME = "itineraries_favorites.db";
 
     public FavoriteDAO(Context context){
         super(context, DATABASENAME, null, DATABASE_VERSION);

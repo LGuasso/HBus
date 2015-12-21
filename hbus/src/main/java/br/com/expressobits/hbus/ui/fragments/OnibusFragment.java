@@ -150,8 +150,6 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
 
         TimesDbHelper dao = new TimesDbHelper(getActivity());
 
-        //TODO ALTERACAO
-        //listBusUsefulDays = dao.getBuses();
         listBusUsefulDays = dao.getBuses(itineraryId,way,TypeDay.USEFUL.toString());
 
         ItemBusAdapter adapterUeful = new ItemBusAdapter(getActivity(), listBusUsefulDays);

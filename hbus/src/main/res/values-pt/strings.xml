@@ -35,4 +35,6 @@
     <string name="number_of_itineraries">%1$s itinerários</string>
     <string name="not_found_city">Não há cidade</string>
     <string name="about">Sobre</string>
+    <string name="dialog_alert_title_confirm_remove">Remover itinerário favorito?</string>
+    <string name="confirm_donwload_data_for_city">Baixar informações para cidade %1$s?</string>
 </resources>

@@ -45,7 +45,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private void initActionBar() {
 
         //Define se � primeira vez do app ou se tem alguma cidade definida...
-        initial = (PreferenceManager.getDefaultSharedPreferences(this).getString(TAG,null)==null);
+        initial = (PreferenceManager.getDefaultSharedPreferences(this).getLong(TAG,0l)==0l);
         Toolbar pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
         setSupportActionBar(pToolbar);
     }
@@ -87,18 +87,22 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(TAG, cities.get(position).getId());
         editor.apply();
-
-        //TODO implementa download do parse
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Choose");
-        builder.setNegativeButton("Nao", null);
-        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.confirm_donwload_data_for_city,cities.get(position).getName()));
+        builder.setNegativeButton(getString(android.R.string.no), null);
+        builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //ParseDAO parseDAO = new ParseDAO(getBaseContext());
                 //parseDAO.insertItineraries();
                 //parseDAO.insertCodes();
+                //TODO implementa download do firebase por cidades especificas
+                //Com progress bar
+                if(initial){
+                    ManagerInit.manager(SelectCityActivity.this);
+                }else{
+                    SelectCityActivity.this.finish();
+                }
             }
         });
         builder.show();
@@ -106,11 +110,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
 
 
-        if(initial){
-            ManagerInit.manager(this);
-        }else{
-            this.finish();
-        }
+
 
     }
 
