@@ -170,14 +170,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onSettingsDone(Long itineraryId, String sentido) {
         this.itineraryId = itineraryId;
         this.sentido = sentido;
-        //TODO corrige nome
         TimesDbHelper db = new TimesDbHelper(this);
         pToolbar.setTitle(db.getItinerary(itineraryId).getName());
         db.close();
         pToolbar.setSubtitle(sentido);
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        /** Se for acessodado de um smartphone o espa�o main existir� */
-        /** Adiciona o fragment com o novo conte�do no �nico espa�o */
+        /** Se for acessodado de um smartphone o espaco main existir */
+        /** Adiciona o fragment com o novo conteudo no unico espaco */
         OnibusFragment onibusFragment = (OnibusFragment) fragmentManager.findFragmentByTag("onibusFragment");
 
         if (findViewById(R.id.framelayout_main) != null) {
@@ -205,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 args.putString(OnibusFragment.ARGS_SENTIDO, sentido);
                 onibusFragment.setArguments(args);
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transa��o novamente na pilha de navega��o
+                // e adiciona a transacao novamente na pilha de navegacao
                 ft.replace(R.id.framelayout_content, onibusFragment,OnibusFragment.TAG);
             }
         }
@@ -269,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+        //TODO numerar navigationDrawer
         switch (i){
             case 1:
                 addFragment(FavoritesItineraryFragment.TAG);

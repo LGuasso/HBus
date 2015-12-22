@@ -38,15 +38,16 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
-        SettingsActivity.bindPreferenceSummaryToValue(findPreference("example_text"));
-        SettingsActivity.bindPreferenceSummaryToValue(findPreference("city"));
-        SettingsActivity.bindPreferenceSummaryToValue(findPreference("example_list"));
-        SettingsActivity.bindPreferenceSummaryToValue(findPreference("time_home_screen"));
+        refreshComponents();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        refreshComponents();
+    }
+
+    private void refreshComponents() {
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("example_text"));
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("city"));
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("example_list"));
