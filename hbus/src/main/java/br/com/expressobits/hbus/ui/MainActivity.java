@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar pToolbar;
     //Navigation Drawer
     private Drawer navigationDrawer;
-    //Gerencia a atua��o dos fragments
+    //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
     Long itineraryId;
     String sentido;
@@ -75,6 +75,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initViews();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        createNavigationDrawer();
+    }
 
     private void initNavigationDrawer() {
         navigationDrawer = new DrawerBuilder()
@@ -147,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.favorites)
                 .withBadge(getString(R.string.number_of_itineraries,
-                        favoriteDAO.getItineraries(PreferenceManager.getDefaultSharedPreferences(this).getLong(SelectCityActivity.TAG,0))))
+                        favoriteDAO.getItineraries(PreferenceManager.getDefaultSharedPreferences(this).getLong(SelectCityActivity.TAG,0)).size()))
                 .withIdentifier(0)
                 .withIcon(R.drawable.ic_star_grey600_24dp));
         navigationDrawer.addItem(new PrimaryDrawerItem()

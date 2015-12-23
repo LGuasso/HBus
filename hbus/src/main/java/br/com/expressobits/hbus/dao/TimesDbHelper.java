@@ -45,6 +45,9 @@ public class TimesDbHelper extends SQLiteAssetHelper{
     public List<Itinerary> getItineraries(){
         return TimesHelper.getItineraries(getReadableDatabase());
     }
+    public List<Itinerary> getItineraries(Long cityId){
+        return TimesHelper.getItineraries(getReadableDatabase(),cityId);
+    }
 
     public List<Code> getCodes(){
         return TimesHelper.getCodes(getReadableDatabase());

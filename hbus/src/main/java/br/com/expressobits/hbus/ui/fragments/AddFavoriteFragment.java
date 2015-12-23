@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
 /**
  * @author Rafael
@@ -64,7 +66,8 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
         RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewAddItineraries);
         TimesDbHelper dao = new TimesDbHelper(getActivity());
         //TODO implementar linhas que ainda n existem no FAVORITeDAO favoritos
-        itineraries = new ArrayList<>(dao.getItineraries());
+        Long cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong(SelectCityActivity.TAG, 0l);
+        itineraries = new ArrayList<>(dao.getItineraries(cityId));
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),itineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);

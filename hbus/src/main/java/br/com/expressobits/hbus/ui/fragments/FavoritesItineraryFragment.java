@@ -64,6 +64,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onResume() {
         super.onResume();
+        updateListViews();
         updateEmptyListView();
         ((MainActivity)getActivity()).setActionBarTitle(getResources().getString(R.string.app_name), "");
     }
@@ -103,14 +104,14 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         recyclerViewLines = (RecyclerView) view.findViewById(R.id.list_lines);
         recyclerViewLines.setHasFixedSize(true);
         recyclerViewLines.setSelected(true);
-
-
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewLines.setLayoutManager(llmUseful);
+        updateListViews();
 
+    }
 
-
+    private void updateListViews() {
         FavoriteDAO dao  = new FavoriteDAO(getActivity());
         Long cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong(SelectCityActivity.TAG, 0l);
         itineraries = dao.getItineraries(cityId);
@@ -118,7 +119,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewLines.setAdapter(adapter);
         dao.close();
-
     }
 
     public void initAdView(View view){
