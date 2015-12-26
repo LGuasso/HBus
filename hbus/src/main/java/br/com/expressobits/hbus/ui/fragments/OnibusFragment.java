@@ -22,6 +22,7 @@ import br.com.expressobits.hbus.adapters.ItemBusAdapter;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
+import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 import br.com.expressobits.hbus.utils.TextUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
@@ -78,12 +79,15 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         recyclerViewUsefulDays = (RecyclerView)view.findViewById(R.id.rv_listline_line_useful_days);
         recyclerViewUsefulDays.setHasFixedSize(true);
         recyclerViewUsefulDays.setSelected(true);
+        recyclerViewUsefulDays.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerViewSaturday = (RecyclerView)view.findViewById(R.id.rv_listline_line_saturday);
         recyclerViewSaturday.setHasFixedSize(true);
         recyclerViewSaturday.setSelected(true);
+        recyclerViewSaturday.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerViewSunday = (RecyclerView)view.findViewById(R.id.rv_listline_line_sunday);
         recyclerViewSunday.setHasFixedSize(true);
         recyclerViewSunday.setSelected(true);
+        recyclerViewSunday.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
 
 
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());

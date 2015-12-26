@@ -21,6 +21,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
+import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 
 /**
  * @author Rafael
@@ -75,6 +76,7 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
         recyclerViewItineraries.setClickable(true);
+        recyclerViewItineraries.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewItineraries.setLayoutManager(llmUseful);
