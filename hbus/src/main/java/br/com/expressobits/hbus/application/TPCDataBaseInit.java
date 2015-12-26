@@ -97,7 +97,7 @@ public class TPCDataBaseInit extends Application{
 
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        //.setDefaultFontPath("fonts/Ubuntu-L.ttf")
+                        //.setDefaultFontPath("fonts/Roboto-Regular.ttf")
                         //.setDefaultFontPath("fonts/proximanova_regular.otf")
                         .setFontAttrId(R.attr.fontPath)
                         .build()
