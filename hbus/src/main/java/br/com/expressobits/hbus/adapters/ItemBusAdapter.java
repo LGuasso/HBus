@@ -49,10 +49,6 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
 
         //Metodo que atualiza informacoes
         myViewHolder.txtViewHorario.setText(listBus.get(i).getTime());
-        //TODO fixar bug de tomorrow no bus
-         if(i%2==0) {
-          myViewHolder.relativeLayout.setSelected(true);
-        }
         Code code = db.getCode(listBus.get(i).getCodeId());
         myViewHolder.txtViewCode.setText(code.getName());
         myViewHolder.txtViewDescrition.setText(code.getDescrition());
