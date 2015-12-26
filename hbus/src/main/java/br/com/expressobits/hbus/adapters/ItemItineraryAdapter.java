@@ -26,15 +26,20 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
     private Context context;
     private List<Itinerary> listItineraries;
+    private List<Itinerary> favoriteItineraries;
     private LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
+    private boolean selectAll;
     int resource;
 
-    public ItemItineraryAdapter(Context context,List<Itinerary> listItineraries) {
+    public ItemItineraryAdapter(Context context,boolean selectAll,List<Itinerary> listItineraries,List<Itinerary> favoriteItineraries) {
         this.context = context;
         this.listItineraries = listItineraries;
+        this.favoriteItineraries = favoriteItineraries;
+        this.selectAll = selectAll;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,9 +49,23 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        if (!selectAll) {
+            for (Itinerary itinerary : favoriteItineraries) {
+                if (itinerary.getId() == listItineraries.get(position).getId()) {
+                    holder.textViewName.setText(listItineraries.get(position).getName());
+                    holder.textViewName.setEnabled(false);
+                    YoYo.with(Techniques.Pulse)
+                            .duration(500)
+                            .playOn(holder.itemView);
+                    return;
+                }
+            }
+        }
+
         holder.textViewName.setText(listItineraries.get(position).getName());
-        YoYo.with(Techniques.Wave)
-                .duration(1000)
+        holder.textViewName.setEnabled(true);
+        YoYo.with(Techniques.Pulse)
+                .duration(500)
                 .playOn(holder.itemView);
     }
 
@@ -64,16 +83,20 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         public TextView textViewName;
         public LinearLayout linearLayout;
 
+
         public MyViewHolder(View itemView) {
             super(itemView);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
             textViewName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
             linearLayout.setOnClickListener(this);
-            linearLayout.setClickable(true);
+            if(textViewName.isEnabled()){
+                linearLayout.setClickable(true);
+            }
+
         }
         @Override
         public void onClick(View v) {
-            if(recyclerViewOnClickListenerHack != null){
+            if(textViewName.isEnabled() & recyclerViewOnClickListenerHack != null){
                 recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
             }
         }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.Bus;
@@ -45,6 +46,15 @@ public class TimesDbHelper extends SQLiteAssetHelper{
     public List<Itinerary> getItineraries(){
         return TimesHelper.getItineraries(getReadableDatabase());
     }
+
+     /**public List<Itinerary> getItineraries(boolean favorite){
+        List<Itinerary> itineraries = new ArrayList<>();
+        if(!favorite){
+            List<Itinerary> its = TimesHelper.getItineraries(getReadableDatabase());
+            for()
+        }
+        return
+    }*/
     public List<Itinerary> getItineraries(Long cityId){
         return TimesHelper.getItineraries(getReadableDatabase(),cityId);
     }

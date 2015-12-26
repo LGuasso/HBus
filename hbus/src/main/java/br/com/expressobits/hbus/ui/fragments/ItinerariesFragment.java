@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui.fragments;
 
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +14,13 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
 /**
  * Fragmento que exibe todos {@link br.com.expressobits.hbus.model.Itinerary}
@@ -51,11 +54,14 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     }
 
     private void initListViews(View view){
+        Long cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong(SelectCityActivity.TAG,0l);
         RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
         recyclerViewItineraries.setHasFixedSize(true);
+        FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
         TimesDbHelper dao = new TimesDbHelper(getActivity());
-        listItineraries = dao.getItineraries();
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),listItineraries);
+        listItineraries = dao.getItineraries(cityId);
+        List<Itinerary> favoriteItineraries = favoriteDAO.getItineraries(cityId);
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),true,listItineraries,favoriteItineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
 

@@ -68,7 +68,10 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
         //TODO implementar linhas que ainda n existem no FAVORITeDAO favoritos
         Long cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong(SelectCityActivity.TAG, 0l);
         itineraries = new ArrayList<>(dao.getItineraries(cityId));
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),itineraries);
+
+        FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
+
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),false,itineraries,favoriteDAO.getItineraries(cityId));
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
         recyclerViewItineraries.setClickable(true);
@@ -83,8 +86,6 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
         TimesDbHelper dao = new TimesDbHelper(AddFavoriteFragment.this.getActivity());
         FavoriteDAO favoriteDAO = new FavoriteDAO(AddFavoriteFragment.this.getActivity());
         favoriteDAO.insert(itineraries.get(position));
-        //itineraries.get(position).setFavorite(true);
-        //dao.update(itineraries.get(position));
         onSettingsListener.onPopStackBack();
         onSettingsListener.onAddFavorite();
         dao.close();
