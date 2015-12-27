@@ -65,7 +65,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         holder.textViewName.setText(listItineraries.get(position).getName());
         holder.textViewName.setEnabled(true);
         YoYo.with(Techniques.Pulse)
-                .duration(500)
+                .duration(250)
                 .playOn(holder.itemView);
     }
 
