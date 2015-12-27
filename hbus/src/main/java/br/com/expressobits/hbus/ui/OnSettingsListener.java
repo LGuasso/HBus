@@ -7,9 +7,9 @@ package br.com.expressobits.hbus.ui;
 public interface OnSettingsListener {
 
     /**
-     * Escolhe atividade deve iniciar com hor�rios da itinerary e sentido selecionado
+     * Escolhe atividade deve iniciar com hor�rios da itinerary e way selecionado
      * @param itineraryId itinerario
-     * @param way sentido
+     * @param way way
      */
     public void onSettingsDone(Long itineraryId,String way);
 

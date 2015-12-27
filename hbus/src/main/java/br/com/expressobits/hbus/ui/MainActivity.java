@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
     Long itineraryId;
-    String sentido;
+    String way;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onSettingsDone(Long itineraryId, String sentido) {
         this.itineraryId = itineraryId;
-        this.sentido = sentido;
+        this.way = sentido;
         TimesDbHelper db = new TimesDbHelper(this);
         pToolbar.setTitle(db.getItinerary(itineraryId).getName());
         db.close();
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         outState.putLong(OnibusFragment.ARGS_LINHA, itineraryId);
-        outState.putString(OnibusFragment.ARGS_SENTIDO, sentido);
+        outState.putString(OnibusFragment.ARGS_SENTIDO, way);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
