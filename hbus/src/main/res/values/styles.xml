@@ -12,6 +12,8 @@
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/ActionBar</item>
         <item name="buttonStyle">@style/ButtonAppTheme</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <!-- Base application theme. -->

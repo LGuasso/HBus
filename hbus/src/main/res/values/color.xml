@@ -13,10 +13,13 @@
 
     <color name="transparent_card_view_image">#99000000</color>
     <color name="transparent">#000000ff</color>
+    
+    <color name="tabs_unfocused">#B3ffffff</color>
+    <color name="tabs_focused">@color/white</color>
 
     <color name="button_cardview_pressed">#33000000</color>
 
-    
+    <color name="textColorPrimary">#FFFFFF</color>
     <color name="text_color">#dd000000</color>
     <color name="subtext_color">#88000000</color>
     <color name="texthint_color">#44000000</color>

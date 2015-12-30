@@ -74,4 +74,15 @@ public class TextUtils {
         }
         return "";
     }
+
+    public static int getTypeDayInt(String typeDay){
+        if(typeDay.equals("uteis")){
+            return 0;
+        }else if(typeDay.equals("sabado")){
+            return 1;
+        }else if(typeDay.equals("domingo")){
+            return 2;
+        }
+        return 0;
+    }
 }

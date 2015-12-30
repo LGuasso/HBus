@@ -25,8 +25,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
+import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
