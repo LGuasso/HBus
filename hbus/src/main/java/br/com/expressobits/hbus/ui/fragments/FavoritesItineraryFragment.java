@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.software.shell.fab.ActionButton;
 
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     OnSettingsListener mCallback;
     LinearLayout linearLayoutEmptyList;
     View view;
+    private Snackbar snackbar;
 
     @Override
     public void onAttach(Activity activity) {
@@ -89,7 +91,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
     private void initViews(View view){
         initListViews(view);
-        initFAB(view);
         initEmptyList(view);
         initAdView(view);
     }
@@ -128,21 +129,11 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
     }
 
-    private void initFAB(View view){
-        //TODO procurar saber quando descenmos a lista
-        ActionButton actionButton = (ActionButton) view.findViewById(R.id.fab_button);
-        actionButton.setButtonColor(getActivity().getResources().getColor(R.color.colorPrimary));
-        actionButton.setButtonColorPressed(getActivity().getResources().getColor(R.color.colorPrimaryDark));
-        actionButton.setShowAnimation(ActionButton.Animations.ROLL_FROM_DOWN);
-        actionButton.setHideAnimation(ActionButton.Animations.ROLL_TO_DOWN);
-        actionButton.playShowAnimation();
-        actionButton.setImageResource(R.drawable.ic_add_white_24dp);
-        actionButton.setOnClickListener((View.OnClickListener) getActivity());
-    }
+
 
 
     @Override
-    public void onClickListener(View view, int position) {
+    public void onClickListener(final View view, int position) {
 
         switch (view.getId()){
             case R.id.buttonLookTime:
@@ -172,9 +163,11 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                         FavoritesItineraryFragment.this.initListViews(FavoritesItineraryFragment.this.view);
                         mCallback.onRemoveFavorite();
                         updateEmptyListView();
+                        String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
                         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
-                            Toast.makeText(getContext(), String.format(getResources().getString(R.string.delete_itinerary_with_sucess), itinerary.getName()), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
                         }
+                        Snackbar.make(FavoritesItineraryFragment.this.view,result, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         dao.close();
                     }
                 });

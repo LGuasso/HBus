@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.List;
 
@@ -54,9 +52,6 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
                 if (itinerary.getId() == listItineraries.get(position).getId()) {
                     holder.textViewName.setText(listItineraries.get(position).getName());
                     holder.textViewName.setEnabled(false);
-                    YoYo.with(Techniques.Pulse)
-                            .duration(500)
-                            .playOn(holder.itemView);
                     return;
                 }
             }
@@ -64,9 +59,6 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
         holder.textViewName.setText(listItineraries.get(position).getName());
         holder.textViewName.setEnabled(true);
-        YoYo.with(Techniques.Pulse)
-                .duration(250)
-                .playOn(holder.itemView);
     }
 
     @Override
