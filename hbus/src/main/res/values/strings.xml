@@ -41,7 +41,16 @@
     <string name="confirm_donwload_data_for_city">Download data for city %1$s?</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="title_activity_help" translatable="false">@string/action_help</string>
+    <string name="action_help">Help and feedback</string>
+    <string name="action_informations_of_version">Informations of version</string>
+    <string name="company_market">©2016 Expresso Bits</string>
+    <string name="version">Version</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="action_send_feedback">Send feedback</string>
+    <string name="title_activity_feedback">Feedback</string>
+    <string name="see_on_play_store">See on Play Store</string>
 
 
 </resources>

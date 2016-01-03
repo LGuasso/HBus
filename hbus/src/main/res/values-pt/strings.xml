@@ -37,4 +37,12 @@
     <string name="about">Sobre</string>
     <string name="dialog_alert_title_confirm_remove">Remover itinerário favorito?</string>
     <string name="confirm_donwload_data_for_city">Baixar informações para cidade %1$s?</string>
+    <string name="action_help">Ajuda e feedback</string>
+    <string name="action_informations_of_version">Informações sobre a versão</string>
+    <string name="action_send_feedback">Enviar feedback</string>
+    <string name="company_market"></string>
+    <string name="see_on_play_store">Ver na Play Store</string>
+    <string name="send_feedback">Enviar feedback</string>
+    <string name="title_activity_feedback">Feedback</string>
+    <string name="version">Versão</string>
 </resources>

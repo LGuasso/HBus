@@ -1,17 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context="br.com.expressobits.hbus.ui.MainActivity">
 
     <item android:id="@+id/menu_action_settings"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_settings_white_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:orderInCategory="2"/>
 
-    <item android:id="@+id/menu_action_about"
-        android:title="@string/about"
-        android:icon="@android:drawable/ic_menu_info_details"
-        app:showAsAction="never"
+    <item android:id="@+id/menu_action_help"
+        android:title="@string/action_help"
+        android:icon="@drawable/ic_help_circle_white_24dp"
+        app:showAsAction="ifRoom"
         android:orderInCategory="3"/>
 </menu>

@@ -35,6 +35,7 @@ import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
+import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -112,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.menu_action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
         }
+        if (id == R.id.menu_action_help) {
+            openHelp();
+        }
         return false;
     }
 
@@ -183,6 +187,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .withName(R.string.action_settings)
                 .withIdentifier(2)
                 .withIcon(R.drawable.ic_settings_grey600_24dp));
+        navigationDrawer.addItem(new PrimaryDrawerItem()
+                .withName(R.string.action_help)
+                .withIdentifier(3)
+                .withIcon(R.drawable.ic_help_circle_grey600_24dp));
 
         dao.close();
         favoriteDAO.close();
@@ -302,6 +310,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 4:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
+            case 5:
+                openHelp();
+                break;
         }
 
         return false;
@@ -319,6 +330,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             onSettingsDone(itineraryId, ways.get(0));
         }
         dao.close();
+    }
+
+    public void openHelp(){
+        Intent intent = new Intent(this,HelpActivity.class);
+        startActivity(intent);
     }
 
     @Override

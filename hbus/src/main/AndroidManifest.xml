@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.expressobits.hbus" >
+    package="br.com.expressobits.hbus">
 
     <!-- Permissão para ler memória externa -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Permissão para saber o estatus da rede -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -20,8 +19,10 @@
       IMPORTANT: Change "com.parse.starter.permission.C2D_MESSAGE" in the lines below
       to match your app's package name + ".permission.C2D_MESSAGE".
     -->
-    <permission android:protectionLevel="signature"
-        android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
+    <permission
+        android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
 
     <application
@@ -29,56 +30,60 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!-- Esta meta data é requerida com o play services -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
-         dispatching on non-Google Play devices -->
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+        <!--
+         Optionally, register AnalyticsReceiver and AnalyticsService to support background
+         dispatching on non-Google Play devices
+        -->
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
-            android:enabled="true"
-            android:exported="false"/>
 
-        <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-          installation campaign reporting -->
-        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!--
+          Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
+          installation campaign reporting
+        -->
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name" />
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name=".ui.tour.TourActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".ui.settings.SelectCityActivity"
-            android:label="@string/title_activity_select_city" >
-        </activity>
+            android:label="@string/title_activity_select_city" />
         <activity
             android:name=".ui.splash.SplashActivity"
             android:label="@string/app_name"
@@ -90,9 +95,11 @@
             </intent-filter>
         </activity>
 
-        <!--PARSE NOTIFICATION -->
+        <!-- PARSE NOTIFICATION -->
         <service android:name="com.parse.PushService" />
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+
+        <receiver
+            android:name="com.parse.ParsePushBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -100,18 +107,34 @@
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <!--
-                  IMPORTANT: Change "com.parse.starter" to match your app's package name.
-                -->
+                <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="br.com.expressobits.hbus" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".ui.help.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.help.FeedbackActivity"
+            android:label="@string/title_activity_feedback"
+            android:parentActivityName=".ui.help.HelpActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.help.HelpActivity" />
+        </activity>
     </application>
 
 </manifest>
