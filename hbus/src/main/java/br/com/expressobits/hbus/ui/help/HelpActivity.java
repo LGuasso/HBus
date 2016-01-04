@@ -55,7 +55,16 @@ public class HelpActivity extends AppCompatActivity {
             versionInfoDialogFragment.show(getSupportFragmentManager(), VersionInfoDialogFragment.TAG);
         }
         if(id == R.id.menu_action_send_feedback){
-            startActivity(new Intent(this, FeedbackActivity.class));
+            PackageInfo pInfo = null;
+            try {
+                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                Toast.makeText(HelpActivity.this, "Error PackageManager NameNotFoundException", Toast.LENGTH_SHORT).show();
+            }
+            String version = pInfo.versionName;
+            Intent intent = new Intent(this,FeedbackActivity.class);
+            intent.putExtra(FeedbackActivity.KEY_VERSION_INFO,version);
+            startActivity(intent);
         }
 
         if(id == R.id.menu_action_see_on_play_store){

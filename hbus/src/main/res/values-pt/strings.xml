@@ -45,4 +45,6 @@
     <string name="send_feedback">Enviar feedback</string>
     <string name="title_activity_feedback">Feedback</string>
     <string name="version">Versão</string>
+    <string name="write_your_feedback_here">Escreva seu feedback aqui</string>
+    <string name="send_your_feedback_to_expressobits">Envie seu feedback para ExpressoBits e faça este app melhor!</string>
 </resources>
