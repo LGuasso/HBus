@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.firebase.client.Firebase;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.expressobits.hbus.FirebaseDAO;
 import br.com.expressobits.hbus.dao.BusContract;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.CityContract;
@@ -45,10 +48,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        deleteAllData();
-        BusDAO dao = new BusDAO(this);
+        FirebaseDAO.setContext(this);
+        FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
+
+
+
+        firebase.saveCities(readFileCity());
+
+        //deleteAllData();
+        //BusDAO dao = new BusDAO(this);
         //dao.createTables();
-        saveCities();
+        //saveCities();
+
+    }
+
+    public List<City> readFileCity(){
+        ReadFile file = new ReadFile(this);
+        return file.getCities();
     }
 
     public void saveCities(){
