@@ -128,14 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initFAB(){
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //fab.setOnClickListener(this);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(findViewById(R.id.cordinatorLayout), "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(this);
 
          //TODO procurar saber quando descenmos a lista
     }
