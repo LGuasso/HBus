@@ -167,7 +167,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
                             Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
                         }
-                        Snackbar.make(FavoritesItineraryFragment.this.view,result, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        //Snackbar.make(FavoritesItineraryFragment.this.view,result, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                         dao.close();
                     }
                 });
