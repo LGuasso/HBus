@@ -25,6 +25,7 @@ import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 
 /**
  * @author Rafael
+ * @deprecated
  * @since 06/07/2015.
  * Fragmento que exibe todos itiner�rios que n�o forma adicionados.
  */

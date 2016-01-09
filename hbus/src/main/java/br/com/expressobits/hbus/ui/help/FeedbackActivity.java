@@ -16,8 +16,6 @@ public class FeedbackActivity extends AppCompatActivity {
     public static final String KEY_VERSION_INFO="VERSION_INFO";
     private String versionInfo;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -135,6 +135,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.help.HelpActivity" />
         </activity>
+        <activity android:name=".ui.AddFavoriteActivity"></activity>
     </application>
 
 </manifest>
