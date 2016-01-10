@@ -148,6 +148,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         progressBar.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
 
+        TimesDbHelper db = new TimesDbHelper(this);
+        db.insertCities(cities);
+
+
 
     }
 

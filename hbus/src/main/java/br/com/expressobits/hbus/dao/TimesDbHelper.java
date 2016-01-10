@@ -23,6 +23,8 @@ public class TimesDbHelper extends SQLiteAssetHelper{
         //setForcedUpgrade(DATABASE_VERSION);
     }
 
+
+
     public City getCity(Long id){
         return TimesHelper.getCity(getReadableDatabase(),id);
     }
@@ -71,9 +73,15 @@ public class TimesDbHelper extends SQLiteAssetHelper{
         return TimesHelper.getBuses(getReadableDatabase(),itineraryId,way,typeday);
     }
 
-    public List<Bus> getNextBus(Itinerary itinerary){ return TimesHelper.getNextBuses(getReadableDatabase(),itinerary);}
+    public List<Bus> getNextBus(Itinerary itinerary){ return TimesHelper.getNextBuses(getReadableDatabase(), itinerary);}
 
+    public void insertCities(List<City> cities){
+        TimesHelper.deleteAllcities(getWritableDatabase());
+        for(City city:cities){
+            TimesHelper.insert(getWritableDatabase(),city);
+        }
 
+    }
 
 
 

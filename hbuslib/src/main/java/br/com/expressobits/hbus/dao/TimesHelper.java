@@ -470,4 +470,9 @@ public class TimesHelper {
         db.execSQL(SQL_CREATE_BUSES);
     }
 
+    //DELETER ALL DATA
+    public static void deleteAllcities(SQLiteDatabase db){
+        db.execSQL(CityContract.SQL_DELETE_ALL_CITIES);
+    }
+
 }

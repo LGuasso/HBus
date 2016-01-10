@@ -38,6 +38,7 @@ public class FirebaseDAO{
      * @param cities
      */
     public void saveCities(List<City> cities){
+        firebaseRef.child(CityContract.City.TABLE_NAME).removeValue();
         for (City city:cities){
             Log.d(TAG, "Salvando no firebase cidade " + city);
             if(firebaseRef==null){
