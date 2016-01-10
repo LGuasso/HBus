@@ -45,7 +45,6 @@ public class TPCDataBaseInit extends Application{
         Firebase.setAndroidContext(this);
 
         //TEST
-        FirebaseDAO firebaseDAO = new FirebaseDAO();
         //PARSE
 
         /**Parse.enableLocalDatastore(this);

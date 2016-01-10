@@ -11,11 +11,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.FirebaseDAO;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemCityAdapter;
@@ -23,17 +30,13 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-//import com.parse.FindCallback;
-//import com.parse.ParseException;
-//import com.parse.ParseObject;
-//import com.parse.ParseQuery;
-//import br.com.expressobits.hbus.dao.ParseDAO;
-
-public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack/**,FindCallback<ParseObject> */{
+public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,ValueEventListener{
 
     private List<City> cities;
     public boolean initial = false;
     public static final String TAG = "city";
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,38 +49,34 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         //Define se � primeira vez do app ou se tem alguma cidade definida...
         initial = (PreferenceManager.getDefaultSharedPreferences(this).getLong(TAG,0l)==0l);
-        Toolbar pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
+        Toolbar pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
     }
 
     private void initViews(){
-        RecyclerView recyclerViewCities = (RecyclerView) findViewById(R.id.recyclerView_cities);
-        recyclerViewCities.setHasFixedSize(true);
-        recyclerViewCities.setSelected(true);
-        recyclerViewCities.setClickable(true);
+        initProgressBar();
+        initActionBar();
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_cities);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setSelected(true);
+        recyclerView.setClickable(true);
 
         LinearLayoutManager llmUseful = new LinearLayoutManager(this);
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewCities.setLayoutManager(llmUseful);
+        recyclerView.setLayoutManager(llmUseful);
 
-        TimesDbHelper db = new TimesDbHelper(this);
-        cities = db.getCities();
+        FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
+        dao.getCities(this);
 
-        //city.setImage(getResources().getDrawable(R.drawable.default_city));
-
-        //ParseDAO dao = new ParseDAO(this);
-        //cities = dao.getCities(this);
-        //cities = dao.getCities(this);
-
-
-        //ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
-        //query.findInBackground(this);
+        //TimesDbHelper db = new TimesDbHelper(this);
+        //cities = db.getCities();
 
         //TODO lista que vem apartir do parse
-        ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
-        itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerViewCities.setAdapter(itemCityAdapter);
-        initActionBar();
+
+    }
+
+    private void initProgressBar() {
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
     }
 
     @Override
@@ -133,5 +132,27 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        cities = new ArrayList<>();
+        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+            City city = postSnapshot.getValue(City.class);
+            cities.add(city);
+        }
+        ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
+        itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerView.setAdapter(itemCityAdapter);
+
+        progressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+
+
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+
     }
 }

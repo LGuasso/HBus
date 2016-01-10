@@ -264,9 +264,10 @@ public class SettingsActivity extends PreferenceActivity {
 
             }else{
                 if(preference.getKey().equals(SelectCityActivity.TAG)){
-                    TimesDbHelper db = new TimesDbHelper(preference.getContext());
-                    String name = db.getCity((Long)value).getName();
-                    preference.setSummary(name);
+                    //TimesDbHelper db = new TimesDbHelper(preference.getContext());
+                    //String name = db.getCity((Long)value).getName();
+                    preference.setSummary(String.valueOf(value));
+                    //TODO mostrar nome da cidade selecionada
                 }else{
                     // For all other preferences, set the summary to the value's
                     // simple string representation.
@@ -280,13 +281,13 @@ public class SettingsActivity extends PreferenceActivity {
     };
 
     /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
+     * Binds a preference's summary to its value. More specifically, when ary is also
      * immediately updated upon calling this method. The exact display format is
      * dependent on the type of preference.
      *
-     * @see #sBindPreferenceSummaryToValueListener
+     * @see #sBindPreferenceSummaryToValueListener the
+     * preference's value is changed, its summary (line of text below the
+     * preference title) is updated to reflect the value. The summ
      */
     protected static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.

@@ -1,9 +1,10 @@
-package br.com.expressobits.hbus;
+package br.com.expressobits.hbus.dao;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.ValueEventListener;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import br.com.expressobits.hbus.model.City;
  * @author Rafael
  * @since 09/01/16.
  */
-public class FirebaseDAO {
+public class FirebaseDAO{
 
     private static final String TAG = "Firebase";
     private Firebase firebaseRef;
@@ -52,4 +53,11 @@ public class FirebaseDAO {
         }
 
     }
+
+    public void getCities(ValueEventListener valueEventListener){
+        Firebase ref = firebaseRef.child(CityContract.City.TABLE_NAME);
+        ref.addValueEventListener(valueEventListener);
+
+    }
+
 }

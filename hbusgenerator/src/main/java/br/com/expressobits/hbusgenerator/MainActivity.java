@@ -10,12 +10,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.firebase.client.Firebase;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.expressobits.hbus.FirebaseDAO;
+import br.com.expressobits.hbus.dao.FirebaseDAO;
 import br.com.expressobits.hbus.dao.BusContract;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.CityContract;
