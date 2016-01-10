@@ -108,7 +108,7 @@ public class FirebaseDAO{
     }
 
     public void insert(Itinerary itinerary){
-        firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME).child(new Long(1l).toString()).setValue(itinerary);
+        firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME).child(itinerary.getId().toString()).setValue(itinerary);
     }
 
     public void insert(Code code){

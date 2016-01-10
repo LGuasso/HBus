@@ -1,5 +1,6 @@
 package br.com.expressobits.hbusgenerator;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +29,11 @@ import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "GENERATOR";
     private ReadFile file;
+    private static long countBus = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,31 +41,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
-
-        FirebaseDAO.setContext(this);
-        FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
-
-
-        List<City> cities = readFileCity();
-        //firebase.saveCities(cities);
-        //firebase.saveItineraries(readFileItinerary(cities.get(0)));
-
-        deleteAllData();
-        //BusDAO dao = new BusDAO(this);
-        //dao.createTables();
-        saveCities();
-
+        fab.setOnClickListener(this);
     }
 
     public List<City> readFileCity(){
@@ -71,8 +52,72 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Itinerary> readFileItinerary(City city){
         ReadFile file = new ReadFile(this);
-        return file.getItineraries(city.getId(),city.getName(),city.getCountry());
+        return file.getItineraries(city.getId(), city.getName(), city.getCountry());
     }
+
+    public List<Code> readFileCode(City city){
+        ReadFile file = new ReadFile(this);
+        return file.getCodes(city.getId(), city.getName(), city.getCountry());
+    }
+
+    public List<Bus> readFileBus(City city,Itinerary itinerary,String way,String typeday){
+        ReadFile file = new ReadFile(this);
+        return file.getBuses(city.getId(), city.getName(), city.getCountry(), itinerary, way, typeday);
+    }
+
+    public void save(FirebaseDAO firebaseDAO){
+        lookmessage("  >Inserindo cities");
+        List<City> cities = readFileCity();
+        for(int i=0;i<cities.size();i++){
+            cities.get(i).setId(i + 1l);
+            firebaseDAO.insert(cities.get(i));
+            saveOnFirebaseItinerary(firebaseDAO,cities.get(i));
+            saveOnFirebaseCode(firebaseDAO,cities.get(i));
+        }
+    }
+
+    private void saveOnFirebaseItinerary(FirebaseDAO firebaseDAO,City city) {
+        lookmessage("  >Inserindo itineraries");
+        List<Itinerary> itineraries = readFileItinerary(city);
+        for(int i=0;i<itineraries.size();i++){
+            itineraries.get(i).setId(i + 1l);
+            firebaseDAO.insert(itineraries.get(i));
+            saveOnFirebaseBus(firebaseDAO, city, itineraries.get(i));
+        }
+    }
+
+    private void saveOnFirebaseCode(FirebaseDAO firebaseDAO,City city) {
+        lookmessage("  >Inserindo codes");
+        List<Code> codes = readFileCode(city);
+        for(int i=0;i<codes.size();i++){
+            codes.get(i).setId(i + 1l);
+            firebaseDAO.insert(codes.get(i));
+        }
+    }
+
+    private void saveOnFirebaseBus(FirebaseDAO firebaseDAO,City city,Itinerary itinerary) {
+        lookmessage("  >Inserindo buses");
+        for(int i=0;i<itinerary.getWays().size();i++){
+            for(int j=0;j<3;j++){
+
+                List<Bus> buses1 = readFileBus(city,itinerary,itinerary.getWays().get(i),TextUtils.getTypeDayInt(j));
+                for (Bus bus:buses1){
+                    bus.setId(countBus++);
+                    firebaseDAO.insert(bus);
+                }
+            }
+
+        }
+
+
+    }
+
+
+    public void lookmessage(String message){
+        Snackbar.make(findViewById(R.id.fab),message,Snackbar.LENGTH_SHORT).show();
+    }
+
+
 
     public void saveCities(){
         Log.i(TAG, "Inserindo cidades");
@@ -162,4 +207,25 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onClick(View v) {
+        FirebaseDAO.setContext(this);
+        final FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
+        new AsyncTask<FirebaseDAO,String,String>(){
+
+            @Override
+            protected String doInBackground(FirebaseDAO... params) {
+                save(firebase);
+                return null;
+            }
+        };
+
+        //deleteAllData();
+        //BusDAO dao = new BusDAO(this);
+        //dao.createTables();
+        //saveCities();
+    }
+
+
 }
