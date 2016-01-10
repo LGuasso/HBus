@@ -136,6 +136,8 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
+
+        //TODO implementar falta de conexão de internet
         cities = new ArrayList<>();
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
             City city = postSnapshot.getValue(City.class);
