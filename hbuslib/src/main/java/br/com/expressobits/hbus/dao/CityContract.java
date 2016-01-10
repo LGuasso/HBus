@@ -25,8 +25,8 @@ public final class CityContract {
     private static final String SQL_DELETE_CITIES =
             "DROP TABLE IF EXISTS " + CityContract.City.TABLE_NAME;
 
-    public static final String SQL_DELETE_ALL_CITIES =
-            "DELETE FROM " + CityContract.City.TABLE_NAME;
+    public static final String SQL_DELETE_ALL =
+            "DELETE FROM " + City.TABLE_NAME;
 
     /* Inner class that defines the table contents */
     public static abstract class City implements BaseColumns {

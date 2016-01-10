@@ -18,6 +18,9 @@ public final class CodeContract {
             Code.COLUMN_NAME_CITY_ID
     };
 
+    public static final String SQL_DELETE_ALL =
+            "DELETE FROM " + Code.TABLE_NAME;
+
     /* Inner class that defines the table contents */
     public static abstract class Code implements BaseColumns{
         public static final String TABLE_NAME = "code";

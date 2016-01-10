@@ -21,6 +21,9 @@ public final class BusContract {
             Bus.COLUMN_NAME_CITY_ID
     };
 
+    public static final String SQL_DELETE_ALL =
+            "DELETE FROM " + Bus.TABLE_NAME;
+
     public static abstract class Bus implements BaseColumns{
         public static final String TABLE_NAME = "bus";
         public static final String COLUMN_NAME_TIME = "time";

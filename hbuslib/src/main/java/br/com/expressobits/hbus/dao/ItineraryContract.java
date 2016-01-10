@@ -34,6 +34,9 @@ public final class ItineraryContract {
     private static final String SQL_DELETE_ITINERARIES =
             "DROP TABLE IF EXISTS " + ItineraryContract.Itinerary.TABLE_NAME;
 
+    public static final String SQL_DELETE_ALL =
+            "DELETE FROM " + Itinerary.TABLE_NAME;
+
     /* Inner class that defines the table contents */
     public static abstract class Itinerary implements BaseColumns {
         public static final String TABLE_NAME = "itinerary";
