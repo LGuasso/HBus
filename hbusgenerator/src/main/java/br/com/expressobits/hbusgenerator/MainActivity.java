@@ -29,6 +29,7 @@ import br.com.expressobits.hbus.utils.TextUtils;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "GENERATOR";
+    private ReadFile file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,23 +47,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         FirebaseDAO.setContext(this);
         FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
 
 
+        List<City> cities = readFileCity();
+        //firebase.saveCities(cities);
+        //firebase.saveItineraries(readFileItinerary(cities.get(0)));
 
-        firebase.saveCities(readFileCity());
-
-        //deleteAllData();
+        deleteAllData();
         //BusDAO dao = new BusDAO(this);
         //dao.createTables();
-        //saveCities();
+        saveCities();
 
     }
 
     public List<City> readFileCity(){
         ReadFile file = new ReadFile(this);
         return file.getCities();
+    }
+
+    public List<Itinerary> readFileItinerary(City city){
+        ReadFile file = new ReadFile(this);
+        return file.getItineraries(city.getId(),city.getName(),city.getCountry());
     }
 
     public void saveCities(){

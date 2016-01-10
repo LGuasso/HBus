@@ -33,6 +33,8 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
     }
 
 
+
+
     @Override
     public HolderCity onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = layoutInflater.inflate(R.layout.item_list_city,viewGroup,false);
@@ -48,6 +50,8 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
         //holder.imageViewCity.setImageDrawable(listCities.get(position).getImageDrawable());
 
     }
+
+
 
     @Override
     public int getItemCount() {

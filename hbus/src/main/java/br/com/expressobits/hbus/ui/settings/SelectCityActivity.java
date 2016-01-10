@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -30,7 +31,8 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,ValueEventListener{
+public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,
+        ChildEventListener,ValueEventListener{
 
     private List<City> cities;
     public boolean initial = false;
@@ -56,6 +58,8 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private void initViews(){
         initProgressBar();
         initActionBar();
+
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_cities);
         recyclerView.setHasFixedSize(true);
         recyclerView.setSelected(true);
@@ -65,6 +69,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
 
+        cities = new ArrayList<>();
+
+        refreshRecyclerView();
+
         FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
         dao.getCities(this);
 
@@ -73,6 +81,14 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         //TODO lista que vem apartir do parse
 
+
+
+    }
+
+    private void refreshRecyclerView() {
+        ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
+        itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerView.setAdapter(itemCityAdapter);
     }
 
     private void initProgressBar() {
@@ -143,9 +159,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
             City city = postSnapshot.getValue(City.class);
             cities.add(city);
         }
-        ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this,cities);
-        itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerView.setAdapter(itemCityAdapter);
+
 
         progressBar.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
@@ -154,6 +168,38 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         db.insertCities(cities);
 
 
+
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        City city = dataSnapshot.getValue(City.class);
+        cities.add(city);
+        //TimesDbHelper db = new TimesDbHelper(this);
+        //db.insertCity(city);
+        refreshRecyclerView();
+        progressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        City city = dataSnapshot.getValue(City.class);
+        cities.add(city);
+        //TimesDbHelper db = new TimesDbHelper(this);
+        //db.insertCity(city);
+        refreshRecyclerView();
+        progressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
     }
 

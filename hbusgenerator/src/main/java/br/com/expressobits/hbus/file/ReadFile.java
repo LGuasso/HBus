@@ -41,10 +41,9 @@ public class ReadFile {
 
     public City toCity(String text){
         City city = new City();
-        city.setId(Long.parseLong(text.split(SPLIT_FILE)[0]));
-        city.setName(text.split(SPLIT_FILE)[1]);
-        city.setCountry(text.split(SPLIT_FILE)[2]);
-        city.setPosition(text.split(SPLIT_FILE)[3]);
+        city.setName(text.split(SPLIT_FILE)[0]);
+        city.setCountry(text.split(SPLIT_FILE)[1]);
+        city.setPosition(text.split(SPLIT_FILE)[2]);
         return city;
     }
 
