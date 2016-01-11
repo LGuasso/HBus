@@ -29,10 +29,13 @@ import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.ManagerInit;
+import br.com.expressobits.hbus.ui.dialog.DownloadDataDialogFragment;
+import br.com.expressobits.hbus.ui.dialog.FinishListener;
+import br.com.expressobits.hbus.ui.dialog.VersionInfoDialogFragment;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,
-        ChildEventListener,ValueEventListener{
+        ChildEventListener,ValueEventListener,FinishListener{
 
     private List<City> cities;
     public boolean initial = false;
@@ -108,16 +111,18 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //ParseDAO parseDAO = new ParseDAO(getBaseContext());
-                //parseDAO.insertItineraries();
-                //parseDAO.insertCodes();
+
+                DownloadDataDialogFragment dialoge = new DownloadDataDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong(DownloadDataDialogFragment.KEY_CITY_ID,
+                        PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this).getLong(TAG,0));
+                dialoge.setParameters(SelectCityActivity.this,
+                        PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this).getLong(TAG, 0));
+                dialoge.addFinishListener(SelectCityActivity.this);
+                dialoge.show(SelectCityActivity.this.getSupportFragmentManager(),"DOWNLOAD");
                 //TODO implementa download do firebase por cidades especificas
                 //Com progress bar
-                if(initial){
-                    ManagerInit.manager(SelectCityActivity.this);
-                }else{
-                    SelectCityActivity.this.finish();
-                }
+
             }
         });
         builder.show();
@@ -207,4 +212,16 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     public void onCancelled(FirebaseError firebaseError) {
 
     }
+
+    @Override
+    public void onFinish() {
+        if(initial){
+            ManagerInit.manager(SelectCityActivity.this);
+         }else {
+            SelectCityActivity.this.finish();
+        }
+    }
 }
+
+
+

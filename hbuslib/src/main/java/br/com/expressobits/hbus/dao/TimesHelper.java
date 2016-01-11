@@ -475,4 +475,16 @@ public class TimesHelper {
         db.execSQL(CityContract.SQL_DELETE_ALL);
     }
 
+    public static void deleteAllItineraries(SQLiteDatabase db){
+        db.execSQL(ItineraryContract.SQL_DELETE_ALL);
+    }
+
+    public static void deleteAllCodes(SQLiteDatabase db){
+        db.execSQL(CodeContract.SQL_DELETE_ALL);
+    }
+
+    public static void deleteAllBuses(SQLiteDatabase db){
+        db.execSQL(BusContract.SQL_DELETE_ALL);
+    }
+
 }

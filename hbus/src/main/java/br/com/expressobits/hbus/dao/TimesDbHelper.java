@@ -58,7 +58,7 @@ public class TimesDbHelper extends SQLiteAssetHelper{
         return
     }*/
     public List<Itinerary> getItineraries(Long cityId){
-        return TimesHelper.getItineraries(getReadableDatabase(),cityId);
+        return TimesHelper.getItineraries(getReadableDatabase(), cityId);
     }
 
     public List<Code> getCodes(){
@@ -70,7 +70,7 @@ public class TimesDbHelper extends SQLiteAssetHelper{
     }
 
     public List<Bus> getBuses(Long itineraryId,String way,String typeday){
-        return TimesHelper.getBuses(getReadableDatabase(),itineraryId,way,typeday);
+        return TimesHelper.getBuses(getReadableDatabase(), itineraryId, way, typeday);
     }
 
     public List<Bus> getNextBus(Itinerary itinerary){ return TimesHelper.getNextBuses(getReadableDatabase(), itinerary);}
@@ -78,11 +78,48 @@ public class TimesDbHelper extends SQLiteAssetHelper{
     public void insertCities(List<City> cities){
         TimesHelper.deleteAllcities(getWritableDatabase());
         for(City city:cities){
-            TimesHelper.insert(getWritableDatabase(),city);
+            insert(city);
         }
+    }
 
+    public void insertItinearies(List<Itinerary> itineraries){
+        TimesHelper.deleteAllItineraries(getWritableDatabase());
+        for(Itinerary itinerary:itineraries){
+            insert(itinerary);
+        }
+    }
+
+    public Long insert(City city){
+        return TimesHelper.insert(getWritableDatabase(), city);
+    }
+
+    public Long insert(Itinerary itinerary){
+        return TimesHelper.insert(getWritableDatabase(), itinerary);
+    }
+
+    public Long insert(Code code){
+        return TimesHelper.insert(getWritableDatabase(), code);
+    }
+
+    public Long insert(Bus bus){
+        return TimesHelper.insert(getWritableDatabase(), bus);
     }
 
 
+    public void deleteAllCities(){
+        TimesHelper.deleteAllcities(getWritableDatabase());
+    }
+
+    public void deleteAllItineraries(){
+        TimesHelper.deleteAllItineraries(getWritableDatabase());
+    }
+
+    public void deleteAllCodes(){
+        TimesHelper.deleteAllCodes(getWritableDatabase());
+    }
+
+    public void deleteAllBuses(){
+        TimesHelper.deleteAllBuses(getWritableDatabase());
+    }
 
 }

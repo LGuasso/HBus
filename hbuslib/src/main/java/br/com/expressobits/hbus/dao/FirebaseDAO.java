@@ -48,6 +48,7 @@ public class FirebaseDAO{
             public void onDataChange(DataSnapshot snapshot) {
                 boolean connected = snapshot.getValue(Boolean.class);
             }
+
             @Override
             public void onCancelled(FirebaseError error) {
                 System.err.println("Listener was cancelled");
@@ -122,7 +123,21 @@ public class FirebaseDAO{
     public void getCities(ChildEventListener childEventListener){
         Firebase ref = firebaseRef.child(CityContract.City.TABLE_NAME);
         ref.addChildEventListener(childEventListener);
+    }
 
+    public void getItineraries(ChildEventListener childEventListener){
+        Firebase ref = firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME);
+        ref.addChildEventListener(childEventListener);
+    }
+
+    public void getItineraries(ValueEventListener valueEventListener){
+        Firebase ref = firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME);
+        ref.addValueEventListener(valueEventListener);
+    }
+
+    public void getCodes(ValueEventListener valueEventListener){
+        Firebase ref = firebaseRef.child(CodeContract.Code.TABLE_NAME);
+        ref.addValueEventListener(valueEventListener);
     }
 
 }

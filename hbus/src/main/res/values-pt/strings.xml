@@ -47,4 +47,5 @@
     <string name="version">Versão</string>
     <string name="write_your_feedback_here">Escreva seu feedback aqui</string>
     <string name="send_your_feedback_to_expressobits">Envie seu feedback para Expresso Bits e faça este app melhor!</string>
+    <string name="downloading_data">Downloading data</string>
 </resources>
