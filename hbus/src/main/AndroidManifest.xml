@@ -95,30 +95,6 @@
             </intent-filter>
         </activity>
 
-        <!-- PARSE NOTIFICATION -->
-        <service android:name="com.parse.PushService" />
-
-        <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.parse.push.intent.RECEIVE" />
-                <action android:name="com.parse.push.intent.DELETE" />
-                <action android:name="com.parse.push.intent.OPEN" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.parse.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
-                <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
-                <category android:name="br.com.expressobits.hbus" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".ui.help.HelpActivity"
             android:label="@string/title_activity_help"
@@ -135,7 +111,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.help.HelpActivity" />
         </activity>
-        <activity android:name=".ui.AddFavoriteActivity"></activity>
+        <activity android:name=".ui.AddFavoriteActivity"
+            android:label="@string/add_favorite"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

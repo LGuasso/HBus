@@ -15,6 +15,7 @@ import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Feedback;
 import br.com.expressobits.hbus.model.Itinerary;
 
 /**
@@ -118,6 +119,10 @@ public class FirebaseDAO{
 
     public void insert(Bus bus){
         firebaseRef.child(BusContract.Bus.TABLE_NAME).child(bus.getId().toString()).setValue(bus);
+    }
+
+    public void insert(Feedback feedback){
+        firebaseRef.child(FeedbackContract.Feedback.TABLE_NAME).child(feedback.getId().toString()).setValue(feedback);
     }
 
     public void getCities(ChildEventListener childEventListener){

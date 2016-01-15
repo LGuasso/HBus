@@ -45,7 +45,7 @@
     <string name="title_activity_help" translatable="false">@string/action_help</string>
     <string name="action_help">Help and feedback</string>
     <string name="action_informations_of_version">Informations of version</string>
-    <string name="company_market">©2016 Expresso Bits</string>
+    <string name="company_market">2016 Expresso Bits</string>
     <string name="version">Version</string>
     <string name="send_feedback">Send feedback</string>
     <string name="action_send_feedback">Send feedback</string>
@@ -54,6 +54,8 @@
     <string name="write_your_feedback_here">Write your feedback here</string>
     <string name="send_your_feedback_to_expressobits">Send your feedback to Expresso Bits and make best app now!</string>
     <string name="downloading_data">Downloading data</string>
+    <string name="include_system_information">Include system information</string>
+    <string name="send_feedback_with_sucess">Send feedback with sucess!</string>
 
 
 </resources>
