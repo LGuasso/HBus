@@ -47,6 +47,7 @@ public class TextUtils {
             ok = ok.replace(" > ","-");
             ok = ok.replace(" < ","-");
             ok = ok.replace(",", "_");
+            ok = ok.replace(" ","-");
             ok = ok.toLowerCase();
             return ok;
         }

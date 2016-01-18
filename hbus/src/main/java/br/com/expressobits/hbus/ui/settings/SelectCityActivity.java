@@ -74,15 +74,23 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         cities = new ArrayList<>();
 
+
+        /**if(onlineMode){
+            refreshRecyclerView();
+
+            FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
+            dao.getCities(this);
+        }*/
+
+
+
+
+
+        TimesDbHelper db = new TimesDbHelper(this);
+        cities = db.getCities();
+        progressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
         refreshRecyclerView();
-
-        FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
-        dao.getCities(this);
-
-        //TimesDbHelper db = new TimesDbHelper(this);
-        //cities = db.getCities();
-
-        //TODO lista que vem apartir do parse
 
 
 
@@ -105,6 +113,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(TAG, cities.get(position).getId());
         editor.apply();
+        /**online mode
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.confirm_donwload_data_for_city,cities.get(position).getName()));
         builder.setNegativeButton(getString(android.R.string.no), null);
@@ -126,6 +135,8 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
             }
         });
         builder.show();
+         **/
+        onFinish();
 
 
 

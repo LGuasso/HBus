@@ -62,7 +62,12 @@ public class Bus implements Comparable<Bus>{
     }
 
     public int getHora(){
-        return Integer.parseInt(time.split(":")[0]);
+        if(time.split(":").length>0){
+            return Integer.parseInt(time.split(":")[0]);
+        }else{
+            return 24;
+        }
+
     }
 
     /**
