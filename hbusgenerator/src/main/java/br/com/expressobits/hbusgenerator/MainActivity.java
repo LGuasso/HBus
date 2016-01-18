@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
 import com.firebase.client.Firebase;
 
@@ -32,47 +35,65 @@ import br.com.expressobits.hbus.utils.TextUtils;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "GENERATOR";
-    private ReadFile file;
     private static long countBus = 1;
+    private Button buttonReadCities;
+    private Button buttonReadItineraries;
+    private Button buttonDeleteAllData;
+    private Button buttonDeleteAllDataFirebase;
+    private FloatingActionButton fab;
+    private List<City> cities;
+    private List<Itinerary> itineraries;
+    private Spinner spinnerCities;
+    ReadFile file = new ReadFile(MainActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initViews();
+
+    }
+
+    private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
+        buttonReadCities = (Button) findViewById(R.id.button_read_data_cities);
+        buttonReadItineraries = (Button) findViewById(R.id.button_read_data_itineraries);
+        buttonDeleteAllData = (Button) findViewById(R.id.button_delete_all_data);
+        buttonDeleteAllDataFirebase = (Button) findViewById(R.id.button_delete_all_data_firebase);
+        buttonReadCities.setOnClickListener(this);
+        buttonReadItineraries.setOnClickListener(this);
+        buttonDeleteAllData.setOnClickListener(this);
+        buttonDeleteAllDataFirebase.setOnClickListener(this);
     }
 
     public List<City> readFileCity(){
-        ReadFile file = new ReadFile(this);
         return file.getCities();
     }
 
     public List<Itinerary> readFileItinerary(City city){
-        ReadFile file = new ReadFile(this);
         return file.getItineraries(city.getId(), city.getName(), city.getCountry());
     }
 
     public List<Code> readFileCode(City city){
-        ReadFile file = new ReadFile(this);
         return file.getCodes(city.getId(), city.getName(), city.getCountry());
     }
 
     public List<Bus> readFileBus(City city,Itinerary itinerary,String way,String typeday){
-        ReadFile file = new ReadFile(this);
         return file.getBuses(city.getId(), city.getName(), city.getCountry(), itinerary, way, typeday);
     }
 
     public void save(FirebaseDAO firebaseDAO){
         lookmessage("  >Inserindo cities");
         List<City> cities = readFileCity();
-        for(int i=0;i<cities.size();i++){
-            cities.get(i).setId(i + 1l);
-            firebaseDAO.insert(cities.get(i));
-            saveOnFirebaseItinerary(firebaseDAO,cities.get(i));
-            saveOnFirebaseCode(firebaseDAO,cities.get(i));
+        for(City city:cities){
+            //cities.get(0).setId(i + 1l);
+            firebaseDAO.insert(city);
+            //saveOnFirebaseItinerary(firebaseDAO,cities.get(i));
+            //saveOnFirebaseCode(firebaseDAO,cities.get(i));
         }
     }
 
@@ -118,74 +139,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-    public void saveCities(){
-        Log.i(TAG, "Inserindo cidades");
-        BusDAO dao = new BusDAO(this);
-        ReadFile file = new ReadFile(this);
-        for(City city:file.getCities()){
-            Long cityId = dao.insertCity(city);
-            city.setId(cityId);
-            Log.i(TAG, "> " + city.getName());
-            saveCodes(city);
-            saveItineraries(city);
-
-        }
-    }
-
-    public void saveItineraries(City city){
-        Log.i(TAG,"  >Inserindo itinerarios");
-        BusDAO dao = new BusDAO(this);
-        ReadFile file = new ReadFile(this);
-        for(Itinerary itinerary:file.getItineraries(city.getId(), city.getName(), city.getCountry())){
-            itinerary.setId(dao.insertItineraries(itinerary));
-            Log.i(TAG, "> > " + itinerary.getName());
-            saveBuses(city,itinerary);
-        }
-    }
-
-    public void saveCodes(City city){
-        Log.i(TAG,"  >Inserindo codes");
-        BusDAO dao = new BusDAO(this);
-        ReadFile file = new ReadFile(this);
-        for(Code code:file.getCodes(city.getId(), city.getName(), city.getCountry())){
-            dao.insertCodes(code);
-            Log.i(TAG,"> > "+code.getName());
-        }
-    }
-
-
-    private void saveBuses(City city,Itinerary itinerary){
-        Log.i(TAG,"  >Inserindo buses");
-        BusDAO dao = new BusDAO(this);
-        ReadFile file = new ReadFile(this);
-        for(int i=0;i<itinerary.getWays().size();i++){
-            for(int j=0;j<3;j++){
-                Log.i(TAG,"  > >>>>Inserindo buses");
-                List<Bus> buses = new ArrayList<>();
-                buses = file.getBuses(city.getId(),
-                        city.getName(),
-                        city.getCountry(),
-                        itinerary,itinerary.getWays().get(i),
-                        TextUtils.getTypeDayInt(j));
-                for (Bus bus:buses){
-                    dao.insertBus(bus);
-                    Log.i(TAG, "> > >" + bus.getTime());
-                }
-
-            }
-        }
-    }
-
-    public void deleteAllData(){
-        BusDAO dao = new BusDAO(this);
-        dao.deleteTable(CityContract.City.TABLE_NAME);
-        dao.deleteTable(ItineraryContract.Itinerary.TABLE_NAME);
-        dao.deleteTable(CodeContract.Code.TABLE_NAME);
-        dao.deleteTable(BusContract.Bus.TABLE_NAME);
-        dao.close();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -210,16 +163,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        FirebaseDAO.setContext(this);
-        final FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
-        new AsyncTask<FirebaseDAO,String,String>(){
 
-            @Override
-            protected String doInBackground(FirebaseDAO... params) {
-                save(firebase);
-                return null;
-            }
-        };
+        String text;
+
+        switch (v.getId()){
+            case R.id.fab:
+                FirebaseDAO.setContext(this);
+                final FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
+                new AsyncTask<FirebaseDAO,String,String>(){
+
+                    @Override
+                    protected String doInBackground(FirebaseDAO... params) {
+                        save(firebase);
+                        return null;
+                    }
+                };
+                break;
+            case R.id.button_read_data_cities:
+                DbManager.getInstance(MainActivity.this).saveCities();
+                break;
+
+            case R.id.button_delete_all_data:
+                DbManager.getInstance(MainActivity.this).deleteAllData();
+                break;
+            case R.id.button_delete_all_data_firebase:
+                FirebaseDAO.setContext(this);
+                final FirebaseDAO base = new FirebaseDAO("https://hbus.firebaseio.com/");
+                base.removeAllValues();
+                break;
+
+        }
+
 
         //deleteAllData();
         //BusDAO dao = new BusDAO(this);

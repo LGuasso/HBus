@@ -26,7 +26,7 @@ public class ReadFile {
     private static final String BARS = "/";
     private static final String SPLIT_FILE = ";";
     private static final String SPLIT_FILE_SECONDARY = ",";
-    private static final String SPLIT_FILE_TIMES = " - ";
+    private static final String SPLIT_FILE_TIMES = "\t-\t";
     private static final String CITIES_FILE = "cities.dat";
     private static final String ITINERARIES_FILE = "itineraries.dat";
     private static final String CODES_FILE = "codes.dat";
@@ -75,7 +75,7 @@ public class ReadFile {
         try{
             bus.setCodeId(dao.getCode(text.split(SPLIT_FILE_TIMES)[1],cityId).getId());
         }catch (Exception e){
-            Log.e(TAG,"ERRO!  TEXTO("+text.split(SPLIT_FILE_TIMES)[1]+")");
+            Log.e(TAG,"ERRO! CITY:"+cityId+" ITINERARY:"+itineraryId+" "+way+" "+"TEXTO("+text+")");
             bus.setCodeId(0l);
         }
 

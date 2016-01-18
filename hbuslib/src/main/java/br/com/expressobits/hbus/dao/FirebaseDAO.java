@@ -106,7 +106,7 @@ public class FirebaseDAO{
     }
 
     public void insert(City city){
-        firebaseRef.child(CityContract.City.TABLE_NAME).child(city.getId().toString()).setValue(city);
+        firebaseRef.child(CityContract.City.TABLE_NAME).child(city.getName()+"-"+city.getCountry()).setValue(city);
     }
 
     public void insert(Itinerary itinerary){
@@ -144,5 +144,10 @@ public class FirebaseDAO{
         Firebase ref = firebaseRef.child(CodeContract.Code.TABLE_NAME);
         ref.addValueEventListener(valueEventListener);
     }
+
+    public void removeAllValues(){
+        firebaseRef.child("/").removeValue();
+    }
+
 
 }
