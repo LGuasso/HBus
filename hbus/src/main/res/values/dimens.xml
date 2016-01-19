@@ -1,0 +1,20 @@
+<resources>
+
+    <dimen name="activity_splash_margin_image_to_text">48dp</dimen>
+
+    <dimen name="horario_textsize">26sp</dimen>
+    <dimen name="textsize">16sp</dimen>
+
+    <dimen name="card_view_size_city">128dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="tab_max_width">264dp</dimen>
+    <dimen name="tab_padding_bottom">16dp</dimen>
+    <dimen name="tab_label">14sp</dimen>
+    <dimen name="custom_tab_layout_height">72dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+
+</resources>

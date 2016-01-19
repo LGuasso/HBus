@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Hbus Generator</string>
+    <string name="action_settings">Settings</string>
+    <string name="read_data_cities">Read data cities</string>
+    <string name="read_data_itineraries">Read data ititneraries</string>
+    <string name="delete_all_data_itineraries">Delete all data</string>
+    <string name="delete_all_data_itineraries_on_firebase">Delete all data on firebase</string>
+</resources>

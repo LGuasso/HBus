@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <style name="AppTheme.TitleSplash" parent="AppTheme.TextAppearance.AppCompat.Display1">
+        <!-- Splash screen titulo -->
+    </style>
+
+    <style name="AppTheme.TitleItinerary" parent="AppTheme.TextAppearance.AppCompat.HeadLine">
+        <!-- Itinerario titulo -->
+    </style>
+
+    <style name="AppTheme.SubTitleItinerary" parent="TextAppearance.AppCompat.Body1">
+        <!-- Splash screen titulo -->
+    </style>
+
+    <style name="AppTheme.SubTitleItineraryNextBus" parent="TextAppearance.AppCompat.Body2">
+        <!-- Splash screen titulo -->
+    </style>
+
+    <style name="AppTheme.TextAppearance.Button.Flat" parent="Base.Widget.AppCompat.Button">
+        <!-- Splash screen titulo -->
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Time" parent="AppTheme.TextAppearance.Display3.Mono">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <!-- Splash screen titulo -->
+    </style>
+
+    <style name="AppTheme.TextAppearance.Code" parent="AppTheme.TextAppearance.AppCompat.Subhead">
+        <!-- Splash screen titulo -->
+    </style>
+    <style name="AppTheme.TextAppearance.DescritionCode" parent="AppTheme.TextAppearance.AppCompat.Caption">
+        <!-- Splash screen titulo -->
+    </style>
+
+    <!-- TODO implementar todo app com AppTheme -->
+
+
+
+
+
+    <!--BASE -->
+    <style name="AppTheme.TextAppearance.AppCompat.HeadLine" parent="@style/Base.TextAppearance.AppCompat.Headline">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.AppCompat.Subhead" parent="@style/Base.TextAppearance.AppCompat.Subhead">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.AppCompat.Caption" parent="@style/Base.TextAppearance.AppCompat.Caption">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+    <style name="AppTheme.TextAppearance.AppCompat.Display1" parent="@style/Base.TextAppearance.AppCompat.Display1">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.AppCompat" parent="TextAppearance.AppCompat">
+    </style>
+
+,
+
+
+    <style name="TextStyle.Large" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+    <style name="TextStyle.Medium" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextStyle.Large.Color" parent="TextStyle.Large">
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+    <style name="TextStyle.Medium.Color" parent="TextStyle.Medium">
+        <item name="android:textColor">@color/subtext_color</item>
+    </style>
+
+    <style name="TextStyle.Popup.Title" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/colorAccentDark</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Display3.Mono" parent="TextAppearance.AppCompat.Display3">
+        <item name="android:textColor">@color/white</item>
+        <!--item name="android:textSize">@dimen/horario_textsize</item-->
+        <item name="android:typeface">monospace</item>
+        <item name="fontPath">fonts/Roboto-Thin.ttf</item>
+    </style>
+
+    <style name="TextStyle.Button" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Button" parent="TextAppearance.AppCompat.Button">
+    </style>
+</resources>

@@ -1,0 +1,91 @@
+<resources
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <style name="AppTheme" parent="AppThemeNavigationDrawer">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- item name="android:actionBarStyle">@style/ActionBarOrange</item>
+        <item name="android:textAppearance">@style/Text</item -->
+        <item name="android:buttonStyle">@style/ButtonAppTheme</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/ActionBar</item>
+        <item name="buttonStyle">@style/ButtonAppTheme</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppThemeNavigationDrawer" parent="MaterialDrawerTheme.Light.DarkToolbar">
+        <!-- MaterialDrawer specific values -->
+        <item name="material_drawer_background">@color/material_drawer_background</item>
+        <item name="material_drawer_icons">@color/material_drawer_icons</item>
+        <item name="material_drawer_primary_text">@color/material_drawer_primary_text</item>
+        <item name="material_drawer_primary_icon">@color/material_drawer_primary_icon</item>
+        <item name="material_drawer_secondary_text">@color/material_drawer_secondary_text</item>
+        <item name="material_drawer_hint_text">@color/material_drawer_hint_text</item>
+        <item name="material_drawer_divider">@color/material_drawer_divider</item>
+        <item name="material_drawer_selected">@color/material_drawer_selected</item>
+        <item name="material_drawer_selected_text">@color/material_drawer_selected_text</item>
+        <item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>
+
+
+
+    </style>
+
+
+
+    <style name="ActionBar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">@color/colorPrimary</item>
+        <!-- Support library compatibility -->
+        <item name="background">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">#fff</item>
+        <item name="android:actionBarItemBackground">@color/colorPrimaryDark</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="ActionBarTabStyle" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_blue</item>
+    </style>
+
+    <style name="Text" parent="@style/TextAppearance.AppCompat.Large">
+        <!-- Support library compatibility -->
+
+    </style>
+
+
+    <style name="ButtonAppTheme" parent="@style/Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+
+        <item name="background">@drawable/button</item>
+    </style>
+
+    <style name="AppTheme.Button.Flat" parent="@style/Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_cardview</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:minHeight">36dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:paddingLeft">24dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="background">@drawable/button_cardview</item>
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
+    </style>
+
+    <style name="AppTheme.CardView" parent="CardView">
+        <item name="android:background">@color/cardview_light_background</item>
+    </style>
+
+
+    <!-- POPUP WINDOW -->
+    <style name="PopupWindow">
+        <item name="android:windowEnterAnimation">@animator/fade_in</item>
+        <item name="android:windowExitAnimation">@animator/fade_out</item>
+    </style>
+
+
+
+</resources>
