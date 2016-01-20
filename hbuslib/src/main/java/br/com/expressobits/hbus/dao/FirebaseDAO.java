@@ -17,6 +17,7 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Feedback;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * @author Rafael
@@ -26,6 +27,7 @@ public class FirebaseDAO{
 
     private static final String TAG = "Firebase";
     private Firebase firebaseRef;
+    public static String reference = "https://hbus.firebaseio.com/";
 
     public FirebaseDAO(String initialRef){
         firebaseRef = new Firebase(initialRef);
@@ -38,7 +40,7 @@ public class FirebaseDAO{
      */
     public static void setContext(Context context){
         Firebase.setAndroidContext(context);
-        Firebase.getDefaultConfig().setPersistenceEnabled(true);
+        //Firebase.getDefaultConfig().setPersistenceEnabled(true);
     }
 
     //TODO implemented connection
@@ -75,10 +77,10 @@ public class FirebaseDAO{
      * Save in firebase home reference into especific city reference
      * @param itineraries
      */
-    public void saveItineraries(List<Itinerary> itineraries){
+    public void saveItineraries(City city,List<Itinerary> itineraries){
         firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME).removeValue();
         for (Itinerary itinerary:itineraries){
-            insert(itinerary);
+            insert(city,itinerary);
         }
 
     }
@@ -87,10 +89,10 @@ public class FirebaseDAO{
      * Save in firebase home reference into especific city reference
      * @param codes
      */
-    public void saveCodes(List<Code> codes){
+    public void saveCodes(City city,List<Code> codes){
         firebaseRef.child(CodeContract.Code.TABLE_NAME).removeValue();
         for (Code code:codes){
-            insert(code);
+            insert(city,code);
         }
     }
 
@@ -98,35 +100,44 @@ public class FirebaseDAO{
      * Save in firebase home reference into especific city reference
      * @param buses
      */
-    public void saveBuses(List<Bus> buses){
+    public void saveBuses(City city,Itinerary itinerary,String way,String typeday,List<Bus> buses){
         firebaseRef.child(BusContract.Bus.TABLE_NAME).removeValue();
         for (Bus bus:buses){
-            insert(bus);
+            insert(city,itinerary,bus,way,typeday);
         }
     }
 
     public void insert(City city){
-        firebaseRef.child(CityContract.City.TABLE_NAME).child(city.getName()+"-"+city.getCountry()).setValue(city);
+        Firebase reference = firebaseRef.child(CityContract.City.TABLE_NAME).child(city.getCountry()).child(city.getName());
+        reference.setValue(city);
     }
 
-    public void insert(Itinerary itinerary){
-        firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME).child(itinerary.getId().toString()).setValue(itinerary);
+    public void insert(City city,Itinerary itinerary){
+        Firebase reference = firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME).child(city.getCountry()).child(city.getName()).child(itinerary.getName());
+        reference.setValue(itinerary);
     }
 
-    public void insert(Code code){
-        firebaseRef.child(CodeContract.Code.TABLE_NAME).child(code.getId().toString()).setValue(code);
+    public void insert(City city,Code code){
+        Firebase reference = firebaseRef.child(CodeContract.Code.TABLE_NAME).child(city.getCountry()).child(city.getName()).child(code.getName());
+        reference.setValue(code);
     }
 
-    public void insert(Bus bus){
-        firebaseRef.child(BusContract.Bus.TABLE_NAME).child(bus.getId().toString()).setValue(bus);
+    public void insert(City city,Itinerary itinerary,Bus bus,String way,String typeday){
+        Firebase reference = firebaseRef.child(BusContract.Bus.TABLE_NAME).child(city.getCountry())
+                .child(city.getName())
+                .child(itinerary.getName())
+                .child(way)
+                .child(typeday)
+                .child(bus.getTime());
+        reference.setValue(bus);
     }
 
     public void insert(Feedback feedback){
         firebaseRef.child(FeedbackContract.Feedback.TABLE_NAME).child(feedback.getId().toString()).setValue(feedback);
     }
 
-    public void getCities(ChildEventListener childEventListener){
-        Firebase ref = firebaseRef.child(CityContract.City.TABLE_NAME);
+    public void getCities(ChildEventListener childEventListener,String country){
+        Firebase ref = firebaseRef.child(CityContract.City.TABLE_NAME).child(country);
         ref.addChildEventListener(childEventListener);
     }
 

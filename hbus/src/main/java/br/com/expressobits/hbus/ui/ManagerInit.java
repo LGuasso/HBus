@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 
+import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
 /**
@@ -18,7 +19,7 @@ public class ManagerInit {
         //if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(TourActivity.TAG, false)){
         //    cl=TourActivity.class;
         //}else
-        if(PreferenceManager.getDefaultSharedPreferences(context).getLong(SelectCityActivity.TAG,0l)==0l){
+        if(PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY).equals(SelectCityActivity.NOT_CITY)){
             cl=SelectCityActivity.class;
         }else{
             cl = MainActivity.class;

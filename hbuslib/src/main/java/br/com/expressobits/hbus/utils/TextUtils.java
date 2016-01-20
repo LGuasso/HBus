@@ -23,11 +23,11 @@ public class TextUtils {
     }
 
     public static TypeDay getTypeDAyString(String typeDay){
-        if(typeDay.equals("uteis")){
+        if(typeDay.equals(TypeDay.USEFUL.toString())){
             return TypeDay.USEFUL;
-        }else if(typeDay.equals("sabado")){
+        }else if(typeDay.equals(TypeDay.SATURDAY.toString())){
             return TypeDay.SATURDAY;
-        }else if(typeDay.equals("domingo")){
+        }else if(typeDay.equals(TypeDay.SUNDAY.toString())){
             return TypeDay.SUNDAY;
         }
         return TypeDay.SUNDAY;
@@ -67,21 +67,21 @@ public class TextUtils {
 
     public static String getTypeDayInt(int typeDay){
         if(typeDay==0){
-            return "uteis";
+            return TypeDay.USEFUL.toString();
         }else if(typeDay==1){
-            return "sabado";
+            return TypeDay.SATURDAY.toString();
         }else if(typeDay==2){
-            return "domingo";
+            return TypeDay.SUNDAY.toString();
         }
         return "";
     }
 
     public static int getTypeDayInt(String typeDay){
-        if(typeDay.equals("uteis")){
+        if(typeDay.equals(TypeDay.USEFUL.toString())){
             return 0;
-        }else if(typeDay.equals("sabado")){
+        }else if(typeDay.equals(TypeDay.SATURDAY.toString())){
             return 1;
-        }else if(typeDay.equals("domingo")){
+        }else if(typeDay.equals(TypeDay.SUNDAY.toString())){
             return 2;
         }
         return 0;

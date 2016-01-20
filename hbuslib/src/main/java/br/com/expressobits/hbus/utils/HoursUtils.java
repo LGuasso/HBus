@@ -137,14 +137,14 @@ public class HoursUtils {
         ArrayList<Bus> busFinal = new ArrayList<>();
         ArrayList<Bus> varFinal = new ArrayList<>();
         for (int i=0;i<busList.size();i++){
-            if(busList.get(i).getHora()>bus.getHora()){
+            if(getHour(busList.get(i))>getHour(bus)){
                 busFinal.add(busList.get(i));
-            }else if(busList.get(i).getHora()<bus.getHora()){
+            }else if(getHour(busList.get(i))<getHour(bus)){
                 varFinal.add(busList.get(i));
             }else{
-                if(busList.get(i).getMinutos()>=bus.getMinutos()){
+                if(getMinute(busList.get(i))>=getMinute(bus)){
                     busFinal.add(busList.get(i));
-                }else if(busList.get(i).getMinutos()<bus.getMinutos()){
+                }else if(getMinute(busList.get(i))<getMinute(bus)) {
                     varFinal.add(busList.get(i));
                 }
             }
@@ -154,5 +154,13 @@ public class HoursUtils {
         }
 
         return busFinal;
+    }
+
+    public static int getHour(Bus bus){
+        return Integer.parseInt(bus.getTime().split(":")[0]);
+    }
+
+    public static int getMinute(Bus bus){
+        return Integer.parseInt(bus.getTime().split(":")[1]);
     }
 }

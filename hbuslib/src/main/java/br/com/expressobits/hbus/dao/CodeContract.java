@@ -28,4 +28,6 @@ public final class CodeContract {
         public static final String COLUMN_NAME_DESCRIPTION = "description";
         public static final String COLUMN_NAME_CITY_ID = "cityid";
     }
+
+    public static String NOT_CODE = "0000";
 }

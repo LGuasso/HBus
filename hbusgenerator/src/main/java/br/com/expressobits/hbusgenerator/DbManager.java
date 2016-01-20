@@ -51,15 +51,15 @@ public class DbManager implements SaveModel{
     }
 
     public List<Itinerary> readFileItinerary(City city){
-        return file.getItineraries(city.getId(), city.getName(), city.getCountry());
+        return file.getItineraries(city);
     }
 
     public List<Code> readFileCode(City city){
-        return file.getCodes(city.getId(), city.getName(), city.getCountry());
+        return file.getCodes(city);
     }
 
     public List<Bus> readFileBus(City city,Itinerary itinerary,String way,String typeday){
-        return file.getBuses(city.getId(), city.getName(), city.getCountry(), itinerary, way, typeday);
+        return file.getBuses(city, itinerary, way, typeday);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DbManager implements SaveModel{
         Log.i(TAG, "Inserindo cidades");
         for (City city:readFileCity()) {
             Long cityId = dao.insertCity(city);
-            city.setId(cityId);
+            city.setId(cityId.toString());
             Log.i(TAG, "> " + city.getName());
             saveCodes(city);
             saveItineraries(city);
@@ -78,7 +78,7 @@ public class DbManager implements SaveModel{
     public void saveItineraries(City city) {
         Log.i(TAG,"  >Inserindo itinerarios");
         for(Itinerary itinerary:readFileItinerary(city)){
-            itinerary.setId(dao.insertItineraries(itinerary));
+            itinerary.setId(dao.insertItineraries(itinerary).toString());
             Log.i(TAG, city.getName()+"> > " + itinerary.getName());
             for(String way:itinerary.getWays()){
                 for(int i=0;i<3;i++){

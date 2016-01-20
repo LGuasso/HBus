@@ -10,7 +10,7 @@ import java.util.List;
 public class Itinerary {
 
 
-    private Long id;
+    private String id;
     /**
      * Nome do itinerário.
      */
@@ -22,11 +22,11 @@ public class Itinerary {
 
     private Long cityid;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

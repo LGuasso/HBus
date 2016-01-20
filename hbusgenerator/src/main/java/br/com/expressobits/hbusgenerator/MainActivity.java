@@ -30,6 +30,7 @@ import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -75,15 +76,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public List<Itinerary> readFileItinerary(City city){
-        return file.getItineraries(city.getId(), city.getName(), city.getCountry());
+        return file.getItineraries(city);
     }
 
     public List<Code> readFileCode(City city){
-        return file.getCodes(city.getId(), city.getName(), city.getCountry());
+        return file.getCodes(city);
     }
 
     public List<Bus> readFileBus(City city,Itinerary itinerary,String way,String typeday){
-        return file.getBuses(city.getId(), city.getName(), city.getCountry(), itinerary, way, typeday);
+        return file.getBuses(city, itinerary, way, typeday);
     }
 
     public void save(FirebaseDAO firebaseDAO){
@@ -92,27 +93,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(City city:cities){
             //cities.get(0).setId(i + 1l);
             firebaseDAO.insert(city);
-            //saveOnFirebaseItinerary(firebaseDAO,cities.get(i));
-            //saveOnFirebaseCode(firebaseDAO,cities.get(i));
+            saveOnFirebaseCode(firebaseDAO, city);
+            saveOnFirebaseItinerary(firebaseDAO, city);
+
         }
     }
 
     private void saveOnFirebaseItinerary(FirebaseDAO firebaseDAO,City city) {
-        lookmessage("  >Inserindo itineraries");
+        lookmessage(">Inserindo itineraries");
         List<Itinerary> itineraries = readFileItinerary(city);
-        for(int i=0;i<itineraries.size();i++){
-            itineraries.get(i).setId(i + 1l);
-            firebaseDAO.insert(itineraries.get(i));
-            saveOnFirebaseBus(firebaseDAO, city, itineraries.get(i));
+        for(Itinerary itinerary:itineraries){
+            firebaseDAO.insert(city, itinerary);
+            saveOnFirebaseBus(firebaseDAO, city, itinerary);
         }
     }
 
     private void saveOnFirebaseCode(FirebaseDAO firebaseDAO,City city) {
         lookmessage("  >Inserindo codes");
         List<Code> codes = readFileCode(city);
-        for(int i=0;i<codes.size();i++){
-            codes.get(i).setId(i + 1l);
-            firebaseDAO.insert(codes.get(i));
+        for(Code code:codes){
+            firebaseDAO.insert(city,code);
         }
     }
 
@@ -121,10 +121,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(int i=0;i<itinerary.getWays().size();i++){
             for(int j=0;j<3;j++){
 
-                List<Bus> buses1 = readFileBus(city,itinerary,itinerary.getWays().get(i),TextUtils.getTypeDayInt(j));
+                String way = itinerary.getWays().get(i);
+                String typeday = TextUtils.getTypeDayInt(j);
+
+                List<Bus> buses1 = readFileBus(city,itinerary,way,typeday);
                 for (Bus bus:buses1){
-                    bus.setId(countBus++);
-                    firebaseDAO.insert(bus);
+                    firebaseDAO.insert(city,itinerary,bus,way,typeday);
                 }
             }
 
@@ -164,20 +166,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        String text;
 
         switch (v.getId()){
             case R.id.fab:
                 FirebaseDAO.setContext(this);
-                final FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
+                FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
                 new AsyncTask<FirebaseDAO,String,String>(){
 
                     @Override
                     protected String doInBackground(FirebaseDAO... params) {
-                        save(firebase);
+                        save(params[0]);
                         return null;
                     }
-                };
+                }.doInBackground(firebase);
                 break;
             case R.id.button_read_data_cities:
                 DbManager.getInstance(MainActivity.this).saveCities();
@@ -188,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button_delete_all_data_firebase:
                 FirebaseDAO.setContext(this);
-                final FirebaseDAO base = new FirebaseDAO("https://hbus.firebaseio.com/");
+                FirebaseDAO base = new FirebaseDAO("https://hbus.firebaseio.com/");
                 base.removeAllValues();
                 break;
 

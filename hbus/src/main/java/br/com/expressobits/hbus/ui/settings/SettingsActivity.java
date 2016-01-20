@@ -301,7 +301,7 @@ public class SettingsActivity extends PreferenceActivity {
                 sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                         PreferenceManager
                                 .getDefaultSharedPreferences(preference.getContext())
-                                .getLong(preference.getKey(), 0l));
+                                .getString(preference.getKey(),"not city"));
             }else {
                 sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                         PreferenceManager

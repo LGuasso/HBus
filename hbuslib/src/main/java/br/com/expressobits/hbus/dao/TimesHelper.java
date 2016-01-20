@@ -18,6 +18,7 @@ import br.com.expressobits.hbus.utils.TextUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
+ * @deprecated
  * Created by rafael on 08/12/15.
  */
 public class TimesHelper {
@@ -58,7 +59,7 @@ public class TimesHelper {
                     BusContract.Bus.COLUMN_NAME_TYPEDAY + TEXT_TYPE + COMMA_SEP +
                     BusContract.Bus.COLUMN_NAME_CITY_ID + INTEGER_TYPE + COMMA_SEP +
                     BusContract.Bus.COLUMN_NAME_ITINERARY_ID + INTEGER_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_CODE_ID + INTEGER_TYPE +
+                    BusContract.Bus.COLUMN_NAME_CODE + INTEGER_TYPE +
                     " )";
 
     public static final String NOT_FOUND_TIME = " --:-- ";
@@ -95,7 +96,7 @@ public class TimesHelper {
         ContentValues values = new ContentValues();
         values.put(BusContract.Bus._ID,bus.getId());
         values.put(BusContract.Bus.COLUMN_NAME_TIME,bus.getTime());
-        values.put(BusContract.Bus.COLUMN_NAME_CODE_ID,bus.getCodeId());
+        values.put(BusContract.Bus.COLUMN_NAME_CODE,bus.getCode());
         values.put(BusContract.Bus.COLUMN_NAME_TYPEDAY,bus.getTypeday().toString());
         values.put(BusContract.Bus.COLUMN_NAME_WAY,bus.getWay());
         values.put(BusContract.Bus.COLUMN_NAME_CITY_ID,bus.getCityid());
@@ -148,7 +149,7 @@ public class TimesHelper {
     //CURSORTOOBJET
     protected static City cursorToCity(Cursor c){
         City city = new City();
-        city.setId(c.getLong(c.getColumnIndexOrThrow(CityContract.City._ID)));
+        //city.setId(c.getLong(c.getColumnIndexOrThrow(CityContract.City._ID)));
         city.setName(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_NAME)));
         city.setCountry(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_COUNTRY)));
         city.setPosition(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_POSITION)));
@@ -157,7 +158,7 @@ public class TimesHelper {
 
     protected static Itinerary cursorToItinerary(Cursor c){
         Itinerary itinerary = new Itinerary();
-        itinerary.setId(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary._ID)));
+        //itinerary.setId(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary._ID)));
         itinerary.setName(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_NAME)));
         itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_WAYS)).split(COMMA_SEP))));
         itinerary.setCityid(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID)));
@@ -177,7 +178,7 @@ public class TimesHelper {
         Bus bus = new Bus();
         bus.setId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus._ID)));
         bus.setTime(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TIME)));
-        bus.setCodeId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CODE_ID)));
+        bus.setCode(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CODE)));
         bus.setCityid(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CITY_ID)));
         bus.setItineraryId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_ITINERARY_ID)));
         bus.setWay(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_WAY)));
@@ -423,7 +424,7 @@ public class TimesHelper {
             next.add(getNextBusforList(
                     getBuses(
                             db,
-                            itinerary.getId(),
+                            Long.parseLong(itinerary.getId()),
                             itinerary.getWays().get(j),
                             HoursUtils.getStringTipoDeDia(Calendar.getInstance()).toString())));
         }
