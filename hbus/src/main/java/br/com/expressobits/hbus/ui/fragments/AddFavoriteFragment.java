@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
@@ -66,9 +67,9 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
 
     private void initListViews(View view){
         RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewAddItineraries);
-        TimesDbHelper dao = new TimesDbHelper(getActivity());
+        BusDAO dao = new BusDAO(getActivity());
         //TODO implementar linhas que ainda n existem no FAVORITeDAO favoritos
-        Long cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong(SelectCityActivity.TAG, 0l);
+        String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         itineraries = new ArrayList<>(dao.getItineraries(cityId));
 
         FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());

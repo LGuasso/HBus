@@ -41,7 +41,7 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack,ChooseWayDialogListener{
 
     public static final String TAG = "FavoritesItineraryFragment";
-    public Long selectedItem;
+    public String selectedItem;
     RecyclerView recyclerViewLines;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
@@ -114,7 +114,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
     private void updateListViews() {
         FavoriteDAO dao  = new FavoriteDAO(getActivity());
-        Long cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong(SelectCityActivity.TAG, 0l);
+        String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         itineraries = dao.getItineraries(cityId);
         ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
         adapter.setRecyclerViewOnClickListenerHack(this);
@@ -186,7 +186,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
 
     @Override
-    public void onItemClick(Long itineraryId,String way) {
+    public void onItemClick(String itineraryId,String way) {
         mCallback.onSettingsDone(itineraryId,way);
     }
 }

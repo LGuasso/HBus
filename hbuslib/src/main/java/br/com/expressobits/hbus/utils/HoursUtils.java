@@ -76,7 +76,7 @@ public class HoursUtils {
      * @param calendar Calendario
      * @return TypeDay
      */
-    public static TypeDay getStringTipoDeDia(Calendar calendar) {
+    public static TypeDay getTypedayinCalendar(Calendar calendar) {
         switch (calendar.get(Calendar.DAY_OF_WEEK)) {
             case Calendar.SATURDAY:
                 return TypeDay.SATURDAY;

@@ -3,16 +3,14 @@ package br.com.expressobits.hbusgenerator;
 import android.content.Context;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.dao.BusContract;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.dao.BusDAOGenerator;
 import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.dao.CodeContract;
 import br.com.expressobits.hbus.dao.ItineraryContract;
 import br.com.expressobits.hbus.dao.SaveModel;
-import br.com.expressobits.hbus.dao.TimesHelper;
 import br.com.expressobits.hbus.file.ReadFile;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
@@ -28,13 +26,13 @@ public class DbManager implements SaveModel{
 
     private static DbManager instance;
     private Context context;
-    private BusDAO dao;
+    private BusDAOGenerator dao;
     private ReadFile file;
     private static final String TAG = "DBMANAGER";
 
     public DbManager(Context context){
         this.context = context;
-        dao = new BusDAO(context);
+        dao = new BusDAOGenerator(context);
         file = new ReadFile(context);
     }
 

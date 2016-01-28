@@ -21,10 +21,10 @@ public class ChooseWayDialogFragment extends DialogFragment implements DialogInt
 
     public static final String TAG = "chooseDialog";
     List<String> ways;
-    Long itinerary;
+    String itinerary;
     private ChooseWayDialogListener mCallback;
 
-    public void setParameters(ChooseWayDialogListener mCallback,Long itinerary,List<String> ways){
+    public void setParameters(ChooseWayDialogListener mCallback,String itinerary,List<String> ways){
         this.itinerary = itinerary;
         this.ways = ways;
         this.mCallback = mCallback;

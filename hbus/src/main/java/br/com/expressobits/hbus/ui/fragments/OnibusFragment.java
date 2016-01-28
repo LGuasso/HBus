@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,9 @@ import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
     public static final String TAG = "OnibusFragment";
-    public static final String ARGS_LINHA = "ItineraryId";
-    public static final String ARGS_SENTIDO = "Way";
+    public static final String ARGS_CITYID = "cityId";
+    public static final String ARGS_ITINERARYID = "itineraryId";
+    public static final String ARGS_WAY = "Way";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
@@ -34,8 +34,8 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         initViews(view);
 
         Bundle arguments = getArguments();
-        if(arguments!=null && arguments.getLong(ARGS_LINHA, 0l)!=0l && arguments.getString(ARGS_SENTIDO)!=null){
-            refresh(arguments.getLong(ARGS_LINHA),arguments.getString(ARGS_SENTIDO));
+        if(arguments!=null && arguments.getString(ARGS_CITYID)!=null &&arguments.getString(ARGS_ITINERARYID)!=null && arguments.getString(ARGS_WAY)!=null){
+            refresh(arguments.getString(ARGS_CITYID),arguments.getString(ARGS_ITINERARYID),arguments.getString(ARGS_WAY));
         }
         return view;
 
@@ -59,13 +59,14 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         Bundle arguments = getArguments();
-        setupViewPager(viewPager, arguments.getLong(ARGS_LINHA), arguments.getString(ARGS_SENTIDO));
+        setupViewPager(viewPager,arguments.getString(ARGS_CITYID),arguments.getString(ARGS_ITINERARYID), arguments.getString(ARGS_WAY));
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager,Long itinearyId,String way) {
+    private void setupViewPager(ViewPager viewPager,String cityId,String itinearyId,String way) {
         viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager(),
                 getActivity(),
+                cityId,
                 itinearyId,
                 way);
         viewPagerAdapter.addFragment(new HoursFragment(),
@@ -81,8 +82,8 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
      * @param itineraryId
      * @param way
      */
-    public void refresh(Long itineraryId,String way){
-        viewPagerAdapter.refresh(itineraryId, way);
+    public void refresh(String cityId,String itineraryId,String way){
+        viewPagerAdapter.refresh(cityId,itineraryId, way);
         viewPager.setAdapter(viewPagerAdapter);
     }
 

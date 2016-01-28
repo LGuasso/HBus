@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.dao.BusHelper;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
@@ -29,8 +31,10 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     private LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
     private Context context;
+    private String cityId;
 
-    public ItemBusAdapter(Context context, List<Bus> listBus){
+    public ItemBusAdapter(Context context, List<Bus> listBus,String cityId){
+        this.cityId = cityId;
         this.context = context;
         this.listBus = HoursUtils.sortByTimeBus(listBus);
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -44,14 +48,16 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
-        TimesDbHelper db = new TimesDbHelper(context);
+        BusDAO db = new BusDAO(context);
 
 
         //Metodo que atualiza informacoes
         myViewHolder.txtViewHorario.setText(listBus.get(i).getTime());
-        Code code = db.getCode(listBus.get(i).getCodeId());
-        myViewHolder.txtViewCode.setText(code.getName());
-        myViewHolder.txtViewDescrition.setText(code.getDescrition());
+        Code code = db.getCode(cityId,listBus.get(i).getCode());
+        if(code!=null) {
+            myViewHolder.txtViewCode.setText(code.getName());
+            myViewHolder.txtViewDescrition.setText(code.getDescrition());
+        }
         myViewHolder.txtViewDescrition.setSelected(true);
         db.close();
     }

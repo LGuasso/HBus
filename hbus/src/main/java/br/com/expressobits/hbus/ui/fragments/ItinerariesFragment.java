@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
@@ -54,11 +55,11 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     }
 
     private void initListViews(View view){
-        Long cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getLong(SelectCityActivity.TAG,0l);
+        String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
         recyclerViewItineraries.setHasFixedSize(true);
         FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
-        TimesDbHelper dao = new TimesDbHelper(getActivity());
+        BusDAO dao = new BusDAO(getActivity());
         listItineraries = dao.getItineraries(cityId);
         List<Itinerary> favoriteItineraries = favoriteDAO.getItineraries(cityId);
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),true,listItineraries,favoriteItineraries);

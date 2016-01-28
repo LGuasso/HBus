@@ -14,6 +14,19 @@ public enum TypeDay {
     SATURDAY,SUNDAY;
 
 
+    public static TypeDay getTypeday(String typeday){
+        switch (typeday){
+            case "useful":
+                return USEFUL;
+            case "saturday":
+                return SATURDAY;
+            case "sunday":
+                return SUNDAY;
+        }
+        return USEFUL;
+    }
+
+
     public int toInt(){
         switch (this){
             case USEFUL:
@@ -41,6 +54,8 @@ public enum TypeDay {
                 return "ERRO";
         }
     }
+
+
 
 
 

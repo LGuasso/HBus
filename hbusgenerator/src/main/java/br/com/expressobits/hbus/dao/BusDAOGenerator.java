@@ -15,11 +15,11 @@ import br.com.expressobits.hbus.model.Itinerary;
 /**
  * Created by rafael on 08/12/15.
  */
-public class BusDAO extends SQLiteOpenHelper{
+public class BusDAOGenerator extends SQLiteOpenHelper{
 
     private static final String TAG = "GENERATOR";
 
-    public BusDAO(Context context){
+    public BusDAOGenerator(Context context){
         super(context, TimesHelper.DATABASE_NAME, null, TimesHelper.DATABASE_VERSION);
     }
 

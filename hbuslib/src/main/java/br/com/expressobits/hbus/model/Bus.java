@@ -11,17 +11,12 @@ public class Bus implements Comparable<Bus>{
 
     public static final String TAG="Bus";
 
-    private Long id;
+    private String id;
 
     /**
      * Sentido do ônibus expresso em {@link String}
      */
     private String way;
-
-    /**
-     * Nome da linha do ônibus expresso em {@link String}
-     */
-    private Long itineraryId;
     /**
      * Horário do bus expresso em {@link String}
      */
@@ -41,7 +36,7 @@ public class Bus implements Comparable<Bus>{
      */
     private Long cityid;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -61,11 +56,7 @@ public class Bus implements Comparable<Bus>{
         this.code = code;
     }
 
-    public Long getItineraryId() {
-        return itineraryId;
-    }
-
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -88,10 +79,6 @@ public class Bus implements Comparable<Bus>{
 
     public Long getCityid() {
         return cityid;
-    }
-
-    public void setItineraryId(Long itineraryId) {
-        this.itineraryId = itineraryId;
     }
 
     public void setCityid(Long cityid) {

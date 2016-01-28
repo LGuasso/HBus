@@ -11,7 +11,7 @@ public interface OnSettingsListener {
      * @param itineraryId itinerario
      * @param way way
      */
-    public void onSettingsDone(Long itineraryId,String way);
+    public void onSettingsDone(String itineraryId,String way);
 
     /**
      *

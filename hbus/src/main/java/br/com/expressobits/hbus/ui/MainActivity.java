@@ -26,6 +26,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Drawer navigationDrawer;
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
-    Long itineraryId;
+    String cityId;
+    String itineraryId;
     String way;
 
     @Override
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.favorites)
                 .withBadge(getString(R.string.number_of_itineraries,
-                        favoriteDAO.getItineraries(PreferenceManager.getDefaultSharedPreferences(this).getLong(SelectCityActivity.TAG,0)).size()))
+                        favoriteDAO.getItineraries(PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY)).size()))
                 .withIdentifier(0)
                 .withIcon(R.drawable.ic_star_grey600_24dp));
         navigationDrawer.addItem(new PrimaryDrawerItem()
@@ -183,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .withName(R.string.action_help)
                 .withIdentifier(3)
                 .withIcon(R.drawable.ic_help_circle_grey600_24dp));
+        //todo design colocar 'change city' here
 
         dao.close();
         favoriteDAO.close();
@@ -190,14 +193,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onSettingsDone(Long itineraryId, String sentido) {
+    public void onSettingsDone(String itineraryId, String sentido) {
         this.itineraryId = itineraryId;
         this.way = sentido;
-        TimesDbHelper db = new TimesDbHelper(this);
+        BusDAO db = new BusDAO(this);
         pToolbar.setTitle(db.getItinerary(itineraryId).getName());
         db.close();
         pToolbar.setSubtitle(sentido);
         FragmentTransaction ft = fragmentManager.beginTransaction();
+        cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         /** Se for acessodado de um smartphone o espaco main existir */
         /** Adiciona o fragment com o novo conteudo no unico espaco */
         OnibusFragment onibusFragment = (OnibusFragment) fragmentManager.findFragmentByTag("onibusFragment");
@@ -205,12 +209,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (findViewById(R.id.framelayout_main) != null) {
 
             if (onibusFragment != null) {
-                onibusFragment.refresh(itineraryId, sentido);
+                onibusFragment.refresh(
+                        cityId,
+                        itineraryId, sentido);
             } else {
                 onibusFragment = new OnibusFragment();
                 Bundle args = new Bundle();
-                args.putLong(OnibusFragment.ARGS_LINHA, itineraryId);
-                args.putString(OnibusFragment.ARGS_SENTIDO, sentido);
+                args.putString(OnibusFragment.ARGS_CITYID, cityId);
+                args.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
+                args.putString(OnibusFragment.ARGS_WAY, sentido);
                 onibusFragment.setArguments(args);
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transa��o novamente na pilha de navega��o
@@ -219,12 +226,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else if (findViewById(R.id.framelayout_content) != null) {
             if (onibusFragment != null) {
-                onibusFragment.refresh(itineraryId, sentido);
+                onibusFragment.refresh(
+                        PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY),
+                        itineraryId, sentido);
             } else {
                 onibusFragment = new OnibusFragment();
                 Bundle args = new Bundle();
-                args.putLong(OnibusFragment.ARGS_LINHA, itineraryId);
-                args.putString(OnibusFragment.ARGS_SENTIDO, sentido);
+                args.putString(OnibusFragment.ARGS_CITYID, cityId);
+                args.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
+                args.putString(OnibusFragment.ARGS_WAY, sentido);
                 onibusFragment.setArguments(args);
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
                 // e adiciona a transacao novamente na pilha de navegacao
@@ -270,18 +280,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putLong(OnibusFragment.ARGS_LINHA, itineraryId);
-        outState.putString(OnibusFragment.ARGS_SENTIDO, way);
+        outState.putString(OnibusFragment.ARGS_CITYID, cityId);
+        outState.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
+        outState.putString(OnibusFragment.ARGS_WAY, way);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
     public void setActionBarTitle(String title, String subtitle) {
         pToolbar.setTitle(title);
         pToolbar.setSubtitle(subtitle);
-        Long cityId = PreferenceManager.getDefaultSharedPreferences(this).getLong(SelectCityActivity.TAG, 0l);
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         String cityname = getString(R.string.not_found_city);
-        if(cityId>0l) {
-            TimesDbHelper db = new TimesDbHelper(this);
+        if(!cityId.equals(SelectCityActivity.NOT_CITY)) {
+            BusDAO db = new BusDAO(this);
             cityname = db.getCity(cityId).getName();
             db.close();
         }
@@ -310,8 +321,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
-    public void onCreateDialogChooseWay(Long itineraryId) {
-        TimesDbHelper dao = new TimesDbHelper(this);
+    public void onCreateDialogChooseWay(String itineraryId) {
+        BusDAO dao = new BusDAO(this);
 
         List<String> ways = dao.getItinerary(itineraryId).getWays();
         if (ways.size() > 1) {
@@ -344,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onItemClick(Long itineraryId, String way) {
+    public void onItemClick(String itineraryId, String way) {
         onSettingsDone(itineraryId, way);
     }
 }

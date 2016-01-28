@@ -6,31 +6,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.firebase.client.Firebase;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.dao.FirebaseDAO;
-import br.com.expressobits.hbus.dao.BusContract;
-import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.dao.CityContract;
-import br.com.expressobits.hbus.dao.CodeContract;
-import br.com.expressobits.hbus.dao.ItineraryContract;
 import br.com.expressobits.hbus.file.ReadFile;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{

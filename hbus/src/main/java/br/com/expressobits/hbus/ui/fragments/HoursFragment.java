@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,9 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.adapters.ItemBusAdapter;
-import br.com.expressobits.hbus.dao.TimesDbHelper;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 
@@ -29,9 +29,10 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
     private List<Bus> listBus;
     private Context context;
     private static final String TAG = "HoursFragment";
-    public static final String ARGS_LINHA = "ItineraryId";
-    public static final String ARGS_SENTIDO = "Way";
-    public static final String ARGS_TYPEDAY = "Typeday";
+    public static final String ARGS_CITYID = "cityId";
+    public static final String ARGS_ITINERARYID = "itineraryId";
+    public static final String ARGS_WAY = "Way";
+    public static final String ARGS_TYPEDAY = "typeday";
 
     public HoursFragment() {
         // Required empty public constructor
@@ -45,13 +46,15 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
         this.context = inflater.getContext();
         initRecyclerView(view);
         Bundle arguments = getArguments();
-        if(arguments!=null && arguments.getLong(ARGS_LINHA, 0l)!=0l &&
-                arguments.getString(ARGS_SENTIDO)!=null &&
+        if(arguments!=null && arguments.getString(ARGS_CITYID)!=null &&
+                arguments.getString(ARGS_ITINERARYID)!=null &&
+                arguments.getString(ARGS_WAY)!=null &&
                 arguments.getString(ARGS_TYPEDAY)!=null){
             refresh(context,
-                    arguments.getLong(ARGS_LINHA),
-                    arguments.getString(ARGS_SENTIDO),
-                    arguments.getString(ARGS_TYPEDAY));
+                    arguments.getString(ARGS_CITYID),
+                    arguments.getString(ARGS_ITINERARYID),
+                    arguments.getString(ARGS_WAY),
+                    TypeDay.getTypeday(ARGS_TYPEDAY));
         }
         return view;
     }
@@ -72,11 +75,11 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
 
     }
 
-    protected void refresh(Context context,Long itineraryId,String way,String typeday){
-        TimesDbHelper timesDbHelper = new TimesDbHelper(context);
-        listBus = timesDbHelper.getBuses(itineraryId,way,typeday);
-        timesDbHelper.close();
-        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus);
+    protected void refresh(Context context,String cityId,String itineraryId,String way,TypeDay typeday){
+        BusDAO dao = new BusDAO(context);
+        listBus = dao.getBuses(cityId,itineraryId,way,typeday);
+        dao.close();
+        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus,cityId);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerView.setAdapter(adapterUeful);
 

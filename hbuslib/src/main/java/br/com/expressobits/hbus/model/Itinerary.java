@@ -20,8 +20,6 @@ public class Itinerary {
 
     private ArrayList<String> codigos;
 
-    private Long cityid;
-
     public String getId() {
         return id;
     }
@@ -44,14 +42,6 @@ public class Itinerary {
 
     public void setWays(List<String> ways) {
         this.ways = ways;
-    }
-
-    public void setCityid(Long cityid) {
-        this.cityid = cityid;
-    }
-
-    public Long getCityid() {
-        return cityid;
     }
 
     public ArrayList<String> getCodigos(){

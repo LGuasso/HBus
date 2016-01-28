@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
 
@@ -23,9 +24,11 @@ public class FavoriteDAO extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASENAME = "itineraries_favorites.db";
-
+    private  Context context;
     public FavoriteDAO(Context context){
+
         super(context, DATABASENAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -39,19 +42,22 @@ public class FavoriteDAO extends SQLiteOpenHelper{
     }
 
     public void insert(Itinerary itinerary){
-        TimesHelper.insert(getWritableDatabase(),itinerary);
+        BusHelper.insert(getWritableDatabase(),itinerary);
     }
 
     public void removeFavorite(Itinerary itinerary){
-        getWritableDatabase().delete(ItineraryContract.Itinerary.TABLE_NAME, ItineraryContract.Itinerary._ID + " = ?", new String[]{itinerary.getId().toString()});
+        getWritableDatabase().delete(ItineraryContract.Itinerary.TABLE_NAME, ItineraryContract.Itinerary._ID + " = ?", new String[]{itinerary.getId()});
     }
 
-    public List<Itinerary> getItineraries(Long cityId){
-        return TimesHelper.getItineraries(getReadableDatabase(),cityId);
+    public List<Itinerary> getItineraries(String cityId){
+        BusDAO dao = new BusDAO(context);
+        City city = dao.getCity(cityId);
+        dao.close();
+        return BusHelper.getItineraries(getReadableDatabase(),city);
     }
 
-    public Itinerary getItinerary(Long itineraryId) {
-        return TimesHelper.getItinerary(getReadableDatabase(),itineraryId);
+    public Itinerary getItinerary(String itineraryId) {
+        return BusHelper.getItinerary(getReadableDatabase(),itineraryId);
     }
 
 }

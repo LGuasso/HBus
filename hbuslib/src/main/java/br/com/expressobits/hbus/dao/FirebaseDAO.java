@@ -146,13 +146,19 @@ public class FirebaseDAO{
         ref.addChildEventListener(childEventListener);
     }
 
-    public void getItineraries(ValueEventListener valueEventListener){
-        Firebase ref = firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME);
+    public void getItineraries(ValueEventListener valueEventListener,City city){
+        Firebase ref = firebaseRef.child(ItineraryContract.Itinerary.TABLE_NAME).child(city.getCountry()).child(city.getName());
         ref.addValueEventListener(valueEventListener);
     }
 
-    public void getCodes(ValueEventListener valueEventListener){
-        Firebase ref = firebaseRef.child(CodeContract.Code.TABLE_NAME);
+    public void getCodes(ValueEventListener valueEventListener,City city){
+        Firebase ref = firebaseRef.child(CodeContract.Code.TABLE_NAME).child(city.getCountry()).child(city.getName());;
+        ref.addValueEventListener(valueEventListener);
+    }
+
+    public void getBus(ValueEventListener valueEventListener,City city,Itinerary itinerary,String way,String typeday){
+        Firebase ref = firebaseRef.child(BusContract.Bus.TABLE_NAME).child(city.getCountry()).child(city.getName())
+                .child(itinerary.getName()).child(way).child(typeday);
         ref.addValueEventListener(valueEventListener);
     }
 

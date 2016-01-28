@@ -58,17 +58,20 @@ public class TPCDataBaseInit extends Application{
             e.printStackTrace();
         }
 
-        if(56> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             clearApplicationData(this);
         }
         if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("santa_maria_rs_bus_data.db");
         }
-        if(70> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            this.deleteDatabase("bus_database.db");
+        }
+        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("bus_data.db");
             Log.e(TAG,"DELETE BUS DATA");
         }
-        if(70> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove(SelectCityActivity.TAG);
@@ -80,7 +83,7 @@ public class TPCDataBaseInit extends Application{
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("version",pInfo.versionCode);
-                editor.apply();
+                //editor.apply();
             }
         }
 

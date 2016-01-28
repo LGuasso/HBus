@@ -42,23 +42,17 @@ public class TimesHelper {
                     ItineraryContract.Itinerary._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     ItineraryContract.Itinerary.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     ItineraryContract.Itinerary.COLUMN_NAME_WAYS + TEXT_TYPE + COMMA_SEP +
-                    ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID + INTEGER_TYPE +
                     " )";
     protected static final String SQL_CREATE_CODES =
             "CREATE TABLE " + CodeContract.Code.TABLE_NAME + " (" +
                     CodeContract.Code._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     CodeContract.Code.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     CodeContract.Code.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
-                    CodeContract.Code.COLUMN_NAME_CITY_ID + INTEGER_TYPE +
                     " )";
     protected static final String SQL_CREATE_BUSES =
             "CREATE TABLE " + BusContract.Bus.TABLE_NAME + " (" +
                     BusContract.Bus._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     BusContract.Bus.COLUMN_NAME_TIME + TEXT_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_WAY + TEXT_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_TYPEDAY + TEXT_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_CITY_ID + INTEGER_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_ITINERARY_ID + INTEGER_TYPE + COMMA_SEP +
                     BusContract.Bus.COLUMN_NAME_CODE + INTEGER_TYPE +
                     " )";
 
@@ -79,7 +73,6 @@ public class TimesHelper {
         values.put(ItineraryContract.Itinerary._ID,itinerary.getId());
         values.put(ItineraryContract.Itinerary.COLUMN_NAME_NAME,itinerary.getName());
         values.put(ItineraryContract.Itinerary.COLUMN_NAME_WAYS, TextUtils.getSentidosinString(itinerary.getWays()));
-        values.put(ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID,itinerary.getCityid());
         return values;
     }
 
@@ -88,7 +81,6 @@ public class TimesHelper {
         values.put(CodeContract.Code._ID,code.getId());
         values.put(CodeContract.Code.COLUMN_NAME_NAME,code.getName());
         values.put(CodeContract.Code.COLUMN_NAME_DESCRIPTION,code.getDescrition());
-        values.put(CodeContract.Code.COLUMN_NAME_CITY_ID,code.getCityid());
         return values;
     }
 
@@ -97,10 +89,10 @@ public class TimesHelper {
         values.put(BusContract.Bus._ID,bus.getId());
         values.put(BusContract.Bus.COLUMN_NAME_TIME,bus.getTime());
         values.put(BusContract.Bus.COLUMN_NAME_CODE,bus.getCode());
-        values.put(BusContract.Bus.COLUMN_NAME_TYPEDAY,bus.getTypeday().toString());
-        values.put(BusContract.Bus.COLUMN_NAME_WAY,bus.getWay());
-        values.put(BusContract.Bus.COLUMN_NAME_CITY_ID,bus.getCityid());
-        values.put(BusContract.Bus.COLUMN_NAME_ITINERARY_ID,bus.getItineraryId());
+        //values.put(BusContract.Bus.COLUMN_NAME_TYPEDAY,bus.getTypeday().toString());
+        //values.put(BusContract.Bus.COLUMN_NAME_WAY,bus.getWay());
+        //values.put(BusContract.Bus.COLUMN_NAME_CITY_ID,bus.getCityid());
+        //values.put(BusContract.Bus.COLUMN_NAME_ITINERARY_ID,bus.getItineraryId());
         return values;
     }
 
@@ -161,28 +153,26 @@ public class TimesHelper {
         //itinerary.setId(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary._ID)));
         itinerary.setName(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_NAME)));
         itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_WAYS)).split(COMMA_SEP))));
-        itinerary.setCityid(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID)));
         return itinerary;
     }
 
     protected static Code cursorToCode(Cursor c){
         Code code = new Code();
-        code.setId(c.getLong(c.getColumnIndexOrThrow(CodeContract.Code._ID)));
+        //code.setId(c.getLong(c.getColumnIndexOrThrow(CodeContract.Code._ID)));
         code.setName(c.getString(c.getColumnIndexOrThrow(CodeContract.Code.COLUMN_NAME_NAME)));
         code.setDescrition(c.getString(c.getColumnIndexOrThrow(CodeContract.Code.COLUMN_NAME_DESCRIPTION)));
-        code.setCityid(c.getLong(c.getColumnIndexOrThrow(CodeContract.Code.COLUMN_NAME_CITY_ID)));
         return code;
     }
 
     protected static Bus cursorToBus(Cursor c){
         Bus bus = new Bus();
-        bus.setId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus._ID)));
+        //bus.setId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus._ID)));
         bus.setTime(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TIME)));
         bus.setCode(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CODE)));
-        bus.setCityid(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CITY_ID)));
-        bus.setItineraryId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_ITINERARY_ID)));
-        bus.setWay(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_WAY)));
-        bus.setTypeday(HoursUtils.getTypeDayforString(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TYPEDAY))));
+        //bus.setCityid(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CITY_ID)));
+        //bus.setItineraryId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_ITINERARY_ID)));
+         //bus.setWay(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_WAY)));
+        //bus.setTypeday(HoursUtils.getTypeDayforString(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TYPEDAY))));
         return bus;
     }
 
@@ -280,7 +270,7 @@ public class TimesHelper {
 
     public static Code getCode(SQLiteDatabase db,String name,Long cityId){
         String where = CodeContract.Code.COLUMN_NAME_NAME+" = ? AND "+
-                CodeContract.Code.COLUMN_NAME_CITY_ID+" = ?";
+                CodeContract.Code.COLUMN_NAME_DESCRIPTION+" = ?";
         String arguments[] = {name,cityId.toString()};
         Cursor cursor = db.query(
                 CodeContract.Code.TABLE_NAME,
@@ -375,7 +365,8 @@ public class TimesHelper {
 
     public static List<Itinerary> getItineraries(SQLiteDatabase db,Long cityId){
         ArrayList<Itinerary> itineraries = new ArrayList<Itinerary>();
-        String where = ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID+" = ?";
+        //TODO erro cloum name
+        String where = ItineraryContract.Itinerary.COLUMN_NAME_WAYS+" = ?";
         String arguments[] = {cityId.toString()};
         Cursor c;
         c = db.query(
@@ -397,9 +388,9 @@ public class TimesHelper {
         ArrayList<Bus> buses = new ArrayList<Bus>();
         //way = TextUtils.toSimpleNameWay(way);
         Cursor c;
-        String where = BusContract.Bus.COLUMN_NAME_ITINERARY_ID+" = ? AND "+
-                BusContract.Bus.COLUMN_NAME_WAY+" = ? AND "+
-                BusContract.Bus.COLUMN_NAME_TYPEDAY+" = ?";
+        String where = //BusContract.Bus.COLUMN_NAME_ITINERARY_ID+" = ? AND "+
+                //BusContract.Bus.COLUMN_NAME_WAY+" = ? AND "+
+                /*BusContract.Bus.COLUMN_NAME_TYPEDAY+*/" = ?";
         String arguments[] = {String.valueOf(itineraryId),way,typeday};
         c = db.query(
                 BusContract.Bus.TABLE_NAME,
@@ -426,7 +417,7 @@ public class TimesHelper {
                             db,
                             Long.parseLong(itinerary.getId()),
                             itinerary.getWays().get(j),
-                            HoursUtils.getStringTipoDeDia(Calendar.getInstance()).toString())));
+                            HoursUtils.getTypedayinCalendar(Calendar.getInstance()).toString())));
         }
         return next;
     }
