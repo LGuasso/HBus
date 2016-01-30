@@ -25,5 +25,13 @@
         android:indeterminate="true"
         android:visibility="visible"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/imageNetworkError"
+        android:src="@android:drawable/stat_notify_error"
+        android:visibility="invisible"/>
+
 
     </RelativeLayout>

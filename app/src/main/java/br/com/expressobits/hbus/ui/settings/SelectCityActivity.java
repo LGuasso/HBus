@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.dialog.DownloadDataDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
+import br.com.expressobits.hbus.util.NetworkUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -42,6 +44,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     public static final String TAG = "city";
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private ImageView imageViewNetworkError;
     private BusDAO db;
 
     public static final String NOT_CITY = "not_city";
@@ -64,6 +67,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private void initViews() {
         initProgressBar();
         initActionBar();
+        imageViewNetworkError = (ImageView) findViewById(R.id.imageNetworkError);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_cities);
@@ -81,9 +85,15 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
         refreshRecyclerView();
 
-        FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
-        String country = "RS";
-        dao.getCities(this, country);
+        if(NetworkUtils.isWifiConnected(this) || NetworkUtils.isMobileConnected(this)){
+            FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
+            String country = "RS";
+            dao.getCities(this, country);
+        }else{
+            progressBar.setVisibility(View.INVISIBLE);
+            imageViewNetworkError.setVisibility(View.VISIBLE);
+        }
+
 
 
         /**TimesDbHelper db = new TimesDbHelper(this);
@@ -160,13 +170,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        City city = dataSnapshot.getValue(City.class);
-        cities.add(city);
-        //TimesDbHelper db = new TimesDbHelper(this);
-        //db.insertCity(city);
-        refreshRecyclerView();
-        progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override

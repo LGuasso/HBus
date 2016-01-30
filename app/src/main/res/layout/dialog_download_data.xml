@@ -11,10 +11,11 @@
         android:orientation="vertical"
         android:layout_centerInParent="true">
         <TextView
-            android:id="@+id/textViewTitle"
-            android:text="@string/downloading_data"
+            android:id="@+id/textViewLoad"
+            android:text="@string/wait_a_few_minutes"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -22,6 +23,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"/>
+
+        <TextView
+            android:id="@+id/textViewMessage"
+            android:text="@string/downloading_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 

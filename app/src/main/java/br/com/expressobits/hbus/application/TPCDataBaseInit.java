@@ -83,7 +83,7 @@ public class TPCDataBaseInit extends Application{
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("version",pInfo.versionCode);
-                //editor.apply();
+                editor.apply();
             }
         }
 

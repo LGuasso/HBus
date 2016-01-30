@@ -53,9 +53,10 @@
     <string name="see_on_play_store">See on Play Store</string>
     <string name="write_your_feedback_here">Write your feedback here</string>
     <string name="send_your_feedback_to_expressobits">Send your feedback to Expresso Bits and make best app now!</string>
-    <string name="downloading_data">Downloading data</string>
+    <string name="downloading_data">Downloading data for city of %1$s</string>
     <string name="include_system_information">Include system information</string>
     <string name="send_feedback_with_sucess">Send feedback with sucess!</string>
+    <string name="wait_a_few_minutes">Wait a few minutes</string>
 
 
 </resources>

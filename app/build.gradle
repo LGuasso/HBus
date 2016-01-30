@@ -9,7 +9,7 @@ android {
         minSdkVersion 11
         targetSdkVersion 23
         versionCode 76
-        versionName "0.7.6.beta"
+        versionName "0.7.6.alpha"
         multiDexEnabled true
     }
     buildTypes {
