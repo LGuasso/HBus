@@ -1,18 +1,13 @@
 package br.com.expressobits.hbus.dao;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
  * Classe que determina database para {@link br.com.expressobits.hbus.model.Itinerary} favoritos,

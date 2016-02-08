@@ -13,7 +13,6 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.BusHelper;
-import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.Bus;

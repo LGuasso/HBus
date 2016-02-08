@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.dao.BusContract;
 import br.com.expressobits.hbus.dao.BusDAOGenerator;
 import br.com.expressobits.hbus.dao.CityContract;
@@ -13,7 +14,6 @@ import br.com.expressobits.hbus.dao.ItineraryContract;
 import br.com.expressobits.hbus.dao.SaveModel;
 import br.com.expressobits.hbus.file.ReadFile;
 import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
@@ -22,7 +22,7 @@ import br.com.expressobits.hbus.utils.TextUtils;
  * @author Rafael
  * @since 18/01/16.
  */
-public class DbManager implements SaveModel{
+public class DbManager /**implements SaveModel*/{
 
     private static DbManager instance;
     private Context context;
@@ -60,19 +60,19 @@ public class DbManager implements SaveModel{
         return file.getBuses(city, itinerary, way, typeday);
     }
 
-    @Override
+    //@Override
     public void saveCities() {
         Log.i(TAG, "Inserindo cidades");
         for (City city:readFileCity()) {
-            Long cityId = dao.insertCity(city);
-            city.setId(cityId.toString());
+            //Long cityId = dao.insertCity(city);
+            //city.setId(cityId.toString());
             Log.i(TAG, "> " + city.getName());
             saveCodes(city);
             saveItineraries(city);
         }
     }
 
-    @Override
+    //@Override
     public void saveItineraries(City city) {
         Log.i(TAG,"  >Inserindo itinerarios");
         for(Itinerary itinerary:readFileItinerary(city)){
@@ -88,7 +88,7 @@ public class DbManager implements SaveModel{
         }
     }
 
-    @Override
+    //@Override
     public void saveCodes(City city) {
         Log.i(TAG,"  >Inserindo codes");
         for (Code code:readFileCode(city)) {
@@ -97,7 +97,7 @@ public class DbManager implements SaveModel{
         }
     }
 
-    @Override
+    //@Override
     public void saveBus(City city, Itinerary itinerary, String way, String typeday) {
         Log.i(TAG,"  >Inserindo buses");
         Log.i(TAG,"  > >>>>Inserindo buses");

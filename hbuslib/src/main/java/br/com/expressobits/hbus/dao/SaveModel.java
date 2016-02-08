@@ -1,10 +1,6 @@
 package br.com.expressobits.hbus.dao;
 
-import java.util.List;
-
-import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 
 /**

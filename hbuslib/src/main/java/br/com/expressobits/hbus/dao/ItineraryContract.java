@@ -18,7 +18,7 @@ public final class ItineraryContract {
 
     public static final String SQL_CREATE_TABLE =
             "CREATE TABLE "+Itinerary.TABLE_NAME+" "+
-                    "("+Itinerary._ID+BusHelper.TEXT_PRIMARY_KEY+BusHelper.COMMA_SEP+
+                    "("+Itinerary._ID+ BusHelper.TEXT_PRIMARY_KEY+BusHelper.COMMA_SEP+
                     " "+Itinerary.COLUMN_NAME_NAME+BusHelper.TEXT_TYPE+BusHelper.COMMA_SEP+
                     " "+Itinerary.COLUMN_NAME_WAYS+BusHelper.TEXT_TYPE+
                     BusHelper.PARENTES+BusHelper.POINTCOMMA;

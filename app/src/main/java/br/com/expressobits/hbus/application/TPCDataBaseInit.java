@@ -16,7 +16,6 @@ import java.io.File;
 
 import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.FirebaseDAO;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 

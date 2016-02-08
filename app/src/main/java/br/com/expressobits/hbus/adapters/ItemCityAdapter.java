@@ -12,8 +12,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.model.City;
 
 /**
  * @author Rafael Correa
@@ -44,7 +44,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
 
     @Override
     public void onBindViewHolder(HolderCity holder, int position) {
-
+        //TODO implementar imagem da cidade
         holder.textViewCity.setText(listCities.get(position).getName()+" - "+listCities.get(position).getCountry());
         //holder.imageViewCity.setImageDrawable(new BitmapDrawable(listCities.get(position).getImage()));
         //holder.imageViewCity.setImageDrawable(listCities.get(position).getImageDrawable());

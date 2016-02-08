@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
 import br.com.expressobits.hbus.dao.CodeContract;
 import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
@@ -43,7 +44,12 @@ public class ReadFile {
         City city = new City();
         city.setName(text.split(SPLIT_FILE)[0]);
         city.setCountry(text.split(SPLIT_FILE)[1]);
-        city.setPosition(text.split(SPLIT_FILE)[2]);
+        String[] location = text.split(SPLIT_FILE)[2].split(",");
+        city.setLocation(
+                new GeoPt()
+                        .setLatitude(Float.valueOf(location[0]))
+                        .setLongitude(Float.valueOf(location[1]))
+        );
         return city;
     }
 

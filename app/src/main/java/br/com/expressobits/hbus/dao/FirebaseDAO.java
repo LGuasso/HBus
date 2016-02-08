@@ -1,7 +1,6 @@
 package br.com.expressobits.hbus.dao;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -11,19 +10,17 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Feedback;
 import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * @author Rafael
  * @since 09/01/16.
  */
-public class FirebaseDAO{
+public class FirebaseDAO {
 
     private static final String TAG = "Firebase";
     private Firebase firebaseRef;

@@ -13,23 +13,16 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import java.sql.SQLDataException;
-import java.sql.SQLException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FirebaseDAO;
-import br.com.expressobits.hbus.dao.ItineraryContract;
-import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;

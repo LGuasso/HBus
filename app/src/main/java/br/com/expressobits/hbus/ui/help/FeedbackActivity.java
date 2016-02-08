@@ -15,7 +15,6 @@ import android.widget.Toast;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.FirebaseDAO;
 import br.com.expressobits.hbus.model.Feedback;
-import br.com.expressobits.hbus.util.EmailUtils;
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener{
 

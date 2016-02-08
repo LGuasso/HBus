@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,20 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.dao.FirebaseDAO;
-import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemCityAdapter;
-import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.gae.ProgressAsyncTask;
+import br.com.expressobits.hbus.gae.PullCitiesEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.ResultAsyncTask;
 import br.com.expressobits.hbus.ui.ManagerInit;
+import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.dialog.DownloadDataDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
 import br.com.expressobits.hbus.util.NetworkUtils;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,
-        ChildEventListener, FinishListener {
+        ChildEventListener, FinishListener, ProgressAsyncTask,ResultAsyncTask<City>{
 
     private List<City> cities;
     public boolean initial = false;
@@ -57,8 +59,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     }
 
     private void initActionBar() {
-
-        //Define se ? primeira vez do app ou se tem alguma cidade definida...
+        //Define se e primeira vez do app ou se tem alguma cidade definida...
         initial = (PreferenceManager.getDefaultSharedPreferences(this).getString(TAG,NOT_CITY).equals(NOT_CITY));
         Toolbar pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
@@ -68,7 +69,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         initProgressBar();
         initActionBar();
         imageViewNetworkError = (ImageView) findViewById(R.id.imageNetworkError);
-
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_cities);
         recyclerView.setHasFixedSize(true);
@@ -86,21 +86,15 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         refreshRecyclerView();
 
         if(NetworkUtils.isWifiConnected(this) || NetworkUtils.isMobileConnected(this)){
-            FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
-            String country = "RS";
-            dao.getCities(this, country);
+            PullCitiesEndpointsAsyncTask pullCitiesEndpointsAsyncTask = new PullCitiesEndpointsAsyncTask();
+            pullCitiesEndpointsAsyncTask.setProgressAsyncTask(this);
+            pullCitiesEndpointsAsyncTask.setContext(this);
+            pullCitiesEndpointsAsyncTask.setResultAsyncTask(this);
+            pullCitiesEndpointsAsyncTask.execute(new Pair<Context, String>(this,"RS"));
         }else{
             progressBar.setVisibility(View.INVISIBLE);
             imageViewNetworkError.setVisibility(View.VISIBLE);
         }
-
-
-
-        /**TimesDbHelper db = new TimesDbHelper(this);
-         cities = db.getCities();
-         progressBar.setVisibility(View.INVISIBLE);
-         recyclerView.setVisibility(View.VISIBLE);
-         refreshRecyclerView();*/
 
 
     }
@@ -117,12 +111,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onClickListener(View view, final int position) {
-
-        Log.d(TAG,"Selection city id="+cities.get(position).getId());
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(TAG, cities.get(position).getId());
-        editor.apply();
+        Log.d(TAG, "Selection city id=" + cities.get(position).getId());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.confirm_donwload_data_for_city, cities.get(position).getName()));
@@ -131,18 +120,21 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                DownloadDataDialogFragment dialoge = new DownloadDataDialogFragment();
-                dialoge.setParameters(SelectCityActivity.this,cities.get(position));
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(TAG,cities.get(position).getId());
+                editor.apply();
+                //TODO implementar download do cloud datastore
+                /**DownloadDataDialogFragment dialoge = new DownloadDataDialogFragment();
+                //dialoge.setParameters(SelectCityActivity.this,cities.get(position));
                 dialoge.addFinishListener(SelectCityActivity.this);
                 dialoge.show(SelectCityActivity.this.getSupportFragmentManager(), "DOWNLOAD");
                 //TODO implementa download do firebase por cidades especificas
-                //Com progress bar
+                //Com progress bar*/
 
             }
         });
         builder.show();
-
-
     }
 
     @Override
@@ -157,7 +149,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        City city = dataSnapshot.getValue(City.class);
+        /**City city = dataSnapshot.getValue(City.class);
         city.setId(FirebaseUtils.getIdCity(city));
         cities.add(city);
 
@@ -165,7 +157,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         Toast.makeText(this, city.getId(), Toast.LENGTH_LONG).show();
         refreshRecyclerView();
         progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);*/
     }
 
     @Override
@@ -194,5 +186,19 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         } else {
             SelectCityActivity.this.finish();
         }
+    }
+
+    @Override
+    public void setProgressUdate(Integer progress, Class c) {
+        Toast.makeText(this,"Download cities "+progress+"%",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void finished(List result) {
+        cities = result;
+        progressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        refreshRecyclerView();
+        Log.i(TAG,cities.toString());
     }
 }

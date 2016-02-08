@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,10 +26,12 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.List;
 
+import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
+import br.com.expressobits.hbus.gae.InsertCityEndpointsAsyncTask;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
@@ -60,6 +63,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        City city = new City();
+        city.setName("Cruz Alta");
+        city.setCountry("RS");
+        new InsertCityEndpointsAsyncTask().execute(new Pair<Context, City>(this,city));
 
         //new LinhaFile(this).init(this);
         if (savedInstanceState == null) {
