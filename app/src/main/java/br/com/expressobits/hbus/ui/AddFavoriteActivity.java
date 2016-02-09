@@ -10,22 +10,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
+import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 
-public class AddFavoriteActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack {
+public class AddFavoriteActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,ResultListenerAsyncTask<Itinerary>{
 
-    private ArrayList<Itinerary> itineraries;
+    private List<Itinerary> itineraries;
+    private RecyclerView recyclerViewItineraries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +46,17 @@ public class AddFavoriteActivity extends AppCompatActivity implements RecyclerVi
     }
 
     private void initListViews(){
-        RecyclerView recyclerViewItineraries = (RecyclerView) findViewById(R.id.recyclerViewAddItineraries);
-        BusDAO dao = new BusDAO(this);
+        recyclerViewItineraries = (RecyclerView) findViewById(R.id.recyclerViewAddItineraries);
+        //BusDAO dao = new BusDAO(this);
         //TODO implementar linhas que ainda n existem no FAVORITeDAO favoritos
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
 
-        itineraries = new ArrayList<>(dao.getItineraries(cityId));
+        //itineraries = new ArrayList<>(dao.getItineraries(cityId));
 
-        FavoriteDAO favoriteDAO = new FavoriteDAO(this);
+        //FavoriteDAO favoriteDAO = new FavoriteDAO(this);
 
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(this,false,itineraries,favoriteDAO.getItineraries(cityId));
+        //ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(this,false,itineraries,favoriteDAO.getItineraries(cityId))
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(this,false,itineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
         recyclerViewItineraries.setClickable(true);
@@ -60,14 +64,14 @@ public class AddFavoriteActivity extends AppCompatActivity implements RecyclerVi
         LinearLayoutManager llmUseful = new LinearLayoutManager(this);
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewItineraries.setLayoutManager(llmUseful);
-        dao.close();
+        //dao.close();
     }
 
     @Override
     public void onClickListener(View view, int position) {
         TimesDbHelper dao = new TimesDbHelper(this);
-        FavoriteDAO favoriteDAO = new FavoriteDAO(this);
-        favoriteDAO.insert(itineraries.get(position));
+        //FavoriteDAO favoriteDAO = new FavoriteDAO(this);
+        //favoriteDAO.insert(itineraries.get(position));
         dao.close();
         finish();
     }
@@ -75,5 +79,15 @@ public class AddFavoriteActivity extends AppCompatActivity implements RecyclerVi
     @Override
     public boolean onLongClickListener(View view, int position) {
         return false;
+    }
+
+    @Override
+    public void finished(List<Itinerary> itineraries) {
+        this.itineraries = itineraries;
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(this,false,itineraries);
+        arrayAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewItineraries.setAdapter(arrayAdapter);
+        recyclerViewItineraries.setClickable(true);
+
     }
 }

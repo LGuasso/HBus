@@ -3,8 +3,6 @@ package br.com.expressobits.hbus.gae;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.util.Pair;
-import android.widget.Toast;
 
 import com.firebase.client.annotations.NotNull;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -22,7 +20,9 @@ import br.com.expressobits.hbus.R;
  * @author Rafael Correa
  * @since 05/02/16
  */
-public class PullCitiesEndpointsAsyncTask extends AsyncTask<Pair<Context,String>,Integer,List<City>>{
+public class PullCitiesEndpointsAsyncTask extends AsyncTask<String,Integer,List<City>>{
+
+    private static final String TAG = PullCitiesEndpointsAsyncTask.class.getSimpleName();
 
     private static CityApi cityApi = null;
     @NotNull
@@ -30,7 +30,7 @@ public class PullCitiesEndpointsAsyncTask extends AsyncTask<Pair<Context,String>
     @NotNull
     private ProgressAsyncTask progressAsyncTask;
 
-    private ResultAsyncTask<City> resultAsyncTask;
+    private ResultListenerAsyncTask<City> resultListenerAsyncTask;
 
     public void setContext(Context context) {
         this.context = context;
@@ -40,14 +40,12 @@ public class PullCitiesEndpointsAsyncTask extends AsyncTask<Pair<Context,String>
         this.progressAsyncTask = progressAsyncTask;
     }
 
-    public void setResultAsyncTask(ResultAsyncTask<City> resultAsyncTask) {
-        this.resultAsyncTask = resultAsyncTask;
+    public void setResultListenerAsyncTask(ResultListenerAsyncTask<City> resultListenerAsyncTask) {
+        this.resultListenerAsyncTask = resultListenerAsyncTask;
     }
 
     @Override
-    protected List<City> doInBackground(Pair<Context, String>... params) {
-
-        context = params[0].first;
+    protected List<City> doInBackground(String... params) {
 
         if(cityApi == null){
             CityApi.Builder builder = new CityApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
@@ -57,7 +55,7 @@ public class PullCitiesEndpointsAsyncTask extends AsyncTask<Pair<Context,String>
             cityApi = builder.build();
         }
         try {
-            return cityApi.getCities(params[0].second).execute().getItems();
+            return cityApi.getCities(params[0]).execute().getItems();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,13 +66,23 @@ public class PullCitiesEndpointsAsyncTask extends AsyncTask<Pair<Context,String>
 
     @Override
     protected void onPostExecute(List<City> cities) {
-        //Toast.makeText(context,"Download "+cities.size()+" cities from datastore!", Toast.LENGTH_LONG).show();
-        resultAsyncTask.finished(cities);
+        Log.d(TAG, "Download " + cities.size() + " cities from datastore!");
+        if(resultListenerAsyncTask!=null){
+            resultListenerAsyncTask.finished(cities);
+        }else{
+            Log.w(this.getClass().getSimpleName(), "resultListenerAsyncTask is null!");
+        }
+
     }
 
     @Override
     protected void onProgressUpdate(Integer... progress) {
-        progressAsyncTask.setProgressUdate(progress[0], City.class);
+        if(progressAsyncTask!=null){
+            progressAsyncTask.setProgressUdate(progress[0], City.class);
+        }else {
+            Log.w(this.getClass().getSimpleName(),"progressAsyncTask is null!");
+        }
+
     }
 
 

@@ -24,8 +24,11 @@ import br.com.expressobits.hbusgenerator.R;
  */
 public class PullCitiesEndpointsAsyncTask extends AsyncTask<Pair<Context,String>,Void,List<City>> {
 
-    private Context context;
     private static CityApi cityApi = null;
+
+    private Context context;
+
+    private ProgressAsyncTask progressAsyncTask;
 
     @Override
     protected List<City> doInBackground(Pair<Context, String>... params) {

@@ -36,7 +36,6 @@ import static org.junit.Assert.*;
 public class PullCitiesAndroidUnitTest extends ActivityInstrumentationTestCase2<MainActivity>{
 
     private static String TAG = "PullCitiesAndroidUnitTest";
-
     Context context;
     private MainActivity mActivity;
     List<City> cities = new ArrayList<>();

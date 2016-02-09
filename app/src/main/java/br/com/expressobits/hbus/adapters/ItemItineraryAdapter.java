@@ -12,8 +12,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.model.Itinerary;
 
 /**
  * Adapter usado para exibir {@link Itinerary}
@@ -34,6 +34,13 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         this.context = context;
         this.listItineraries = listItineraries;
         this.favoriteItineraries = favoriteItineraries;
+        this.selectAll = selectAll;
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public ItemItineraryAdapter(Context context,boolean selectAll,List<Itinerary> listItineraries) {
+        this.context = context;
+        this.listItineraries = listItineraries;
         this.selectAll = selectAll;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

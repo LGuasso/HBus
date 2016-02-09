@@ -30,16 +30,15 @@ import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.gae.ProgressAsyncTask;
 import br.com.expressobits.hbus.gae.PullCitiesEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.ResultAsyncTask;
+import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.ui.dialog.DownloadDataDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
 import br.com.expressobits.hbus.util.NetworkUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,
-        ChildEventListener, FinishListener, ProgressAsyncTask,ResultAsyncTask<City>{
+        ChildEventListener, FinishListener, ProgressAsyncTask,ResultListenerAsyncTask<City> {
 
     private List<City> cities;
     public boolean initial = false;
@@ -89,8 +88,8 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
             PullCitiesEndpointsAsyncTask pullCitiesEndpointsAsyncTask = new PullCitiesEndpointsAsyncTask();
             pullCitiesEndpointsAsyncTask.setProgressAsyncTask(this);
             pullCitiesEndpointsAsyncTask.setContext(this);
-            pullCitiesEndpointsAsyncTask.setResultAsyncTask(this);
-            pullCitiesEndpointsAsyncTask.execute(new Pair<Context, String>(this,"RS"));
+            pullCitiesEndpointsAsyncTask.setResultListenerAsyncTask(this);
+            pullCitiesEndpointsAsyncTask.execute("RS");
         }else{
             progressBar.setVisibility(View.INVISIBLE);
             imageViewNetworkError.setVisibility(View.VISIBLE);
