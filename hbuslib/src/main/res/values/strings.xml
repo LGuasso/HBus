@@ -1,4 +1,3 @@
 <resources>
     <string name="app_name">HbusLib</string>
-    <string name="api_google_url">https://hbus-1206.appspot.com/_ah/api/</string>
 </resources>

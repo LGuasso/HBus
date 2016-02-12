@@ -10,15 +10,13 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.myApi.MyApi;
 import br.com.expressobits.hbus.backend.cityApi.CityApi;
-import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbuslib.R;
 
 /**
- * Tarefa de inserção de cidades
+ * Task with methods of insert city in datastore backend
  * @author Rafael
  * @since 31/01/16
  */

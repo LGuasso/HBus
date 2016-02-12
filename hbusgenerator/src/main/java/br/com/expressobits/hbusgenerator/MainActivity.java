@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.google.api.client.util.DateTime;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -27,6 +26,7 @@ import br.com.expressobits.hbus.backend.employeeApi.model.Employee;
 import br.com.expressobits.hbus.dao.FirebaseDAO;
 import br.com.expressobits.hbus.file.ReadFile;
 import br.com.expressobits.hbus.gae.GetEmployeeEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.InsertCityEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.InsertEmployeeEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.ProgressAsyncTask;
 import br.com.expressobits.hbus.gae.PullEmployeeEndpointsAsyncTask;

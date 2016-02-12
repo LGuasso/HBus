@@ -11,14 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
-import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
@@ -33,7 +34,7 @@ import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClickListenerHack {
 
     public static final String TAG = "AddFavoriteFragment";
-    private ArrayList<Itinerary> itineraries;
+    private List<Itinerary> itineraries;
     OnSettingsListener onSettingsListener;
 
     @Override
@@ -70,11 +71,11 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
         BusDAO dao = new BusDAO(getActivity());
         //TODO implementar linhas que ainda n existem no FAVORITeDAO favoritos
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        itineraries = new ArrayList<>(dao.getItineraries(cityId));
+        //itineraries = new ArrayList<>(dao.getItineraries(cityId));
 
         FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
 
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),false,itineraries,favoriteDAO.getItineraries(cityId));
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getActivity(),false,itineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
         recyclerViewItineraries.setClickable(true);
@@ -89,7 +90,7 @@ public class AddFavoriteFragment extends Fragment implements RecyclerViewOnClick
     public void onClickListener(View view, int position) {
         TimesDbHelper dao = new TimesDbHelper(AddFavoriteFragment.this.getActivity());
         FavoriteDAO favoriteDAO = new FavoriteDAO(AddFavoriteFragment.this.getActivity());
-        favoriteDAO.insert(itineraries.get(position));
+        //favoriteDAO.insert(itineraries.get(position));
         onSettingsListener.onPopStackBack();
         onSettingsListener.onAddFavorite();
         dao.close();

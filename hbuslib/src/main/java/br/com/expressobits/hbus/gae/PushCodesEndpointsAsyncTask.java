@@ -3,31 +3,30 @@ package br.com.expressobits.hbus.gae;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.firebase.client.annotations.NotNull;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.backend.itineraryApi.ItineraryApi;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.backend.codeApi.CodeApi;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbuslib.R;
 
 /**
- * @author Rafael Correa
- * @since 08/02/16
+ *
+ * @author Rafael
+ * @since 12/02/16
  */
-public class PushItinerariesEndpointsAsyncTask extends AsyncTask<Itinerary,Integer,Integer>{
+public class PushCodesEndpointsAsyncTask extends AsyncTask<Code,Integer,Integer>{
 
-    private static final String TAG = PushItinerariesEndpointsAsyncTask.class.getClass().getSimpleName();
+    private static final String TAG = PushCodesEndpointsAsyncTask.class.getSimpleName();
 
-    private static ItineraryApi itineraryApi = null;
-    @NotNull
+    private static CodeApi codeApi;
+
     private Context context;
-    @NotNull
+
     private ProgressAsyncTask progressAsyncTask;
 
     private ResultListenerAsyncTask<Integer> resultListenerAsyncTask;
@@ -35,14 +34,6 @@ public class PushItinerariesEndpointsAsyncTask extends AsyncTask<Itinerary,Integ
     private String cityName;
 
     private String country;
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
 
     public void setContext(Context context) {
         this.context = context;
@@ -56,20 +47,28 @@ public class PushItinerariesEndpointsAsyncTask extends AsyncTask<Itinerary,Integ
         this.resultListenerAsyncTask = resultListenerAsyncTask;
     }
 
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     @Override
-    protected Integer doInBackground(Itinerary... params) {
-        if(itineraryApi == null) {  // Only do this once
-            ItineraryApi.Builder builder = new ItineraryApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+    protected Integer doInBackground(Code... params) {
+        if(codeApi == null){
+            CodeApi.Builder builder = new CodeApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl(context.getString(R.string.api_google_url));
             // end options for devappserver
 
-            itineraryApi = builder.build();
+            codeApi = builder.build();
         }
 
         for (int i=0;i<params.length;i++) {
-            Itinerary itinerary = params[i];
+            Code code = params[i];
             try {
-                itineraryApi.insertItinerary(country, cityName,itinerary).execute();
+                codeApi.insertCode(country, cityName,code).execute();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -83,19 +82,23 @@ public class PushItinerariesEndpointsAsyncTask extends AsyncTask<Itinerary,Integ
     @Override
     protected void onProgressUpdate(Integer... progress) {
         if(progressAsyncTask!=null){
-            progressAsyncTask.setProgressUdate(progress[0],Itinerary.class);
+            progressAsyncTask.setProgressUdate(progress[0],Code.class);
         }else{
-            Log.w(this.getClass().getSimpleName(),"progressAsyncTask is null!");
+            Log.w(TAG,"progressAsyncTask is null!");
         }
 
     }
 
     @Override
     protected void onPostExecute(Integer percent) {
-        Log.d(TAG, "Send itineraries from datastore!");
+        Log.d(TAG, "Send codes from datastore!");
         if(resultListenerAsyncTask!=null){
             resultListenerAsyncTask.finished(new ArrayList<Integer>(0));
+        }else{
+            Log.w(TAG,"resultListenerAsyncTask is null!");
         }
 
     }
+
+
 }

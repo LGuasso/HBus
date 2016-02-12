@@ -72,14 +72,14 @@ public class CityEndpoint {
     @ApiMethod(name = "getCities")
     public List<City> getCities(@Named("country") String country) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Key taskBeanParentKey = KeyFactory.createKey("country",country);
-        Query query = new Query(taskBeanParentKey);
+        Key cityParentKey = KeyFactory.createKey("country", country);
+        Query query = new Query("City",cityParentKey);
         List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
 
         ArrayList<City> cities = new ArrayList<>();
         for (Entity result : results) {
             City city = new City();
-            city.setId((String) result.getProperty("country")+(String) result.getProperty("name"));
+            city.setId((String) result.getProperty("country")+"/"+(String) result.getProperty("name"));
             city.setName((String) result.getProperty("name"));
             city.setCountry((String) result.getProperty("country"));
             city.setLocation((GeoPt)result.getProperty("location"));
@@ -96,18 +96,12 @@ public class CityEndpoint {
     @ApiMethod(name = "clearCities")
     public void clearCities(@Named("country") String country) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Transaction txn = datastoreService.beginTransaction();
-        try {
-            Key cityParentKey = KeyFactory.createKey("country", country);
-            Query query = new Query(cityParentKey);
-            List<Entity> results = datastoreService.prepare(query)
-                    .asList(FetchOptions.Builder.withDefaults());
-            for (Entity result : results) {
-                datastoreService.delete(result.getKey());
-            }
-            txn.commit();
-        } finally {
-            if (txn.isActive()) { txn.rollback(); }
+        Key cityParentKey = KeyFactory.createKey("country", country);
+        Query query = new Query("City",cityParentKey);
+        List<Entity> results = datastoreService.prepare(query)
+                .asList(FetchOptions.Builder.withDefaults());
+        for (Entity result : results) {
+            datastoreService.delete(result.getKey());
         }
 
     }

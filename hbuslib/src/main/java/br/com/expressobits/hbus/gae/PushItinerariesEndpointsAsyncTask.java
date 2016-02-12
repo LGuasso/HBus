@@ -3,32 +3,30 @@ package br.com.expressobits.hbus.gae;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.firebase.client.annotations.NotNull;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.backend.itineraryApi.ItineraryApi;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbuslib.R;
 
 /**
  * @author Rafael Correa
- * @since 09/02/16
+ * @since 08/02/16
  */
-public class ClearItinerariesEndpointsAsyncTask extends AsyncTask<City,Integer,Integer> {
+public class PushItinerariesEndpointsAsyncTask extends AsyncTask<Itinerary,Integer,Integer>{
 
-    private static final String TAG = PullItinerariesEndpointsAsyncTask.class.getClass().getSimpleName();
+    private static final String TAG = PushItinerariesEndpointsAsyncTask.class.getClass().getSimpleName();
 
     private static ItineraryApi itineraryApi = null;
-    @NotNull
+
     private Context context;
-    @NotNull
+
     private ProgressAsyncTask progressAsyncTask;
 
     private ResultListenerAsyncTask<Integer> resultListenerAsyncTask;
@@ -53,25 +51,32 @@ public class ClearItinerariesEndpointsAsyncTask extends AsyncTask<City,Integer,I
         this.progressAsyncTask = progressAsyncTask;
     }
 
+    public void setResultListenerAsyncTask(ResultListenerAsyncTask<Integer> resultListenerAsyncTask) {
+        this.resultListenerAsyncTask = resultListenerAsyncTask;
+    }
+
     @Override
-    protected Integer doInBackground(City... params) {
-        if(itineraryApi == null){
+    protected Integer doInBackground(Itinerary... params) {
+        if(itineraryApi == null) {  // Only do this once
             ItineraryApi.Builder builder = new ItineraryApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl(context.getString(R.string.api_google_url));
             // end options for devappserver
 
             itineraryApi = builder.build();
         }
-        try {
-            //TODO
-            itineraryApi.clearItineraries(params[0].getName());
-            return 0;
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Endpoints", e.getMessage());
-            return null;
+        for (int i=0;i<params.length;i++) {
+            Itinerary itinerary = params[i];
+            try {
+                itineraryApi.insertItinerary(country, cityName,itinerary).execute();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("Endpoints", e.getMessage());
+            }
+            publishProgress((int) ((i+1 / params.length) * 100));
         }
+        return params.length;
     }
 
     @Override
@@ -79,18 +84,18 @@ public class ClearItinerariesEndpointsAsyncTask extends AsyncTask<City,Integer,I
         if(progressAsyncTask!=null){
             progressAsyncTask.setProgressUdate(progress[0],Itinerary.class);
         }else{
-            Log.w(this.getClass().getSimpleName(),"progressAsyncTask is null!");
+            Log.w(TAG,"progressAsyncTask is null!");
         }
 
     }
 
     @Override
     protected void onPostExecute(Integer percent) {
-        Log.d(TAG, "Clear itineraries from datastore!");
+        Log.d(TAG, "Send itineraries from datastore!");
         if(resultListenerAsyncTask!=null){
             resultListenerAsyncTask.finished(new ArrayList<Integer>(0));
         }else{
-            Log.w(this.getClass().getSimpleName(),"resultListener is null!");
+            Log.w(TAG,"resultListenerAsyncTask is null!");
         }
 
     }

@@ -1,4 +1,4 @@
-package br.com.expressobits.hbus;
+package br.com.expressobits.hbusgenerator;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -24,18 +24,16 @@ import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.gae.ClearItinerariesEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.PullItinerariesEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.PushItinerariesEndpointsAsyncTask;
-import br.com.expressobits.hbus.ui.MainActivity;
-import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
 /**
  * Test of operations with class of Itinerary in Cloud of Google.
  * @author Rafael Correa
  * @since 08/02/16
  */
-@FixMethodOrder(MethodSorters.JVM)
+@FixMethodOrder(MethodSorters.DEFAULT)
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-public class ItineraryGaeAndroidUnitTest extends ActivityInstrumentationTestCase2<SelectCityActivity>{
+public class ItineraryGaeAndroidUnitTest extends ActivityInstrumentationTestCase2<MainActivity>{
 
     private static String TAG = "Itinerary Gae Test";
     PushItinerariesEndpointsAsyncTask pushItinerariesEndpointsAsyncTask;
@@ -43,14 +41,14 @@ public class ItineraryGaeAndroidUnitTest extends ActivityInstrumentationTestCase
     PullItinerariesEndpointsAsyncTask pullItinerariesEndpointsAsyncTask;
 
     Context context;
-    private SelectCityActivity mActivity;
+    private MainActivity mActivity;
 
     private City city;
     Itinerary maringa;
     Itinerary vilaSchirmer;
 
     public ItineraryGaeAndroidUnitTest() {
-        super(SelectCityActivity.class);
+        super(MainActivity.class);
     }
 
     @Before
@@ -76,6 +74,62 @@ public class ItineraryGaeAndroidUnitTest extends ActivityInstrumentationTestCase
         vilaSchirmer.setCodes(Arrays.asList("53B", "155A"));
     }
 
+    @Test
+    public void testRemoveItineraries() throws ExecutionException, InterruptedException {
+
+        if (context != null){
+            clearItinerariesEndpointsAsyncTask = new ClearItinerariesEndpointsAsyncTask();
+            clearItinerariesEndpointsAsyncTask.setContext(context);
+            clearItinerariesEndpointsAsyncTask.setCityName(city.getName());
+            clearItinerariesEndpointsAsyncTask.setCountry(city.getCountry());
+            clearItinerariesEndpointsAsyncTask.execute(city).get();
+        }else{
+            Log.e(TAG, "Context is null!");
+        }
+
+        while (clearItinerariesEndpointsAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)){
+
+        }
+        assertEquals(0, (int) clearItinerariesEndpointsAsyncTask.get());
+
+        if (context != null){
+            pullItinerariesEndpointsAsyncTask = new PullItinerariesEndpointsAsyncTask();
+            pullItinerariesEndpointsAsyncTask.setContext(context);
+            pullItinerariesEndpointsAsyncTask.execute(city).get();
+        }else{
+            Log.e(TAG, "Context is null!");
+        }
+        while (pullItinerariesEndpointsAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)){
+
+        }
+        assertEquals(0, pullItinerariesEndpointsAsyncTask.get().size());
+
+
+    }
+
+
+
+
+    @Test
+    public void testPullItineraries() throws ExecutionException, InterruptedException {
+
+
+        if (context != null){
+            pullItinerariesEndpointsAsyncTask = new PullItinerariesEndpointsAsyncTask();
+            pullItinerariesEndpointsAsyncTask.setContext(context);
+            pullItinerariesEndpointsAsyncTask.execute(city).get();
+        }else{
+            Log.e(TAG, "Context is null!");
+        }
+        while (pullItinerariesEndpointsAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)){
+
+        }
+        List<Itinerary> itTest = pullItinerariesEndpointsAsyncTask.get();
+        assertEquals(2, itTest.size());
+        assertEquals(maringa.getName(), itTest.get(0).getName());
+        assertEquals(maringa.getWays(), itTest.get(0).getWays());
+
+    }
 
     @Test
     public void testPushItineraries() throws ExecutionException, InterruptedException {
@@ -108,59 +162,7 @@ public class ItineraryGaeAndroidUnitTest extends ActivityInstrumentationTestCase
         assertEquals(2, pullItinerariesEndpointsAsyncTask.get().size());
     }
 
-    @Test
-    public void testPullItineraries() throws ExecutionException, InterruptedException {
 
-
-        if (context != null){
-            pullItinerariesEndpointsAsyncTask = new PullItinerariesEndpointsAsyncTask();
-            pullItinerariesEndpointsAsyncTask.setContext(context);
-            pullItinerariesEndpointsAsyncTask.execute(city).get();
-        }else{
-            Log.e(TAG, "Context is null!");
-        }
-        while (pullItinerariesEndpointsAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)){
-
-        }
-        List<Itinerary> itTest = pullItinerariesEndpointsAsyncTask.get();
-        assertEquals(2, itTest.size());
-        assertEquals(maringa.getName(), itTest.get(0).getName());
-        assertEquals(maringa.getWays(), itTest.get(0).getWays());
-
-    }
-
-    @Test
-    public void testClearItineraries() throws ExecutionException, InterruptedException {
-
-        if (context != null){
-            clearItinerariesEndpointsAsyncTask = new ClearItinerariesEndpointsAsyncTask();
-            clearItinerariesEndpointsAsyncTask.setContext(context);
-            clearItinerariesEndpointsAsyncTask.setCityName(city.getName());
-            clearItinerariesEndpointsAsyncTask.setCountry(city.getCountry());
-            clearItinerariesEndpointsAsyncTask.execute(city).get();
-        }else{
-            Log.e(TAG, "Context is null!");
-        }
-
-        while (clearItinerariesEndpointsAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)){
-
-        }
-        assertEquals(0, (int)clearItinerariesEndpointsAsyncTask.get());
-
-        if (context != null){
-            pullItinerariesEndpointsAsyncTask = new PullItinerariesEndpointsAsyncTask();
-            pullItinerariesEndpointsAsyncTask.setContext(context);
-            pullItinerariesEndpointsAsyncTask.execute(city).get();
-        }else{
-            Log.e(TAG, "Context is null!");
-        }
-        while (pullItinerariesEndpointsAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)){
-
-        }
-        assertEquals(0, pullItinerariesEndpointsAsyncTask.get().size());
-
-
-    }
 
 
 

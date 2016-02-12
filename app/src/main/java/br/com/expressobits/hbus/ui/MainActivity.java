@@ -173,17 +173,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FavoriteDAO favoriteDAO = new FavoriteDAO(this);
         navigationDrawer.getDrawerItems().clear();
         navigationDrawer.addItem(new SectionDrawerItem());
-        navigationDrawer.addItem(new PrimaryDrawerItem()
+        /**navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.favorites)
                 .withBadge(getString(R.string.number_of_itineraries,
                         favoriteDAO.getItineraries(PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY)).size()))
                 .withIdentifier(0)
-                .withIcon(R.drawable.ic_star_grey600_24dp));
-        navigationDrawer.addItem(new PrimaryDrawerItem()
+                .withIcon(R.drawable.ic_star_grey600_24dp));*/
+        /**navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.all_lines)
                 .withBadge(getString(R.string.number_of_itineraries,dao.getItineraries().size()))
                 .withIdentifier(1)
-                .withIcon(R.drawable.ic_format_list_bulleted_grey600_24dp));
+                .withIcon(R.drawable.ic_format_list_bulleted_grey600_24dp));*/
         navigationDrawer.addItem(new SectionDrawerItem());
         navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.action_settings)
@@ -298,14 +298,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pToolbar.setTitle(title);
         pToolbar.setSubtitle(subtitle);
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        String cityname = getString(R.string.not_found_city);
-        if(!cityId.equals(SelectCityActivity.NOT_CITY)) {
-            BusDAO db = new BusDAO(this);
-            cityname = db.getCity(cityId).getName();
-            db.close();
-        }
 
-        pToolbar.setTitle(cityname);
+        pToolbar.setTitle(cityId);
     }
 
     @Override

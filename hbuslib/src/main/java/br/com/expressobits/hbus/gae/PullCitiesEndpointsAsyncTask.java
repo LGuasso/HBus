@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.firebase.client.annotations.NotNull;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.backend.cityApi.CityApi;
 import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbuslib.R;
 
 /**
  * Puxa cidades do datastore apartir de uma country definida
@@ -25,9 +24,9 @@ public class PullCitiesEndpointsAsyncTask extends AsyncTask<String,Integer,List<
     private static final String TAG = PullCitiesEndpointsAsyncTask.class.getSimpleName();
 
     private static CityApi cityApi = null;
-    @NotNull
+
     private Context context;
-    @NotNull
+
     private ProgressAsyncTask progressAsyncTask;
 
     private ResultListenerAsyncTask<City> resultListenerAsyncTask;

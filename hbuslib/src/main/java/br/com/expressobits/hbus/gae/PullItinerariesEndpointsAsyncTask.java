@@ -10,7 +10,7 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import java.io.IOException;
 import java.util.List;
 
-import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbuslib.R;
 import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.backend.itineraryApi.ItineraryApi;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;

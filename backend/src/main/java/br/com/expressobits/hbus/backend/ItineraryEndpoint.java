@@ -7,9 +7,9 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Transaction;
 
@@ -56,13 +56,13 @@ public class ItineraryEndpoint {
      * @return The object to be added.
      */
     @ApiMethod(name = "insertItinerary")
-    public Itinerary insertItinerary(@Named("country")String country,@Named("cityName")String cityName,Itinerary itinerary) {
+    public Itinerary insertItinerary(@Named("country") String country, @Named("cityName") String cityName, Itinerary itinerary) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Transaction txn = datastoreService.beginTransaction();
         try {
 
             Key countryParentKey = KeyFactory.createKey("country", country);
-            Key cityParentKey = KeyFactory.createKey(countryParentKey,"city", cityName);
+            Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
             Entity cityEntity = new Entity("Itinerary", itinerary.getName(), cityParentKey);
             cityEntity.setProperty("name", itinerary.getName());
             cityEntity.setProperty("ways", itinerary.getWays());
@@ -79,10 +79,10 @@ public class ItineraryEndpoint {
     }
 
     @ApiMethod(name = "getItineraries")
-    public List<Itinerary> getItineraries(@Named("country")String country,@Named("cityName")String cityName) {
+    public List<Itinerary> getItineraries(@Named("country") String country, @Named("cityName") String cityName) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Key countryParentKey = KeyFactory.createKey("country", country);
-        Key cityParentKey = KeyFactory.createKey(countryParentKey,"city", cityName);
+        Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
         Query query = new Query(cityParentKey);
         List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
 
@@ -101,40 +101,27 @@ public class ItineraryEndpoint {
 
     /**
      * clear list of itineraries in datastore base in country param
-     * @param cityName
      */
-    @ApiMethod(name = "clearItineraries")
-    public void clearItineraries(@Named("cityName")String cityName) {
+    @ApiMethod(name = "removeItineraries")
+    public void removeItineraries(@Named("country")String country,@Named("cityName") String cityName) {
 
-        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Key countryParentKey = KeyFactory.createKey("country", "RS");
-        Key cityParentKey = KeyFactory.createKey(countryParentKey,"city", cityName);
-        Query query = new Query(cityParentKey);
-        List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
-
-        ArrayList<Itinerary> itineraries = new ArrayList<>();
-
-        for (Entity result : results) {
-            datastoreService.delete(result.getKey());
-        }
-        /**
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Transaction txn = datastoreService.beginTransaction();
         try {
-            //TODO problemas
-            Key countryParentKey = KeyFactory.createKey("country","RS");
-            //TODO problemas em country parametro
-            Key cityParentKey = KeyFactory.createKey(countryParentKey,"city", cityName);
-            Query query = new Query(cityParentKey);
-            List<Entity> results = datastoreService.prepare(query)
-                    .asList(FetchOptions.Builder.withDefaults());
+            Key countryParentKey = KeyFactory.createKey("country", country);
+            Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
+            Query query = new Query("Itinerary", cityParentKey);
+            PreparedQuery pq = datastoreService.prepare(query);
+            List<Entity> results = pq.asList(FetchOptions.Builder.withDefaults());
+
             for (Entity result : results) {
                 datastoreService.delete(result.getKey());
             }
-            txn.commit();
         } finally {
-            if (txn.isActive()) { txn.rollback(); }
-        }*/
-
+            if (txn.isActive()) {
+                txn.rollback();
+            }
+        }
     }
+
 }

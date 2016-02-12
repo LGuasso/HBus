@@ -24,8 +24,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Tela de tour(intro)
- * <p>Esta tela apresenta v·rias inst‚ncias de um mesmo objeto de <link>Fragment</link>
- * que exibem informaÁıes diferentes com mesmos views</p>
+ * <p>Esta tela apresenta v√°rias inst√¢ncias de um mesmo objeto de <link>Fragment</link>
+ * que exibem informa√ß√µes diferentes com mesmos views</p>
  * @author Rafael Correa
  * @since 27/09/15
  */
@@ -114,8 +114,8 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         //TODO para resources este dados
-        fragments.add(PagerFragment.newInstance(1, 0, "HBus", "A hora nas suas m„os!\nEncontre a linha urbana favorita!", R.drawable.modelo));
-        fragments.add(PagerFragment.newInstance(1, 0, "F·cil de usar!", "Com poucos toques utilize o m·ximo!\nCom favoritos que exibem j· os prÛximos hor·rios!", R.mipmap.ic_launcher));
+        fragments.add(PagerFragment.newInstance(1, 0, "HBus", "A hora nas suas m√£os!\nEncontre a linha urbana favorita!", R.drawable.modelo));
+        fragments.add(PagerFragment.newInstance(1, 0, "F√°cil de usar!", "Com poucos toques utilize o m√°ximo!\nCom favoritos que exibem j√° os pr√≥ximos hor√°rios!", R.mipmap.ic_launcher));
         fragments.add(PagerFragment.newInstance(1, 0, "Ajude-nos!", "Ainda em fase de testes, este aplicativo vai crescer com sua ajuda e feedback!", R.mipmap.ic_launcher));
 
         defaultPagerAdapter = new ContentPagerAdapter(getSupportFragmentManager(), fragments);

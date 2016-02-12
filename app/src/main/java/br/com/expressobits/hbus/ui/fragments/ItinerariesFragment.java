@@ -14,12 +14,15 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
+import br.com.expressobits.hbus.gae.PullItinerariesEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
-import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
@@ -31,10 +34,11 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
  * @author Rafael Correa
  * @since 16/11/15
  */
-public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack {
+public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack,ResultListenerAsyncTask<Itinerary> {
 
     private List<Itinerary> listItineraries;
     public static final String TAG = "ItinerariesFragment";
+    private RecyclerView recyclerViewItineraries;
 
     @Nullable
     @Override
@@ -56,20 +60,21 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     private void initListViews(View view){
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        RecyclerView recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
+        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
         recyclerViewItineraries.setHasFixedSize(true);
         FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
         BusDAO dao = new BusDAO(getActivity());
-        listItineraries = dao.getItineraries(cityId);
-        List<Itinerary> favoriteItineraries = favoriteDAO.getItineraries(cityId);
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),true,listItineraries,favoriteItineraries);
-        arrayAdapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerViewItineraries.setAdapter(arrayAdapter);
-
-        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
-        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewItineraries.setLayoutManager(llmUseful);
-        dao.close();
+        //listItineraries = dao.getItineraries(cityId);
+        //List<Itinerary> favoriteItineraries = favoriteDAO.getItineraries(cityId);
+        //ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),true,listItineraries,favoriteItineraries);
+        //dao.close();
+        PullItinerariesEndpointsAsyncTask pullItinerariesEndpointsAsyncTask = new PullItinerariesEndpointsAsyncTask();
+        pullItinerariesEndpointsAsyncTask.setContext(getActivity());
+        pullItinerariesEndpointsAsyncTask.setResultListenerAsyncTask(this);
+        City city = new City();
+        city.setName(cityId.split("/")[0]);
+        city.setCountry(cityId.split("/")[1]);
+        pullItinerariesEndpointsAsyncTask.execute(city);
     }
 
     @Override
@@ -80,5 +85,15 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     @Override
     public boolean onLongClickListener(View view, int position) {
         return false;
+    }
+
+    @Override
+    public void finished(List<Itinerary> itineraries) {
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),true,listItineraries);
+        arrayAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewItineraries.setAdapter(arrayAdapter);
+        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
+        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewItineraries.setLayoutManager(llmUseful);
     }
 }

@@ -14,12 +14,13 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
+import br.com.expressobits.hbus.gae.PullItinerariesEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
-import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
@@ -56,15 +57,15 @@ public class AddFavoriteActivity extends AppCompatActivity implements RecyclerVi
         //FavoriteDAO favoriteDAO = new FavoriteDAO(this);
 
         //ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(this,false,itineraries,favoriteDAO.getItineraries(cityId))
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(this,false,itineraries);
-        arrayAdapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerViewItineraries.setAdapter(arrayAdapter);
-        recyclerViewItineraries.setClickable(true);
-        recyclerViewItineraries.addItemDecoration(new SimpleDividerItemDecoration(this));
-        LinearLayoutManager llmUseful = new LinearLayoutManager(this);
-        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewItineraries.setLayoutManager(llmUseful);
+
         //dao.close();
+        PullItinerariesEndpointsAsyncTask pullItinerariesEndpointsAsyncTask = new PullItinerariesEndpointsAsyncTask();
+        pullItinerariesEndpointsAsyncTask.setContext(this);
+        pullItinerariesEndpointsAsyncTask.setResultListenerAsyncTask(this);
+        City city = new City();
+        city.setName(cityId.split("/")[1]);
+        city.setCountry(cityId.split("/")[0]);
+        pullItinerariesEndpointsAsyncTask.execute(city);
     }
 
     @Override
@@ -88,6 +89,9 @@ public class AddFavoriteActivity extends AppCompatActivity implements RecyclerVi
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
         recyclerViewItineraries.setClickable(true);
-
+        recyclerViewItineraries.addItemDecoration(new SimpleDividerItemDecoration(this));
+        LinearLayoutManager llmUseful = new LinearLayoutManager(this);
+        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewItineraries.setLayoutManager(llmUseful);
     }
 }

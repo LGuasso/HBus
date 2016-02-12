@@ -54,6 +54,8 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        /**
+         *
         if (!selectAll) {
             for (Itinerary itinerary : favoriteItineraries) {
                 if (itinerary.getId() == listItineraries.get(position).getId()) {
@@ -62,7 +64,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
                     return;
                 }
             }
-        }
+        }*/
 
         holder.textViewName.setText(listItineraries.get(position).getName());
         holder.textViewName.setEnabled(true);
