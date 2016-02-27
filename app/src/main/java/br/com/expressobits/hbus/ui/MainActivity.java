@@ -64,17 +64,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        this.cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         //new LinhaFile(this).init(this);
         if (savedInstanceState == null) {
 
-            FavoritesItineraryFragment favoritesItineraryFragment = new FavoritesItineraryFragment();
+            Fragment fragment = new FavoritesItineraryFragment();
+            String tag;
+
+
+            FavoriteDAO dao = new FavoriteDAO(this);
+            if(dao.getItineraries(cityId).size()>0){
+                fragment = new FavoritesItineraryFragment();
+                tag = FavoritesItineraryFragment.TAG;
+
+            }else{
+                fragment = new ItinerariesFragment();
+                tag = ItinerariesFragment.TAG;
+            }
+
             if (findViewById(R.id.framelayout_main) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_main, favoritesItineraryFragment,FavoritesItineraryFragment.TAG);
+                ft.add(R.id.framelayout_main, fragment,tag);
                 ft.commit();
             } else if (findViewById(R.id.framelayout_content) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_menu, favoritesItineraryFragment,FavoritesItineraryFragment.TAG);
+                ft.add(R.id.framelayout_menu, fragment,tag);
                 ft.add(R.id.framelayout_content, new OnibusFragment(),OnibusFragment.TAG);
                 ft.commit();
                 //Define se tela é para dois framgnetos

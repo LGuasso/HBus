@@ -6,11 +6,13 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.backend.codeApi.model.Code;
@@ -72,6 +74,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
                 break;
         }
 
+
         return new MyViewHolder(view);
     }
 
@@ -126,6 +129,10 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         myViewHolder.txtViewDescrition.setSelected(true);
         db.close();
 
+        if(BuildConfig.VERSION_CODE<79){
+            myViewHolder.imageViewAlarm.setVisibility(View.INVISIBLE);
+        }
+
         //Metodo que atualiza informacoes
 
     }
@@ -159,6 +166,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         public TextView txtViewCode;
         public TextView txtViewDescrition;
         public RelativeLayout relativeLayout;
+        public ImageView imageViewAlarm;
         public View itemView;
 
         public MyViewHolder(View itemView) {
@@ -171,6 +179,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
             txtViewHorario = (TextView) itemView.findViewById(R.id.item_list_textview_horario);
             txtViewCode = (TextView) itemView.findViewById(R.id.item_list_textview_codigo);
             txtViewDescrition = (TextView) itemView.findViewById(R.id.item_list_textview_descricao_do_codigo);
+            imageViewAlarm = (ImageView) itemView.findViewById(R.id.item_list_imageview);
             //itemView.setOnClickListener(this);
 
         }

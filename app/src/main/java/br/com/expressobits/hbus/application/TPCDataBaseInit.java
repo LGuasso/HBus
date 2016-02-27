@@ -45,10 +45,10 @@ public class TPCDataBaseInit extends Application{
         if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("santa_maria_rs_bus_data.db");
         }
-        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(78> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("bus_database.db");
         }
-        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(78> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("bus_data.db");
             Log.e(TAG,"DELETE BUS DATA");
         }

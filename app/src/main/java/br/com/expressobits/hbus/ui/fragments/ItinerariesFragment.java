@@ -95,9 +95,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     @Override
     public void onClickListener(View view, int position) {
         switch (view.getId()){
-            case R.id.listView_background_line:
-                ((MainActivity)getActivity()).onCreateDialogChooseWay(listItineraries.get(position).getId());
-                break;
             case R.id.imageViewStar:
                 FavoriteDAO dao = new FavoriteDAO(getActivity());
                 Itinerary itinerary = listItineraries.get(position);
@@ -105,20 +102,25 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                     dao.removeFavorite(itinerary);
                     dao.close();
                     Log.d(TAG,"remove favorite "+itinerary.getId());
+                    String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
                     Snackbar.make(
                             view,
-                            getString(R.string.delete_itinerary_with_sucess),
+                            result,
                             Snackbar.LENGTH_LONG).show();
                 }else {
                     dao.insert(listItineraries.get(position));
                     Log.d(TAG,"insert favorite "+itinerary.getId());
                     dao.close();
+
                     Snackbar.make(
                             view,
-                            getString(R.string.added_favorite_itinerary_with_sucess),
+                            getResources().getString(R.string.added_favorite_itinerary_with_sucess),
                             Snackbar.LENGTH_LONG).show();
                 }
 
+                break;
+            case R.id.linearLayoutItemList:
+                ((MainActivity)getActivity()).onCreateDialogChooseWay(listItineraries.get(position).getId());
                 break;
         }
 

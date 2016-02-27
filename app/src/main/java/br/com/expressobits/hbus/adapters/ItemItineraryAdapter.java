@@ -89,7 +89,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
             textViewName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
             imageViewStar = (ImageView) itemView.findViewById(R.id.imageViewStar);
             linearLayout.setOnClickListener(this);
@@ -104,14 +104,14 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
 
             switch (v.getId()){
-                case R.id.textViewItineraryName:
-                    if(textViewName.isEnabled() & recyclerViewOnClickListenerHack != null){
-                        recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
-                    }
-                    break;
                 case R.id.imageViewStar:
                     if(imageViewStar.isEnabled() & recyclerViewOnClickListenerHack != null){
                         imageViewStar.setSelected(!imageViewStar.isSelected());
+                        recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
+                    }
+                    break;
+                case R.id.linearLayoutItemList:
+                    if(recyclerViewOnClickListenerHack != null){
                         recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
                     }
                     break;
