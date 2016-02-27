@@ -14,7 +14,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:title="@string/add_favorite"
+            android:title="@string/title_activity_times"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="?attr/colorPrimary"

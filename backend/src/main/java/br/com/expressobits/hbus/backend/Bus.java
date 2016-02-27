@@ -4,7 +4,9 @@ package br.com.expressobits.hbus.backend;
  * @author Rafael
  * @since 12/02/16
  */
-public class Bus implements Comparable<Bus>{
+public class Bus{
+
+    private String id;
 
     private String time;
 
@@ -14,6 +16,13 @@ public class Bus implements Comparable<Bus>{
 
     private String code;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTime() {
         return time;
@@ -45,29 +54,6 @@ public class Bus implements Comparable<Bus>{
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    @Override
-    public int compareTo(Bus another) {
-
-        int hourThis = Integer.parseInt(this.time.split(":")[0]);
-        int hourAnother = Integer.parseInt(another.time.split(":")[0]);
-        int minuteThis = Integer.parseInt(this.time.split(":")[1]);
-        int minuteAnother = Integer.parseInt(another.time.split(":")[1]);
-
-        if(hourThis>hourAnother){
-            return 1;
-        }else if(hourThis<hourAnother){
-            return -1;
-        }else{
-            if(minuteThis>minuteAnother){
-                return 1;
-            }else if(minuteThis<minuteAnother){
-                return -1;
-            }else{
-                return 0;
-            }
-        }
     }
 
     @Override

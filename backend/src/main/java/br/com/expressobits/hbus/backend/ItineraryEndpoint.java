@@ -91,8 +91,8 @@ public class ItineraryEndpoint {
             Itinerary itinerary = new Itinerary();
             //itinerary.setId();
             itinerary.setName((String) result.getProperty("name"));
-            itinerary.setCodes((List<String>) result.getProperty("codes"));
-            itinerary.setWays((List<String>) result.getProperty("ways"));
+            //itinerary.setCodes((List<String>) result.getProperty("codes"));
+            //itinerary.setWays((List<String>) result.getProperty("ways"));
             itineraries.add(itinerary);
         }
 

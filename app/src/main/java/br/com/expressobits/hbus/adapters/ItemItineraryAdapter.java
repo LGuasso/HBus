@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 
 /**
@@ -29,6 +31,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
     private boolean selectAll;
     int resource;
+    FavoriteDAO dao;
 
     public ItemItineraryAdapter(Context context,boolean selectAll,List<Itinerary> listItineraries,List<Itinerary> favoriteItineraries) {
         this.context = context;
@@ -36,6 +39,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         this.favoriteItineraries = favoriteItineraries;
         this.selectAll = selectAll;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        dao = new FavoriteDAO(context);
     }
 
     public ItemItineraryAdapter(Context context,boolean selectAll,List<Itinerary> listItineraries) {
@@ -54,20 +58,17 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        /**
-         *
-        if (!selectAll) {
-            for (Itinerary itinerary : favoriteItineraries) {
-                if (itinerary.getId() == listItineraries.get(position).getId()) {
-                    holder.textViewName.setText(listItineraries.get(position).getName());
-                    holder.textViewName.setEnabled(false);
-                    return;
-                }
-            }
-        }*/
+
+        if(dao.getItinerary(listItineraries.get(position).getId())!=null){
+            holder.imageViewStar.setSelected(true);
+           // holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
+
+        }else {
+            holder.imageViewStar.setSelected(false);
+            //holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_outline_accent_24dp));
+        }
 
         holder.textViewName.setText(listItineraries.get(position).getName());
-        holder.textViewName.setEnabled(true);
     }
 
     @Override
@@ -83,13 +84,16 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
         public TextView textViewName;
         public LinearLayout linearLayout;
+        public ImageView imageViewStar;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
             textViewName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
+            imageViewStar = (ImageView) itemView.findViewById(R.id.imageViewStar);
             linearLayout.setOnClickListener(this);
+            imageViewStar.setOnClickListener(this);
             if(textViewName.isEnabled()){
                 linearLayout.setClickable(true);
             }
@@ -97,9 +101,23 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         }
         @Override
         public void onClick(View v) {
-            if(textViewName.isEnabled() & recyclerViewOnClickListenerHack != null){
-                recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
+
+
+            switch (v.getId()){
+                case R.id.textViewItineraryName:
+                    if(textViewName.isEnabled() & recyclerViewOnClickListenerHack != null){
+                        recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
+                    }
+                    break;
+                case R.id.imageViewStar:
+                    if(imageViewStar.isEnabled() & recyclerViewOnClickListenerHack != null){
+                        imageViewStar.setSelected(!imageViewStar.isSelected());
+                        recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
+                    }
+                    break;
             }
+
+
         }
     }
 }

@@ -69,6 +69,7 @@ public class PushCodesEndpointsAsyncTask extends AsyncTask<Code,Integer,Integer>
             Code code = params[i];
             try {
                 codeApi.insertCode(country, cityName,code).execute();
+                Log.i(TAG, "Push code " + code.getName());
 
             } catch (IOException e) {
                 e.printStackTrace();

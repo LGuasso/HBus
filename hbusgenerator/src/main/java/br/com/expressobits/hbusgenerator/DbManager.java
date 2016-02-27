@@ -48,7 +48,7 @@ public class DbManager /**implements SaveModel*/{
         return file.getCities();
     }
 
-    public List<Itinerary> readFileItinerary(City city){
+    /**public List<Itinerary> readFileItinerary(City city){
         return file.getItineraries(city);
     }
 
@@ -116,5 +116,5 @@ public class DbManager /**implements SaveModel*/{
         dao.deleteTable(CodeContract.Code.TABLE_NAME);
         dao.deleteTable(BusContract.Bus.TABLE_NAME);
         dao.close();
-    }
+    }*/
 }

@@ -30,17 +30,16 @@ import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
-import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.gae.InsertCityEndpointsAsyncTask;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
-import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
+import br.com.expressobits.hbus.utils.DAOUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnSettingsListener, Drawer.OnDrawerItemClickListener, ChooseWayDialogListener {
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String cityId;
     String itineraryId;
     String way;
+    private boolean isDualPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        City city = new City();
-        city.setName("Cruz Alta");
-        city.setCountry("RS");
-        new InsertCityEndpointsAsyncTask().execute(new Pair<Context, City>(this,city));
 
         //new LinhaFile(this).init(this);
         if (savedInstanceState == null) {
@@ -82,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ft.add(R.id.framelayout_menu, favoritesItineraryFragment,FavoritesItineraryFragment.TAG);
                 ft.add(R.id.framelayout_content, new OnibusFragment(),OnibusFragment.TAG);
                 ft.commit();
+                //Define se tela é para dois framgnetos
+                isDualPane = true;
             }
         }
         initViews();
@@ -149,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * </ul>
      */
     private void initActionBar() {
-        pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
+        pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
     }
 
@@ -169,21 +166,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void createNavigationDrawer() {
-        TimesDbHelper dao  = new TimesDbHelper(this);
+        BusDAO dao  = new BusDAO(this);
         FavoriteDAO favoriteDAO = new FavoriteDAO(this);
         navigationDrawer.getDrawerItems().clear();
         navigationDrawer.addItem(new SectionDrawerItem());
-        /**navigationDrawer.addItem(new PrimaryDrawerItem()
+        navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.favorites)
                 .withBadge(getString(R.string.number_of_itineraries,
                         favoriteDAO.getItineraries(PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY)).size()))
                 .withIdentifier(0)
-                .withIcon(R.drawable.ic_star_grey600_24dp));*/
-        /**navigationDrawer.addItem(new PrimaryDrawerItem()
+                .withIcon(R.drawable.ic_star_grey600_24dp));
+        navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.all_lines)
-                .withBadge(getString(R.string.number_of_itineraries,dao.getItineraries().size()))
+                .withBadge(getString(R.string.number_of_itineraries, dao.getItineraries().size()))
                 .withIdentifier(1)
-                .withIcon(R.drawable.ic_format_list_bulleted_grey600_24dp));*/
+                .withIcon(R.drawable.ic_format_list_bulleted_grey600_24dp));
         navigationDrawer.addItem(new SectionDrawerItem());
         navigationDrawer.addItem(new PrimaryDrawerItem()
                 .withName(R.string.action_settings)
@@ -204,66 +201,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onSettingsDone(String itineraryId, String sentido) {
         this.itineraryId = itineraryId;
         this.way = sentido;
+        this.cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         BusDAO db = new BusDAO(this);
-        pToolbar.setTitle(db.getItinerary(itineraryId).getName());
-        db.close();
-        pToolbar.setSubtitle(sentido);
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        /** Se for acessodado de um smartphone o espaco main existir */
-        /** Adiciona o fragment com o novo conteudo no unico espaco */
-        OnibusFragment onibusFragment = (OnibusFragment) fragmentManager.findFragmentByTag("onibusFragment");
+        if(isDualPane){
+            pToolbar.setTitle(db.getItinerary(itineraryId).getName());
+            db.close();
+            pToolbar.setSubtitle(sentido);
+            FragmentTransaction ft = fragmentManager.beginTransaction();
 
-        if (findViewById(R.id.framelayout_main) != null) {
+            /** Se for acessodado de um smartphone o espaco main existir */
+            /** Adiciona o fragment com o novo conteudo no unico espaco */
+            OnibusFragment onibusFragment = (OnibusFragment) fragmentManager.findFragmentByTag("onibusFragment");
 
-            if (onibusFragment != null) {
-                onibusFragment.refresh(
-                        cityId,
-                        itineraryId, sentido);
-            } else {
-                onibusFragment = new OnibusFragment();
-                Bundle args = new Bundle();
-                args.putString(OnibusFragment.ARGS_CITYID, cityId);
-                args.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
-                args.putString(OnibusFragment.ARGS_WAY, sentido);
-                onibusFragment.setArguments(args);
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transa��o novamente na pilha de navega��o
-                ft.replace(R.id.framelayout_main, onibusFragment,OnibusFragment.TAG);
-                ft.addToBackStack("pilha");
+            if (findViewById(R.id.framelayout_main) != null) {
+
+                if (onibusFragment != null) {
+                    onibusFragment.refresh(
+                            cityId,
+                            itineraryId, sentido);
+                } else {
+                    onibusFragment = new OnibusFragment();
+                    Bundle args = new Bundle();
+                    args.putString(OnibusFragment.ARGS_CITYID, cityId);
+                    args.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
+                    args.putString(OnibusFragment.ARGS_WAY, sentido);
+                    onibusFragment.setArguments(args);
+                    // Troca o que quer que tenha na view do fragment_container por este fragment,
+                    // e adiciona a transa��o novamente na pilha de navega��o
+                    ft.replace(R.id.framelayout_main, onibusFragment,OnibusFragment.TAG);
+                    ft.addToBackStack("pilha");
+                }
+            } else if (findViewById(R.id.framelayout_content) != null) {
+                if (onibusFragment != null) {
+                    onibusFragment.refresh(
+                            PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY),
+                            itineraryId, sentido);
+                } else {
+                    onibusFragment = new OnibusFragment();
+                    Bundle args = new Bundle();
+                    args.putString(OnibusFragment.ARGS_CITYID, cityId);
+                    args.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
+                    args.putString(OnibusFragment.ARGS_WAY, sentido);
+                    onibusFragment.setArguments(args);
+                    // Troca o que quer que tenha na view do fragment_container por este fragment,
+                    // e adiciona a transacao novamente na pilha de navegacao
+                    ft.replace(R.id.framelayout_content, onibusFragment,OnibusFragment.TAG);
+                }
             }
-        } else if (findViewById(R.id.framelayout_content) != null) {
-            if (onibusFragment != null) {
-                onibusFragment.refresh(
-                        PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY),
-                        itineraryId, sentido);
-            } else {
-                onibusFragment = new OnibusFragment();
-                Bundle args = new Bundle();
-                args.putString(OnibusFragment.ARGS_CITYID, cityId);
-                args.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
-                args.putString(OnibusFragment.ARGS_WAY, sentido);
-                onibusFragment.setArguments(args);
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transacao novamente na pilha de navegacao
-                ft.replace(R.id.framelayout_content, onibusFragment,OnibusFragment.TAG);
-            }
+            ft.commit();
+        }else{
+            Intent intent = new Intent(this,TimesActivity.class);
+            intent.putExtra(TimesActivity.ARGS_CITYID,cityId);
+            intent.putExtra(TimesActivity.ARGS_ITINERARYID,itineraryId);
+            intent.putExtra(TimesActivity.ARGS_WAY,way);
+            startActivity(intent);
         }
-        ft.commit();
+
     }
 
     public void addFragment(String TAG) {
         Fragment fragment = new Fragment();
         if(TAG.equals(ItinerariesFragment.TAG)){
             fragment = new ItinerariesFragment();
-        }else if(TAG.equals(AddFavoriteFragment.TAG)){
-            fragment = new AddFavoriteFragment();
         }else{
 
             if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
-                getSupportFragmentManager().popBackStack();
-            }
-            if(getSupportFragmentManager().findFragmentByTag(AddFavoriteFragment.TAG)!=null){
                 getSupportFragmentManager().popBackStack();
             }
         }
@@ -295,11 +297,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setActionBarTitle(String title, String subtitle) {
-        pToolbar.setTitle(title);
-        pToolbar.setSubtitle(subtitle);
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-
-        pToolbar.setTitle(cityId);
+        pToolbar.setTitle("HBus");
+        pToolbar.setSubtitle(DAOUtils.getNameCity(cityId)+" - "+DAOUtils.getNameCountry(cityId));
     }
 
     @Override

@@ -13,7 +13,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.FirebaseDAO;
 import br.com.expressobits.hbus.model.Feedback;
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener{
@@ -78,8 +77,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         }else{
             feedback.setSystemInformation("Not system info...");
         }
-        FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
-        dao.insert(feedback);
+        //TODO insert feedback into datastore database
+        //FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
+        //dao.insert(feedback);
         Toast.makeText(this,getString(R.string.send_feedback_with_sucess),Toast.LENGTH_LONG).show();
         finish();
     }

@@ -24,6 +24,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemFavoriteItineraryAdapter;
 import br.com.expressobits.hbus.ui.MainActivity;
@@ -71,13 +72,13 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     }
 
     private void updateEmptyListView() {
-        /**if(recyclerViewLines.getAdapter().getItemCount()<1){
+        if(recyclerViewLines.getAdapter().getItemCount()<1){
             recyclerViewLines.setVisibility(View.GONE);
             linearLayoutEmptyList.setVisibility(View.VISIBLE);
         }else{
             recyclerViewLines.setVisibility(View.VISIBLE);
             linearLayoutEmptyList.setVisibility(View.GONE);
-        }*/
+        }
     }
 
     @Override
@@ -112,13 +113,13 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     }
 
     private void updateListViews() {
-        //FavoriteDAO dao  = new FavoriteDAO(getActivity());
+        FavoriteDAO dao  = new FavoriteDAO(getActivity());
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        //itineraries = dao.getItineraries(cityId);
-        //ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
-        //adapter.setRecyclerViewOnClickListenerHack(this);
-        //recyclerViewLines.setAdapter(adapter);
-        //dao.close();
+        itineraries = dao.getItineraries(cityId);
+        ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
+        adapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewLines.setAdapter(adapter);
+        dao.close();
     }
 
     public void initAdView(View view){
@@ -156,18 +157,18 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                 builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //FavoriteDAO dao = new FavoriteDAO(getActivity());
-                        //Itinerary itinerary = dao.getItinerary(selectedItem);
-                        //dao.removeFavorite(itinerary);
+                        FavoriteDAO dao = new FavoriteDAO(getActivity());
+                        Itinerary itinerary = dao.getItinerary(selectedItem);
+                        dao.removeFavorite(itinerary);
                         FavoritesItineraryFragment.this.initListViews(FavoritesItineraryFragment.this.view);
                         mCallback.onRemoveFavorite();
                         updateEmptyListView();
-                        /**String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
+                        String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
                         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
                             Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
                         }
-                        //Snackbar.make(FavoritesItineraryFragment.this.view,result, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                        //dao.close();*/
+                        Snackbar.make(FavoritesItineraryFragment.this.view,result, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                        dao.close();
                     }
                 });
                 builder.show();

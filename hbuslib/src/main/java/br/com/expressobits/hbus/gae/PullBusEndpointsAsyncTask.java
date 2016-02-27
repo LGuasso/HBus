@@ -10,6 +10,7 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.backend.busApi.BusApi;
@@ -35,7 +36,7 @@ public class PullBusEndpointsAsyncTask extends AsyncTask<Pair<City,Itinerary>,In
 
     private ProgressAsyncTask progressAsyncTask;
 
-    private ResultListenerAsyncTask<Itinerary> resultListenerAsyncTask;
+    private ResultListenerAsyncTask<Bus> resultListenerAsyncTask;
 
     public void setContext(Context context) {
         this.context = context;
@@ -45,7 +46,7 @@ public class PullBusEndpointsAsyncTask extends AsyncTask<Pair<City,Itinerary>,In
         this.progressAsyncTask = progressAsyncTask;
     }
 
-    public void setResultListenerAsyncTask(ResultListenerAsyncTask<Itinerary> resultListenerAsyncTask) {
+    public void setResultListenerAsyncTask(ResultListenerAsyncTask<Bus> resultListenerAsyncTask) {
         this.resultListenerAsyncTask = resultListenerAsyncTask;
     }
 
@@ -60,13 +61,17 @@ public class PullBusEndpointsAsyncTask extends AsyncTask<Pair<City,Itinerary>,In
         }
         City city = params[0].first;
         Itinerary itinerary = params[0].second;
-        List<Bus> buses  = new ArrayList<>();
+        ArrayList<Bus> buses  = new ArrayList<>();
         try {
             for(String way :itinerary.getWays()){
                 for(int i=0;i<3;i++){
-                    buses.addAll(busApi.getBuses(
-                            city.getCountry(),city.getName(),itinerary.getName(),way, TextUtils.getTypeDayInt(i))
-                            .execute().getItems());
+                    List<Bus> buses1 = busApi.getBuses(
+                            city.getCountry(), city.getName(), itinerary.getName(), way, TextUtils.getTypeDayInt(i))
+                            .execute().getItems();
+                    if(buses1!=null){
+                        buses.addAll(buses1);
+                    }
+
                 }
 
             }
@@ -77,5 +82,24 @@ public class PullBusEndpointsAsyncTask extends AsyncTask<Pair<City,Itinerary>,In
             return null;
         }
         return buses;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... progress) {
+        if(progressAsyncTask!=null){
+            progressAsyncTask.setProgressUdate(progress[0], Bus.class);
+        }else{
+            Log.w(this.getClass().getSimpleName(),"progressAsyncTask is null!");
+        }
+    }
+
+    @Override
+    protected void onPostExecute(List<Bus> buses) {
+        if(resultListenerAsyncTask!=null) {
+            Log.d(TAG, "Download " + buses.size() + " codes from datastore!");
+            resultListenerAsyncTask.finished(buses);
+        }else{
+            Log.w(this.getClass().getSimpleName(), "resultListenerAsyncTask is null!");
+        }
     }
 }

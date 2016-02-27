@@ -76,7 +76,35 @@ public class PushBusEndpointsAsyncTask extends AsyncTask<Bus,Integer,Integer> {
             Bus bus = params[i];
             try {
                 //TODO modify to add param country name
+                if(country==null){
+                    Log.e(TAG,"country null");
+                }
+                if(cityName==null){
+                    Log.e(TAG,"cityName null");
+                }
+                if(itineraryName==null){
+                    Log.e(TAG,"itineraryName null");
+                }
+                if(bus==null){
+                    Log.e(TAG,"bus null");
+                }
+                if(bus.getTime()==null){
+                    Log.e(TAG,"bus:time null");
+                }
+                if(bus.getCode()==null){
+                    Log.e(TAG,"bus:code null");
+                }
+
+                if(bus.getWay()==null){
+                    Log.e(TAG,"bus:way null");
+                }
+                if(bus.getTypeday()==null){
+                    Log.e(TAG,"bus:typeday null");
+                }
+
+
                 busApi.insertBus(country,cityName,itineraryName,bus).execute();
+                Log.i(TAG, "Push bus " + bus.getTime());
 
             } catch (IOException e) {
                 e.printStackTrace();

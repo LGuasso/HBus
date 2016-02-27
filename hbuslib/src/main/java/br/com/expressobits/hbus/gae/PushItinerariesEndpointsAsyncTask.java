@@ -69,6 +69,7 @@ public class PushItinerariesEndpointsAsyncTask extends AsyncTask<Itinerary,Integ
             Itinerary itinerary = params[i];
             try {
                 itineraryApi.insertItinerary(country, cityName,itinerary).execute();
+                Log.i(TAG, "Push itinerary " + itinerary.getName());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -81,6 +82,7 @@ public class PushItinerariesEndpointsAsyncTask extends AsyncTask<Itinerary,Integ
 
     @Override
     protected void onProgressUpdate(Integer... progress) {
+
         if(progressAsyncTask!=null){
             progressAsyncTask.setProgressUdate(progress[0],Itinerary.class);
         }else{
@@ -91,6 +93,7 @@ public class PushItinerariesEndpointsAsyncTask extends AsyncTask<Itinerary,Integ
 
     @Override
     protected void onPostExecute(Integer percent) {
+
         Log.d(TAG, "Send itineraries from datastore!");
         if(resultListenerAsyncTask!=null){
             resultListenerAsyncTask.finished(new ArrayList<Integer>(0));

@@ -52,7 +52,6 @@ dependencies {
     compile 'me.relex:circleindicator:1.1.5@aar'
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
-    compile 'com.firebase:firebase-client-android:2.5.0'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.easing:library:1.0.1@aar'
 }

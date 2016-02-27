@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.firebase.client.Firebase;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -18,12 +17,6 @@ import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-
-/**
- * import com.parse.Parse;
- * import com.parse.ParseInstallation;
- * import com.parse.ParseObject;
- */
 
 /**
  * @author  Rafael
@@ -38,17 +31,6 @@ public class TPCDataBaseInit extends Application{
 
     @Override
     public void onCreate() {
-
-
-        //FIREBASE
-        Firebase.setAndroidContext(this);
-
-        //TEST
-        //PARSE
-
-        /**Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "pmozmo0oSDUsmX5xWxIjqG1ZRKlT5EDMdld9cMyE", "XKZQXJhT9MIERWpmAYBIj2qAWdsx9oOZ7fpsYNdr");
-        ParseInstallation.getCurrentInstallation().saveInBackground();*/
 
         PackageInfo pInfo = null;
         try {

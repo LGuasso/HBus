@@ -75,8 +75,10 @@ public class PullItinerariesEndpointsAsyncTask extends AsyncTask<City,Integer,Li
 
     @Override
     protected void onPostExecute(List<Itinerary> itineraries) {
-        if(resultListenerAsyncTask!=null) {
+        if(itineraries!=null){
             Log.d(TAG, "Download " + itineraries.size() + " itineraries from datastore!");
+        }
+        if(resultListenerAsyncTask!=null) {
             resultListenerAsyncTask.finished(itineraries);
         }else{
             Log.w(this.getClass().getSimpleName(), "resultListenerAsyncTask is null!");

@@ -8,12 +8,7 @@
     android:layout_marginBottom="0dp"
     android:layout_marginTop="0dp"
     android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp"
-    app:cardElevation="3dp"
-    app:cardUseCompatPadding="false"
-    app:cardPreventCornerOverlap="true"
-    app:cardMaxElevation="3dp"
-    app:cardCornerRadius="4dp">
+    android:layout_marginRight="4dp">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -33,7 +28,7 @@
             android:layout_width="fill_parent"
             android:padding="8dp"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.HeadLine"
             android:background="@color/transparent_card_view_image"
             android:text="@string/abc_action_bar_home_description"
             android:textColor="@color/white"

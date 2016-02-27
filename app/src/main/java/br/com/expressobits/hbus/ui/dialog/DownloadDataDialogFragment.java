@@ -8,34 +8,35 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.dao.FirebaseDAO;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.gae.PullBusEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.PullItinerariesEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * Caixa de dialogo para baixar informações do firebase
  * @author Rafael
  * @since 10/01/16.
  */
-public class DownloadDataDialogFragment extends DialogFragment{
+public class DownloadDataDialogFragment extends DialogFragment implements ResultListenerAsyncTask<Itinerary>{
 
     public static String TAG = "DownloadData";
     private Context context;
@@ -46,27 +47,22 @@ public class DownloadDataDialogFragment extends DialogFragment{
     private List<Itinerary> itineraries= new ArrayList<>();
     private FinishListener finishListener;
     private List<Code> codes = new ArrayList<>();
-    private List<Bus> buses = new ArrayList<>();
-    private FirebaseDAO dao;
+    private HashMap<Itinerary,Bus> buses = new HashMap<>();
+    public static int count=0;
 
     //TODO implementar feedback de timeElapse
     private Long timeElapse;
 
-    public void setParameters(Context context,City city){
+    public void setParameters(FinishListener finishListener,Context context,City city){
         this.context = context;
         this.city = city;
-    }
-
-    public void addFinishListener(FinishListener finishListener){
         this.finishListener = finishListener;
     }
 
-    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        dao = new FirebaseDAO("https://hbus.firebaseio.com/");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
@@ -77,107 +73,50 @@ public class DownloadDataDialogFragment extends DialogFragment{
         textView = (TextView)view.findViewById(R.id.textViewMessage);
         progressBar = (ProgressBar)view.findViewById(R.id.progressBar);
 
-        textView.setText(getString(R.string.downloading_data,city));
+        textView.setText(getString(R.string.downloading_data, city));
         builder.setView(view);
-        new InsertDataInDatabase().execute(city);
+        pullData();
         return builder.create();
     }
 
-    private class InsertDataInDatabase extends AsyncTask<City,Void,Void>{
-
-
-
-        @Override
-        protected Void doInBackground(City... params) {
-            downloadItineraries(params[0]);
-            return null;
-        }
-
-        public void downloadItineraries(City city){
-            db  = new BusDAO(context);
-            readItineraries(city);
-        }
-
-        public void readItineraries(final City city){
-            timeElapse = System.currentTimeMillis();
-            dao.getItineraries(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Itinerary itinerary = postSnapshot.getValue(Itinerary.class);
-                        itinerary.setId(FirebaseUtils.getIdItinerary(city, itinerary));
-                        itineraries.add(itinerary);
-
-                    }
-                    for (int i = 0; i < itineraries.size(); i++) {
-
-                        db.insert(itineraries.get(i));
-                        for (String way : itineraries.get(i).getWays()) {
-                            for (TypeDay typeday : TypeDay.values()) {
-                                readBus(city, itineraries.get(i), way, typeday.toString());
-                            }
-                        }
-                    }
-                    readCodes(city);
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            }, city);
-        }
-
-        public void readCodes(final City city){
-            dao.getCodes(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Code code = postSnapshot.getValue(Code.class);
-                        code.setId(FirebaseUtils.getIdCode(city, code));
-                        codes.add(code);
-
-                    }
-                    for (int i = 0; i < codes.size(); i++) {
-                        db.insert(codes.get(i));
-                    }
-                    Log.i(TAG, "Time for download data info " + (System.currentTimeMillis() - timeElapse));
-                    finishListener.onFinish();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            }, city);
-        }
-
-        public void readBus(final City city,final Itinerary itinerary, final String way, final String typeday){
-            dao.getBus(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<Bus> buses = new ArrayList<Bus>();
-
-                    Log.d(TAG, "Downloaded " + city.getName() + " " + itinerary.getName() + " " + way + " " + typeday);
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Bus bus = postSnapshot.getValue(Bus.class);
-                        bus.setId(FirebaseUtils.getIdBus(city, itinerary, way, typeday, bus.getTime()));
-                        buses.add(bus);
-                    }
-                    for (int i = 0; i < buses.size(); i++) {
-                        db.insert(buses.get(i));
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            }, city, itinerary, way, typeday);
-        }
-
+    public void pullData(){
+        timeElapse = System.currentTimeMillis();
+        PullItinerariesEndpointsAsyncTask pullItinerariesEndpointsAsyncTask = new PullItinerariesEndpointsAsyncTask();
+        pullItinerariesEndpointsAsyncTask.setContext(context);
+        pullItinerariesEndpointsAsyncTask.setResultListenerAsyncTask(this);
+        pullItinerariesEndpointsAsyncTask.execute(city);
     }
 
+
+    @Override
+    public void finished(List<Itinerary> itineraries) {
+
+        Log.d(TAG,"Time elapsed in datastore push and save in database local "+
+                HoursUtils.longTimetoString(System.currentTimeMillis() - timeElapse));
+
+        BusDAO dao = new BusDAO(context);
+        for (Itinerary itinerary:itineraries){
+            //dao.insert(itinerary);
+        }
+
+        /**for(final Itinerary itinerary:itineraries){
+            PullBusEndpointsAsyncTask pullBusEndpointsAsyncTask = new PullBusEndpointsAsyncTask();
+            pullBusEndpointsAsyncTask.setContext(context);
+            pullBusEndpointsAsyncTask.setResultListenerAsyncTask(new ResultListenerAsyncTask<Bus>() {
+                @Override
+                public void finished(List<Bus> buses) {
+                    Log.d("ULTRA TEST",buses.get(0).getWay()+"    "+itinerary+" count="+(count++));
+
+                }
+            });
+            pullBusEndpointsAsyncTask.execute(new Pair<City, Itinerary>(city,itineraries.get(0)));
+
+        }*/
+
+        Log.d(TAG,"Time elapsed in datastore push and save in database local "+
+                HoursUtils.longTimetoString(System.currentTimeMillis() - timeElapse));
+        finishListener.onFinish();
+
+    }
 }
 

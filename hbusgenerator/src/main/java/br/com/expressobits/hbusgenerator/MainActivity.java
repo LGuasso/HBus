@@ -7,47 +7,45 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.Pair;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.api.client.util.DateTime;
-
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.employeeApi.model.Employee;
-import br.com.expressobits.hbus.dao.FirebaseDAO;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.dao.BusDAOGenerator;
 import br.com.expressobits.hbus.file.ReadFile;
-import br.com.expressobits.hbus.gae.GetEmployeeEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.InsertCityEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.InsertEmployeeEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.ProgressAsyncTask;
-import br.com.expressobits.hbus.gae.PullEmployeeEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.PushBusEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.PushCitiesEndpointsAsyncTask;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.gae.PushCodesEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.PushItinerariesEndpointsAsyncTask;
+import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,ProgressAsyncTask{
 
     private static final String TAG = "GENERATOR";
-    private static long countBus = 1;
-    private Button buttonReadCities;
+    private Button buttonSaveAllData;
+    private Button buttonReadAllData;
     private Button buttonReadItineraries;
-    private Button buttonDeleteAllData;
+    private Button buttonPushAllData;
     private Button buttonDeleteAllDataFirebase;
     private FloatingActionButton fab;
-    private List<City> cities;
-    private List<Itinerary> itineraries;
+    private List<City> cities = new ArrayList<>();
+    private HashMap<City,List<Itinerary>> itineraries = new HashMap<>();
+    private HashMap<City,List<Code>> codes = new HashMap<>();
+    private HashMap<City,HashMap<Itinerary,List<Bus>>> buses = new HashMap<>();
     private Spinner spinnerCities;
     ReadFile file = new ReadFile(MainActivity.this);
 
@@ -55,9 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initViews();
-
     }
 
     private void initViews() {
@@ -65,121 +61,107 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
-        buttonReadCities = (Button) findViewById(R.id.button_read_data_cities);
+        buttonReadAllData = (Button) findViewById(R.id.button_read_all_data);
+        buttonSaveAllData = (Button) findViewById(R.id.button_save_in_database_all_data);
         buttonReadItineraries = (Button) findViewById(R.id.button_read_data_itineraries);
-        buttonDeleteAllData = (Button) findViewById(R.id.button_delete_all_data);
+        buttonPushAllData = (Button) findViewById(R.id.button_push_all_data);
         buttonDeleteAllDataFirebase = (Button) findViewById(R.id.button_delete_all_data_firebase);
-        buttonReadCities.setOnClickListener(this);
+        buttonReadAllData.setOnClickListener(this);
+        buttonSaveAllData.setOnClickListener(this);
         buttonReadItineraries.setOnClickListener(this);
-        buttonDeleteAllData.setOnClickListener(this);
+        buttonPushAllData.setOnClickListener(this);
         buttonDeleteAllDataFirebase.setOnClickListener(this);
     }
 
-    private void createTestemployee(){
-        Employee employee = new Employee();
-        employee.setFirstName("Rafael");
-        employee.setLastName("Correa");
-        employee.setHireDate(new DateTime(new Date()));
-        employee.setAttendedHrTraining(true);
-        InsertEmployeeEndpointsAsyncTask insertEmployeeEndpointsAsyncTask = new InsertEmployeeEndpointsAsyncTask();
-        insertEmployeeEndpointsAsyncTask.execute(new Pair<Context, Employee>(this, employee));
+
+
+    public void readFiles(){
+        cities = file.getCities();
+        for(City city:cities){
+                itineraries.put(city, file.getItineraries(city));
+                codes.put(city, file.getCodes(city));
+                buses.put(city,file.getBuses(city,itineraries.get(city)));
+
+
+        }
+
     }
 
-    private void createTestGetEmployee(){
-        GetEmployeeEndpointsAsyncTask getEmployeeEndpointsAsyncTask = new GetEmployeeEndpointsAsyncTask();
-        try {
-            Employee employee = getEmployeeEndpointsAsyncTask.execute(this).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+    public void saveInDataBaseAllData(Context context){
+        BusDAOGenerator dao = new BusDAOGenerator(context);
+        for(City city:cities){
+            //Somente cidade de Santa Maria será salva!
+            if(city.getName().equals("Santa Maria")){
+                dao.insertCity(city.clone().setId(DAOUtils.getId(city)));
+                for(Itinerary itinerary : itineraries.get(city)){
+                    dao.insertItineraries(itinerary.clone().setId(DAOUtils.getId(city,itinerary)));
+                    for(Bus bus:buses.get(city).get(itinerary)) {
+                        dao.insertBus(bus.clone().setId(DAOUtils.getId(city,itinerary,bus)));
+                    }
+                }
+                for(Code code : codes.get(city)){
+                    dao.insertCodes(code.clone().setId(DAOUtils.getId(city,code)));
+                }
+            }
         }
     }
 
-    private void getTestEmployee(){
-        PullEmployeeEndpointsAsyncTask pullEmployeeEndpointsAsyncTask = new PullEmployeeEndpointsAsyncTask();
-        try {
-            List<Employee> employees = pullEmployeeEndpointsAsyncTask.execute(this).get();
-            Log.d("RESULT",employees.toString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+    public void push(){
+        for(City city:cities) {
+            pushCity(city);
+            if (city.getName().equals("Cruz Alta")) {
+                for (Itinerary itinerary : itineraries.get(city)) {
+                    pushItinerary(city, itinerary);
+                    for (Bus bus : buses.get(city).get(itinerary)) {
+                        Log.e(TAG, "TEST " + bus.getTime());
+                        pushBus(city, itinerary, bus);
+                    }
+                }
+                for (Code code : codes.get(city)) {
+                    pushCode(city, code);
+                }
+
+            }
         }
     }
 
-    private void insertCitiestoDatastore(List<City> cities){
+    private void pushCity(City city){
         PushCitiesEndpointsAsyncTask pushCitiesEndpointsAsyncTask = new PushCitiesEndpointsAsyncTask();
         pushCitiesEndpointsAsyncTask.setContext(this);
         pushCitiesEndpointsAsyncTask.setProgressAsyncTask(this);
-        pushCitiesEndpointsAsyncTask.execute(cities.get(0),cities.get(1));
+        pushCitiesEndpointsAsyncTask.execute(city);
+    }
+
+    private void pushItinerary(City city,Itinerary itinerary){
+        PushItinerariesEndpointsAsyncTask pushItinerariesEndpointsAsyncTask = new PushItinerariesEndpointsAsyncTask();
+        pushItinerariesEndpointsAsyncTask.setContext(this);
+        pushItinerariesEndpointsAsyncTask.setProgressAsyncTask(this);
+        pushItinerariesEndpointsAsyncTask.setCityName(city.getName());
+        pushItinerariesEndpointsAsyncTask.setCountry(city.getCountry());
+        pushItinerariesEndpointsAsyncTask.execute(itinerary);
+    }
+
+    private void pushCode(City city,Code code){
+        PushCodesEndpointsAsyncTask pushCodesEndpointsAsyncTask = new PushCodesEndpointsAsyncTask();
+        pushCodesEndpointsAsyncTask.setContext(this);
+        pushCodesEndpointsAsyncTask.setProgressAsyncTask(this);
+        pushCodesEndpointsAsyncTask.setCityName(city.getName());
+        pushCodesEndpointsAsyncTask.setCountry(city.getCountry());
+        pushCodesEndpointsAsyncTask.execute(code);
+    }
+
+    private void pushBus(City city,Itinerary itinerary,Bus bus){
+        PushBusEndpointsAsyncTask pushBusEndpointsAsyncTask = new PushBusEndpointsAsyncTask();
+        pushBusEndpointsAsyncTask.setContext(this);
+        pushBusEndpointsAsyncTask.setProgressAsyncTask(this);
+        pushBusEndpointsAsyncTask.setCountry(city.getCountry());
+        pushBusEndpointsAsyncTask.setCityName(city.getName());
+        pushBusEndpointsAsyncTask.setItineraryName(itinerary.getName());
+        pushBusEndpointsAsyncTask.execute(bus);
     }
 
 
-    public List<City> readFileCity(){
-        return file.getCities();
-    }
 
-    public List<Itinerary> readFileItinerary(City city){
-        return file.getItineraries(city);
-    }
-
-    public List<Code> readFileCode(City city){
-        return file.getCodes(city);
-    }
-
-    public List<Bus> readFileBus(City city,Itinerary itinerary,String way,String typeday){
-        return file.getBuses(city, itinerary, way, typeday);
-    }
-
-    public void save(){
-        lookmessage("  >Inserindo cities");
-        List<City> cities = readFileCity();
-        insertCitiestoDatastore(cities);
-        for(City city:cities){
-            //cities.get(0).setId(i + 1l);
-            //firebaseDAO.insert(city);
-            //saveOnFirebaseCode(firebaseDAO, city);
-            //saveOnFirebaseItinerary(firebaseDAO, city);
-
-        }
-    }
-
-    private void saveOnFirebaseItinerary(FirebaseDAO firebaseDAO,City city) {
-        lookmessage(">Inserindo itineraries");
-        List<Itinerary> itineraries = readFileItinerary(city);
-        for(Itinerary itinerary:itineraries){
-            //firebaseDAO.insert(city, itinerary);
-            saveOnFirebaseBus(firebaseDAO, city, itinerary);
-        }
-    }
-
-    private void saveOnFirebaseCode(FirebaseDAO firebaseDAO,City city) {
-        lookmessage("  >Inserindo codes");
-        List<Code> codes = readFileCode(city);
-        for(Code code:codes){
-            //firebaseDAO.insert(city,code);
-        }
-    }
-
-    private void saveOnFirebaseBus(FirebaseDAO firebaseDAO,City city,Itinerary itinerary) {
-        lookmessage("  >Inserindo buses");
-        for(int i=0;i<itinerary.getWays().size();i++){
-            for(int j=0;j<3;j++){
-
-                String way = itinerary.getWays().get(i);
-                String typeday = TextUtils.getTypeDayInt(j);
-
-                List<Bus> buses1 = readFileBus(city,itinerary,way,typeday);
-                for (Bus bus:buses1){
-                    //firebaseDAO.insert(city,itinerary,bus,way,typeday);
-                }
-            }
-
-        }
-
-
-    }
 
 
     public void lookmessage(String message){
@@ -215,45 +197,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()){
             case R.id.fab:
-                /**FirebaseDAO.setContext(this);
-                FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
-                new AsyncTask<FirebaseDAO,String,String>(){
 
-                    @Override
-                    protected String doInBackground(FirebaseDAO... params) {
-                        save(params[0]);
-                        return null;
-                    }
-                }.doInBackground(firebase);*/
-                //insertCitiestoDatastore();
-                save();
                 break;
-            case R.id.button_read_data_cities:
-                //DbManager.getInstance(MainActivity.this).saveCities();
+            case R.id.button_read_all_data:
+                readFiles();
                 break;
 
-            case R.id.button_delete_all_data:
-                //DbManager.getInstance(MainActivity.this).deleteAllData();
+            case R.id.button_save_in_database_all_data:
+                saveInDataBaseAllData(this);
+                break;
+
+            case R.id.button_push_all_data:
+                push();
                 break;
             case R.id.button_delete_all_data_firebase:
-                /**FirebaseDAO.setContext(this);
-                FirebaseDAO base = new FirebaseDAO("https://hbus.firebaseio.com/");
-                base.removeAllValues();*/
                 break;
 
         }
 
-
-        //deleteAllData();
-        //BusDAO dao = new BusDAO(this);
-        //dao.createTables();
-        //saveCities();
     }
 
 
 
     @Override
     public void setProgressUdate(Integer progress,Class c) {
-        Toast.makeText(this,"Porcent test "+progress.toString()+"%",Toast.LENGTH_LONG).show();
+        if(c.equals(City.class)){
+            Toast.makeText(this,"Porcent test "+progress.toString()+"%",Toast.LENGTH_LONG).show();
+        }
+
     }
 }

@@ -5,12 +5,17 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.GregorianCalendar;
+
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,14 +50,6 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         initTabLayout(view);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //TODO implements dia selecionado na tabs
-        //TODO calendário de feriados
-        //tabs.setCurrentTab(HoursUtils.getTipoDeDia(GregorianCalendar.getInstance()));
-    }
-
 
 
     private void initTabLayout(View view){
@@ -63,17 +60,35 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager,String cityId,String itinearyId,String way) {
+    private void setupViewPager(ViewPager viewPager,String cityId,String itineraryId,String way) {
         viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager(),
                 getActivity(),
                 cityId,
-                itinearyId,
+                itineraryId,
                 way);
-        viewPagerAdapter.addFragment(new HoursFragment(),
+        Bundle args = new Bundle();
+        args.putString(HoursFragment.ARGS_CITYID, cityId);
+        args.putString(HoursFragment.ARGS_ITINERARYID,itineraryId);
+        args.putString(HoursFragment.ARGS_WAY, way);
+
+
+        HoursFragment hoursFragmentUseful = new HoursFragment();
+        hoursFragmentUseful.setArguments(args);
+        hoursFragmentUseful.setTypeday(TypeDay.USEFUL);
+
+        HoursFragment hoursFragmentSaturday = new HoursFragment();
+        hoursFragmentSaturday.setArguments(args);
+        hoursFragmentSaturday.setTypeday(TypeDay.SATURDAY);
+
+        HoursFragment hoursFragmentSunday = new HoursFragment();
+        hoursFragmentSunday.setArguments(args);
+        hoursFragmentSunday.setTypeday(TypeDay.SUNDAY);
+
+        viewPagerAdapter.addFragment(hoursFragmentUseful,
                 getString(R.string.useful));
-        viewPagerAdapter.addFragment(new HoursFragment(),
+        viewPagerAdapter.addFragment(hoursFragmentSaturday,
                 getString(R.string.saturday));
-        viewPagerAdapter.addFragment(new HoursFragment(),
+        viewPagerAdapter.addFragment(hoursFragmentSunday,
                 getString(R.string.sunday));
         viewPager.setAdapter(viewPagerAdapter);
     }
@@ -85,6 +100,12 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     public void refresh(String cityId,String itineraryId,String way){
         viewPagerAdapter.refresh(cityId,itineraryId, way);
         viewPager.setAdapter(viewPagerAdapter);
+
+        //TODO implement sunday days in holiday
+        int typeday  = HoursUtils.getTipoDeDia(GregorianCalendar.getInstance());
+        Log.d(TAG, "Typday of now " + typeday);
+
+        viewPager.setCurrentItem(typeday);
     }
 
     @Override

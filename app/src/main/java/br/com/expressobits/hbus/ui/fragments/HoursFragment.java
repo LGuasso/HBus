@@ -14,8 +14,8 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.adapters.ItemBusAdapter;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
@@ -33,6 +33,7 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
     public static final String ARGS_ITINERARYID = "itineraryId";
     public static final String ARGS_WAY = "Way";
     public static final String ARGS_TYPEDAY = "typeday";
+    public TypeDay typeday = TypeDay.USEFUL;
 
     public HoursFragment() {
         // Required empty public constructor
@@ -48,13 +49,14 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
         Bundle arguments = getArguments();
         if(arguments!=null && arguments.getString(ARGS_CITYID)!=null &&
                 arguments.getString(ARGS_ITINERARYID)!=null &&
-                arguments.getString(ARGS_WAY)!=null &&
-                arguments.getString(ARGS_TYPEDAY)!=null){
+                arguments.getString(ARGS_WAY)!=null/** &&
+                arguments.getString(ARGS_TYPEDAY)!=null*/){
             refresh(context,
                     arguments.getString(ARGS_CITYID),
                     arguments.getString(ARGS_ITINERARYID),
-                    arguments.getString(ARGS_WAY),
-                    TypeDay.getTypeday(ARGS_TYPEDAY));
+                    arguments.getString(ARGS_WAY)/*,
+                    TypeDay.getTypeday(ARGS_TYPEDAY)*/,
+                    typeday);
         }
         return view;
     }
@@ -73,6 +75,10 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
 
+    }
+
+    public void setTypeday(TypeDay typeday){
+        this.typeday = typeday;
     }
 
     protected void refresh(Context context,String cityId,String itineraryId,String way,TypeDay typeday){

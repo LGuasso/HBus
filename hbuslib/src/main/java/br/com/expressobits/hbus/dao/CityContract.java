@@ -19,7 +19,8 @@ public final class CityContract {
             City._ID,
             City.COLUMN_NAME_NAME,
             City.COLUMN_NAME_COUNTRY,
-            City.COLUMN_NAME_POSITION
+            City.COLUMN_NAME_LATITUDE,
+            City.COLUMN_NAME_LONGITUDE
     };
 
     private static final String SQL_DELETE_CITIES =
@@ -33,6 +34,7 @@ public final class CityContract {
         public static final String TABLE_NAME = "city";
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_COUNTRY= "country";
-        public static final String COLUMN_NAME_POSITION= "position";
+        public static final String COLUMN_NAME_LATITUDE= "latitude";
+        public static final String COLUMN_NAME_LONGITUDE= "longitude";
     }
 }

@@ -4,6 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 
+import java.util.Arrays;
+
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 

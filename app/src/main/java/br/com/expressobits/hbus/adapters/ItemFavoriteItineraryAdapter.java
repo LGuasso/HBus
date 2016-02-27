@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.dao.TimesDbHelper;
-import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
@@ -67,17 +67,12 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                 View view = layoutInflater.inflate(R.layout.item_next_bus,holder.linearLayoutHours,false);
                 TextView textViewHour = (TextView)view.findViewById(R.id.textViewHourforNextBus);
                 TextView textViewWay = (TextView)view.findViewById(R.id.textViewWayforNextBus);
-
-
                 Bus bus = onibuses.get(i);
-
                 String time = bus.getTime();
                 if(time!=null) {
-
                     //texto+=itineraryList.get(position).getWays().get(i)+"  -  "+time;
                     textViewWay.setText(itineraryList.get(position).getWays().get(i));
                     textViewHour.setText(time);
-
                 }
                 holder.linearLayoutHours.addView(view, i);
             }

@@ -10,10 +10,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
@@ -35,13 +36,14 @@ public class TimesHelper {
                     CityContract.City._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_COUNTRY + TEXT_TYPE + COMMA_SEP +
-                    CityContract.City.COLUMN_NAME_POSITION + TEXT_TYPE +
+                    CityContract.City.COLUMN_NAME_LATITUDE + TEXT_TYPE + COMMA_SEP +
+                    CityContract.City.COLUMN_NAME_LONGITUDE + TEXT_TYPE +
                     " )";
     protected static final String SQL_CREATE_ITINERARIES =
             "CREATE TABLE " + ItineraryContract.Itinerary.TABLE_NAME + " (" +
                     ItineraryContract.Itinerary._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     ItineraryContract.Itinerary.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
-                    ItineraryContract.Itinerary.COLUMN_NAME_WAYS + TEXT_TYPE + COMMA_SEP +
+                    ItineraryContract.Itinerary.COLUMN_NAME_WAYS + TEXT_TYPE +
                     " )";
     protected static final String SQL_CREATE_CODES =
             "CREATE TABLE " + CodeContract.Code.TABLE_NAME + " (" +
@@ -64,7 +66,8 @@ public class TimesHelper {
         values.put(CityContract.City._ID,city.getId());
         values.put(CityContract.City.COLUMN_NAME_NAME,city.getName());
         values.put(CityContract.City.COLUMN_NAME_COUNTRY,city.getCountry());
-        values.put(CityContract.City.COLUMN_NAME_POSITION, city.getPosition());
+        values.put(CityContract.City.COLUMN_NAME_LATITUDE, city.getLocation().getLatitude());
+        values.put(CityContract.City.COLUMN_NAME_LONGITUDE, city.getLocation().getLongitude());
         return values;
     }
 
@@ -144,7 +147,9 @@ public class TimesHelper {
         //city.setId(c.getLong(c.getColumnIndexOrThrow(CityContract.City._ID)));
         city.setName(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_NAME)));
         city.setCountry(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_COUNTRY)));
-        city.setPosition(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_POSITION)));
+        Float latitude = Float.parseFloat(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LATITUDE)));
+        Float longitude = Float.parseFloat(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LONGITUDE)));
+        city.setLocation(new GeoPt().setLatitude(latitude));
         return city;
     }
 
@@ -431,7 +436,7 @@ public class TimesHelper {
             nextBus = buses.get(0);
             for (int i = 0; i < buses.size(); i++) {
                 nextBus = buses.get(i);
-                if (nowBus.compareTo(nextBus) <= 0) {
+                if (HoursUtils.compareTo(nowBus,nextBus) <= 0) {
                     nextBus = buses.get(i);
                     return nextBus;
                 } else {

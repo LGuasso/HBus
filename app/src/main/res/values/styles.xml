@@ -1,20 +1,29 @@
 <resources
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="AppThemeNavigationDrawer">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!-- item name="android:actionBarStyle">@style/ActionBarOrange</item>
         <item name="android:textAppearance">@style/Text</item -->
-        <item name="android:buttonStyle">@style/ButtonAppTheme</item>
-        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item>
+        <!--item name="android:buttonStyle">@style/ButtonAppTheme</item-->
+        <!--item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item-->
+
         <!-- Support library compatibility -->
-        <item name="actionBarStyle">@style/ActionBar</item>
+        <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
         <item name="buttonStyle">@style/ButtonAppTheme</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 
     <!-- Base application theme. -->
     <style name="AppThemeNavigationDrawer" parent="MaterialDrawerTheme.Light.DarkToolbar">
@@ -35,15 +44,11 @@
     </style>
 
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        </style>
 
-    <style name="ActionBar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:background">@color/colorPrimary</item>
-        <!-- Support library compatibility -->
-        <item name="background">@color/colorPrimary</item>
-        <item name="android:textColorPrimary">#fff</item>
-        <item name="android:actionBarItemBackground">@color/colorPrimaryDark</item>
-        <item name="android:textColor">#FFFFFF</item>
-    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ActionBarTabStyle" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_blue</item>

@@ -10,10 +10,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.HoursUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
@@ -23,11 +24,10 @@ import br.com.expressobits.hbus.utils.TextUtils;
  * @since 19/01/16
  */
 public class BusHelper {
-    private static final String TAG = "TimesHelper";
-    protected static final String DATABASE_NAME = "bus_database.db";
-    protected static final int DATABASE_VERSION = 1;
+    private static final String TAG = "BusHelper";
     protected static final String TEXT_TYPE = " TEXT";
     protected static final String INTEGER_TYPE = " INTEGER";
+    protected static final String REAL_TYPE = " REAL";
     protected static final String COMMA_SEP = ",";
     protected static final String INTEGER_PRIMARY_KEY = " INTEGER PRIMARY KEY";
     protected static final String TEXT_PRIMARY_KEY = " TEXT PRIMARY KEY";
@@ -43,7 +43,8 @@ public class BusHelper {
                     CityContract.City._ID + TEXT_PRIMARY_KEY + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_COUNTRY + TEXT_TYPE + COMMA_SEP +
-                    CityContract.City.COLUMN_NAME_POSITION + TEXT_TYPE +
+                    CityContract.City.COLUMN_NAME_LATITUDE + REAL_TYPE + COMMA_SEP +
+                    CityContract.City.COLUMN_NAME_LONGITUDE + REAL_TYPE +
                     " )";
 
 
@@ -55,7 +56,8 @@ public class BusHelper {
         values.put(CityContract.City._ID,city.getId());
         values.put(CityContract.City.COLUMN_NAME_NAME,city.getName());
         values.put(CityContract.City.COLUMN_NAME_COUNTRY,city.getCountry());
-        values.put(CityContract.City.COLUMN_NAME_POSITION, city.getPosition());
+        values.put(CityContract.City.COLUMN_NAME_LATITUDE,city.getLocation().getLatitude());
+        values.put(CityContract.City.COLUMN_NAME_LONGITUDE,city.getLocation().getLongitude());
         return values;
     }
 
@@ -116,7 +118,9 @@ public class BusHelper {
         city.setId(c.getString(c.getColumnIndexOrThrow(CityContract.City._ID)));
         city.setName(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_NAME)));
         city.setCountry(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_COUNTRY)));
-        city.setPosition(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_POSITION)));
+        Float latitude = c.getFloat(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LATITUDE));
+        Float longitude = c.getFloat(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LONGITUDE));
+        city.setLocation(new GeoPt().setLatitude(latitude).setLongitude(longitude));
         return city;
     }
 
@@ -200,7 +204,7 @@ public class BusHelper {
 
     public static Code getCode(SQLiteDatabase db,City city,String codeName){
         String where = CodeContract.Code._ID+" = ?";
-        String arguments[] = {BARS+city.getCountry()+BARS+city.getName()+BARS+codeName};
+        String arguments[] = {city.getCountry()+BARS+city.getName()+BARS+codeName};
         Cursor cursor = db.query(
                 CodeContract.Code.TABLE_NAME,
                 CodeContract.COLS,
@@ -298,7 +302,7 @@ public class BusHelper {
     public static List<Itinerary> getItineraries(SQLiteDatabase db,City city){
         ArrayList<Itinerary> itineraries = new ArrayList<Itinerary>();
         String where = ItineraryContract.Itinerary._ID+" LIKE ?";
-        String arguments[] = {BARS+city.getCountry()+BARS+city.getName()+"%"};
+        String arguments[] = {city.getCountry()+BARS+city.getName()+"%"};
         Cursor c;
         c = db.query(
                 ItineraryContract.Itinerary.TABLE_NAME,
@@ -318,7 +322,7 @@ public class BusHelper {
     public static List<Code> getCodes(SQLiteDatabase db,City city){
         ArrayList<Code> codes = new ArrayList<Code>();
         String where = CodeContract.Code._ID+" LIKE ?";
-        String arguments[] = {BARS+city.getCountry()+BARS+city.getName()+"%"};
+        String arguments[] = {city.getCountry()+BARS+city.getName()+"%"};
         Cursor c;
         c = db.query(
                 CodeContract.Code.TABLE_NAME,
@@ -339,9 +343,9 @@ public class BusHelper {
         ArrayList<Bus> buses = new ArrayList<Bus>();
         Cursor c;
         String where = BusContract.Bus._ID+" LIKE ?";
-        Log.e("TEST",BARS+city.getCountry()+BARS+city.getName()+BARS+
+        Log.e("TEST",city.getCountry()+BARS+city.getName()+BARS+
                 itinerary.getName()+BARS+way+BARS+typeDay.toString()+"%");
-        String arguments[] = {BARS+city.getCountry()+BARS+city.getName()+BARS+
+        String arguments[] = {city.getCountry()+BARS+city.getName()+BARS+
                 itinerary.getName()+BARS+way+BARS+typeDay.toString()+"%"};
         c = db.query(
                 BusContract.Bus.TABLE_NAME,
@@ -382,7 +386,7 @@ public class BusHelper {
             nextBus = buses.get(0);
             for (int i = 0; i < buses.size(); i++) {
                 nextBus = buses.get(i);
-                if (nowBus.compareTo(nextBus) <= 0) {
+                if (HoursUtils.compareTo(nowBus,nextBus) <= 0) {
                     nextBus = buses.get(i);
                     return nextBus;
                 } else {
@@ -413,6 +417,10 @@ public class BusHelper {
     public static void createTableCodes(SQLiteDatabase db){
         db.execSQL(CodeContract.SQL_CREATE_TABLE);
     }
+    public static void createTableBuses(SQLiteDatabase db){
+        db.execSQL(BusContract.SQL_CREATE_TABLE);
+    }
+
 
     //DELETER ALL DATA
     public static void deleteAllcities(SQLiteDatabase db){

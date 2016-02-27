@@ -45,8 +45,20 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
     @Override
     public void onBindViewHolder(HolderCity holder, int position) {
         //TODO implementar imagem da cidade
-        holder.textViewCity.setText(listCities.get(position).getName()+" - "+listCities.get(position).getCountry());
-        //holder.imageViewCity.setImageDrawable(new BitmapDrawable(listCities.get(position).getImage()));
+
+        String name = listCities.get(position).getName()+" - "+listCities.get(position).getCountry();
+        holder.textViewCity.setText(name);
+
+        name=name.replace(" - ","-");
+        name=name.replace(" ","_");
+        name=name.toLowerCase();
+        if(name.equals("santa_maria-rs")){
+            holder.imageViewCity.setImageDrawable(context.getResources().getDrawable(R.drawable.santa_maria_rs));
+        }
+        if(name.equals("cruz_alta-rs")){
+            holder.imageViewCity.setImageDrawable(context.getResources().getDrawable(R.drawable.cruz_alta_rs));
+        }
+
         //holder.imageViewCity.setImageDrawable(listCities.get(position).getImageDrawable());
 
     }
@@ -70,15 +82,10 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
 
         public HolderCity(View itemView,List<City> list) {
             super(itemView);
-
-
             textViewCity = (TextView) itemView.findViewById(R.id.textView_city_name);
             imageViewCity = (ImageView) itemView.findViewById(R.id.imageView_city);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
-
             cardView.setOnClickListener(this);
-
-
         }
 
 

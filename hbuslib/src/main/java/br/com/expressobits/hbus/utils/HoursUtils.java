@@ -1,14 +1,17 @@
 package br.com.expressobits.hbus.utils;
 
 import android.util.Log;
+import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
 
 /**
@@ -129,31 +132,64 @@ public class HoursUtils {
         return texto;
     }*/
 
-    public static List<Bus> sortByTimeBus(List<Bus> busList){
+    public static Pair<Integer,List<Bus>> sortByTimeBus(List<Bus> busList){
 
-        Collections.sort(busList);
+        //Collections.sort(busList);
         Bus bus = new Bus();
         bus.setTime(HoursUtils.getNowTimeinString());
-        ArrayList<Bus> busFinal = new ArrayList<>();
-        ArrayList<Bus> varFinal = new ArrayList<>();
+        List<Bus> busFinal = new ArrayList<>();
+        ArrayList<Bus> twoLastBuses = new ArrayList<>();
+        ArrayList<Bus> lastBuses = new ArrayList<>();
+        ArrayList<Bus> nextBuses = new ArrayList<>();
+
+        int countTwoLast = 0;
+
         for (int i=0;i<busList.size();i++){
             if(getHour(busList.get(i))>getHour(bus)){
-                busFinal.add(busList.get(i));
+                nextBuses.add(busList.get(i));
             }else if(getHour(busList.get(i))<getHour(bus)){
-                varFinal.add(busList.get(i));
+                    lastBuses.add(busList.get(i));
+
             }else{
                 if(getMinute(busList.get(i))>=getMinute(bus)){
-                    busFinal.add(busList.get(i));
+                    nextBuses.add(busList.get(i));
                 }else if(getMinute(busList.get(i))<getMinute(bus)) {
-                    varFinal.add(busList.get(i));
+                        lastBuses.add(busList.get(i));
                 }
             }
         }
-        for(Bus bus1 : varFinal){
+
+        if(lastBuses.size()>1){
+            Bus bus2 = lastBuses.get(lastBuses.size() - 2);
+            Bus bus1 = lastBuses.get(lastBuses.size() - 1);
+            twoLastBuses.add(bus1);
+            lastBuses.remove(bus1);
+            //Tem que ser invertido para aparecer embaixo o mais recente
+            twoLastBuses.add(bus2);
+            lastBuses.remove(bus2);
+
+        }else if(lastBuses.size()>0){
+            Bus bus1 = lastBuses.get(lastBuses.size() - 1);
+            twoLastBuses.add(bus1);
+            lastBuses.remove(bus1);
+        }
+
+        countTwoLast = twoLastBuses.size();
+
+
+        for(Bus bus1 : twoLastBuses){
             busFinal.add(bus1);
         }
 
-        return busFinal;
+        for(Bus bus1 : nextBuses){
+            busFinal.add(bus1);
+        }
+
+        for(Bus bus1 : lastBuses){
+            busFinal.add(bus1);
+        }
+
+        return new Pair<>(countTwoLast,busFinal);
     }
 
     public static int getHour(Bus bus){
@@ -162,5 +198,35 @@ public class HoursUtils {
 
     public static int getMinute(Bus bus){
         return Integer.parseInt(bus.getTime().split(":")[1]);
+    }
+
+    public static String longTimetoString(long millis){
+        return String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(millis),
+                TimeUnit.MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+        );
+    }
+
+    public static int compareTo(Bus bus,Bus another) {
+
+        int hourThis = Integer.parseInt(bus.getTime().split(":")[0]);
+        int hourAnother = Integer.parseInt(another.getTime().split(":")[0]);
+        int minuteThis = Integer.parseInt(bus.getTime().split(":")[1]);
+        int minuteAnother = Integer.parseInt(another.getTime().split(":")[1]);
+
+        if(hourThis>hourAnother){
+            return 1;
+        }else if(hourThis<hourAnother){
+            return -1;
+        }else{
+            if(minuteThis>minuteAnother){
+                return 1;
+            }else if(minuteThis<minuteAnother){
+                return -1;
+            }else{
+                return 0;
+            }
+        }
     }
 }

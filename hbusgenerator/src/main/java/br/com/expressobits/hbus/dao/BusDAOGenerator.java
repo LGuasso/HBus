@@ -7,10 +7,11 @@ import android.util.Log;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+
 
 /**
  * Created by rafael on 08/12/15.
@@ -19,8 +20,11 @@ public class BusDAOGenerator extends SQLiteOpenHelper{
 
     private static final String TAG = "GENERATOR";
 
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "bus_database.db";
+
     public BusDAOGenerator(Context context){
-        super(context, TimesHelper.DATABASE_NAME, null, TimesHelper.DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -35,10 +39,10 @@ public class BusDAOGenerator extends SQLiteOpenHelper{
 
     public void createTables(SQLiteDatabase db){
         Log.i(TAG, "Create tables...");
-        TimesHelper.createTableCities(db);
-        TimesHelper.createTableItineraries(db);
-        TimesHelper.createTableCodes(db);
-        TimesHelper.createTableBuses(db);
+        BusHelper.createTableCities(db);
+        BusHelper.createTableItineraries(db);
+        BusHelper.createTableCodes(db);
+        BusHelper.createTableBuses(db);
     }
 
     public void deleteTable(String table){
@@ -46,40 +50,44 @@ public class BusDAOGenerator extends SQLiteOpenHelper{
         getWritableDatabase().delete(table, null, null);
     }
 
-    public Long insertCity(City city){
-        return TimesHelper.insert(getWritableDatabase(), city);
+    public void insertCity(City city){
+        Log.d(TAG,"insert city "+city.getId()+" "+city.getName()+" "+city.getCountry()+" "+city.getLocation());
+        BusHelper.insert(getWritableDatabase(), city);
     }
 
-    public Long insertItineraries(Itinerary itinerary){
-        return TimesHelper.insert(getWritableDatabase(), itinerary);
+    public void insertItineraries(Itinerary itinerary){
+        Log.d(TAG,"insert itinerary "+itinerary.getId()+" "+itinerary.getName()+" "+itinerary.getWays()+" "+itinerary.getCodes());
+        BusHelper.insert(getWritableDatabase(), itinerary);
     }
 
-    public Long insertCodes(Code code){
-        return TimesHelper.insert(getWritableDatabase(), code);
+    public void insertCodes(Code code){
+        Log.d(TAG,"insert code "+code.getId()+" "+code.getName()+" "+code.getDescrition());
+        BusHelper.insert(getWritableDatabase(), code);
     }
 
-    public Long insertBus(Bus bus){
-        return TimesHelper.insert(getWritableDatabase(), bus);
+    public void insertBus(Bus bus){
+        Log.d(TAG,"insert bus "+bus.getId()+" "+bus.getTime()+" "+bus.getCode()+" "+bus.getTypeday()+" "+bus.getWay());
+        BusHelper.insert(getWritableDatabase(), bus);
     }
 
-    public City getCity(Long id){
-        return TimesHelper.getCity(getReadableDatabase(), id);
+    public City getCity(String id){
+        return BusHelper.getCity(getReadableDatabase(), id);
     }
 
-    public City getCity(String name,String country){
-        return TimesHelper.getCity(getReadableDatabase(), name,country);
-    }
+    /**public City getCity(String name,String country){
+        return BusHelper.getCity(getReadableDatabase(), name,country);
+    }*/
 
     public Code getCode(String name,Long cityId){
-        return TimesHelper.getCode(getReadableDatabase(), name,cityId);
+        return BusHelper.getCode(getReadableDatabase(), name,cityId);
     }
 
     public List<City> getCities(){
-        return TimesHelper.getCities(getReadableDatabase());
+        return BusHelper.getCities(getReadableDatabase());
     }
 
-    public List<Itinerary> getItineraries(Long cityId){
-        return TimesHelper.getItineraries(getReadableDatabase(),cityId);
+    public List<Itinerary> getItineraries(City city){
+        return BusHelper.getItineraries(getReadableDatabase(),city);
     }
 
 

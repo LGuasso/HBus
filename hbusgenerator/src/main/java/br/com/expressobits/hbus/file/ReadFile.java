@@ -8,14 +8,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.CodeContract;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
@@ -110,6 +111,8 @@ public class ReadFile {
     }
 
     public List<Bus> getBuses(City city,Itinerary itinerary,String way,String typeday){
+
+
         List<Bus> buses = new ArrayList<>();
         for(String text:readFile(city.getCountry()+BARS+
                         city.getName()+BARS+
@@ -118,6 +121,36 @@ public class ReadFile {
         )){
             buses.add(toBus(text));
         }
+        return buses;
+    }
+
+    public HashMap<Itinerary,List<Bus>> getBuses(City city,List<Itinerary> itineraries){
+
+
+        HashMap<Itinerary,List<Bus>> buses = new HashMap<>();
+        for(Itinerary itinerary:itineraries){
+
+
+            List<Bus> buses1 = new ArrayList<>();
+            for(String way:itinerary.getWays()){
+                for(int i=0;i<3;i++){
+                    for(String text:readFile(city.getCountry() + BARS +
+                                    city.getName() + BARS +
+                                    TextUtils.toSimpleNameFile(itinerary.getName()) + BARS +
+                                    TextUtils.toSimpleNameWay(way) + "_" + TextUtils.getTypeDayInt(i) + FORMAT
+                    )){
+                        Bus bus = toBus(text);
+                        bus.setWay(way);
+                        bus.setTypeday(TextUtils.getTypeDayInt(i));
+                        buses1.add(bus);
+                    }
+                }
+            }
+            buses.put(itinerary, buses1);
+
+        }
+
+
         return buses;
     }
 

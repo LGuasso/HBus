@@ -104,4 +104,24 @@ public class BusEndpoint {
         logger.info("Calling getBuses method");
         return buses;
     }
+
+    @ApiMethod(name = "getAllBuses")
+    public List<Bus> getAllBuses(@Named("country")String country,@Named("cityName")String cityName) {
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+        Key countryParentKey = KeyFactory.createKey("country", country);
+        Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
+        Query query = new Query("Bus",cityParentKey);
+        List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
+
+        ArrayList<Bus> buses = new ArrayList<>();
+        for (Entity result : results) {
+            Bus bus = new Bus();
+            bus.setTime((String) result.getProperty("time"));
+            bus.setCode((String) result.getProperty("code"));
+
+            buses.add(bus);
+        }
+        logger.info("Calling getBuses method");
+        return buses;
+    }
 }

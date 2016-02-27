@@ -65,6 +65,7 @@ public class AddFavoriteActivity extends AppCompatActivity implements RecyclerVi
         City city = new City();
         city.setName(cityId.split("/")[1]);
         city.setCountry(cityId.split("/")[0]);
+
         pullItinerariesEndpointsAsyncTask.execute(city);
     }
 
@@ -84,14 +85,17 @@ public class AddFavoriteActivity extends AppCompatActivity implements RecyclerVi
 
     @Override
     public void finished(List<Itinerary> itineraries) {
-        this.itineraries = itineraries;
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(this,false,itineraries);
-        arrayAdapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerViewItineraries.setAdapter(arrayAdapter);
-        recyclerViewItineraries.setClickable(true);
-        recyclerViewItineraries.addItemDecoration(new SimpleDividerItemDecoration(this));
-        LinearLayoutManager llmUseful = new LinearLayoutManager(this);
-        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewItineraries.setLayoutManager(llmUseful);
+        if(itineraries == null){
+            this.itineraries = itineraries;
+            ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(this,false,itineraries);
+            arrayAdapter.setRecyclerViewOnClickListenerHack(this);
+            recyclerViewItineraries.setAdapter(arrayAdapter);
+            recyclerViewItineraries.setClickable(true);
+            recyclerViewItineraries.addItemDecoration(new SimpleDividerItemDecoration(this));
+            LinearLayoutManager llmUseful = new LinearLayoutManager(this);
+            llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerViewItineraries.setLayoutManager(llmUseful);
+        }
+
     }
 }

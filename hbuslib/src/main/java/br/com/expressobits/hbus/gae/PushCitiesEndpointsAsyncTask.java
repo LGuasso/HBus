@@ -66,6 +66,7 @@ public class PushCitiesEndpointsAsyncTask extends AsyncTask<City,Integer,Integer
             try {
                 //TODO modify to add param country name
                 cityApi.insertCity(city).execute();
+                Log.i(TAG, "Push city " + city.getName());
 
             } catch (IOException e) {
                 e.printStackTrace();

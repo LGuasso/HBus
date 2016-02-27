@@ -65,7 +65,9 @@ public class PullCitiesEndpointsAsyncTask extends AsyncTask<String,Integer,List<
 
     @Override
     protected void onPostExecute(List<City> cities) {
-        Log.d(TAG, "Download " + cities.size() + " cities from datastore!");
+        if(cities!=null){
+            Log.d(TAG, "Download " + cities.size() + " cities from datastore!");
+        }
         if(resultListenerAsyncTask!=null){
             resultListenerAsyncTask.finished(cities);
         }else{

@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 
 /**
  * Classe que determina database para {@link br.com.expressobits.hbus.model.Itinerary} favoritos,
@@ -18,11 +18,11 @@ import br.com.expressobits.hbus.model.Itinerary;
 public class FavoriteDAO extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASENAME = "itineraries_favorites.db";
+    private static final String DATABASE_NAME = "itineraries_favorites.db";
     private  Context context;
     public FavoriteDAO(Context context){
 
-        super(context, DATABASENAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
