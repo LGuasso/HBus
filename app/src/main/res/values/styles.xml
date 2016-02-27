@@ -15,7 +15,6 @@
         <!-- Support library compatibility -->
         <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
         <item name="buttonStyle">@style/ButtonAppTheme</item>
-        <item name="android:windowTranslucentStatus">true</item>
 
     </style>
 
@@ -45,7 +44,6 @@
 
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

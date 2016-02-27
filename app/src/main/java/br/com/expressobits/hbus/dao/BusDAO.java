@@ -25,7 +25,7 @@ public class BusDAO extends SQLiteAssetHelper{
 
     public BusDAO(Context context) {
         //super(context, BusHelper.DATABASE_NAME, null, BusHelper.DATABASE_VERSION); //SQLITEOPENHELPER
-        super(context, DATABASE_NAME, context.getExternalFilesDir(null).getAbsolutePath(), null, DATABASE_VERSION);//SQLITE ASSET HELPER
+        super(context, DATABASE_NAME,null, DATABASE_VERSION);//SQLITE ASSET HELPER
     }
 
     /**@Override
