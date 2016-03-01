@@ -47,7 +47,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     OnSettingsListener mCallback;
     LinearLayout linearLayoutEmptyList;
     View view;
-    private Snackbar snackbar;
 
     @Override
     public void onAttach(Activity activity) {
@@ -68,7 +67,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         super.onResume();
         updateListViews();
         updateEmptyListView();
-        ((MainActivity)getActivity()).setActionBarTitle(getResources().getString(R.string.app_name), "");
+        ((MainActivity)getActivity()).setActionBarTitle();
     }
 
     private void updateEmptyListView() {
@@ -92,7 +91,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private void initViews(View view){
         initListViews(view);
         initEmptyList(view);
-        initAdView(view);
     }
 
     private void initEmptyList(View view) {
@@ -122,12 +120,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         dao.close();
     }
 
-    public void initAdView(View view){
-        AdView mAdView = (AdView) view.findViewById(R.id.ad_view);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-
-    }
 
 
 
@@ -161,7 +153,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                         Itinerary itinerary = dao.getItinerary(selectedItem);
                         dao.removeFavorite(itinerary);
                         FavoritesItineraryFragment.this.initListViews(FavoritesItineraryFragment.this.view);
-                        mCallback.onRemoveFavorite();
                         updateEmptyListView();
                         String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
                         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
@@ -173,6 +164,10 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                 });
                 builder.show();
 
+                break;
+
+            case R.id.buttonSeeAllItinerary:
+                mCallback.addFragment(ItinerariesFragment.TAG);
                 break;
         }
 

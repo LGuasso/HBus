@@ -58,7 +58,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.all_lines), null);
+        ((MainActivity)getActivity()).setActionBarTitle();
     }
 
     private void initViews(View view){

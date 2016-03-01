@@ -1,7 +1,4 @@
-<resources
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -14,7 +11,7 @@
 
         <!-- Support library compatibility -->
         <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
-        <item name="buttonStyle">@style/ButtonAppTheme</item>
+        <!--item name="buttonStyle">@style/ButtonAppTheme</item-->
 
     </style>
 
@@ -36,15 +33,15 @@
         <item name="material_drawer_divider">@color/material_drawer_divider</item>
         <item name="material_drawer_selected">@color/material_drawer_selected</item>
         <item name="material_drawer_selected_text">@color/material_drawer_selected_text</item>
-        <item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>
-
+        <item name="material_drawer_header_selection_text">
+            @color/material_drawer_header_selection_text
+        </item>
 
 
     </style>
 
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -58,23 +55,21 @@
     </style>
 
 
-    <style name="ButtonAppTheme" parent="@style/Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button</item>
-        <item name="android:minHeight">48dip</item>
-        <item name="android:minWidth">64dip</item>
-
-        <item name="background">@drawable/button</item>
-    </style>
-
-    <style name="AppTheme.Button.Flat" parent="@style/Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button_cardview</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+    <style name="AppTheme.Button.Borderless.Colored" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
         <item name="android:minHeight">36dip</item>
         <item name="android:minWidth">64dip</item>
         <item name="android:padding">8dp</item>
         <item name="android:paddingLeft">24dp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="background">@drawable/button_cardview</item>
+    </style>
+
+    <style name="AppTheme.Base.Widget.AppCompat.Button.Colored" parent="@style/Base.Widget.AppCompat.Button.Colored">
+        <item name="android:minHeight">36dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
     </style>
 
@@ -88,7 +83,6 @@
         <item name="android:windowEnterAnimation">@animator/fade_in</item>
         <item name="android:windowExitAnimation">@animator/fade_out</item>
     </style>
-
 
 
 </resources>

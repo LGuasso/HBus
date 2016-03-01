@@ -51,4 +51,13 @@
     <string name="include_system_information">Incluir informações sobre o sistema</string>
     <string name="wait_a_few_minutes">Aguarde alguns minutos</string>
     <string name="last_recently_bus">Ônibus recentes</string>
+    <string name="action_refresh">Atualizar</string>
+    <string name="action_refresh_cities_list">Atualizar lista de cidades</string>
+    <string name="city">Cidade</string>
+    <string name="click_here_to_change">Clique aqui para mudar</string>
+    <string name="navigation_drawer_close"></string>
+    <string name="send_feedback_with_sucess">Enviado feedback com sucesso!</string>
+    <string name="add_itinerary">Adicionar itinerário</string>
+    <string name="all_itinerary">Todos itinerários</string>
+    <string name="see_all_itinerary">Ver todos ititnerários</string>
 </resources>

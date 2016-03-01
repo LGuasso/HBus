@@ -5,32 +5,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Pair;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
-import br.com.expressobits.hbus.gae.InsertCityEndpointsAsyncTask;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
@@ -42,14 +39,13 @@ import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.DAOUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnSettingsListener, Drawer.OnDrawerItemClickListener, ChooseWayDialogListener {
+public class MainActivity extends AppCompatActivity implements OnSettingsListener,
+        ChooseWayDialogListener,NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
     public static final String TAG = "Atividade Principal";
     public static final String DEBUG = "debug";
     public static final String STACK = "pilha";
     private Toolbar pToolbar;
-    //Navigation Drawer
-    private Drawer navigationDrawer;
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
     String cityId;
@@ -60,36 +56,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         this.cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        //new LinhaFile(this).init(this);
         if (savedInstanceState == null) {
 
             Fragment fragment = new FavoritesItineraryFragment();
-            String tag;
 
 
-            FavoriteDAO dao = new FavoriteDAO(this);
-            if(dao.getItineraries(cityId).size()>0){
-                fragment = new FavoritesItineraryFragment();
-                tag = FavoritesItineraryFragment.TAG;
 
-            }else{
-                fragment = new ItinerariesFragment();
-                tag = ItinerariesFragment.TAG;
-            }
 
             if (findViewById(R.id.framelayout_main) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_main, fragment,tag);
+                ft.add(R.id.framelayout_main, fragment,FavoritesItineraryFragment.TAG);
                 ft.commit();
             } else if (findViewById(R.id.framelayout_content) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_menu, fragment,tag);
+                ft.add(R.id.framelayout_menu, fragment,FavoritesItineraryFragment.TAG);
                 ft.add(R.id.framelayout_content, new OnibusFragment(),OnibusFragment.TAG);
                 ft.commit();
                 //Define se tela é para dois framgnetos
@@ -102,20 +85,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        createNavigationDrawer();
+        this.cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        //TODO "resumir" os views sem ter carregar novamente
+        initNavigationDrawer();
     }
 
+    private void initViews() {
+        initActionBar();
+        initNavigationDrawer();
+        initAdView();
+    }
+
+    public void initAdView(){
+        AdView mAdView = (AdView) findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+    }
+
+
     private void initNavigationDrawer() {
-        navigationDrawer = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(pToolbar)
-                .withActionBarDrawerToggleAnimated(true)
-                .withDrawerGravity(Gravity.START)
-                .withSelectedItem(0)
-                .withActionBarDrawerToggle(true)
-                .withOnDrawerItemClickListener(this)
-                .build();
-        createNavigationDrawer();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, pToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View naviHeader = navigationView.getHeaderView(0);
+        View naviView = naviHeader.findViewById(R.id.side_nav_bar);
+        naviView.setOnClickListener(this);
+        TextView textViewCityName = (TextView)naviHeader.findViewById(R.id.textViewCityName);
+        TextView textViewCoutry = (TextView)naviHeader.findViewById(R.id.textViewCountry);
+        textViewCityName.setText(DAOUtils.getNameCity(cityId));
+        textViewCoutry.setText(DAOUtils.getNameCountry(cityId));
+
+        ImageView imageViewCity = (ImageView)naviHeader.findViewById(R.id.imageViewCity);
+        if(cityId.equals("RS/Santa Maria")){
+            imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.santa_maria_rs));
+        }
+        if(cityId.equals("RS/Cruz Alta")){
+            imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.cruz_alta_rs));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -133,25 +156,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+            return true;
         }
         if (id == R.id.menu_action_help) {
             openHelp();
+            return true;
         }
-        return false;
-    }
-
-    private void initViews() {
-        initActionBar();
-        initNavigationDrawer();
-        initFAB();
-    }
-
-    private void initFAB(){
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(this);
-
-         //TODO procurar saber quando descenmos a lista
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -166,57 +177,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onPopStackBack() {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void onRemoveFavorite() {
-        createNavigationDrawer();
-    }
-
-    @Override
-    public void onAddFavorite() {
-        createNavigationDrawer();
-    }
-
-    private void createNavigationDrawer() {
-        BusDAO dao  = new BusDAO(this);
-        FavoriteDAO favoriteDAO = new FavoriteDAO(this);
-        navigationDrawer.getDrawerItems().clear();
-        navigationDrawer.addItem(new SectionDrawerItem());
-        navigationDrawer.addItem(new PrimaryDrawerItem()
-                .withName(R.string.favorites)
-                .withBadge(getString(R.string.number_of_itineraries,
-                        favoriteDAO.getItineraries(PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY)).size()))
-                .withIdentifier(0)
-                .withIcon(R.drawable.ic_star_grey600_24dp));
-        navigationDrawer.addItem(new PrimaryDrawerItem()
-                .withName(R.string.all_lines)
-                .withBadge(getString(R.string.number_of_itineraries, dao.getItineraries().size()))
-                .withIdentifier(1)
-                .withIcon(R.drawable.ic_format_list_bulleted_grey600_24dp));
-        navigationDrawer.addItem(new SectionDrawerItem());
-        navigationDrawer.addItem(new PrimaryDrawerItem()
-                .withName(R.string.action_settings)
-                .withIdentifier(2)
-                .withIcon(R.drawable.ic_settings_grey600_24dp));
-        navigationDrawer.addItem(new PrimaryDrawerItem()
-                .withName(R.string.action_help)
-                .withIdentifier(3)
-                .withIcon(R.drawable.ic_help_circle_grey600_24dp));
-        //todo design colocar 'change city' here
-
-        dao.close();
-        favoriteDAO.close();
-
-    }
-
-    @Override
     public void onSettingsDone(String itineraryId, String sentido) {
         this.itineraryId = itineraryId;
         this.way = sentido;
-        this.cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+
         BusDAO db = new BusDAO(this);
         if(isDualPane){
             pToolbar.setTitle(db.getItinerary(itineraryId).getName());
@@ -278,11 +242,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fragment fragment = new Fragment();
         if(TAG.equals(ItinerariesFragment.TAG)){
             fragment = new ItinerariesFragment();
-        }else{
-
-            if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+        }else if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                 getSupportFragmentManager().popBackStack();
-            }
+
         }
         if(getSupportFragmentManager().findFragmentByTag(TAG)==null){
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -311,31 +273,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
-    public void setActionBarTitle(String title, String subtitle) {
+    public void setActionBarTitle() {
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         pToolbar.setTitle("HBus");
         pToolbar.setSubtitle(DAOUtils.getNameCity(cityId)+" - "+DAOUtils.getNameCountry(cityId));
-    }
-
-    @Override
-    public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-        //TODO numerar navigationDrawer
-        switch (i){
-            case 1:
-                addFragment(FavoritesItineraryFragment.TAG);
-                break;
-            case 2:
-                addFragment(ItinerariesFragment.TAG);
-                break;
-            case 4:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case 5:
-                openHelp();
-                break;
-        }
-
-        return false;
     }
 
     public void onCreateDialogChooseWay(String itineraryId) {
@@ -358,15 +299,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab:
-                startActivity(new Intent(this, AddFavoriteActivity.class));
-                break;
-        }
-    }
-
-    @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
@@ -374,5 +306,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(String itineraryId, String way) {
         onSettingsDone(itineraryId, way);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_favorites) {
+            addFragment(FavoritesItineraryFragment.TAG);
+        } else if (id == R.id.nav_all_itineraries) {
+            addFragment(ItinerariesFragment.TAG);
+        } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        } else if (id == R.id.nav_help) {
+            openHelp();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.side_nav_bar:
+                startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
+                break;
+        }
     }
 }

@@ -14,18 +14,8 @@ public interface OnSettingsListener {
     public void onSettingsDone(String itineraryId,String way);
 
     /**
-     *
+     * Escolhe atividade deve iniciar com hor�rios da itinerary e way selecionado
      */
-    public void onPopStackBack();
+    public void addFragment(String TAG);
 
-
-    /**
-     * Notifica que foi removido favorito da lista de favoritos
-     */
-    public void onRemoveFavorite();
-
-    /**
-     * Notifica que foi adicionado itiner�rio na lista de favoritos
-     */
-    public void onAddFavorite();
 }

@@ -47,12 +47,14 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private ProgressBar progressBar;
     private ImageView imageViewNetworkError;
     private BusDAO db;
-
+    private boolean starter = false;
     public static final String NOT_CITY = "not_city";
+    public static final String STARTER_MODE = "starter";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        starter = getIntent().getBooleanExtra(STARTER_MODE,false);
         setContentView(R.layout.activity_select_city);
         initViews();
     }
@@ -162,7 +164,13 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(TAG, cities.get(position).getId());
         editor.apply();
-        ManagerInit.manager(this);
+
+        if(starter){
+            ManagerInit.manager(this);
+        }
+
+        finish();
+
     }
 
     @Override
