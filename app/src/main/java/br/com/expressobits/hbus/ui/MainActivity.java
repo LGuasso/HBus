@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     public void setActionBarTitle() {
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         pToolbar.setTitle("HBus");
-        pToolbar.setSubtitle(DAOUtils.getNameCity(cityId)+" - "+DAOUtils.getNameCountry(cityId));
+        pToolbar.setSubtitle(DAOUtils.getNameCity(cityId) + " - " + DAOUtils.getNameCountry(cityId));
     }
 
     public void onCreateDialogChooseWay(String itineraryId) {
@@ -336,5 +336,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
                 break;
         }
+    }
+
+    public void refreshItinerariesList(){
+
     }
 }

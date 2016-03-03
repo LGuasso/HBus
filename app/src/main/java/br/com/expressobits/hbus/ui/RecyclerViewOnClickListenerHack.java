@@ -7,7 +7,7 @@ import android.view.View;
  * @since 25/06/2015.
  * Comunicação entre adapter de recyceler view e sua fragment/activity
  */
-public interface RecyclerViewOnClickListenerHack {
+public interface RecyclerViewOnClickListenerHack{
     void onClickListener(View view, int position);
     boolean onLongClickListener(View view, int position);
 }

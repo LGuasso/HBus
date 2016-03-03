@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -38,11 +39,13 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
  * @author Rafael Correa
  * @since 06/07/2015
  */
-public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack,ChooseWayDialogListener{
+public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack,
+        ChooseWayDialogListener,View.OnClickListener{
 
     public static final String TAG = "FavoritesItineraryFragment";
     public String selectedItem;
-    RecyclerView recyclerViewLines;
+    private RecyclerView recyclerViewLines;
+    private Button buttonSeeAllItineraries;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
     LinearLayout linearLayoutEmptyList;
@@ -91,6 +94,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private void initViews(View view){
         initListViews(view);
         initEmptyList(view);
+        buttonSeeAllItineraries = (Button) view.findViewById(R.id.buttonSeeAllItinerary);
+        buttonSeeAllItineraries.setOnClickListener(this);
     }
 
     private void initEmptyList(View view) {
@@ -166,9 +171,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
                 break;
 
-            case R.id.buttonSeeAllItinerary:
-                mCallback.addFragment(ItinerariesFragment.TAG);
-                break;
+
         }
 
     }
@@ -183,6 +186,15 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onItemClick(String itineraryId,String way) {
         mCallback.onSettingsDone(itineraryId,way);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.buttonSeeAllItinerary:
+                mCallback.addFragment(ItinerariesFragment.TAG);
+                break;
+        }
     }
 }
 

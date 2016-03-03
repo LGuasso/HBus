@@ -83,16 +83,19 @@ public class ItineraryEndpoint {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Key countryParentKey = KeyFactory.createKey("country", country);
         Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
-        Query query = new Query(cityParentKey);
+        Query query = new Query("Itinerary",cityParentKey);
         List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
 
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         for (Entity result : results) {
             Itinerary itinerary = new Itinerary();
-            //itinerary.setId();
+            itinerary.setId(country+"/"+cityName+"/"+((String) result.getProperty("name")));
             itinerary.setName((String) result.getProperty("name"));
-            //itinerary.setCodes((List<String>) result.getProperty("codes"));
-            //itinerary.setWays((List<String>) result.getProperty("ways"));
+            itinerary.setCodes((ArrayList<String>) result.getProperty("codes"));
+            itinerary.setWays((ArrayList<String>)result.getProperty("ways"));
+
+            logger.info("Calling wayssss " + result.getProperty("ways")+" /// "+((List<String>)result.getProperty("ways"))+" /// "+
+                    (ArrayList<String>) result.getProperty("ways"));
             itineraries.add(itinerary);
         }
 

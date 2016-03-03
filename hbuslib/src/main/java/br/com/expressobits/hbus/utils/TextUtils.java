@@ -19,6 +19,7 @@ public class TextUtils {
                 result+=",";
             }
         }
+
         return result;
     }
 

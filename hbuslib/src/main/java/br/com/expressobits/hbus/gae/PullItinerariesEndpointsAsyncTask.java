@@ -63,6 +63,7 @@ public class PullItinerariesEndpointsAsyncTask extends AsyncTask<City,Integer,Li
             itineraryApi = builder.build();
         }
         try {
+            Log.d(TAG,"Pull ititneraries "+params[0].getCountry()+"-"+params[0].getName());
             return itineraryApi.getItineraries(params[0].getCountry(),params[0].getName()).execute().getItems();
 
         } catch (IOException e) {

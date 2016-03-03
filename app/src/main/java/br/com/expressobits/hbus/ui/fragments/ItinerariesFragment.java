@@ -10,6 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -30,6 +33,7 @@ import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 import br.com.expressobits.hbus.util.NetworkUtils;
+import br.com.expressobits.hbus.utils.DAOUtils;
 
 /**
  * Fragmento que exibe todos {@link br.com.expressobits.hbus.model.Itinerary}
@@ -52,6 +56,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_itineraries,container,false);
         initViews(view);
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -136,8 +141,10 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
         if(itineraries!=null){
             listItineraries = itineraries;
+            Log.d(TAG,itineraries.toString());
             BusDAO db = new BusDAO(getActivity());
             for (Itinerary itinerary:listItineraries){
+                Log.d(TAG,"itinerary "+itinerary.getName()+"load from datastore ways"+itinerary.getWays());
                 db.insert(itinerary);
             }
             Log.i(TAG, itineraries.toString());
@@ -170,12 +177,34 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
             pullItinerariesEndpointsAsyncTask.setContext(getActivity());
             pullItinerariesEndpointsAsyncTask.setResultListenerAsyncTask(this);
             City city = new City();
-            city.setName(cityId.split("/")[0]);
-            city.setCountry(cityId.split("/")[1]);
+            city.setName(DAOUtils.getNameCity(cityId));
+            city.setCountry(DAOUtils.getNameCountry(cityId));
             pullItinerariesEndpointsAsyncTask.execute(city);
         }else{
             progressBar.setVisibility(View.INVISIBLE);
             //imageViewNetworkError.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.fragment_itineraries, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+        if (id == R.id.menu_action_refresh) {
+            String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+            pullItineraries(cityId);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
