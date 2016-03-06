@@ -337,8 +337,4 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
         }
     }
-
-    public void refreshItinerariesList(){
-
-    }
 }

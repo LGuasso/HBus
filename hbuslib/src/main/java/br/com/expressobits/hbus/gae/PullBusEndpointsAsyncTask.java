@@ -61,27 +61,18 @@ public class PullBusEndpointsAsyncTask extends AsyncTask<Pair<City,Itinerary>,In
         }
         City city = params[0].first;
         Itinerary itinerary = params[0].second;
-        ArrayList<Bus> buses  = new ArrayList<>();
         try {
-            for(String way :itinerary.getWays()){
-                for(int i=0;i<3;i++){
-                    List<Bus> buses1 = busApi.getBuses(
-                            city.getCountry(), city.getName(), itinerary.getName(), way, TextUtils.getTypeDayInt(i))
-                            .execute().getItems();
-                    if(buses1!=null){
-                        buses.addAll(buses1);
-                    }
 
-                }
+            return busApi.getBuses(
+                    city.getCountry(), city.getName(), itinerary.getName())
+                    .execute().getItems();
 
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("Endpoints", e.getMessage());
             return null;
         }
-        return buses;
     }
 
     @Override
@@ -96,7 +87,9 @@ public class PullBusEndpointsAsyncTask extends AsyncTask<Pair<City,Itinerary>,In
     @Override
     protected void onPostExecute(List<Bus> buses) {
         if(resultListenerAsyncTask!=null) {
-            Log.d(TAG, "Download " + buses.size() + " codes from datastore!");
+            if(buses!=null){
+                Log.d(TAG, "Download " + buses.size() + " codes from datastore!");
+            }
             resultListenerAsyncTask.finished(buses);
         }else{
             Log.w(this.getClass().getSimpleName(), "resultListenerAsyncTask is null!");

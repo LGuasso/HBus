@@ -58,7 +58,17 @@ public class BusDAO extends SQLiteAssetHelper{
         BusHelper.insert(getWritableDatabase(), bus);
     }
 
+    public int deleteItineraries(String cityId){
+        return BusHelper.deleteItineraries(getWritableDatabase(), getCity(cityId));
+    }
 
+    public int deleteCodes(String cityId){
+        return BusHelper.deleteCodes(getWritableDatabase(), getCity(cityId));
+    }
+
+    public int deleteBuses(String cityId,String itineraryId){
+        return BusHelper.deleteBuses(getWritableDatabase(), getCity(cityId), getItinerary(itineraryId));
+    }
 
     public City getCity(String id){
         return BusHelper.getCity(getReadableDatabase(), id);
@@ -81,7 +91,6 @@ public class BusDAO extends SQLiteAssetHelper{
     }
 
     public List<Itinerary> getItineraries() {
-
         return BusHelper.getItineraries(getReadableDatabase());
     }
 
@@ -90,7 +99,11 @@ public class BusDAO extends SQLiteAssetHelper{
     }
 
     public List<Bus> getBuses(String cityId,String itineraryId,String way,TypeDay typeday){
-        return BusHelper.getBuses(getReadableDatabase(),getCity(cityId),getItinerary(itineraryId), way, typeday);
+        return BusHelper.getBuses(getReadableDatabase(), getCity(cityId), getItinerary(itineraryId), way, typeday);
+    }
+
+    public List<Bus> getBuses(String cityId,String itineraryId){
+        return BusHelper.getBuses(getReadableDatabase(),getCity(cityId),getItinerary(itineraryId));
     }
 
     public List<Bus> getNextBus(String cityId,String itineraryId){

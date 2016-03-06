@@ -88,6 +88,7 @@ public class CodeEndpoint {
         ArrayList<Code> codes = new ArrayList<>();
         for (Entity result : results) {
             Code code = new Code();
+            code.setId(country+"/"+cityName+"/"+((String) result.getProperty("name")));
             code.setName((String) result.getProperty("name"));
             code.setDescrition((String) result.getProperty("descrition"));
             codes.add(code);

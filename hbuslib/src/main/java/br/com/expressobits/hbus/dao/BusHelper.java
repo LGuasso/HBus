@@ -363,6 +363,67 @@ public class BusHelper {
         return buses;
     }
 
+    public static List<Bus> getBuses(SQLiteDatabase db,City city,Itinerary itinerary){
+        ArrayList<Bus> buses = new ArrayList<Bus>();
+        Cursor c;
+        String where = BusContract.Bus._ID+" LIKE ?";
+        Log.e("TEST",city.getCountry()+BARS+city.getName()+BARS+
+                itinerary.getName()+"%");
+        String arguments[] = {city.getCountry()+BARS+city.getName()+BARS+
+                itinerary.getName()+"%"};
+        c = db.query(
+                BusContract.Bus.TABLE_NAME,
+                BusContract.COLS,
+                where,
+                arguments,
+                null,
+                null,
+                null
+        );
+        while (c.moveToNext()){
+            buses.add(cursorToBus(c));
+        }
+        c.close();
+        return buses;
+    }
+
+    ///DELETES
+
+    public static int deleteItineraries(SQLiteDatabase db,City city){
+        ArrayList<Bus> buses = new ArrayList<Bus>();
+        String where = ItineraryContract.Itinerary._ID+" LIKE ?";
+        String arguments[] = {city.getCountry()+BARS+city.getName()+"%"};
+        return db.delete(
+                ItineraryContract.Itinerary.TABLE_NAME,
+                where,
+                arguments
+        );
+    }
+
+    public static int deleteCodes(SQLiteDatabase db,City city){
+        ArrayList<Bus> buses = new ArrayList<Bus>();
+        String where = CodeContract.Code._ID+" LIKE ?";
+        String arguments[] = {city.getCountry()+BARS+city.getName()+"%"};
+        return db.delete(
+                CodeContract.Code.TABLE_NAME,
+                where,
+                arguments
+        );
+    }
+
+
+    public static int deleteBuses(SQLiteDatabase db,City city,Itinerary itinerary){
+        ArrayList<Bus> buses = new ArrayList<Bus>();
+        String where = BusContract.Bus._ID+" LIKE ?";
+        String arguments[] = {city.getCountry()+BARS+city.getName()+BARS+
+                itinerary.getName()+"%"};
+        return db.delete(
+                    BusContract.Bus.TABLE_NAME,
+                    where,
+                    arguments
+            );
+    }
+
     public static List<Bus> getNextBuses(SQLiteDatabase db,City city,Itinerary itinerary){
 
         ArrayList<Bus> next = new ArrayList<Bus>();

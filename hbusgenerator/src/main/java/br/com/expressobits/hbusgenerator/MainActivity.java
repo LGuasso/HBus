@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -71,12 +73,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonReadItineraries.setOnClickListener(this);
         buttonPushAllData.setOnClickListener(this);
         buttonDeleteAllDataFirebase.setOnClickListener(this);
+        spinnerCities = (Spinner) findViewById(R.id.spinner_cities);
     }
 
 
 
     public void readFiles(){
         cities = file.getCities();
+
         for(City city:cities){
                 itineraries.put(city, file.getItineraries(city));
                 codes.put(city, file.getCodes(city));
@@ -85,13 +89,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+
+
     }
 
     public void saveInDataBaseAllData(Context context){
         BusDAOGenerator dao = new BusDAOGenerator(context);
         for(City city:cities){
             //Somente cidade de Santa Maria será salva!
-            if(city.getName().equals("Santa Maria")){
+            if(city.getName().equals("Cruz Alta")){
                 dao.insertCity(city.clone().setId(DAOUtils.getId(city)));
                 for(Itinerary itinerary : itineraries.get(city)){
                     dao.insertItineraries(itinerary.clone().setId(DAOUtils.getId(city,itinerary)));
@@ -107,21 +113,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void push(){
-        for(City city:cities) {
-            pushCity(city);
-            if (city.getName().equals("Cruz Alta")) {
-                for (Itinerary itinerary : itineraries.get(city)) {
-                    pushItinerary(city, itinerary);
-                    for (Bus bus : buses.get(city).get(itinerary)) {
-                        Log.e(TAG, "TEST " + bus.getTime());
-                        pushBus(city, itinerary, bus);
-                    }
-                }
-                for (Code code : codes.get(city)) {
-                    pushCode(city, code);
-                }
-
+        City city = (City)spinnerCities.getSelectedItem();
+        pushCity(city);
+        for (Itinerary itinerary : itineraries.get(city)) {
+            pushItinerary(city, itinerary);
+            for (Bus bus : buses.get(city).get(itinerary)) {
+                Log.e(TAG, "TEST " + bus.getTime());
+                pushBus(city, itinerary, bus);
             }
+        }
+        for (Code code : codes.get(city)) {
+            pushCode(city, code);
         }
     }
 
@@ -168,6 +170,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Snackbar.make(findViewById(R.id.fab), message, Snackbar.LENGTH_SHORT).show();
     }
 
+    public void refreshSpinner(List<City> cities){
+        ArrayAdapter<City> simpleAdapter = new ArrayAdapter<City>(this,android.R.layout.simple_list_item_1,cities);
+        spinnerCities.setAdapter(simpleAdapter);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -201,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button_read_all_data:
                 readFiles();
+                refreshSpinner(cities);
                 break;
 
             case R.id.button_save_in_database_all_data:

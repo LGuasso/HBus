@@ -66,7 +66,7 @@ public class BusGaeAndroidUnitTest extends ActivityInstrumentationTestCase2<Main
         context = mActivity;
 
         city = new City();
-        city.setName("Santa Maria");
+        city.setName("Cruz Alta");
         city.setCountry("RS");
         city.setLocation(new GeoPt().setLatitude(-109.776722f).setLongitude(-14.1046164f));
 
@@ -88,7 +88,7 @@ public class BusGaeAndroidUnitTest extends ActivityInstrumentationTestCase2<Main
         bus2203.setTypeday("useful");
     }
 
-    //@Test
+    @Test
     public void testBuses() throws ExecutionException, InterruptedException {
         if(context!=null){
             pushBusEndpointsAsyncTask = new PushBusEndpointsAsyncTask();
@@ -115,7 +115,7 @@ public class BusGaeAndroidUnitTest extends ActivityInstrumentationTestCase2<Main
         assertEquals(bus1204.getTime(),buses.get(0).getTime());
     }
 
-    @Test
+     //@Test
     public void testBusesAll() throws ExecutionException, InterruptedException {
         Long timeStart = System.currentTimeMillis();
         pullAllBusEndpointsAsyncTask = new PullAllBusEndpointsAsyncTask();

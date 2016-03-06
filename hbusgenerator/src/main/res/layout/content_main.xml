@@ -39,11 +39,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/read_data_itineraries"
                 android:enabled="false"/>
-            <Spinner
-                android:id="@+id/spinner_cities"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+
         </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spinner_cities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/button_push_all_data"

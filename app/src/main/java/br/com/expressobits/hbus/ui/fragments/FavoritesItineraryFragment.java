@@ -45,7 +45,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     public static final String TAG = "FavoritesItineraryFragment";
     public String selectedItem;
     private RecyclerView recyclerViewLines;
-    private Button buttonSeeAllItineraries;
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
     LinearLayout linearLayoutEmptyList;
@@ -94,12 +93,11 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private void initViews(View view){
         initListViews(view);
         initEmptyList(view);
-        buttonSeeAllItineraries = (Button) view.findViewById(R.id.buttonSeeAllItinerary);
-        buttonSeeAllItineraries.setOnClickListener(this);
     }
 
     private void initEmptyList(View view) {
         linearLayoutEmptyList = (LinearLayout)view.findViewById(R.id.list_empty);
+        linearLayoutEmptyList.setOnClickListener(this);
 
     }
 
@@ -191,7 +189,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.buttonSeeAllItinerary:
+            case R.id.list_empty:
                 mCallback.addFragment(ItinerariesFragment.TAG);
                 break;
         }

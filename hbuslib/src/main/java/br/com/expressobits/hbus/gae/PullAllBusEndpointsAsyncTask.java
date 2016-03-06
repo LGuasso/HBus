@@ -60,8 +60,8 @@ public class PullAllBusEndpointsAsyncTask extends AsyncTask<Pair<City,Itinerary>
         Itinerary itinerary = params[0].second;
         ArrayList<Bus> buses  = new ArrayList<>();
         try {
-                return busApi.getAllBuses(
-                        city.getCountry(), city.getName())
+                return busApi.getBuses(
+                        city.getCountry(), city.getName(),itinerary.getName())
                         .execute().getItems();
 
 

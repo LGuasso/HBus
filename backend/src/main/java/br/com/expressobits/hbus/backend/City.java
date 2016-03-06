@@ -49,4 +49,9 @@ public class City {
     public void setLocation(GeoPt location) {
         this.location = location;
     }
+
+    @Override
+    public String toString() {
+        return this.getName() +" - "+ this.getCountry();
+    }
 }

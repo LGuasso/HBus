@@ -21,20 +21,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_have_itinerary"
+            android:text="@string/see_all_itinerary"
             android:layout_gravity="center_horizontal"
             android:textAppearance="@android:style/TextAppearance.Widget.TabWidget" />
 
-        <Button
-            android:id="@+id/buttonSeeAllItinerary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            style="@style/AppTheme.Base.Widget.AppCompat.Button.Colored"
-            android:text="@string/see_all_itinerary"/>
 
 
     </LinearLayout>

@@ -59,7 +59,6 @@ public class BusEndpoint {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Transaction txn = datastoreService.beginTransaction();
         try {
-
             Key countryParentKey = KeyFactory.createKey("country", country);
             Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
             Key itineraryParentKey = KeyFactory.createKey(cityParentKey, "itinerary", itineraryName);
@@ -68,6 +67,8 @@ public class BusEndpoint {
             Entity entity = new Entity("Bus", bus.getTime(), typedayParentKey);
             entity.setProperty("time", bus.getTime());
             entity.setProperty("code", bus.getCode());
+            entity.setProperty("way", bus.getWay());
+            entity.setProperty("typeday", bus.getTypeday());
             datastoreService.put(entity);
             txn.commit();
         } finally {
@@ -81,23 +82,23 @@ public class BusEndpoint {
 
     @ApiMethod(name = "getBuses")
     public List<Bus> getBuses(@Named("country")String country,@Named("cityName")String cityName,
-                               @Named("itineraryName")String itineraryName,@Named("way")String way,@Named("typeday")String typeday) {
+                               @Named("itineraryName")String itineraryName) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Key countryParentKey = KeyFactory.createKey("country", country);
         Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
         Key itineraryParentKey = KeyFactory.createKey(cityParentKey, "itinerary", itineraryName);
-        Key wayParentKey = KeyFactory.createKey(itineraryParentKey, "way", way);
-        Key typedayParentKey = KeyFactory.createKey(wayParentKey, "typeday", typeday);
-        Query query = new Query(typedayParentKey);
+        Query query = new Query("Bus",itineraryParentKey);
         List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
 
         ArrayList<Bus> buses = new ArrayList<>();
         for (Entity result : results) {
             Bus bus = new Bus();
+            bus.setId(country+"/"+cityName+"/"+itineraryName+"/"+((String) result.getProperty("way"))+"/"+
+                    ((String) result.getProperty("typeday"))+"/"+((String) result.getProperty("time")));
             bus.setTime((String) result.getProperty("time"));
             bus.setCode((String) result.getProperty("code"));
-            bus.setWay(way);
-            bus.setTypeday(typeday);
+            bus.setWay((String) result.getProperty("way"));
+            bus.setTypeday((String) result.getProperty("typeday"));
 
             buses.add(bus);
         }
@@ -105,23 +106,17 @@ public class BusEndpoint {
         return buses;
     }
 
-    @ApiMethod(name = "getAllBuses")
-    public List<Bus> getAllBuses(@Named("country")String country,@Named("cityName")String cityName) {
+    @ApiMethod(name = "clearBus")
+    public void clearBus(@Named("country")String country,@Named("cityName")String cityName) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Key countryParentKey = KeyFactory.createKey("country", country);
-        Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
+        Key countryKey = KeyFactory.createKey("country", country);
+        Key cityParentKey = KeyFactory.createKey(countryKey, "city", cityName);
         Query query = new Query("Bus",cityParentKey);
-        List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
-
-        ArrayList<Bus> buses = new ArrayList<>();
+        List<Entity> results = datastoreService.prepare(query)
+                .asList(FetchOptions.Builder.withDefaults());
         for (Entity result : results) {
-            Bus bus = new Bus();
-            bus.setTime((String) result.getProperty("time"));
-            bus.setCode((String) result.getProperty("code"));
-
-            buses.add(bus);
+            datastoreService.delete(result.getKey());
         }
-        logger.info("Calling getBuses method");
-        return buses;
+
     }
 }
