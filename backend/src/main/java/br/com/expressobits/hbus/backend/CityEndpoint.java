@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.backend;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.appengine.api.datastore.DatastoreFailureException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -15,6 +16,7 @@ import com.google.appengine.api.datastore.Transaction;
 
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -39,7 +41,6 @@ public class CityEndpoint {
     private static final Logger logger = Logger.getLogger(CityEndpoint.class.getName());
 
 
-
     /**
      * This inserts a new <code>City</code> object.
      *
@@ -53,11 +54,11 @@ public class CityEndpoint {
         Transaction txn = datastoreService.beginTransaction();
         try {
 
-            Key cityParentKey = KeyFactory.createKey("country",city.getCountry());
+            Key cityParentKey = KeyFactory.createKey("country", city.getCountry());
             Entity cityEntity = new Entity("City", city.getName(), cityParentKey);
             cityEntity.setProperty("name", city.getName());
             cityEntity.setProperty("country", city.getCountry());
-            cityEntity.setProperty("location",city.getLocation());
+            cityEntity.setProperty("location", city.getLocation());
             datastoreService.put(cityEntity);
             txn.commit();
         } finally {
@@ -73,16 +74,16 @@ public class CityEndpoint {
     public List<City> getCities(@Named("country") String country) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Key cityParentKey = KeyFactory.createKey("country", country);
-        Query query = new Query("City",cityParentKey);
+        Query query = new Query("City", cityParentKey);
         List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
 
         ArrayList<City> cities = new ArrayList<>();
         for (Entity result : results) {
             City city = new City();
-            city.setId((String) result.getProperty("country")+"/"+(String) result.getProperty("name"));
+            city.setId((String) result.getProperty("country") + "/" + (String) result.getProperty("name"));
             city.setName((String) result.getProperty("name"));
             city.setCountry((String) result.getProperty("country"));
-            city.setLocation((GeoPt)result.getProperty("location"));
+            city.setLocation((GeoPt) result.getProperty("location"));
             cities.add(city);
         }
 
@@ -91,18 +92,39 @@ public class CityEndpoint {
 
     /**
      * clear list of cities in datastore base in country param
+     *
      * @param country
      */
     @ApiMethod(name = "clearCities")
     public void clearCities(@Named("country") String country) {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-        Key cityParentKey = KeyFactory.createKey("country", country);
-        Query query = new Query("City",cityParentKey);
-        List<Entity> results = datastoreService.prepare(query)
-                .asList(FetchOptions.Builder.withDefaults());
-        for (Entity result : results) {
-            datastoreService.delete(result.getKey());
-        }
+        Transaction txn = datastoreService.beginTransaction();
+        logger.info("Calling clear!!!");
+        try {
+            Key cityParentKey = KeyFactory.createKey("country", country);
+            Query query = new Query("City", cityParentKey);
+            List<Entity> results = datastoreService.prepare(query)
+                    .asList(FetchOptions.Builder.withDefaults());
+            for (Entity result : results) {
+                datastoreService.delete(result.getKey());
+            }
+            txn.commit();
 
+        }catch (IllegalArgumentException ile) {
+            logger.info("Calling clear method IllegalArgumentException");
+            ile.printStackTrace();
+        }catch (ConcurrentModificationException cme){
+            logger.info("Calling clear method ConcurrentModificationException");
+            cme.printStackTrace();
+        }catch (DatastoreFailureException dfe){
+            logger.info("Calling clear method DatastoreFailureException");
+            dfe.printStackTrace();
+
+        }  finally {
+            if (txn.isActive()) {
+                txn.rollback();
+            }
+        }
     }
+
 }

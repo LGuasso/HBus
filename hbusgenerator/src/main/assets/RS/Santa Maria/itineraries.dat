@@ -4,9 +4,9 @@ Bela Uniao;Bairro > Centro,Centro > Bairro;155B:144:45
 Big Rodoviaria;Centro > Rodoviaria,Rodoviaria > Centro;155B:144:45
 Boca do Monte;Bairro > Centro,Centro > Bairro;155B:144:45
 Boi Morto;Bairro > Centro,Centro > Bairro,Rodoviaria > Bairro,Bairro > Rodoviaria;155B:144:45
-Brigada Itarare;Circular;155B:144:45
+Brigada Itarare;Circular;155B:144:45;Atualizado horários 07/03
 Camobi;Bairro > Centro,Centro > Bairro;155B:144:45
-Campestre;Bairro > Centro,Centro > Bairro;155B:144:45
+Campestre;Bairro > Centro,Centro > Bairro;155B:144:45;Atualizado horários 07/03
 Capivara;Bairro > Centro,Centro > Bairro;155B:144:45
 Carlos Gomes;Bairro > Centro,Centro > Bairro;155B:144:45
 Carolina Angelo Berleze;Bairro > Centro,Centro > Bairro;155B:144:45
@@ -25,7 +25,7 @@ Fernando Ferrari;Bairro > Centro,Centro > Bairro;155B:144:45
 Gentil Dallalana;Bairro > Centro,Centro > Bairro;155B:144:45
 Ipiranga;Bairro > Centro,Centro > Bairro;155B:144:45
 Itagiba;Bairro > Centro,Centro > Bairro;155B:144:45
-Itarare Brigada;Circular;155B:144:45
+Itarare Brigada;Circular;155B:144:45;Atualizado horários 07/03
 Jardim Berleze;Bairro > Centro,Centro > Bairro;155B:144:45
 Maringa;Bairro > Centro,Centro > Bairro;155B:144:45
 Medianeira Via Carlos Hur;Bairro > Centro,Centro > Bairro;155B:144:45
@@ -53,17 +53,17 @@ Seletivo Camobi;Bairro > Centro,Centro > Bairro;155B:144:45
 Seletivo Caturrita;Bairro > Centro,Centro > Bairro;155B:144:45
 Seletivo Tancredo Neves;Bairro > Centro,Centro > Bairro;155B:144:45
 Seletivo Tancredo Neves Via Sta Marta;Bairro > Centro,Centro > Bairro;155B:144:45
-Seletivo UFSM;UFSM > Centro,Centro > UFSM;155B:144:45
-Seletivo UFSM Bombeiros;Bombeiros > UFSM,UFSM > Bombeiros;155B:144:45
+Seletivo UFSM;UFSM > Centro,Centro > UFSM;155B:144:45;Atualizado horários 07/03
+Seletivo UFSM Bombeiros;Bombeiros > UFSM,UFSM > Bombeiros;155B:144:45;Atualizado horários 07/03
 Tancredo Neves Campus;Campus > TNeves,TNeves > Campus;155B:144:45
 Tancredo Neves;Bairro > Centro,Centro > Bairro;155B:144:45
-UFSM;UFSM > Centro,Centro > UFSM;155B:144:45
-UFSM Bombeiros;Bombeiros > UFSM,UFSM > Bombeiros;155B:144:45
-UFSM Circular;Circular;155B:144:45
+UFSM;UFSM > Centro,Centro > UFSM;155B:144:45;Atualizado horários 07/03
+UFSM Bombeiros;Bombeiros > UFSM,UFSM > Bombeiros;155B:144:45;Atualizado horários 07/03
+UFSM Circular;Circular;155B:144:45;Atualizado horários 07/03
 Urlandia;Bairro > Centro,Centro > Bairro;155B:144:45
 Vila do Carmo Chacara das Flores;Bairro > Centro,Centro > Bairro;155B:144:45
 Vila Lorenzi;Bairro > Centro,Centro > Bairro;155B:144:45
 Vila Lorenzi Rodoviaria;Bairro > Centro,Centro > Bairro;155B:144:45
 Vila Rossi;Bairro > Centro,Centro > Bairro;155B:144:45
-Vila Schirmer;Bairro > Centro,Centro > Bairro;155B:144:45
+Vila Schirmer;Bairro > Centro,Centro > Bairro;155B:144:45;Atualizado horários 07/03
 Vitoria;Bairro > Centro,Centro > Bairro;155B:144:45

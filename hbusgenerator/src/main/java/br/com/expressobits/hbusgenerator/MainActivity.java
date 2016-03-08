@@ -127,6 +127,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void pushAll(){
+        City city = (City)spinnerCities.getSelectedItem();
+        pushCity(city);
+    }
+
+
     private void pushCity(City city){
         PushCitiesEndpointsAsyncTask pushCitiesEndpointsAsyncTask = new PushCitiesEndpointsAsyncTask();
         pushCitiesEndpointsAsyncTask.setContext(this);
@@ -216,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.button_push_all_data:
-                push();
+                pushAll();
                 break;
             case R.id.button_delete_all_data_firebase:
                 break;
