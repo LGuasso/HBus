@@ -81,7 +81,7 @@ public class BusHelper {
         ContentValues values = new ContentValues();
         values.put(BusContract.Bus._ID,bus.getId());
         values.put(BusContract.Bus.COLUMN_NAME_TIME,bus.getTime());
-        values.put(BusContract.Bus.COLUMN_NAME_CODE,bus.getCode());
+        values.put(BusContract.Bus.COLUMN_NAME_CODE, bus.getCode());
         return values;
     }
 
@@ -427,14 +427,17 @@ public class BusHelper {
     public static List<Bus> getNextBuses(SQLiteDatabase db,City city,Itinerary itinerary){
 
         ArrayList<Bus> next = new ArrayList<Bus>();
-        for(int j = 0;j< itinerary.getWays().size();j++) {
-            next.add(getNextBusforList(
-                    getBuses(db,
-                            city,
-                            itinerary,
-                            itinerary.getWays().get(j),
-                            HoursUtils.getTypedayinCalendar(Calendar.getInstance()))));
+        if(itinerary.getWays()!=null){
+            for(int j = 0;j< itinerary.getWays().size();j++) {
+                next.add(getNextBusforList(
+                        getBuses(db,
+                                city,
+                                itinerary,
+                                itinerary.getWays().get(j),
+                                HoursUtils.getTypedayinCalendar(Calendar.getInstance()))));
+            }
         }
+
         return next;
     }
 
