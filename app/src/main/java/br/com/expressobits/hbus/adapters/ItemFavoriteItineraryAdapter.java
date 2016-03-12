@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.adapters;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,14 +54,15 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     public void onBindViewHolder(HolderFavoriteItinerary holder, int position) {
         BusDAO dao = new BusDAO(context);
         String name  = "";
+        Itinerary itinerary = itineraryList.get(position);
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(MainActivity.DEBUG,false)){
-            name += itineraryList.get(position).getId()+" - "+itineraryList.get(position).getName();
+            name += itinerary.getId()+" - "+ itinerary.getName();
         }else{
-            name += itineraryList.get(position).getName();
+            name += itinerary.getName();
         }
         holder.textItineraryName.setText(name);
-        if(itineraryList.get(position).getWays().size()>0){
-            ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBus(PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG,null),itineraryList.get(position).getId()));
+        if(itinerary.getWays().size()>0){
+            ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBus(PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG,null), itinerary.getId()));
 
             holder.linearLayoutHours.removeAllViews();
             for(int i=0;i<onibuses.size();i++){
@@ -70,9 +72,16 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                 Bus bus = onibuses.get(i);
                 String time = bus.getTime();
                 if(time!=null) {
-                    //texto+=itineraryList.get(position).getWays().get(i)+"  -  "+time;
-                    textViewWay.setText(itineraryList.get(position).getWays().get(i));
-                    textViewHour.setText(time);
+                    if(itinerary.getWays().get(i)!=null){
+                        try {
+                            textViewWay.setText(itinerary.getWays().get(i));
+                            textViewHour.setText(time);
+                        }catch (IndexOutOfBoundsException ioobe){
+                            Log.e("Adapter favorite",ioobe.getMessage()+" "+ itinerary.getName());
+
+                        }
+                    }
+
                 }
                 holder.linearLayoutHours.addView(view, i);
             }
