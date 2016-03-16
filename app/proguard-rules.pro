@@ -16,14 +16,14 @@
 #   public *;
 #}
 
-#depuração
+#depuraï¿½ï¿½o
 -verbose
-#desabilita o opção de otimização
+#desabilita o opï¿½ï¿½o de otimizaï¿½ï¿½o
 -dontoptimize
 
 -repackageclasses ''
 
-#desabilita o opção para metodos onClick
+#desabilita o opï¿½ï¿½o para metodos onClick
 -keepclassmembers class * extends android.app.Activity {
    public void *(android.view.View);
 }
@@ -43,7 +43,7 @@
 -keep public class br.com.expressobits.hbus.ui.tour.TourActivity
 -keep public class br.com.expressobits.hbus.ui.tour.PagerFragment
 -keep public class br.com.expressobits.hbus.ui.tour.ContentPagerAdapter
--keep public class br.com.expressobits.hbus.ui.settings.SettingsActivity
+-keep public class br.com.expressobits.hbus.ui.settings.SettingsActivity2
 -keep public class br.com.expressobits.hbus.ui.settings.AboutPreferenceFragment
 -keep public class br.com.expressobits.hbus.ui.settings.SelectCityFragment
 -keep public class br.com.expressobits.hbus.ui.settings.DataSyncPreferenceFragment

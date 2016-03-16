@@ -129,7 +129,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         myViewHolder.txtViewDescrition.setSelected(true);
         db.close();
 
-        if(BuildConfig.VERSION_CODE<79){
+        if(BuildConfig.DEBUG){
             myViewHolder.imageViewAlarm.setVisibility(View.INVISIBLE);
         }
 

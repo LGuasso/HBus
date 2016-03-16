@@ -67,8 +67,6 @@
     <string name="all_itinerary">All itineraries</string>
     <string name="see_all_itinerary">See all itinerary</string>
     <string name="load_online_itineraries_with_sucess">Load online itineraries with sucess</string>
-    <string name="load_online_codes_with_sucess">Load online codes with sucess</string>
-    <string name="load_online_buses_with_sucess">Load online bus with sucess</string>
-
-
+    <string name="load_online_codes_with_sucess" translatable="false">Load online codes with sucess</string>
+    <string name="load_online_buses_with_sucess" translatable="false">Load online bus with sucess</string>
 </resources>

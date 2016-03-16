@@ -60,4 +60,7 @@
     <string name="add_itinerary">Adicionar itinerário</string>
     <string name="all_itinerary">Todos itinerários</string>
     <string name="see_all_itinerary">Ver todos ititnerários</string>
+    <string name="load_online_buses_with_sucess"></string>
+    <string name="load_online_codes_with_sucess"></string>
+    <string name="load_online_itineraries_with_sucess">Os itinerários foram sincronizados</string>
 </resources>

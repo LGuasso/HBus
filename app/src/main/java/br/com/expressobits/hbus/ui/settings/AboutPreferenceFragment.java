@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.view.MenuItem;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.tour.TourActivity;
@@ -34,7 +35,17 @@ public class AboutPreferenceFragment extends PreferenceFragment{
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
-        SettingsActivity.bindPreferenceSummaryToValue(findPreference("tour"));
-        SettingsActivity.bindPreferenceSummaryToValue(findPreference("debug"));
+        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("tour"));
+        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("debug"));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            startActivity(new Intent(getActivity(), SettingsActivity2.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

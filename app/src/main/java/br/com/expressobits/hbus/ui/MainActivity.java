@@ -27,7 +27,6 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
@@ -35,7 +34,7 @@ import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import br.com.expressobits.hbus.ui.settings.SettingsActivity;
+import br.com.expressobits.hbus.ui.settings.SettingsActivity2;
 import br.com.expressobits.hbus.utils.DAOUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity2.class));
             return true;
         }
         if (id == R.id.menu_action_help) {
@@ -319,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         } else if (id == R.id.nav_all_itineraries) {
             addFragment(ItinerariesFragment.TAG);
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity2.class));
         } else if (id == R.id.nav_help) {
             openHelp();
         }

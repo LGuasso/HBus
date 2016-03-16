@@ -13,10 +13,10 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
-import android.preference.SwitchPreference;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatCheckedTextView;
@@ -36,7 +36,6 @@ import android.widget.ListView;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.TimesDbHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -54,11 +53,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class SettingsActivity extends PreferenceActivity {
 
     Toolbar toolbar;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override
     protected boolean isValidFragment(String fragmentName) {
@@ -105,7 +99,6 @@ public class SettingsActivity extends PreferenceActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
             toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
-
             root.addView(toolbar, 0); // insert at top
         } else {
             ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
@@ -113,7 +106,7 @@ public class SettingsActivity extends PreferenceActivity {
 
             root.removeAllViews();
 
-            toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
+//            toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
 
 
             int height;
@@ -127,15 +120,15 @@ public class SettingsActivity extends PreferenceActivity {
             content.setPadding(0, height, 0, 0);
 
             root.addView(content);
-            root.addView(toolbar);
+ //           root.addView(toolbar);
         }
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        /**toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
 
     }
 
@@ -184,8 +177,8 @@ public class SettingsActivity extends PreferenceActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             LinearLayout root = (LinearLayout) dialog.findViewById(android.R.id.list).getParent();
-            toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
-            root.addView(toolbar, 0); // insert at top
+  //          toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
+  //          root.addView(toolbar, 0); // insert at top
         } else {
             ViewGroup root = (ViewGroup) dialog.findViewById(android.R.id.content);
             ListView content = (ListView) root.getChildAt(0);
@@ -208,7 +201,7 @@ public class SettingsActivity extends PreferenceActivity {
             root.addView(toolbar);
         }
 
-        toolbar.setTitle(preferenceScreen.getTitle());
+       // toolbar.setTitle(preferenceScreen.getTitle());
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

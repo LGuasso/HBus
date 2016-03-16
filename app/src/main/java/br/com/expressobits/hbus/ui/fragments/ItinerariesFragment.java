@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.backend.cityApi.model.City;
@@ -34,7 +35,6 @@ import br.com.expressobits.hbus.gae.PullItinerariesEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.adapters.ItemItineraryAdapter;
-import br.com.expressobits.hbus.dao.TimesDbHelper;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
@@ -268,7 +268,10 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                         db.insert(code);
                     }
                     Log.i(TAG, codes.toString());
-                    Toast.makeText(getActivity(),getString(R.string.load_online_codes_with_sucess),Toast.LENGTH_LONG).show();
+                    if(BuildConfig.DEBUG){
+                        Toast.makeText(getActivity(),getString(R.string.load_online_codes_with_sucess),Toast.LENGTH_LONG).show();
+                    }
+
                 }else if(list.get(0) instanceof Bus){
                     List<Bus> buses = list;
                     Log.d(TAG,buses.toString());
@@ -280,7 +283,9 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                         db.insert(bus);
                     }
                     Log.i(TAG, buses.toString());
-                    Toast.makeText(getActivity(),getString(R.string.load_online_buses_with_sucess),Toast.LENGTH_LONG).show();
+                    if(BuildConfig.DEBUG) {
+                        Toast.makeText(getActivity(), getString(R.string.load_online_buses_with_sucess), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         }
