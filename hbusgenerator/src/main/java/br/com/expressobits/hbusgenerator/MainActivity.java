@@ -96,8 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void saveInDataBaseAllData(Context context){
         BusDAOGenerator dao = new BusDAOGenerator(context);
         for(City city:cities){
+
             //Somente cidade de Santa Maria será salva!
-            if(city.getName().equals("Cruz Alta")){
+            if(city.getName().equals("Santa Maria")){
                 dao.insertCity(city.clone().setId(DAOUtils.getId(city)));
                 for(Itinerary itinerary : itineraries.get(city)){
                     dao.insertItineraries(itinerary.clone().setId(DAOUtils.getId(city,itinerary)));

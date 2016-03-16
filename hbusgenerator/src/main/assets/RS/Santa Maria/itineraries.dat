@@ -35,7 +35,7 @@ Norte;Bairro > Centro,Centro > Bairro;155B:144:45
 Parque Pinheiro Machado;Bairro > Centro,Centro > Bairro;155B:144:45
 Parque Motos Nova Santa Marta;Bairro > Centro,Centro > Bairro;155B:144:45
 Parque Pinheiro Coca Cola;Bairro > Centro,Centro > Bairro;155B:144:45
-Parque Pinheiro Riachuelo;Bairro > Centro,Centro > Bairro;155B:144:45
+Parque Riachuelo;Bairro > Centro,Centro > Bairro;155B:144:45
 Passo das Tropas;Bairro > Centro,Centro > Bairro;155B:144:45
 Patronato;Bairro > Centro,Centro > Bairro;155B:144:45
 Peninteciaria Santo Antao;Bairro > Centro,Centro > Bairro;155B:144:45
@@ -59,7 +59,7 @@ Tancredo Neves Campus;Campus > TNeves,TNeves > Campus;155B:144:45
 Tancredo Neves;Bairro > Centro,Centro > Bairro;155B:144:45
 UFSM;UFSM > Centro,Centro > UFSM;155B:144:45;Atualizado horários 07/03
 UFSM Bombeiros;Bombeiros > UFSM,UFSM > Bombeiros;155B:144:45;Atualizado horários 07/03
-UFSM Circular;Circular;155B:144:45;Atualizado horários 07/03
+UFSM Circular;UFSM > Centro,Centro > UFSM;155B:144:45;Atualizado horários 07/03
 Urlandia;Bairro > Centro,Centro > Bairro;155B:144:45
 Vila do Carmo Chacara das Flores;Bairro > Centro,Centro > Bairro;155B:144:45
 Vila Lorenzi;Bairro > Centro,Centro > Bairro;155B:144:45
