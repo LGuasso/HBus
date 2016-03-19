@@ -29,6 +29,7 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavoriteItineraryAdapter.HolderFavoriteItinerary>  {
 
     private Context context;
+    public static String PREF_TIME_HOME_SCREEN = "time_home_screen";
     private List<Itinerary> itineraryList;
     private LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
@@ -60,7 +61,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             name += itinerary.getName();
         }
         holder.textItineraryName.setText(name);
-        if(itinerary.getWays().size()>0){
+        if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemFavoriteItineraryAdapter.PREF_TIME_HOME_SCREEN,true)){
             ArrayList<Bus> onibuses = new ArrayList<>(dao.getNextBus(PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG,null), itinerary.getId()));
 
             holder.linearLayoutHours.removeAllViews();

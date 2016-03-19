@@ -4,6 +4,7 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
+        android:id="@+id/general"
         android:fragment="br.com.expressobits.hbus.ui.settings.GeneralPreferenceFragment"
         android:title="@string/pref_header_general"
         android:icon="@android:drawable/ic_menu_preferences"/>

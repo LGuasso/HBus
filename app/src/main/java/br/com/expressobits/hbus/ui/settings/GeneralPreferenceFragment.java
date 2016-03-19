@@ -45,9 +45,7 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
     }
 
     private void refreshComponents() {
-        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("example_text"));
         SettingsActivity2.bindPreferenceSummaryToValue(findPreference("city"));
-        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("example_list"));
         SettingsActivity2.bindPreferenceSummaryToValue(findPreference("time_home_screen"));
     }
 }

@@ -48,6 +48,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     private List<Itinerary> itineraries;
     OnSettingsListener mCallback;
     LinearLayout linearLayoutEmptyList;
+    LinearLayoutManager llmUseful;
     View view;
 
     @Override
@@ -106,9 +107,32 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         recyclerViewLines = (RecyclerView) view.findViewById(R.id.list_lines);
         recyclerViewLines.setHasFixedSize(true);
         recyclerViewLines.setSelected(true);
-        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
+        llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewLines.setLayoutManager(llmUseful);
+
+        /**recyclerViewLines.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            int mLastFirstVisibleItem = 0;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                final int currentFirstVisibleItem = llmUseful.findFirstVisibleItemPosition();
+
+                if (currentFirstVisibleItem > this.mLastFirstVisibleItem) {
+                    ((MainActivity) getActivity()).getSupportActionBar().hide();
+                } else if (currentFirstVisibleItem < this.mLastFirstVisibleItem) {
+                    ((MainActivity) getActivity()).getSupportActionBar().show();
+                }
+
+                this.mLastFirstVisibleItem = currentFirstVisibleItem;
+            }
+        });*/
+
         updateListViews();
 
     }
