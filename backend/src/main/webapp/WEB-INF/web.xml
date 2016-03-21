@@ -11,7 +11,8 @@
                 br.com.expressobits.hbus.backend.AddressEndpoint,
                 br.com.expressobits.hbus.backend.ItineraryEndpoint,
                 br.com.expressobits.hbus.backend.CodeEndpoint,
-                br.com.expressobits.hbus.backend.BusEndpoint</param-value>
+                br.com.expressobits.hbus.backend.BusEndpoint,
+                br.com.expressobits.hbus.backend.FeedbackEndpoint</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

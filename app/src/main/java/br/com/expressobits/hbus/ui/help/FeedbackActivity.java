@@ -1,8 +1,15 @@
 package br.com.expressobits.hbus.ui.help;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,10 +19,17 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.model.Feedback;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
-public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener{
+import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.backend.feedbackApi.model.Feedback;
+import br.com.expressobits.hbus.gae.PushFeedbackEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
+import br.com.expressobits.hbus.ui.dialog.VersionInfoDialogFragment;
+
+public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener,ResultListenerAsyncTask<Integer>{
 
     public static final String KEY_VERSION_INFO="VERSION_INFO";
     private String versionInfo;
@@ -68,20 +82,45 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
     public void sendFeedback(){
         Feedback feedback = new Feedback();
-        //TODO gerar um Long
-        feedback.setId(1l);
-        feedback.setText(editTextFeedback.getText().toString());
-        feedback.setType(getResources().getStringArray(R.array.list_feedback)[spinnerFeedback.getSelectedItemPosition()]);
+        feedback.setMessage(editTextFeedback.getText().toString());
+        feedback.setType(spinnerFeedback.getSelectedItemPosition());
+        feedback.setEmail(getEmail(this));
         if(checkBoxFeedback.isChecked()){
-            feedback.setSystemInformation("Hbus example");
+            ArrayList<String> informations = new ArrayList<>();
+            VersionInfoDialogFragment versionInfoDialogFragment = new VersionInfoDialogFragment();
+            PackageInfo pInfo = null;
+            try {
+                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                Toast.makeText(this, "Error PackageManager NameNotFoundException", Toast.LENGTH_SHORT).show();
+            }
+            informations.add("Version app name="+pInfo.versionName);
+            informations.add("Version app code="+pInfo.versionCode);
+            informations.add("Version android release="+ Build.VERSION.RELEASE);
+            informations.add("Device="+ Build.DEVICE);
+            informations.add("Dispĺay="+ Build.DISPLAY);
+            informations.add("Type="+ Build.TYPE);
+
+            feedback.setInformationSystem(informations);
         }else{
-            feedback.setSystemInformation("Not system info...");
+            //feedback.setInformationSystem("Not system info...");
         }
-        //TODO insert feedback into datastore database
-        //FirebaseDAO dao = new FirebaseDAO("https://hbus.firebaseio.com/");
-        //dao.insert(feedback);
-        Toast.makeText(this,getString(R.string.send_feedback_with_sucess),Toast.LENGTH_LONG).show();
-        finish();
+        PushFeedbackEndpointsAsyncTask pushFeedbackEndpointsAsyncTask = new PushFeedbackEndpointsAsyncTask();
+        pushFeedbackEndpointsAsyncTask.setContext(this);
+        pushFeedbackEndpointsAsyncTask.setResultListenerAsyncTask(this);
+        pushFeedbackEndpointsAsyncTask.execute(feedback);
+
+    }
+
+    private String getEmail(Context context){
+        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        Account[] accounts = AccountManager.get(context).getAccounts();
+        for (Account account : accounts) {
+            if (emailPattern.matcher(account.name).matches()) {
+                return account.name;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -91,5 +130,11 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 sendFeedback();
                 break;
         }
+    }
+
+    @Override
+    public void finished(List<Integer> integers) {
+        Toast.makeText(this,getString(R.string.send_feedback_with_sucess),Toast.LENGTH_LONG).show();
+        finish();
     }
 }

@@ -9,12 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.dialog.VersionInfoDialogFragment;
 
-public class HelpActivity extends AppCompatActivity {
+public class HelpActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private View linearLayoutSendFeedback;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +30,9 @@ public class HelpActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+
+        linearLayoutSendFeedback = findViewById(R.id.linearLayoutSendFeedback);
+        linearLayoutSendFeedback.setOnClickListener(this);
 
     }
 
@@ -55,16 +64,7 @@ public class HelpActivity extends AppCompatActivity {
             versionInfoDialogFragment.show(getSupportFragmentManager(), VersionInfoDialogFragment.TAG);
         }
         if(id == R.id.menu_action_send_feedback){
-            PackageInfo pInfo = null;
-            try {
-                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            } catch (PackageManager.NameNotFoundException e) {
-                Toast.makeText(HelpActivity.this, "Error PackageManager NameNotFoundException", Toast.LENGTH_SHORT).show();
-            }
-            String version = pInfo.versionName;
-            Intent intent = new Intent(this,FeedbackActivity.class);
-            intent.putExtra(FeedbackActivity.KEY_VERSION_INFO,version);
-            startActivity(intent);
+            startSendFeedback();
         }
 
         if(id == R.id.menu_action_see_on_play_store){
@@ -77,5 +77,27 @@ public class HelpActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void startSendFeedback() {
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            Toast.makeText(HelpActivity.this, "Error PackageManager NameNotFoundException", Toast.LENGTH_SHORT).show();
+        }
+        String version = pInfo.versionName;
+        Intent intent = new Intent(this,FeedbackActivity.class);
+        intent.putExtra(FeedbackActivity.KEY_VERSION_INFO,version);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.linearLayoutSendFeedback:
+                startSendFeedback();
+                break;
+        }
     }
 }

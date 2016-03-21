@@ -63,4 +63,10 @@
     <string name="load_online_buses_with_sucess"></string>
     <string name="load_online_codes_with_sucess"></string>
     <string name="load_online_itineraries_with_sucess">Os itinerários foram sincronizados</string>
+    <string-array name="list_feedbacks">
+        <item>Dica</item>
+        <item>Erro</item>
+        <item>Atualização</item>
+    </string-array>
+    <string name="select_the_type_of_feedback">Selecione o tipo de feedback</string>
 </resources>
