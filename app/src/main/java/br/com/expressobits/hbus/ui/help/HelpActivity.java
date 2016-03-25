@@ -14,13 +14,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.net.URI;
+
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.dialog.VersionInfoDialogFragment;
 
 public class HelpActivity extends AppCompatActivity implements View.OnClickListener{
-
-    private View linearLayoutSendFeedback;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,13 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
 
-        linearLayoutSendFeedback = findViewById(R.id.linearLayoutSendFeedback);
+        View linearLayoutHelpContent = findViewById(R.id.linearLayoutHelpContent);
+        linearLayoutHelpContent.setOnClickListener(this);
+
+        View linearLayoutDeveloperProfile = findViewById(R.id.linearLayoutDeveloperProfile);
+        linearLayoutDeveloperProfile.setOnClickListener(this);
+
+        View linearLayoutSendFeedback = findViewById(R.id.linearLayoutSendFeedback);
         linearLayoutSendFeedback.setOnClickListener(this);
 
     }
@@ -92,11 +97,24 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
+    private void starHelpContent() {
+        Intent intent = new Intent(this,HelpContentActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.linearLayoutHelpContent:
+                starHelpContent();
+                break;
+
             case R.id.linearLayoutSendFeedback:
                 startSendFeedback();
+                break;
+
+            case R.id.linearLayoutDeveloperProfile:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/Rafinha2108")));
                 break;
         }
     }

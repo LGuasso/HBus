@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cities = file.getCities();
 
         for(City city:cities){
+
                 itineraries.put(city, file.getItineraries(city));
                 codes.put(city, file.getCodes(city));
                 buses.put(city,file.getBuses(city,itineraries.get(city)));
@@ -125,12 +126,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         for (Code code : codes.get(city)) {
             pushCode(city, code);
+
         }
     }
 
     public void pushAll(){
         City city = (City)spinnerCities.getSelectedItem();
         pushCity(city);
+        for (Itinerary itinerary : itineraries.get(city)) {
+            pushItinerary(city, itinerary);
+            for (Bus bus : buses.get(city).get(itinerary)) {
+                Log.e(TAG, "TEST " + bus.getTime());
+                pushBus(city, itinerary, bus);
+            }
+        }
+        for (Code code : codes.get(city)) {
+            pushCode(city, code);
+        }
     }
 
 

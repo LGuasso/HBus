@@ -69,4 +69,5 @@
         <item>Atualização</item>
     </string-array>
     <string name="select_the_type_of_feedback">Selecione o tipo de feedback</string>
+    <string name="developer">Desenvolvedor</string>
 </resources>

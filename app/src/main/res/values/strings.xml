@@ -70,9 +70,12 @@
     <string name="load_online_codes_with_sucess" translatable="false">Load online codes with sucess</string>
     <string name="load_online_buses_with_sucess" translatable="false">Load online bus with sucess</string>
     <string name="select_the_type_of_feedback">Select the type of feedback</string>
+    <string name="developer">Developer</string>
+    <string name="help_warning">    Este aplicativo tem função de facilitar o acesso aos horários disponíveis no site da SIM(Sistema Integrado Municipal)  http://www.simsm.com.br/ ,ou seja, a Expresso Bits não se responsabiliza pelos horários!</string>
     <string-array name="list_feedbacks">
         <item>Tip</item>
         <item>Error</item>
         <item>Update</item>
     </string-array>
+    <string name="title_activity_help_content">HelpContentActivity</string>
 </resources>
