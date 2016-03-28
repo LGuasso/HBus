@@ -3,4 +3,5 @@
     <integer name="fade">300</integer>
     <integer name="max_lines_feedback">3</integer>
     <integer name="max_length_feedback">600</integer>
+    <integer name="counts_close_times_activity">2</integer>
 </resources>

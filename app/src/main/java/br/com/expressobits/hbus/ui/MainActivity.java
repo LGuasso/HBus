@@ -20,12 +20,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     String itineraryId;
     String way;
     private boolean isDualPane;
+    public InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,16 +96,39 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     private void initViews() {
         initActionBar();
         initNavigationDrawer();
-        initAdView();
+        initAdInterstitial();
     }
 
-    public void initAdView(){
-        AdView mAdView = (AdView) findViewById(R.id.ad_view);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+    private void initAdInterstitial(){
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.intersticial_ad_unit_id));
 
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                openTimes(itineraryId,way);
+            }
+
+        });
+        requestNewInterstitial();
     }
 
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    private boolean showAdIntersticial() {
+        if (mInterstitialAd.isLoaded() && AppManager.countTimesActivity(this)) {
+            mInterstitialAd.show();
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private void initNavigationDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -175,13 +202,23 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         setSupportActionBar(pToolbar);
     }
 
+
+
     @Override
     public void onSettingsDone(String itineraryId, String sentido) {
         this.itineraryId = itineraryId;
         this.way = sentido;
+        if(showAdIntersticial()){
 
+        }else {
+            openTimes(itineraryId, sentido);
+        }
+
+    }
+
+    private void openTimes(String itineraryId, String sentido) {
         BusDAO db = new BusDAO(this);
-        if(isDualPane){
+        if (isDualPane) {
             pToolbar.setTitle(db.getItinerary(itineraryId).getName());
             db.close();
             pToolbar.setSubtitle(sentido);
@@ -206,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                     onibusFragment.setArguments(args);
                     // Troca o que quer que tenha na view do fragment_container por este fragment,
                     // e adiciona a transa��o novamente na pilha de navega��o
-                    ft.replace(R.id.framelayout_main, onibusFragment,OnibusFragment.TAG);
+                    ft.replace(R.id.framelayout_main, onibusFragment, OnibusFragment.TAG);
                     ft.addToBackStack("pilha");
                 }
             } else if (findViewById(R.id.framelayout_content) != null) {
@@ -223,18 +260,17 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                     onibusFragment.setArguments(args);
                     // Troca o que quer que tenha na view do fragment_container por este fragment,
                     // e adiciona a transacao novamente na pilha de navegacao
-                    ft.replace(R.id.framelayout_content, onibusFragment,OnibusFragment.TAG);
+                    ft.replace(R.id.framelayout_content, onibusFragment, OnibusFragment.TAG);
                 }
             }
             ft.commit();
-        }else{
-            Intent intent = new Intent(this,TimesActivity.class);
-            intent.putExtra(TimesActivity.ARGS_CITYID,cityId);
-            intent.putExtra(TimesActivity.ARGS_ITINERARYID,itineraryId);
-            intent.putExtra(TimesActivity.ARGS_WAY,way);
+        } else {
+            Intent intent = new Intent(this, TimesActivity.class);
+            intent.putExtra(TimesActivity.ARGS_CITYID, cityId);
+            intent.putExtra(TimesActivity.ARGS_ITINERARYID, itineraryId);
+            intent.putExtra(TimesActivity.ARGS_WAY, way);
             startActivity(intent);
         }
-
     }
 
     public void addFragment(String TAG) {
