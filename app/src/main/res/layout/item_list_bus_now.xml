@@ -42,7 +42,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/example_hours"
                 android:textColor="@color/white"
-                android:textAppearance="@style/AppTheme.TextAppearance.Time" />
+                android:textAppearance="@style/AppTheme.TextAppearance.Display2.Mono" />
 
         </RelativeLayout>
 

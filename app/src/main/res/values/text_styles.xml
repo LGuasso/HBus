@@ -95,6 +95,13 @@
         <item name="fontPath">fonts/Roboto-Thin.ttf</item>
     </style>
 
+    <style name="AppTheme.TextAppearance.Display2.Mono" parent="TextAppearance.AppCompat.Display2">
+        <item name="android:textColor">@color/white</item>
+        <!--item name="android:textSize">@dimen/horario_textsize</item-->
+        <item name="android:typeface">monospace</item>
+        <item name="fontPath">fonts/Roboto-Thin.ttf</item>
+    </style>
+
     <style name="AppTheme.TextAppearance.Display4.Mono" parent="TextAppearance.AppCompat.Display4">
         <item name="android:textColor">@color/white</item>
         <!--item name="android:textSize">@dimen/horario_textsize</item-->

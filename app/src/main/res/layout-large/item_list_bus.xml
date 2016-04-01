@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/example_hours"
-            android:textAppearance="@style/AppTheme.TextAppearance.Display2.Mono"
+            android:textAppearance="@style/AppTheme.TextAppearance.Display3.Mono"
             android:textColor="@color/colorPrimaryDark"/>
 
     </RelativeLayout>

@@ -27,7 +27,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/example_hours"
                 android:textColor="@color/md_blue_100"
-                android:textAppearance="@style/AppTheme.TextAppearance.Display3.Mono" />
+                android:textAppearance="@style/AppTheme.TextAppearance.Display2.Mono"/>
 
         </RelativeLayout>
 

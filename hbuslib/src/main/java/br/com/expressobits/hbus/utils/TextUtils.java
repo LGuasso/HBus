@@ -10,6 +10,19 @@ import br.com.expressobits.hbus.model.TypeDay;
  */
 public class TextUtils {
 
+    public static String getDaysinString(List<String> days){
+        String result = "";
+        for(int i=0;i<days.size();i++){
+            String s = days.get(i);
+            result+=s;
+            if(i!=days.size()-1){
+                result+=",";
+            }
+        }
+
+        return result;
+    }
+
     public static String getSentidosinString(List<String> sentidos){
         String result = "";
         for(int i=0;i<sentidos.size();i++){
