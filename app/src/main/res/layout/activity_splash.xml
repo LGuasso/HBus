@@ -6,6 +6,7 @@
     tools:ignore="MissingPrefix"
     android:paddingTop="32dp"
     android:paddingBottom="32dp"
+    android:background="@color/colorPrimary"
     tools:context="br.com.expressobits.hbus.ui.splash.SplashActivity">
 
     <RelativeLayout
@@ -15,14 +16,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_splash"
+            android:src="@drawable/ic_splash"
             android:layout_centerInParent="true"/>
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
+            android:text="@string/company_name"
             android:textAppearance="@style/AppTheme.TitleSplash"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"/>

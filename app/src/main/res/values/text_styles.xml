@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
-    <style name="AppTheme.TitleSplash" parent="AppTheme.TextAppearance.AppCompat.Display1">
+    <!-- Splash screen titulo -->
+    <style name="AppTheme.TitleSplash" parent="TextAppearance.AppCompat.Headline">
         <item name="fontPath">fonts/UbuntuTitling-B.ttf</item>
-        <!-- Splash screen titulo -->
+        <item name="android:textColor">@color/md_white_1000</item>
     </style>
 
     <style name="AppTheme.TitleItinerary" parent="AppTheme.TextAppearance.AppCompat.HeadLine">
@@ -39,7 +39,8 @@
         <!-- Splash screen titulo -->
     </style>
     <style name="AppTheme.TextAppearance.DescritionCode" parent="AppTheme.TextAppearance.AppCompat.Caption">
-        <!-- Splash screen titulo -->
+        <!-- Descricao do onibus -->
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
     </style>
 
     <!-- TODO implementar todo app com AppTheme -->

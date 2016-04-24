@@ -112,4 +112,5 @@
     <string name="in_bus_time">In bus time</string>
     <string name="after_5_minutes">5 minutes after</string>
     <string name="after_10_minutes">10 minutes after</string>
+    <string name="company_name">Expresso Bits</string>
 </resources>
