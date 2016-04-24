@@ -11,6 +11,7 @@ import java.util.List;
 import br.com.expressobits.hbus.backend.Alarm;
 import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.utils.BooleanConvert;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
@@ -25,9 +26,17 @@ public class AlarmHelper {
         ContentValues values = new ContentValues();
         values.put(AlarmContract.Alarm._ID,alarm.getId());
         values.put(AlarmContract.Alarm.COLUMN_NAME_TIME,alarm.getTimeAlarm());
-        values.put(AlarmContract.Alarm.COLUMN_NAME_DAYS, TextUtils.getDaysinString(alarm.getDaysOfWeek()));
+        values.put(AlarmContract.Alarm.COLUMN_NAME_DAYS_SUNDAY,alarm.isSunday());
+        values.put(AlarmContract.Alarm.COLUMN_NAME_DAYS_MONDAY,alarm.isMonday());
+        values.put(AlarmContract.Alarm.COLUMN_NAME_DAYS_TUESDAY,alarm.isTuesday());
+        values.put(AlarmContract.Alarm.COLUMN_NAME_DAYS_WEDNESDAY,alarm.isWednesday());
+        values.put(AlarmContract.Alarm.COLUMN_NAME_DAYS_THURSDAY,alarm.isThursday());
+        values.put(AlarmContract.Alarm.COLUMN_NAME_DAYS_FRIDAY,alarm.isFriday());
+        values.put(AlarmContract.Alarm.COLUMN_NAME_DAYS_SATURDAY,alarm.isSaturday());
         values.put(AlarmContract.Alarm.COLUMN_NAME_TIME_DELAY,alarm.getMinuteDelay());
         values.put(AlarmContract.Alarm.COLUMN_NAME_NAME,alarm.getName());
+        values.put(AlarmContract.Alarm.COLUMN_NAME_ACTIVED,alarm.isActived());
+        values.put(AlarmContract.Alarm.COLUMN_NAME_CODE,alarm.getCode());
         return values;
     }
 
@@ -50,13 +59,25 @@ public class AlarmHelper {
         Alarm alarm = new Alarm();
         alarm.setId(c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm._ID)));
         alarm.setTimeAlarm(c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_TIME)));
-        //TODO arrumar algo de errado boolean = string
-        alarm.setDaysOfWeek(new ArrayList<String>(
-                (Arrays.asList(
-                        c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS)).split(BusHelper.COMMA_SEP))
-                )));
+        alarm.setSunday(BooleanConvert.IntegerToBoolean(
+                c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS_SUNDAY))));
+        alarm.setMonday(BooleanConvert.IntegerToBoolean(
+                c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS_MONDAY))));
+        alarm.setTuesday(BooleanConvert.IntegerToBoolean(
+                c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS_TUESDAY))));
+        alarm.setWednesday(BooleanConvert.IntegerToBoolean(
+                c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS_WEDNESDAY))));
+        alarm.setThursday(BooleanConvert.IntegerToBoolean(
+                c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS_THURSDAY))));
+        alarm.setFriday(BooleanConvert.IntegerToBoolean(
+                c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS_FRIDAY))));
+        alarm.setSaturday(BooleanConvert.IntegerToBoolean(
+                c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS_SATURDAY))));
         alarm.setMinuteDelay(c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_TIME_DELAY)));
         alarm.setName(c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_NAME)));
+        alarm.setActived(BooleanConvert.IntegerToBoolean(
+                c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_ACTIVED))));
+        alarm.setCode(c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_CODE)));
         return alarm;
     }
 
@@ -76,6 +97,25 @@ public class AlarmHelper {
             return cursorToAlarm(cursor);
         }
         return null;
+    }
+
+    public static List<Alarm> getAlarms(SQLiteDatabase db){
+        ArrayList<Alarm> alarms = new ArrayList<Alarm>();
+        Cursor c;
+        c = db.query(
+                AlarmContract.Alarm.TABLE_NAME,
+                AlarmContract.COLS,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        while (c.moveToNext()){
+            alarms.add(cursorToAlarm(c));
+        }
+        c.close();
+        return alarms;
     }
 
     public static List<Alarm> getAlarms(SQLiteDatabase db,City city){

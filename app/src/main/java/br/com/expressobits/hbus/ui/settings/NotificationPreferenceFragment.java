@@ -19,6 +19,11 @@ import br.com.expressobits.hbus.R;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class NotificationPreferenceFragment extends PreferenceFragment {
+
+
+    public static final String PREF_NOTIFICATION_ALERT_BUS = "notifications_alert_bus";
+    public static final String PREF_NOTIFICATION_ALERT_BUS_RINGTONE = "notifications_alert_bus_ringtone";
+    public static final String PREF_NOTIFICATION_ALERT_BUS_VIBRATE = "notifications_alert_bus_vibrate";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +34,7 @@ public class NotificationPreferenceFragment extends PreferenceFragment {
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
-        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+        SettingsActivity2.bindPreferenceSummaryToValue(findPreference(PREF_NOTIFICATION_ALERT_BUS_RINGTONE));
     }
 
     @Override

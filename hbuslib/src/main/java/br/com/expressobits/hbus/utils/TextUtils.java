@@ -1,5 +1,9 @@
 package br.com.expressobits.hbus.utils;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.TypeDay;
@@ -100,4 +104,22 @@ public class TextUtils {
         }
         return 0;
     }
+
+    public static String getTimeWithDelayTime(String time,int delay){
+        int hour = Integer.parseInt(time.split(":")[0]);
+        int minute = Integer.parseInt(time.split(":")[1]);
+        Calendar c = Calendar.getInstance();
+        c.set(0, 0, 0, hour, minute);
+
+        c.add(Calendar.MINUTE,delay);
+
+        Date d = c.getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+
+        return format.format(d);
+
+
+    }
+
 }

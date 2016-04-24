@@ -30,6 +30,7 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                openTimes(itineraryId,way);
+                openTimes(itineraryId, way);
             }
 
         });
@@ -275,8 +276,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     public void addFragment(String TAG) {
         Fragment fragment = new Fragment();
-        if(TAG.equals(ItinerariesFragment.TAG)){
+        if(TAG.equals(ItinerariesFragment.TAG)) {
             fragment = new ItinerariesFragment();
+        }else if(TAG.equals(AlarmListFragment.TAG)){
+            Bundle args = new Bundle();
+            args.putString(AlarmListFragment.ARGS_CITYID, cityId);
+            fragment = new AlarmListFragment();
+            fragment.setArguments(args);
         }else if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                 getSupportFragmentManager().popBackStack();
 
@@ -333,6 +339,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         startActivity(intent);
     }
 
+    public void setActionBarTitle(String title){
+        pToolbar.setTitle(title);
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -353,6 +363,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             addFragment(FavoritesItineraryFragment.TAG);
         } else if (id == R.id.nav_all_itineraries) {
             addFragment(ItinerariesFragment.TAG);
+        }else if (id == R.id.nav_alarms) {
+            addFragment(AlarmListFragment.TAG);
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity2.class));
         } else if (id == R.id.nav_help) {

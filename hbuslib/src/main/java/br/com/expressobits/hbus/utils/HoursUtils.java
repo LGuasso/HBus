@@ -115,6 +115,18 @@ public class HoursUtils {
         return time;
     }
 
+    /**
+     * Retorna o atual horario na forma de String HH:mm
+     * @return String do horario atual em HH:mm
+     */
+    public static Calendar getTimeInCalendar(String time){
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.split(":")[0]));
+        cal.set(Calendar.MINUTE,Integer.parseInt(time.split(":")[1]));
+        Log.d(TAG,"Criado calendar com atual hora "+time);
+        return cal;
+    }
+
 
     /**public static String getFaltaparaHorario(String timeBus){
         String timeNow = getNowTimeinString();

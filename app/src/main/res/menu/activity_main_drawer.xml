@@ -10,6 +10,11 @@
             android:id="@+id/nav_all_itineraries"
             android:icon="@drawable/ic_menu_bus"
             android:title="@string/all_lines" />
+
+        <item
+            android:id="@+id/nav_alarms"
+            android:icon="@drawable/ic_alarm_plus_grey600_24dp"
+            android:title="@string/alarms" />
     </group>
 
     <item android:title="@string/action_settings">

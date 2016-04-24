@@ -15,6 +15,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+    <!-- WARNING use to load alarms after boot restarted -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!--
       IMPORTANT: Change "com.parse.starter.permission.C2D_MESSAGE" in the lines below
       to match your app's package name + ".permission.C2D_MESSAGE".
@@ -133,7 +136,25 @@
         <activity
             android:name=".ui.help.HelpContentActivity"
             android:label="@string/title_activity_help_content"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.alarm.AlarmEditorActivity"
+            android:label="@string/title_activity_help_content"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".alarm.AlarmService"
+            android:enabled="true" />
+        <receiver android:name=".alarm.AlarmReceiver" />
+        <receiver android:name=".alarm.BootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".alarm.BootService"
+            android:enabled="true"/>
     </application>
 
 </manifest>

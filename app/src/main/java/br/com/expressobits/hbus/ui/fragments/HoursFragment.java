@@ -2,37 +2,25 @@ package br.com.expressobits.hbus.ui.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.adapters.ItemBusAdapter;
 import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.gae.PullBusEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.model.TypeDay;
+import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
-import br.com.expressobits.hbus.util.NetworkUtils;
-import br.com.expressobits.hbus.utils.DAOUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +35,9 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
     public static final String ARGS_ITINERARYID = "itineraryId";
     public static final String ARGS_WAY = "Way";
     public static final String ARGS_TYPEDAY = "typeday";
+    private String cityId;
+    private String itineraryId;
+    private String way;
     public TypeDay typeday = TypeDay.USEFUL;
 
     public HoursFragment() {
@@ -65,12 +56,14 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
                 arguments.getString(ARGS_ITINERARYID)!=null &&
                 arguments.getString(ARGS_WAY)!=null/** &&
                 arguments.getString(ARGS_TYPEDAY)!=null*/){
+            this.cityId = arguments.getString(ARGS_CITYID);
+            this.itineraryId = arguments.getString(ARGS_ITINERARYID);
+            this.way = arguments.getString(ARGS_WAY);
 
             refresh(context,
-                    arguments.getString(ARGS_CITYID),
-                    arguments.getString(ARGS_ITINERARYID),
-                    arguments.getString(ARGS_WAY)/*,
-                    TypeDay.getTypeday(ARGS_TYPEDAY)*/,
+                    cityId,
+                    itineraryId,
+                    way,
                     typeday);
         }
         return view;
@@ -79,6 +72,7 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
     @Override
     public void onResume() {
         super.onResume();
+        refresh(context,cityId,itineraryId,way,typeday);
     }
 
     private void initRecyclerView(View view){
@@ -108,7 +102,10 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
 
     @Override
     public void onClickListener(View view, int position) {
+        switch (view.getId()){
 
+
+        }
     }
 
     @Override

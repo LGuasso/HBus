@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.alarm.AlarmEditorActivity"
+    tools:showIn="@layout/activity_alarm_editor">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textViewAlarmName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/alarm_name"
+                    android:maxLength="20"
+                    android:maxLines="1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkboxSunday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sundayFirstChar"
+                    style="@style/DayOfWeek.Button"/>
+
+                <CheckBox
+                    android:id="@+id/checkboxMonday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mondayFirstChar"
+                    style="@style/DayOfWeek.Button"/>
+
+                <CheckBox
+                    android:id="@+id/checkboxTuesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tuesdayFirstChar"
+                    style="@style/DayOfWeek.Button"/>
+
+                <CheckBox
+                    android:id="@+id/checkboxWednesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wednesdayFirstChar"
+                    style="@style/DayOfWeek.Button"/>
+
+                <CheckBox
+                    android:id="@+id/checkboxThursday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/thursdayFirstChar"
+                    style="@style/DayOfWeek.Button"/>
+
+                <CheckBox
+                    android:id="@+id/checkboxFriday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fridayFirstChar"
+                    style="@style/DayOfWeek.Button"/>
+
+                <CheckBox
+                    android:id="@+id/checkboxSaturday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/saturdayFirstChar"
+                    style="@style/DayOfWeek.Button"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/line_divider"
+                android:layout_marginTop="2dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:layout_gravity="center_vertical">
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tint="@color/accent"
+                    android:src="@drawable/ic_watch_later_white_24dp"
+                    android:padding="8dp"/>
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:id="@+id/spinnerDelayType"/>
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/line_divider"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switchActived"
+                    android:padding="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

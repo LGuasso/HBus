@@ -13,7 +13,6 @@
     <string name="code_of_bus">Code of bus</string>
     <string name="no_have_bus">No have bus</string>
     <string name="choose_the_way">Choose the way</string>
-
     <string name="example_hours" translatable="false">10:00</string>
     <string name="example_codigo_da_linha" translatable="false">155A</string>
     <string name="next_bus">Next bus</string>
@@ -78,4 +77,39 @@
         <item>Update</item>
     </string-array>
     <string name="title_activity_help_content">HelpContentActivity</string>
+    <string name="alarms">Alarms</string>
+    <string name="sundayFirstChar">S</string>
+    <string name="mondayFirstChar">M</string>
+    <string name="tuesdayFirstChar">T</string>
+    <string name="wednesdayFirstChar">W</string>
+    <string name="thursdayFirstChar">T</string>
+    <string name="fridayFirstChar">F</string>
+    <string name="saturdayFirstChar">S</string>
+    <string name="alarm_enable">%1$s enable!</string>
+    <string name="alarm_disable">%1$s disable!</string>
+    <string name="alarm">Alarm</string>
+    <string name="alarm_added">Alarm added</string>
+    <string name="alarm_removed">Alarm removed</string>
+    <string name="edit_alarm">Edit alarm</string>
+    <string name="new_alarm">New alarm</string>
+    <string name="name">Name</string>
+    <string name="alarm_name">Alarm name</string>
+    <string name="action_save">Save</string>
+    <string name="add_new_alarm_with_sucess">Add new alarm with sucess!</string>
+    <string name="updated_alarm_with_sucess">Updated alarm with sucess!</string>
+    <string name="notification_alarm_ticker">Don\'t miss the %1$s</string>
+    <string name="notification">Notification</string>
+    <string name="notification_alarm_title_text">%1$s left ace %2$s</string>
+    <string name="notification_alarm_text">Way %1$s</string>
+    <plurals name="delay_content">
+        <item quantity="few">Bus after %1$s minutes</item>
+        <item quantity="zero">Bus now!</item>
+        <item quantity="other">Bus before %1$s minutes</item>
+    </plurals>
+
+    <string name="before_10_minutes">10 minutes before</string>
+    <string name="before_5_minutes">5 minutes before</string>
+    <string name="in_bus_time">In bus time</string>
+    <string name="after_5_minutes">5 minutes after</string>
+    <string name="after_10_minutes">10 minutes after</string>
 </resources>

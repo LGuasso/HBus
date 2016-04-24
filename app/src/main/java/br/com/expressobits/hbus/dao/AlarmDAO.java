@@ -37,19 +37,30 @@ public class AlarmDAO extends SQLiteOpenHelper {
 
     }
 
-    public void insert(Alarm alarm){
+    /**
+     *
+     * @param alarm
+     * @return false if old alarm and true to new alarm
+     */
+    public boolean insert(Alarm alarm){
         if((getAlarm(alarm.getId()))==null){
             Log.d(TAG,"insert new alarm!\t"+alarm.getId());
             AlarmHelper.insert(getWritableDatabase(), alarm);
+            return true;
         }else {
             Log.d(TAG,"update alarm!\t"+alarm.getId());
             AlarmHelper.update(getWritableDatabase(), alarm);
+            return false;
         }
 
     }
 
     public Alarm getAlarm(String id){
         return AlarmHelper.getAlarm(getReadableDatabase(), id);
+    }
+
+    public List<Alarm> getAlarms(){
+        return AlarmHelper.getAlarms(getReadableDatabase());
     }
 
     public List<Alarm> getAlarms(City city){

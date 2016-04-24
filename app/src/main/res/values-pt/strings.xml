@@ -70,4 +70,35 @@
     </string-array>
     <string name="select_the_type_of_feedback">Selecione o tipo de feedback</string>
     <string name="developer">Desenvolvedor</string>
+    <string name="alarms">Alarmes</string>
+    <string name="sundayFirstChar">D</string>
+    <string name="thursdayFirstChar">Q</string>
+    <string name="tuesdayFirstChar">T</string>
+    <string name="wednesdayFirstChar">Q</string>
+    <string name="saturdayFirstChar">S</string>
+    <string name="fridayFirstChar">S</string>
+    <string name="mondayFirstChar">S</string>
+    <string name="alarm_disable">%1$s desativado!</string>
+    <string name="alarm_enable">%1$s ativado!</string>
+    <string name="alarm">Alarme</string>
+    <string name="alarm_added">Alarme adicionado</string>
+    <string name="alarm_removed">Alarme desativado</string>
+    <string name="action_save">Salvar</string>
+    <string name="add_new_alarm_with_sucess">Adicionado novo alarme com sucesso!</string>
+    <string name="alarm_name">Nome do alarme</string>
+    <string name="new_alarm">Novo alarme</string>
+    <string name="name">Nome</string>
+    <string name="updated_alarm_with_sucess">Atualizado alarme com sucesso!</string>
+    <string-array name="list_delay_type">
+        <item>10 minutos antes</item>
+        <item>5 minutos antes</item>
+        <item>Na hora do ônibus</item>
+        <item>5 minutos depois</item>
+        <item>10 minutos depois</item>
+    </string-array>
+    <string name="edit_alarm">Editar alarme</string>
+    <string name="notification_alarm_ticker">Não perca o %1$s</string>
+    <string name="notification">Notificação</string>
+    <string name="notification_alarm_title_text">%1$s parte ás %2$s</string>
+    <string name="notification_alarm_text">Sentido %1$s</string>
 </resources>

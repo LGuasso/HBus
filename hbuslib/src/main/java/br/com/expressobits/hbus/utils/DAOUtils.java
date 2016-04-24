@@ -58,4 +58,69 @@ public class DAOUtils {
         }
 
     }
+
+    public static String getTypedayBus(String id){
+        if(id!=null && id.split(BARS).length>=5){
+            return id.split(BARS)[4];
+        }else {
+            return ERROR;
+        }
+
+    }
+
+    /**
+     * /RS/Santa Maria/Cerrrito/Centro > Bairro/useful/12:12
+     * @param id
+     * @return
+     */
+    public static String getTimeForBus(String id){
+        if(id!=null && id.split(BARS).length>=6){
+            return id.split(BARS)[5];
+        }else {
+            return ERROR;
+        }
+
+    }
+
+    /**
+     * /RS/Santa Maria/Cerrrito/Centro > Bairro/useful/12:12
+     * @param id
+     * @return
+     */
+    public static String getTimeForAlarm(String id){
+        if(id!=null && id.split(BARS).length>=5){
+            return id.split(BARS)[4];
+        }else {
+            return ERROR;
+        }
+
+    }
+
+    /**
+     * /RS/Santa Maria/Cerrrito/Centro > Bairro/useful/12:12
+     * @param id
+     * @return
+     */
+    public static String getIdAlarmForBus(String id){
+        if(id!=null && id.split(BARS).length>=6){
+            return id.split(BARS)[5];
+        }else {
+            return ERROR;
+        }
+
+    }
+
+    /**
+     * /RS/Santa Maria/Cerrrito/Centro > Bairro/useful/12:12
+     * @param id
+     * @return
+     */
+    public static String getWayForBus(String id){
+        if(id!=null && id.split(BARS).length>=4){
+            return id.split(BARS)[3];
+        }else {
+            return ERROR;
+        }
+
+    }
 }

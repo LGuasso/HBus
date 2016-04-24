@@ -114,21 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void push(){
-        City city = (City)spinnerCities.getSelectedItem();
-        pushCity(city);
-        for (Itinerary itinerary : itineraries.get(city)) {
-            pushItinerary(city, itinerary);
-            for (Bus bus : buses.get(city).get(itinerary)) {
-                Log.e(TAG, "TEST " + bus.getTime());
-                pushBus(city, itinerary, bus);
-            }
-        }
-        for (Code code : codes.get(city)) {
-            pushCode(city, code);
 
-        }
-    }
 
     public void pushAll(){
         City city = (City)spinnerCities.getSelectedItem();
@@ -137,7 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             pushItinerary(city, itinerary);
             for (Bus bus : buses.get(city).get(itinerary)) {
                 Log.e(TAG, "TEST " + bus.getTime());
-                pushBus(city, itinerary, bus);
+                if(itinerary.getName().equals("Vila Oliveira")) {
+                    pushBus(city, itinerary, bus);
+                }
             }
         }
         for (Code code : codes.get(city)) {
