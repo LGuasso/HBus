@@ -3,12 +3,15 @@ package br.com.expressobits.hbus.utils;
 import android.util.Log;
 import android.util.Pair;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import br.com.expressobits.hbus.backend.busApi.model.Bus;
@@ -90,18 +93,6 @@ public class HoursUtils {
         }
     }
 
-    public static TypeDay getTypeDayforString(String day){
-        switch (day){
-            case "uteis":
-                return TypeDay.USEFUL;
-            case "sabado":
-                return TypeDay.SATURDAY;
-            default:
-                return TypeDay.SUNDAY;
-
-        }
-    }
-
     /**
      * Retorna o atual horario na forma de String HH:mm
      * @return String do horario atual em HH:mm
@@ -128,22 +119,6 @@ public class HoursUtils {
     }
 
 
-    /**public static String getFaltaparaHorario(String timeBus){
-        String timeNow = getNowTimeinString();
-        int horaNow = Integer.parseInt(timeNow.split(":")[0]);
-        int horaBus = Integer.parseInt(timeBus.split(":")[0]);
-        int i = horaBus - horaNow;
-        String texto= new String();
-        if(i>0){
-            texto+="Em "+i+" hora(s)";
-        }else if(i<0){
-            i+=24;//SE HORARIO FOR NEGATIVO SIGNIFICA QUE SO DAQUI 24HORAS //TODO CODE VER ERRO DE DIAS  DA SEMANA
-        }else{
-            //NADA
-        }
-        return texto;
-    }*/
-
     public static Pair<Integer,List<Bus>> sortByTimeBus(List<Bus> busList){
 
         //Collections.sort(busList);
@@ -154,7 +129,7 @@ public class HoursUtils {
         ArrayList<Bus> lastBuses = new ArrayList<>();
         ArrayList<Bus> nextBuses = new ArrayList<>();
 
-        int countTwoLast = 0;
+        int countTwoLast;
 
         for (int i=0;i<busList.size();i++){
             if(getHour(busList.get(i))>getHour(bus)){
@@ -213,7 +188,7 @@ public class HoursUtils {
     }
 
     public static String longTimetoString(long millis){
-        return String.format("%d min, %d sec",
+        return String.format(Locale.getDefault(),"%d min, %d sec",
                 TimeUnit.MILLISECONDS.toMinutes(millis),
                 TimeUnit.MILLISECONDS.toSeconds(millis) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
