@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     public static final String DEBUG = "debug";
     public static final String STACK = "pilha";
     public Toolbar pToolbar;
+    private NavigationView navigationView;
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
     String cityId;
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View naviHeader = navigationView.getHeaderView(0);
@@ -274,18 +275,56 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         }
     }
 
+
+    /**
+     * Ao abrir qualquer fragment, seta o navigation dawer evitando assim atalhos que não sejam
+     * selecionados no navigation
+     * @param TAG
+     */
+    public void setSelectItemNavigation(String TAG){
+        switch (TAG){
+            case FavoritesItineraryFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_favorites).setChecked(true);
+                break;
+            case ItinerariesFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_all_itineraries).setChecked(true);
+                break;
+            case AlarmListFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_alarms).setChecked(true);
+                break;
+        }
+    }
+
+    /**
+     * S
+     * @param TAG
+     */
     public void addFragment(String TAG) {
         Fragment fragment = new Fragment();
-        if(TAG.equals(ItinerariesFragment.TAG)) {
-            fragment = new ItinerariesFragment();
-        }else if(TAG.equals(AlarmListFragment.TAG)){
-            Bundle args = new Bundle();
-            args.putString(AlarmListFragment.ARGS_CITYID, cityId);
-            fragment = new AlarmListFragment();
-            fragment.setArguments(args);
-        }else if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
-                getSupportFragmentManager().popBackStack();
-
+        switch (TAG){
+            case FavoritesItineraryFragment.TAG:
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case ItinerariesFragment.TAG:
+                fragment = new ItinerariesFragment();
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case AlarmListFragment.TAG:
+                Bundle args = new Bundle();
+                args.putString(AlarmListFragment.ARGS_CITYID, cityId);
+                fragment = new AlarmListFragment();
+                fragment.setArguments(args);
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
         }
         if(getSupportFragmentManager().findFragmentByTag(TAG)==null){
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

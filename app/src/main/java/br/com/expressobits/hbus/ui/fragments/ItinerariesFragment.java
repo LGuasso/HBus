@@ -73,6 +73,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     public void onResume() {
         super.onResume();
         ((MainActivity)getActivity()).setActionBarTitle();
+        ((MainActivity)getActivity()).setSelectItemNavigation(TAG);
     }
 
     private void initViews(View view){

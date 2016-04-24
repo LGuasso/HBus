@@ -93,6 +93,7 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         updateListAlarms(getActivity());
         udpateRecyclerViewAlarms(getActivity());
         ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.alarms));
+        ((MainActivity)getActivity()).setSelectItemNavigation(TAG);
         super.onResume();
     }
 

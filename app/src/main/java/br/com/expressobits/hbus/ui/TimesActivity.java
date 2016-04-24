@@ -1,8 +1,10 @@
 package br.com.expressobits.hbus.ui;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -46,12 +48,15 @@ public class TimesActivity extends AppCompatActivity {
         pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (((AppBarLayout)findViewById(R.id.appBar)) != null) {
+                ((AppBarLayout)findViewById(R.id.appBar)).setElevation(0);
+            }
+        }
 
         getSupportActionBar().setTitle(DAOUtils.getNameItinerary(getIntent().getStringExtra(ARGS_ITINERARYID)));
         pToolbar.setSubtitle(getIntent().getStringExtra(ARGS_WAY));
-
         initViews();
-
     }
 
 

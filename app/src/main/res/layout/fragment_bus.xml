@@ -25,15 +25,21 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                app:tabBackground="@color/colorPrimary"
-                app:tabGravity="fill"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="@color/tabs_focused"
-                app:tabTextColor="@color/tabs_unfocused" />
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="6dp"
+                    android:background="@color/colorPrimary"
+                    app:tabBackground="@color/colorPrimary"
+                    app:tabPadding="12dp"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/tabs_focused"
+                    app:tabTextColor="@color/tabs_unfocused" />
+
+
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"
