@@ -174,11 +174,11 @@ public class HoursUtils {
         if(lastBuses.size()>1){
             Bus bus2 = lastBuses.get(lastBuses.size() - 2);
             Bus bus1 = lastBuses.get(lastBuses.size() - 1);
-            twoLastBuses.add(bus1);
-            lastBuses.remove(bus1);
-            //Tem que ser invertido para aparecer embaixo o mais recente
             twoLastBuses.add(bus2);
             lastBuses.remove(bus2);
+            //Tem que ser invertido para aparecer embaixo o mais recente
+            twoLastBuses.add(bus1);
+            lastBuses.remove(bus1);
 
         }else if(lastBuses.size()>0){
             Bus bus1 = lastBuses.get(lastBuses.size() - 1);
