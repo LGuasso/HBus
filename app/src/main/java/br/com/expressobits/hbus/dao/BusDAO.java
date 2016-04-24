@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.dao;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -22,6 +23,7 @@ public class BusDAO extends SQLiteAssetHelper{
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "bus_database.db";
+    private static final String TAG = "BusDAO";
 
     public BusDAO(Context context) {
         //super(context, BusHelper.DATABASE_NAME, null, BusHelper.DATABASE_VERSION); //SQLITEOPENHELPER
@@ -42,20 +44,54 @@ public class BusDAO extends SQLiteAssetHelper{
 
     }
 
-    public void insert(City city){
-        BusHelper.insert(getWritableDatabase(), city);
+    public boolean insert(City city){
+        if((getItinerary(city.getId()))==null){
+            Log.d(TAG,"insert new "+ CityContract.City.TABLE_NAME+"!\t"+city.getId());
+            BusHelper.insert(getWritableDatabase(), city);
+            return true;
+        }else {
+            Log.d(TAG,"update old "+ CityContract.City.TABLE_NAME+"!\t"+city.getId());
+            BusHelper.update(getWritableDatabase(), city);
+            return false;
+        }
     }
 
-    public void insert(Itinerary itinerary){
-        BusHelper.insert(getWritableDatabase(), itinerary);
+    public boolean insert(Itinerary itinerary){
+        if((getItinerary(itinerary.getId()))==null){
+            Log.d(TAG,"insert new "+ ItineraryContract.Itinerary.TABLE_NAME+"!\t"+itinerary.getId());
+            BusHelper.insert(getWritableDatabase(), itinerary);
+            return true;
+        }else {
+            Log.d(TAG,"update old "+ ItineraryContract.Itinerary.TABLE_NAME+"!\t"+itinerary.getId());
+            BusHelper.update(getWritableDatabase(), itinerary);
+            return false;
+        }
+
     }
 
-    public void insert(Code code){
-        BusHelper.insert(getWritableDatabase(), code);
+    public boolean insert(Code code){
+        if((getCode(code.getId()))==null){
+            Log.d(TAG,"insert new "+ CodeContract.Code.TABLE_NAME+"!\t"+code.getId());
+            BusHelper.insert(getWritableDatabase(), code);
+            return true;
+        }else {
+            Log.d(TAG,"update old "+ CodeContract.Code.TABLE_NAME+"!\t"+code.getId());
+            BusHelper.update(getWritableDatabase(), code);
+            return false;
+        }
+
     }
 
-    public void insert(Bus bus){
-        BusHelper.insert(getWritableDatabase(), bus);
+    public boolean insert(Bus bus){
+        if((getBus(bus.getId()))==null){
+            Log.d(TAG,"insert new "+ BusContract.Bus.TABLE_NAME+"!\t"+bus.getId());
+            BusHelper.insert(getWritableDatabase(), bus);
+            return true;
+        }else {
+            Log.d(TAG,"update old "+ BusContract.Bus.TABLE_NAME+"!\t"+bus.getId());
+            BusHelper.update(getWritableDatabase(), bus);
+            return false;
+        }
     }
 
     public int deleteItineraries(String cityId){
@@ -77,8 +113,16 @@ public class BusDAO extends SQLiteAssetHelper{
     public Itinerary getItinerary(String itineraryId){
         return  BusHelper.getItinerary(getReadableDatabase(), itineraryId);
     }
+
+    public Code getCode(String codeId){
+        return  BusHelper.getCode(getReadableDatabase(), codeId);
+    }
     public Code getCode(String cityId,String code){
         return  BusHelper.getCode(getReadableDatabase(), getCity(cityId), code);
+    }
+
+    public Bus getBus(String busId){
+        return  BusHelper.getBus(getReadableDatabase(), busId);
     }
 
     public List<City> getCities(){

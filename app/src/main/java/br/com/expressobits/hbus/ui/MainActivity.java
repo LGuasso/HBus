@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -361,16 +363,22 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     public void onCreateDialogChooseWay(String itineraryId) {
         BusDAO dao = new BusDAO(this);
-
-        List<String> ways = dao.getItinerary(itineraryId).getWays();
-        if (ways.size() > 1) {
-            ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-            chooseWayDialogFragment.setParameters(this, itineraryId, ways);
-            chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
-        } else {
-            onSettingsDone(itineraryId, ways.get(0));
+        List<String> ways;
+        try {
+            ways = dao.getItinerary(itineraryId).getWays();
+            if (ways.size() > 1) {
+                ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
+                chooseWayDialogFragment.setParameters(this, itineraryId, ways);
+                chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
+            } else {
+                onSettingsDone(itineraryId, ways.get(0));
+            }
+            dao.close();
+        }catch (SQLiteCantOpenDatabaseException exception){
+            Toast.makeText(this,"aguarde alguns segundos...",Toast.LENGTH_LONG).show();
         }
-        dao.close();
+
+
     }
 
     public void openHelp(){

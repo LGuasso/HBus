@@ -113,6 +113,38 @@ public class BusHelper {
                 toContentValues(bus));
     }
 
+    public static void update(SQLiteDatabase db,City city){
+        db.update(
+                CityContract.City.TABLE_NAME,
+                toContentValues(city),
+                CityContract.City._ID+" = ?",
+                new String[]{city.getId()});
+    }
+
+    public static void update(SQLiteDatabase db,Itinerary itinerary){
+        db.update(
+                ItineraryContract.Itinerary.TABLE_NAME,
+                toContentValues(itinerary),
+                ItineraryContract.Itinerary._ID+" = ?",
+                new String[]{itinerary.getId()});
+    }
+
+    public static void update(SQLiteDatabase db,Code code){
+        db.update(
+                CodeContract.Code.TABLE_NAME,
+                toContentValues(code),
+                CodeContract.Code._ID+" = ?",
+                new String[]{code.getId()});
+    }
+
+    public static void update(SQLiteDatabase db,Bus bus){
+        db.update(
+                BusContract.Bus.TABLE_NAME,
+                toContentValues(bus),
+                BusContract.Bus._ID+" = ?",
+                new String[]{bus.getId()});
+    }
+
     protected static City cursorToCity(Cursor c){
         City city = new City();
         city.setId(c.getString(c.getColumnIndexOrThrow(CityContract.City._ID)));

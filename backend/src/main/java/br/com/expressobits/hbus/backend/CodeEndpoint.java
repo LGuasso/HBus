@@ -82,7 +82,7 @@ public class CodeEndpoint {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         Key countryParentKey = KeyFactory.createKey("country", country);
         Key cityParentKey = KeyFactory.createKey(countryParentKey, "city", cityName);
-        Query query = new Query(cityParentKey);
+        Query query = new Query("Code",cityParentKey);
         List<Entity> results = datastoreService.prepare(query).asList(FetchOptions.Builder.withDefaults());
 
         ArrayList<Code> codes = new ArrayList<>();

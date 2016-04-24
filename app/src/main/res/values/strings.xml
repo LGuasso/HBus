@@ -113,4 +113,8 @@
     <string name="after_5_minutes">5 minutes after</string>
     <string name="after_10_minutes">10 minutes after</string>
     <string name="company_name">Expresso Bits</string>
+    <string name="pref_header_summary_notification">Notifications of alarms</string>
+    <string name="pref_header_summary_general">General settings</string>
+    <string name="pref_header_summary_data_sync">Sync with server</string>
+    <string name="pref_header_summary_about">Application information</string>
 </resources>

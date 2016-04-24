@@ -1,6 +1,8 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -16,7 +18,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -29,6 +33,9 @@ import br.com.expressobits.hbus.backend.codeApi.model.Code;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
+import br.com.expressobits.hbus.dao.FinishSaveDAO;
+import br.com.expressobits.hbus.dao.SaveCodesAsyncTask;
+import br.com.expressobits.hbus.dao.SaveItinerariesAsyncTask;
 import br.com.expressobits.hbus.gae.PullBusEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.PullCodesEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.PullItinerariesEndpointsAsyncTask;
@@ -49,7 +56,7 @@ import br.com.expressobits.hbus.utils.DAOUtils;
  * @author Rafael Correa
  * @since 16/11/15
  */
-public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack,ResultListenerAsyncTask{
+public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack,ResultListenerAsyncTask,FinishSaveDAO{
 
     private List<Itinerary> listItineraries;
     private List<Itinerary> favoriteItineraries;
@@ -57,8 +64,16 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     public static final String TAG = "ItinerariesFragment";
     private RecyclerView recyclerViewItineraries;
     private ProgressBar progressBar;
+    private TextView textViewProgress;
+    private LinearLayout linearLayoutProgress;
     private String cityId;
     public int lastPositionItinerary;
+    private SaveItinerariesAsyncTask saveItinerariesAsyncTask;
+    private SaveCodesAsyncTask saveCodesAsyncTask;
+    int totalCodes=0;
+    int totalItineraries=0;
+    int progressCodes =0;
+    int progressItineraries =0;
 
     @Nullable
     @Override
@@ -82,6 +97,8 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     private void initListViews(View view){
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        linearLayoutProgress = (LinearLayout)view.findViewById(R.id.progressLayout);
+        textViewProgress = (TextView) view.findViewById(R.id.textViewProgress);
         cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
         recyclerViewItineraries.setHasFixedSize(true);
@@ -96,7 +113,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
         if(listItineraries.size()>0){
             recyclerViewItineraries.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
+            linearLayoutProgress.setVisibility(View.INVISIBLE);
 
             refreshRecyclerView();
         }else {
@@ -145,7 +162,15 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
                 break;
             case R.id.linearLayoutItemList:
-                ((MainActivity)getActivity()).onCreateDialogChooseWay(listItineraries.get(position).getId());
+                if(saveItinerariesAsyncTask.isFinished() && saveCodesAsyncTask.isFinished()){
+                    ((MainActivity)getActivity()).onCreateDialogChooseWay(listItineraries.get(position).getId());
+                }else {
+                    Snackbar.make(
+                            view,
+                            "AGUARDEEEEEEEEEEEEEEEEE",
+                            Snackbar.LENGTH_LONG).show();
+                }
+
                 break;
         }
 
@@ -169,7 +194,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
 
     public void pullItineraries(String cityId){
-        progressBar.setVisibility(View.VISIBLE);
+        linearLayoutProgress.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
         Log.d(TAG, "initial push itinerary");
         if(NetworkUtils.isWifiConnected(getActivity()) || NetworkUtils.isMobileConnected(getActivity())) {
@@ -181,7 +206,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
             city.setCountry(DAOUtils.getNameCountry(cityId));
             pullItinerariesEndpointsAsyncTask.execute(city);
         }else{
-            progressBar.setVisibility(View.INVISIBLE);
+            linearLayoutProgress.setVisibility(View.INVISIBLE);
             //imageViewNetworkError.setVisibility(View.VISIBLE);
         }
     }
@@ -246,32 +271,22 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                 if(list.get(0) instanceof Itinerary){
                     listItineraries = list;
                     Log.d(TAG,list.toString());
-                    BusDAO db = new BusDAO(getActivity());
-                    int result = db.deleteItineraries(cityId);
-                    Log.d(TAG, "result delete ititneraries " + result);
-                    for (Itinerary itinerary:listItineraries){
-                        Log.d(TAG,"itinerary "+itinerary.getName()+"load from datastore ways"+itinerary.getWays());
-                        db.insert(itinerary);
-                    }
-                    Log.i(TAG, list.toString());
-                    recyclerViewItineraries.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getActivity(),getString(R.string.load_online_itineraries_with_sucess),Toast.LENGTH_LONG).show();
-                    refreshRecyclerView();
+                    saveItinerariesAsyncTask = new SaveItinerariesAsyncTask();
+                    saveItinerariesAsyncTask.setContext(getActivity());
+                    saveItinerariesAsyncTask.setFinishSaveDAO(this);
+                    saveItinerariesAsyncTask.execute(new Pair<String, List<Itinerary>>(cityId,list));
+                    totalItineraries = list.size();
+                    progressItineraries =0;
+
                 }else if(list.get(0) instanceof Code){
                     codes = list;
                     Log.d(TAG,codes.toString());
-                    BusDAO db = new BusDAO(getActivity());
-                    int result = db.deleteCodes(cityId);
-                    Log.d(TAG, "result delete code " + result);
-                    for (Code code:codes){
-                        Log.d(TAG,"itinerary "+code.getName()+"load from datastore descr "+code.getDescrition());
-                        db.insert(code);
-                    }
-                    Log.i(TAG, codes.toString());
-                    if(BuildConfig.DEBUG){
-                        Toast.makeText(getActivity(),getString(R.string.load_online_codes_with_sucess),Toast.LENGTH_LONG).show();
-                    }
+                    saveCodesAsyncTask = new SaveCodesAsyncTask();
+                    saveCodesAsyncTask.setContext(getActivity());
+                    saveCodesAsyncTask.setFinishSaveDAO(this);
+                    saveCodesAsyncTask.execute(new Pair<String, List<Code>>(cityId,list));
+                    totalCodes = list.size();
+                    progressCodes =0;
 
                 }else if(list.get(0) instanceof Bus){
                     List<Bus> buses = list;
@@ -280,7 +295,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                     int result = db.deleteBuses(cityId, listItineraries.get(lastPositionItinerary).getId());
                     Log.d(TAG, "result delete bus " + result);
                     for (Bus bus:buses){
-                        Log.d(TAG,"bus "+bus.getTime()+"load from datastore way "+bus.getWay());
+                        Log.d(TAG,"bus "+bus.getTime()+" load from datastore way "+bus.getWay());
                         db.insert(bus);
                     }
                     Log.i(TAG, buses.toString());
@@ -290,7 +305,34 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                 }
             }
         }
+    }
 
+    @Override
+    public void finish() {
+        if(saveCodesAsyncTask.isFinished() && saveItinerariesAsyncTask.isFinished()){
+            recyclerViewItineraries.setVisibility(View.VISIBLE);
+            linearLayoutProgress.setVisibility(View.INVISIBLE);
+            Toast.makeText(getActivity(),getString(R.string.load_online_itineraries_with_sucess),Toast.LENGTH_LONG).show();
+            refreshRecyclerView();
+        }
+    }
+
+    @Override
+    public void progressUpdate(Object type, int progress, int total) {
+
+
+
+        if(type instanceof Code){
+            progressCodes++;
+
+
+        }else if(type instanceof Itinerary){
+            progressItineraries++;
+        }
+        float number = ((float)(progressCodes+progressItineraries)/ (float)(totalCodes+totalItineraries));
+        textViewProgress.setText(((int)(number*100))+"%");
+        progressBar.setMax(totalItineraries+totalCodes);
+        progressBar.setProgress(progressItineraries+progressCodes);
 
     }
 }
