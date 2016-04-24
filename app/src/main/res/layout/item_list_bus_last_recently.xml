@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/example_codigo_da_linha"
                 android:textAppearance="@style/AppTheme.TextAppearance.Code"
-                android:textColor="@color/md_blue_100"  />
+                android:textColor="@color/colorAccent"  />
 
             <TextView
                 android:id="@+id/item_list_textview_descricao_do_codigo"
@@ -59,7 +59,7 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
                 android:textAppearance="@style/AppTheme.TextAppearance.DescritionCode"
-                android:textColor="@color/md_blue_100"
+                android:textColor="@color/md_white_1000"
                 android:textColorHighlight="#FFFFFF" />
         </LinearLayout>
 
