@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textAppearance="@style/AppTheme.TextAppearance.Button.Flat"
+    android:textColor="@color/colorPrimaryDark"
     android:gravity="center"
     android:textAllCaps="true"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
