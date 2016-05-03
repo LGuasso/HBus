@@ -19,10 +19,10 @@
     <string name="add_favorite">Adicionar favorito</string>
     <string name="added_favorite_itinerary_with_sucess">Adicionado itinerário favorito com sucesso!</string>
     <string name="delete_itinerary_with_sucess">Deletado itinerário %1$s com sucesso!</string>
-    <string name="delete">Deletar</string>
+    <string name="action_delete">Deletar</string>
     <string name="itinerary_name">Nome do itinerário</string>
-    <string name="jump">Pular</string>
-    <string name="next">Próximo</string>
+    <string name="action_jump">Pular</string>
+    <string name="action_next">Próximo</string>
     <string name="title_activity_load">Tela inicial</string>
     <string name="finish">Finalizar</string>
     <string name="title_activity_select_city">Selecione cidade</string>
@@ -30,7 +30,7 @@
     <string name="not_found">Não encontrado</string>
     <string name="no_have_itinerary">Não há itinerários favoritos</string>
     <string name="pref_title_active_debug_mode">Ativar o modo de depuração</string>
-    <string name="remove">Remover</string>
+    <string name="action_remove">Remover</string>
     <string name="look_times">Ver horários</string>
     <string name="number_of_itineraries">%1$s itinerários</string>
     <string name="not_found_city">Não há cidade</string>
@@ -102,8 +102,4 @@
     <string name="notification_alarm_title_text">%1$s parte ás %2$s</string>
     <string name="notification_alarm_text">Sentido %1$s</string>
     <string name="notificates_about_a_bus">Notificações dos alarmes de itinerários</string>
-    <string name="pref_header_summary_data_sync">Sincronia com servidor</string>
-    <string name="pref_header_summary_about">Informações sobre aplicativo</string>
-    <string name="pref_header_summary_general">Configurações em geral</string>
-    <string name="pref_header_summary_notification">Notificações de alarmes</string>
 </resources>
