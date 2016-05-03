@@ -66,4 +66,8 @@
     <string name="pref_header_about">Sobre</string>
     <string name="pref_title_tour_of_product">Tour do produto</string>
     <string name="pref_summary_tour_of_product">Informações sobre o aplicativo</string>
+    <string name="pref_header_summary_data_sync">Sincronia com servidor</string>
+    <string name="pref_header_summary_about">Informações sobre aplicativo</string>
+    <string name="pref_header_summary_general">Configurações em geral</string>
+    <string name="pref_header_summary_notification">Notificações de alarmes</string>
 </resources>

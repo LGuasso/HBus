@@ -79,4 +79,9 @@
     <string name="pref_title_tour_of_product">Tour of product</string>
     <string name="pref_summary_tour_of_product">Information of application</string>
     <string name="pref_title_active_debug_mode">Active debug mode</string>
+
+    <string name="pref_header_summary_notification">Notifications of alarms</string>
+    <string name="pref_header_summary_general">General settings</string>
+    <string name="pref_header_summary_data_sync">Sync with server</string>
+    <string name="pref_header_summary_about">Application information</string>
 </resources>

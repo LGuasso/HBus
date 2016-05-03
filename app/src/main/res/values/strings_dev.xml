@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="example_hours" translatable="false">10:00</string>
+    <string name="example_codigo_da_linha" translatable="false">155A</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc accumsan vitae massa a rhoncus. Quisque ultrices congue accumsan. Etiam venenatis, nisi ac bibendum viverra, ex quam ullamcorper elit, ac mollis augue ante ac justo. Praesent venenatis metus et ultrices malesuada. Maecenas suscipit vel nisi in dapibus. Maecenas blandit egestas cursus. Fusce tincidunt ullamcorper enim quis finibus. Aenean eu est odio. Phasellus ullamcorper mi metus, vitae gravida erat iaculis vel. Mauris quam leo, malesuada ut lorem nec, aliquam feugiat ex. Phasellus dignissim justo non ligula molestie viverra. Nam faucibus mi justo, sit amet aliquam risus elementum sed. Pellentesque ut purus pulvinar, feugiat ex et, blandit felis.
 
 Etiam bibendum pretium odio non imperdiet. Ut ut mauris orci. Etiam vitae justo sed magna fringilla vestibulum. Nulla a rhoncus dui, nec vulputate felis. Nunc gravida aliquam porttitor. Nam velit nisi, fermentum vitae dolor in, aliquam consectetur lorem. Aenean eu elit eros. Aliquam a tincidunt sem. Praesent egestas vestibulum luctus. Mauris scelerisque, tellus ut ultricies rutrum, libero nulla posuere ex, vitae sollicitudin est velit vel urna. Nam faucibus tincidunt magna in aliquet. Quisque lorem ex, aliquet blandit euismod non, iaculis ultricies tellus. Nulla id molestie est. Suspendisse tempus accumsan rhoncus. Curabitur varius lacus elit, sit amet venenatis nisi congue sed. Etiam fringilla ante sem, porttitor interdum tortor ultricies sed.

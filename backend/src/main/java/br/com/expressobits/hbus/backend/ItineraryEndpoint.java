@@ -92,10 +92,7 @@ public class ItineraryEndpoint {
             itinerary.setId(country+"/"+cityName+"/"+((String) result.getProperty("name")));
             itinerary.setName((String) result.getProperty("name"));
             itinerary.setCodes((ArrayList<String>) result.getProperty("codes"));
-            itinerary.setWays((ArrayList<String>)result.getProperty("ways"));
-
-            logger.info("Calling wayssss " + result.getProperty("ways")+" /// "+((List<String>)result.getProperty("ways"))+" /// "+
-                    (ArrayList<String>) result.getProperty("ways"));
+            itinerary.setWays((ArrayList)result.getProperty("ways"));
             itineraries.add(itinerary);
         }
 
