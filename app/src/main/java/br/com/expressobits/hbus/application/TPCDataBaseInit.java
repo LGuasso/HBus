@@ -52,7 +52,7 @@ public class TPCDataBaseInit extends Application{
             this.deleteDatabase("bus_database.db");
             Log.e(TAG, "DELETE bus_database");
         }
-        if(80> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(86> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             this.deleteDatabase("bus_data.db");
             Log.e(TAG, "DELETE BUS DATA");
         }
