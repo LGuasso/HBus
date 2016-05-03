@@ -51,7 +51,7 @@
             >
             <Button
                 android:id="@+id/previousText"
-                android:text="@string/jump"
+                android:text="@string/action_jump"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textAllCaps="true"
                 android:layout_weight="1"
@@ -72,7 +72,7 @@
             <Button
                 android:src="@drawable/ic_navigate_next_white_48dp"
                 android:id="@+id/nextButton"
-                android:text="@string/next"
+                android:text="@string/action_next"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textAllCaps="true"
                 android:layout_weight="1"

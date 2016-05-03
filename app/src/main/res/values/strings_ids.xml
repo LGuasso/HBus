@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Strings que contém os dados de ids -->
 <resources>
     <string name="analytics_id_tracker" translatable="false">UA-69666206-1</string>
     <!-- Banner Normal WARNING Somente usado na produção -->

@@ -99,7 +99,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
                 if(defaultViewpager.getCurrentItem() + 2 == defaultPagerAdapter.getCount()){
                     nextButton.setText(getResources().getText(R.string.finish));
                 }else{
-                    nextButton.setText(getResources().getText(R.string.next));
+                    nextButton.setText(getResources().getText(R.string.action_next));
                 }
 
                 defaultViewpager.setCurrentItem(defaultViewpager.getCurrentItem() + 1);
@@ -155,7 +155,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
         if(defaultViewpager.getCurrentItem() + 1 == defaultPagerAdapter.getCount()){
             nextButton.setText(getResources().getText(R.string.finish));
         }else{
-            nextButton.setText(getResources().getText(R.string.next));
+            nextButton.setText(getResources().getText(R.string.action_next));
         }
     }
 
