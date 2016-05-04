@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listView_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+    android:baselineAligned="true"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Primeiro layout com quadrado que tem as horas-->
+        <RelativeLayout
+            android:id="@+id/linear_layout_list_bus_square"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Texto que exibe horário do ônibus -->
+            <TextView
+                android:id="@+id/item_list_textview_horario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/example_hours"
+                android:textColor="@color/md_blue_100"
+                android:textAppearance="@style/AppTheme.TextAppearance.Display2.Mono"/>
+
+        </RelativeLayout>
+
+        <!-- Segundo Layout com o resto de informações -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:id="@+id/item_list_textview_codigo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/example_codigo_da_linha"
+                android:textAppearance="@style/AppTheme.TextAppearance.Code"
+                android:textColor="@color/colorAccent"  />
+
+            <TextView
+                android:id="@+id/item_list_textview_descricao_do_codigo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:fadingEdgeLength="20dp"
+                android:focusable="false"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:textAppearance="@style/AppTheme.TextAppearance.DescritionCode"
+                android:textColor="@color/md_white_1000"
+                android:textColorHighlight="#FFFFFF" />
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/item_list_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/transparent"
+            android:padding="16dp"
+            android:src="@drawable/ic_alarm_plus_white_24dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+
+

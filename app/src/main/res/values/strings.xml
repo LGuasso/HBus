@@ -1,0 +1,113 @@
+<resources>
+    <string name="app_name">HBus</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_jump">Jump</string>
+    <string name="action_next">Next</string>
+    <string name="choose_the_line">Choose the line</string>
+    <string name="choose_the_local">Choose the local</string>
+    <string name="look_line">Look line</string>
+    <string name="title_activity_list_line">Online hours</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="saturday">Saturday</string>
+    <string name="useful">Useful days</string>
+    <string name="sunday">Sunday</string>
+    <string name="code_of_bus">Code of bus</string>
+    <string name="no_have_bus">No have bus</string>
+    <string name="choose_the_way">Choose the way</string>
+    <string name="next_bus">Next bus</string>
+    <string name="all_lines">All lines</string>
+    <string name="favorites">Favorites</string>
+    <string name="add_favorite">Add favorite</string>
+    <string name="added_favorite_itinerary_with_sucess">Added favorite itinerary with sucess</string>
+    <string name="itinerary_name">Itinerary Name</string>
+    <string name="delete_itinerary_with_sucess">Deleted itinerary %1$s with sucess!</string>
+    <string name="title_activity_load">Splash screen</string>
+    <string name="finish">Finish</string>
+    <string name="title_activity_select_city">Select city</string>
+    <string name="not_found">Not found</string>
+    <string name="title_activity_splash" translatable="false">SplashActivity</string>
+    <string name="about">About</string>
+    <string name="no_have_itinerary">No have favorite itinerary</string>
+    <string name="look_times">Look times</string>
+    <string name="not_found_city">Not found city</string>
+    <string name="number_of_itineraries">%1$s itineraries</string>
+    <string name="dialog_alert_title_confirm_remove">Remove favorite itinerary?</string>
+    <string name="confirm_donwload_data_for_city">Download data for city %1$s?</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="title_activity_help" translatable="false">@string/action_help</string>
+    <string name="action_help">Help and feedback</string>
+    <string name="action_informations_of_version">Informations of version</string>
+    <string name="company_market">2016 Expresso Bits</string>
+    <string name="version">Version</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="action_send_feedback">Send feedback</string>
+    <string name="title_activity_feedback">Feedback</string>
+    <string name="see_on_play_store">See on Play Store</string>
+    <string name="write_your_feedback_here">Write your feedback here</string>
+    <string name="send_your_feedback_to_expressobits">Send your feedback to Expresso Bits and make best app now!</string>
+    <string name="downloading_data">Downloading data for city of %1$s</string>
+    <string name="include_system_information">Include system information</string>
+    <string name="send_feedback_with_sucess">Send feedback with sucess!</string>
+    <string name="wait_a_few_minutes">Wait a few minutes</string>
+    <string name="action_refresh_cities_list">Refresh cities list</string>
+    <string name="title_activity_times" translatable="false">TimesActivity</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="last_recently_bus">Bus recently</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="city">City</string>
+    <string name="click_here_to_change">Click here to change</string>
+    <string name="add_itinerary">Add itinerary</string>
+    <string name="all_itinerary">All itineraries</string>
+    <string name="see_all_itinerary">See all itinerary</string>
+    <string name="load_online_itineraries_with_sucess">Load online itineraries with sucess</string>
+    <string name="load_online_codes_with_sucess" translatable="false">Load online codes with sucess</string>
+    <string name="load_online_buses_with_sucess" translatable="false">Load online bus with sucess</string>
+    <string name="select_the_type_of_feedback">Select the type of feedback</string>
+    <string name="developer">Developer</string>
+    <string name="help_warning">    Este aplicativo tem função de facilitar o acesso aos horários disponíveis no site da SIM(Sistema Integrado Municipal)  http://www.simsm.com.br/ ,ou seja, a Expresso Bits não se responsabiliza pelos horários!</string>
+    <string-array name="list_feedbacks">
+        <item>Tip</item>
+        <item>Error</item>
+        <item>Update</item>
+    </string-array>
+    <string name="title_activity_help_content">HelpContentActivity</string>
+    <string name="alarms">Alarms</string>
+    <string name="sundayFirstChar">S</string>
+    <string name="mondayFirstChar">M</string>
+    <string name="tuesdayFirstChar">T</string>
+    <string name="wednesdayFirstChar">W</string>
+    <string name="thursdayFirstChar">T</string>
+    <string name="fridayFirstChar">F</string>
+    <string name="saturdayFirstChar">S</string>
+    <string name="alarm_enable">%1$s enable!</string>
+    <string name="alarm_disable">%1$s disable!</string>
+    <string name="alarm">Alarm</string>
+    <string name="alarm_added">Alarm added</string>
+    <string name="alarm_removed">Alarm removed</string>
+    <string name="edit_alarm">Edit alarm</string>
+    <string name="new_alarm">New alarm</string>
+    <string name="name">Name</string>
+    <string name="alarm_name">Alarm name</string>
+    <string name="action_save">Save</string>
+    <string name="add_new_alarm_with_sucess">Add new alarm with sucess!</string>
+    <string name="updated_alarm_with_sucess">Updated alarm with sucess!</string>
+    <string name="notification_alarm_ticker">Don\'t miss the %1$s</string>
+    <string name="notification">Notification</string>
+    <string name="notification_alarm_title_text">%1$s left ace %2$s</string>
+    <string name="notification_alarm_text">Way %1$s</string>
+    <plurals name="delay_content">
+        <item quantity="few">Bus after %1$s minutes</item>
+        <item quantity="zero">Bus now!</item>
+        <item quantity="other">Bus before %1$s minutes</item>
+    </plurals>
+
+    <string name="before_10_minutes">10 minutes before</string>
+    <string name="before_5_minutes">5 minutes before</string>
+    <string name="in_bus_time">In bus time</string>
+    <string name="after_5_minutes">5 minutes after</string>
+    <string name="after_10_minutes">10 minutes after</string>
+    <string name="company_name">Expresso Bits</string>
+</resources>

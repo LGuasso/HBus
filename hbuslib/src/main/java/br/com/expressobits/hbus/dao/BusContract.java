@@ -11,14 +11,17 @@ public final class BusContract {
     // give it an empty constructor.
     public BusContract(){}
 
+    protected static final String SQL_CREATE_TABLE =
+            "CREATE TABLE " + Bus.TABLE_NAME + " (" +
+                    Bus._ID + BusHelper.TEXT_PRIMARY_KEY + BusHelper.COMMA_SEP +
+                    Bus.COLUMN_NAME_TIME + BusHelper.TEXT_TYPE + BusHelper.COMMA_SEP +
+                    Bus.COLUMN_NAME_CODE + BusHelper.TEXT_TYPE +
+                    BusHelper.PARENTES+BusHelper.POINTCOMMA;
+
     public static final String[] COLS = {
             Bus._ID,
             Bus.COLUMN_NAME_TIME,
-            Bus.COLUMN_NAME_CODE_ID,
-            Bus.COLUMN_NAME_ITINERARY_ID,
-            Bus.COLUMN_NAME_WAY,
-            Bus.COLUMN_NAME_TYPEDAY,
-            Bus.COLUMN_NAME_CITY_ID
+            Bus.COLUMN_NAME_CODE,
     };
 
     public static final String SQL_DELETE_ALL =
@@ -27,11 +30,7 @@ public final class BusContract {
     public static abstract class Bus implements BaseColumns{
         public static final String TABLE_NAME = "bus";
         public static final String COLUMN_NAME_TIME = "time";
-        public static final String COLUMN_NAME_CODE_ID = "codeid";
-        public static final String COLUMN_NAME_ITINERARY_ID = "itineraryid";
-        public static final String COLUMN_NAME_WAY = "way";
-        public static final String COLUMN_NAME_TYPEDAY = "typeday";
-        public static final String COLUMN_NAME_CITY_ID = "cityid";
+        public static final String COLUMN_NAME_CODE = "code";
 
     }
 

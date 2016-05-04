@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="analytics_id_tracker" translatable="false">UA-69666206-1</string>
-    <!-- Banner Normal WARNING Somente usado na produção -->
-    <string name="banner_ad_product_unit_id" translatable="false">ca-app-pub-3074923165940773/7875100197</string>
-    <!-- Banner de testes -->
-    <string name="banner_ad_developer_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="banner_ad_unit_id" translatable="false">@string/banner_ad_product_unit_id</string>
-</resources>

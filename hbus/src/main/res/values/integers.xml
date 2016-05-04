@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="fade">300</integer>
-    <integer name="max_lines_feedback">3</integer>
-    <integer name="max_length_feedback">600</integer>
-</resources>

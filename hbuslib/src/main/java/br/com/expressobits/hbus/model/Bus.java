@@ -11,17 +11,12 @@ public class Bus implements Comparable<Bus>{
 
     public static final String TAG="Bus";
 
-    private Long id;
+    private String id;
 
     /**
      * Sentido do ônibus expresso em {@link String}
      */
     private String way;
-
-    /**
-     * Nome da linha do ônibus expresso em {@link String}
-     */
-    private Long itineraryId;
     /**
      * Horário do bus expresso em {@link String}
      */
@@ -29,7 +24,7 @@ public class Bus implements Comparable<Bus>{
     /**
      * Codigo único desse ônibus {@link Code}
      */
-    private Long codeId;
+    private String code;
 
     /**
      * Tipo do dia expresso em {@link TypeDay}
@@ -41,7 +36,7 @@ public class Bus implements Comparable<Bus>{
      */
     private Long cityid;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -53,36 +48,15 @@ public class Bus implements Comparable<Bus>{
         return time;
     }
 
-    public Long getCodeId() {
-        return codeId;
+    public String getCode() {
+        return code;
     }
 
-    public void setCodeId(Long codeId) {
-        this.codeId = codeId;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public int getHora(){
-        if(time.split(":").length>0){
-            return Integer.parseInt(time.split(":")[0]);
-        }else{
-            return 24;
-        }
-
-    }
-
-    /**
-     * Retorna minutos do horário do ônibus
-     * @return Inteiro
-     */
-    public int getMinutos(){
-        return Integer.parseInt(time.split(":")[1]);
-    }
-
-    public Long getItineraryId() {
-        return itineraryId;
-    }
-
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -107,10 +81,6 @@ public class Bus implements Comparable<Bus>{
         return cityid;
     }
 
-    public void setItineraryId(Long itineraryId) {
-        this.itineraryId = itineraryId;
-    }
-
     public void setCityid(Long cityid) {
         this.cityid = cityid;
     }
@@ -118,14 +88,19 @@ public class Bus implements Comparable<Bus>{
     @Override
     public int compareTo(Bus another) {
 
-        if(this.getHora()>another.getHora()){
+        int hourThis = Integer.parseInt(this.time.split(":")[0]);
+        int hourAnother = Integer.parseInt(another.time.split(":")[0]);
+        int minuteThis = Integer.parseInt(this.time.split(":")[1]);
+        int minuteAnother = Integer.parseInt(another.time.split(":")[1]);
+
+        if(hourThis>hourAnother){
             return 1;
-        }else if(this.getHora()<another.getHora()){
+        }else if(hourThis<hourAnother){
             return -1;
         }else{
-            if(this.getMinutos()>another.getMinutos()){
+            if(minuteThis>minuteAnother){
                 return 1;
-            }else if(this.getMinutos()<another.getMinutos()){
+            }else if(minuteThis<minuteAnother){
                 return -1;
             }else{
                 return 0;
@@ -135,7 +110,7 @@ public class Bus implements Comparable<Bus>{
 
     @Override
     public String toString() {
-        return getTime()+" - "+getCodeId()+" - "+getItineraryId()
+        return getTime()+" - "+getCode()+" - "
                 +" - "+getTypeday()+" - "+getWay();
     }
 }

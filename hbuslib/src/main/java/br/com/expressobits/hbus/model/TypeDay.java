@@ -13,20 +13,49 @@ public enum TypeDay {
     USEFUL,
     SATURDAY,SUNDAY;
 
+
+    public static TypeDay getTypeday(String typeday){
+        switch (typeday){
+            case "useful":
+                return USEFUL;
+            case "saturday":
+                return SATURDAY;
+            case "sunday":
+                return SUNDAY;
+        }
+        return USEFUL;
+    }
+
+
+    public int toInt(){
+        switch (this){
+            case USEFUL:
+                return 0;
+            case SATURDAY:
+                return 1;
+            case SUNDAY:
+                return 2;
+            default:
+                return 4;
+        }
+    }
+
     @Override
     public String toString() {
 
         switch (this){
             case USEFUL:
-                return "uteis";
+                return "useful";
             case SATURDAY:
-                return "sabado";
+                return "saturday";
             case SUNDAY:
-                return "domingo";
+                return "sunday";
             default:
                 return "ERRO";
         }
     }
+
+
 
 
 

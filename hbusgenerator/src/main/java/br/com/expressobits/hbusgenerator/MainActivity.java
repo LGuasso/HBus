@@ -1,48 +1,53 @@
 package br.com.expressobits.hbusgenerator;
 
-import android.os.AsyncTask;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-
-import com.firebase.client.Firebase;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import br.com.expressobits.hbus.dao.FirebaseDAO;
-import br.com.expressobits.hbus.dao.BusContract;
-import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.dao.CityContract;
-import br.com.expressobits.hbus.dao.CodeContract;
-import br.com.expressobits.hbus.dao.ItineraryContract;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.dao.BusDAOGenerator;
 import br.com.expressobits.hbus.file.ReadFile;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.gae.ProgressAsyncTask;
+import br.com.expressobits.hbus.gae.PushBusEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.PushCitiesEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.PushCodesEndpointsAsyncTask;
+import br.com.expressobits.hbus.gae.PushItinerariesEndpointsAsyncTask;
+import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,ProgressAsyncTask{
 
     private static final String TAG = "GENERATOR";
-    private static long countBus = 1;
-    private Button buttonReadCities;
+    private Button buttonSaveAllData;
+    private Button buttonReadAllData;
     private Button buttonReadItineraries;
-    private Button buttonDeleteAllData;
+    private Button buttonPushAllData;
     private Button buttonDeleteAllDataFirebase;
     private FloatingActionButton fab;
-    private List<City> cities;
-    private List<Itinerary> itineraries;
+    private List<City> cities = new ArrayList<>();
+    private HashMap<City,List<Itinerary>> itineraries = new HashMap<>();
+    private HashMap<City,List<Code>> codes = new HashMap<>();
+    private HashMap<City,HashMap<Itinerary,List<Bus>>> buses = new HashMap<>();
     private Spinner spinnerCities;
     ReadFile file = new ReadFile(MainActivity.this);
 
@@ -50,9 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initViews();
-
     }
 
     private void initViews() {
@@ -60,82 +63,123 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
-        buttonReadCities = (Button) findViewById(R.id.button_read_data_cities);
+        buttonReadAllData = (Button) findViewById(R.id.button_read_all_data);
+        buttonSaveAllData = (Button) findViewById(R.id.button_save_in_database_all_data);
         buttonReadItineraries = (Button) findViewById(R.id.button_read_data_itineraries);
-        buttonDeleteAllData = (Button) findViewById(R.id.button_delete_all_data);
+        buttonPushAllData = (Button) findViewById(R.id.button_push_all_data);
         buttonDeleteAllDataFirebase = (Button) findViewById(R.id.button_delete_all_data_firebase);
-        buttonReadCities.setOnClickListener(this);
+        buttonReadAllData.setOnClickListener(this);
+        buttonSaveAllData.setOnClickListener(this);
         buttonReadItineraries.setOnClickListener(this);
-        buttonDeleteAllData.setOnClickListener(this);
+        buttonPushAllData.setOnClickListener(this);
         buttonDeleteAllDataFirebase.setOnClickListener(this);
+        spinnerCities = (Spinner) findViewById(R.id.spinner_cities);
     }
 
-    public List<City> readFileCity(){
-        return file.getCities();
-    }
 
-    public List<Itinerary> readFileItinerary(City city){
-        return file.getItineraries(city.getId(), city.getName(), city.getCountry());
-    }
 
-    public List<Code> readFileCode(City city){
-        return file.getCodes(city.getId(), city.getName(), city.getCountry());
-    }
+    public void readFiles(){
+        cities = file.getCities();
 
-    public List<Bus> readFileBus(City city,Itinerary itinerary,String way,String typeday){
-        return file.getBuses(city.getId(), city.getName(), city.getCountry(), itinerary, way, typeday);
-    }
-
-    public void save(FirebaseDAO firebaseDAO){
-        lookmessage("  >Inserindo cities");
-        List<City> cities = readFileCity();
         for(City city:cities){
-            //cities.get(0).setId(i + 1l);
-            firebaseDAO.insert(city);
-            //saveOnFirebaseItinerary(firebaseDAO,cities.get(i));
-            //saveOnFirebaseCode(firebaseDAO,cities.get(i));
+
+                itineraries.put(city, file.getItineraries(city));
+                codes.put(city, file.getCodes(city));
+                buses.put(city,file.getBuses(city,itineraries.get(city)));
+
+
         }
+
+
+
     }
 
-    private void saveOnFirebaseItinerary(FirebaseDAO firebaseDAO,City city) {
-        lookmessage("  >Inserindo itineraries");
-        List<Itinerary> itineraries = readFileItinerary(city);
-        for(int i=0;i<itineraries.size();i++){
-            itineraries.get(i).setId(i + 1l);
-            firebaseDAO.insert(itineraries.get(i));
-            saveOnFirebaseBus(firebaseDAO, city, itineraries.get(i));
-        }
-    }
+    public void saveInDataBaseAllData(Context context){
+        BusDAOGenerator dao = new BusDAOGenerator(context);
+        for(City city:cities){
 
-    private void saveOnFirebaseCode(FirebaseDAO firebaseDAO,City city) {
-        lookmessage("  >Inserindo codes");
-        List<Code> codes = readFileCode(city);
-        for(int i=0;i<codes.size();i++){
-            codes.get(i).setId(i + 1l);
-            firebaseDAO.insert(codes.get(i));
-        }
-    }
-
-    private void saveOnFirebaseBus(FirebaseDAO firebaseDAO,City city,Itinerary itinerary) {
-        lookmessage("  >Inserindo buses");
-        for(int i=0;i<itinerary.getWays().size();i++){
-            for(int j=0;j<3;j++){
-
-                List<Bus> buses1 = readFileBus(city,itinerary,itinerary.getWays().get(i),TextUtils.getTypeDayInt(j));
-                for (Bus bus:buses1){
-                    bus.setId(countBus++);
-                    firebaseDAO.insert(bus);
+            //Somente cidade de Santa Maria será salva!
+            if(city.getName().equals("Santa Maria")){
+                dao.insertCity(city.clone().setId(DAOUtils.getId(city)));
+                for(Itinerary itinerary : itineraries.get(city)){
+                    dao.insertItineraries(itinerary.clone().setId(DAOUtils.getId(city,itinerary)));
+                    for(Bus bus:buses.get(city).get(itinerary)) {
+                        dao.insertBus(bus.clone().setId(DAOUtils.getId(city,itinerary,bus)));
+                    }
+                }
+                for(Code code : codes.get(city)){
+                    dao.insertCodes(code.clone().setId(DAOUtils.getId(city,code)));
                 }
             }
-
         }
-
-
     }
+
+
+
+    public void pushAll(){
+        City city = (City)spinnerCities.getSelectedItem();
+        pushCity(city);
+        for (Itinerary itinerary : itineraries.get(city)) {
+            pushItinerary(city, itinerary);
+            for (Bus bus : buses.get(city).get(itinerary)) {
+                Log.e(TAG, "TEST " + bus.getTime());
+                if(itinerary.getName().equals("Vila Oliveira")) {
+                    pushBus(city, itinerary, bus);
+                }
+            }
+        }
+        for (Code code : codes.get(city)) {
+            pushCode(city, code);
+        }
+    }
+
+
+    private void pushCity(City city){
+        PushCitiesEndpointsAsyncTask pushCitiesEndpointsAsyncTask = new PushCitiesEndpointsAsyncTask();
+        pushCitiesEndpointsAsyncTask.setContext(this);
+        pushCitiesEndpointsAsyncTask.setProgressAsyncTask(this);
+        pushCitiesEndpointsAsyncTask.execute(city);
+    }
+
+    private void pushItinerary(City city,Itinerary itinerary){
+        PushItinerariesEndpointsAsyncTask pushItinerariesEndpointsAsyncTask = new PushItinerariesEndpointsAsyncTask();
+        pushItinerariesEndpointsAsyncTask.setContext(this);
+        pushItinerariesEndpointsAsyncTask.setProgressAsyncTask(this);
+        pushItinerariesEndpointsAsyncTask.setCityName(city.getName());
+        pushItinerariesEndpointsAsyncTask.setCountry(city.getCountry());
+        pushItinerariesEndpointsAsyncTask.execute(itinerary);
+    }
+
+    private void pushCode(City city,Code code){
+        PushCodesEndpointsAsyncTask pushCodesEndpointsAsyncTask = new PushCodesEndpointsAsyncTask();
+        pushCodesEndpointsAsyncTask.setContext(this);
+        pushCodesEndpointsAsyncTask.setProgressAsyncTask(this);
+        pushCodesEndpointsAsyncTask.setCityName(city.getName());
+        pushCodesEndpointsAsyncTask.setCountry(city.getCountry());
+        pushCodesEndpointsAsyncTask.execute(code);
+    }
+
+    private void pushBus(City city,Itinerary itinerary,Bus bus){
+        PushBusEndpointsAsyncTask pushBusEndpointsAsyncTask = new PushBusEndpointsAsyncTask();
+        pushBusEndpointsAsyncTask.setContext(this);
+        pushBusEndpointsAsyncTask.setProgressAsyncTask(this);
+        pushBusEndpointsAsyncTask.setCountry(city.getCountry());
+        pushBusEndpointsAsyncTask.setCityName(city.getName());
+        pushBusEndpointsAsyncTask.setItineraryName(itinerary.getName());
+        pushBusEndpointsAsyncTask.execute(bus);
+    }
+
+
+
 
 
     public void lookmessage(String message){
-        Snackbar.make(findViewById(R.id.fab),message,Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.fab), message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public void refreshSpinner(List<City> cities){
+        ArrayAdapter<City> simpleAdapter = new ArrayAdapter<City>(this,android.R.layout.simple_list_item_1,cities);
+        spinnerCities.setAdapter(simpleAdapter);
     }
 
 
@@ -164,42 +208,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        String text;
 
         switch (v.getId()){
             case R.id.fab:
-                FirebaseDAO.setContext(this);
-                final FirebaseDAO firebase = new FirebaseDAO("https://hbus.firebaseio.com/");
-                new AsyncTask<FirebaseDAO,String,String>(){
 
-                    @Override
-                    protected String doInBackground(FirebaseDAO... params) {
-                        save(firebase);
-                        return null;
-                    }
-                };
                 break;
-            case R.id.button_read_data_cities:
-                DbManager.getInstance(MainActivity.this).saveCities();
+            case R.id.button_read_all_data:
+                readFiles();
+                refreshSpinner(cities);
                 break;
 
-            case R.id.button_delete_all_data:
-                DbManager.getInstance(MainActivity.this).deleteAllData();
+            case R.id.button_save_in_database_all_data:
+                saveInDataBaseAllData(this);
+                break;
+
+            case R.id.button_push_all_data:
+                pushAll();
                 break;
             case R.id.button_delete_all_data_firebase:
-                FirebaseDAO.setContext(this);
-                final FirebaseDAO base = new FirebaseDAO("https://hbus.firebaseio.com/");
-                base.removeAllValues();
                 break;
 
         }
 
-
-        //deleteAllData();
-        //BusDAO dao = new BusDAO(this);
-        //dao.createTables();
-        //saveCities();
     }
 
 
+
+    @Override
+    public void setProgressUdate(Integer progress,Class c) {
+        if(c.equals(City.class)){
+            Toast.makeText(this,"Porcent test "+progress.toString()+"%",Toast.LENGTH_LONG).show();
+        }
+
+    }
 }

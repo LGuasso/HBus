@@ -10,7 +10,7 @@ import java.util.List;
 public class Itinerary {
 
 
-    private Long id;
+    private String id;
     /**
      * Nome do itinerário.
      */
@@ -20,13 +20,11 @@ public class Itinerary {
 
     private ArrayList<String> codigos;
 
-    private Long cityid;
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -44,14 +42,6 @@ public class Itinerary {
 
     public void setWays(List<String> ways) {
         this.ways = ways;
-    }
-
-    public void setCityid(Long cityid) {
-        this.cityid = cityid;
-    }
-
-    public Long getCityid() {
-        return cityid;
     }
 
     public ArrayList<String> getCodigos(){

@@ -1,5 +1,9 @@
 package br.com.expressobits.hbus.utils;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.TypeDay;
@@ -10,6 +14,19 @@ import br.com.expressobits.hbus.model.TypeDay;
  */
 public class TextUtils {
 
+    public static String getDaysinString(List<String> days){
+        String result = "";
+        for(int i=0;i<days.size();i++){
+            String s = days.get(i);
+            result+=s;
+            if(i!=days.size()-1){
+                result+=",";
+            }
+        }
+
+        return result;
+    }
+
     public static String getSentidosinString(List<String> sentidos){
         String result = "";
         for(int i=0;i<sentidos.size();i++){
@@ -19,15 +36,16 @@ public class TextUtils {
                 result+=",";
             }
         }
+
         return result;
     }
 
     public static TypeDay getTypeDAyString(String typeDay){
-        if(typeDay.equals("uteis")){
+        if(typeDay.equals(TypeDay.USEFUL.toString())){
             return TypeDay.USEFUL;
-        }else if(typeDay.equals("sabado")){
+        }else if(typeDay.equals(TypeDay.SATURDAY.toString())){
             return TypeDay.SATURDAY;
-        }else if(typeDay.equals("domingo")){
+        }else if(typeDay.equals(TypeDay.SUNDAY.toString())){
             return TypeDay.SUNDAY;
         }
         return TypeDay.SUNDAY;
@@ -67,23 +85,41 @@ public class TextUtils {
 
     public static String getTypeDayInt(int typeDay){
         if(typeDay==0){
-            return "uteis";
+            return TypeDay.USEFUL.toString();
         }else if(typeDay==1){
-            return "sabado";
+            return TypeDay.SATURDAY.toString();
         }else if(typeDay==2){
-            return "domingo";
+            return TypeDay.SUNDAY.toString();
         }
         return "";
     }
 
     public static int getTypeDayInt(String typeDay){
-        if(typeDay.equals("uteis")){
+        if(typeDay.equals(TypeDay.USEFUL.toString())){
             return 0;
-        }else if(typeDay.equals("sabado")){
+        }else if(typeDay.equals(TypeDay.SATURDAY.toString())){
             return 1;
-        }else if(typeDay.equals("domingo")){
+        }else if(typeDay.equals(TypeDay.SUNDAY.toString())){
             return 2;
         }
         return 0;
     }
+
+    public static String getTimeWithDelayTime(String time,int delay){
+        int hour = Integer.parseInt(time.split(":")[0]);
+        int minute = Integer.parseInt(time.split(":")[1]);
+        Calendar c = Calendar.getInstance();
+        c.set(0, 0, 0, hour, minute);
+
+        c.add(Calendar.MINUTE,delay);
+
+        Date d = c.getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+
+        return format.format(d);
+
+
+    }
+
 }

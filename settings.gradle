@@ -1,1 +1,1 @@
-include ':hbus', ':hbuslib', ':hbusgenerator'
+include ':app', ':hbuslib', ':hbusgenerator', ':backend'

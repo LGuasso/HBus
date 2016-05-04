@@ -6,7 +6,7 @@ package br.com.expressobits.hbus.model;
  */
 public class Code {
 
-    private Long id;
+    private String id;
     /**
      * Identificacao do codigo.
      */
@@ -18,7 +18,7 @@ public class Code {
 
     private Long cityid;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -40,7 +40,7 @@ public class Code {
         return descrition;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

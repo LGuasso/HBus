@@ -18,17 +18,16 @@ public final class ItineraryContract {
 
     public static final String SQL_CREATE_TABLE =
             "CREATE TABLE "+Itinerary.TABLE_NAME+" "+
-                    "("+Itinerary._ID+" INTEGER PRIMARY KEY, "+
-                    " "+Itinerary.COLUMN_NAME_NAME+" TEXT, "+
-                    " "+Itinerary.COLUMN_NAME_WAYS+" TEXT, "+
-                    " "+Itinerary.COLUMN_NAME_CITY_ID+" INTEGER);";
+                    "("+Itinerary._ID+ BusHelper.TEXT_PRIMARY_KEY+BusHelper.COMMA_SEP+
+                    " "+Itinerary.COLUMN_NAME_NAME+BusHelper.TEXT_TYPE+BusHelper.COMMA_SEP+
+                    " "+Itinerary.COLUMN_NAME_WAYS+BusHelper.TEXT_TYPE+
+                    BusHelper.PARENTES+BusHelper.POINTCOMMA;
 
 
     public static final String[] COLS = {
             Itinerary._ID,
             Itinerary.COLUMN_NAME_NAME,
-            Itinerary.COLUMN_NAME_WAYS,
-            Itinerary.COLUMN_NAME_CITY_ID
+            Itinerary.COLUMN_NAME_WAYS
     };
 
     private static final String SQL_DELETE_ITINERARIES =
@@ -42,7 +41,6 @@ public final class ItineraryContract {
         public static final String TABLE_NAME = "itinerary";
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_WAYS = "ways";
-        public static final String COLUMN_NAME_CITY_ID= "cityid";
 
     }
 }

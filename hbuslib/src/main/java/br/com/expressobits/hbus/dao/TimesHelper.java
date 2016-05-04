@@ -10,14 +10,16 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.backend.busApi.model.Bus;
+import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
+import br.com.expressobits.hbus.backend.codeApi.model.Code;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
+ * @deprecated
  * Created by rafael on 08/12/15.
  */
 public class TimesHelper {
@@ -34,31 +36,26 @@ public class TimesHelper {
                     CityContract.City._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_COUNTRY + TEXT_TYPE + COMMA_SEP +
-                    CityContract.City.COLUMN_NAME_POSITION + TEXT_TYPE +
+                    CityContract.City.COLUMN_NAME_LATITUDE + TEXT_TYPE + COMMA_SEP +
+                    CityContract.City.COLUMN_NAME_LONGITUDE + TEXT_TYPE +
                     " )";
     protected static final String SQL_CREATE_ITINERARIES =
             "CREATE TABLE " + ItineraryContract.Itinerary.TABLE_NAME + " (" +
                     ItineraryContract.Itinerary._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     ItineraryContract.Itinerary.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
-                    ItineraryContract.Itinerary.COLUMN_NAME_WAYS + TEXT_TYPE + COMMA_SEP +
-                    ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID + INTEGER_TYPE +
+                    ItineraryContract.Itinerary.COLUMN_NAME_WAYS + TEXT_TYPE +
                     " )";
     protected static final String SQL_CREATE_CODES =
             "CREATE TABLE " + CodeContract.Code.TABLE_NAME + " (" +
                     CodeContract.Code._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     CodeContract.Code.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     CodeContract.Code.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
-                    CodeContract.Code.COLUMN_NAME_CITY_ID + INTEGER_TYPE +
                     " )";
     protected static final String SQL_CREATE_BUSES =
             "CREATE TABLE " + BusContract.Bus.TABLE_NAME + " (" +
                     BusContract.Bus._ID + INTEGER_PRIMARY_KEY + COMMA_SEP +
                     BusContract.Bus.COLUMN_NAME_TIME + TEXT_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_WAY + TEXT_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_TYPEDAY + TEXT_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_CITY_ID + INTEGER_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_ITINERARY_ID + INTEGER_TYPE + COMMA_SEP +
-                    BusContract.Bus.COLUMN_NAME_CODE_ID + INTEGER_TYPE +
+                    BusContract.Bus.COLUMN_NAME_CODE + INTEGER_TYPE +
                     " )";
 
     public static final String NOT_FOUND_TIME = " --:-- ";
@@ -69,7 +66,8 @@ public class TimesHelper {
         values.put(CityContract.City._ID,city.getId());
         values.put(CityContract.City.COLUMN_NAME_NAME,city.getName());
         values.put(CityContract.City.COLUMN_NAME_COUNTRY,city.getCountry());
-        values.put(CityContract.City.COLUMN_NAME_POSITION, city.getPosition());
+        values.put(CityContract.City.COLUMN_NAME_LATITUDE, city.getLocation().getLatitude());
+        values.put(CityContract.City.COLUMN_NAME_LONGITUDE, city.getLocation().getLongitude());
         return values;
     }
 
@@ -78,7 +76,6 @@ public class TimesHelper {
         values.put(ItineraryContract.Itinerary._ID,itinerary.getId());
         values.put(ItineraryContract.Itinerary.COLUMN_NAME_NAME,itinerary.getName());
         values.put(ItineraryContract.Itinerary.COLUMN_NAME_WAYS, TextUtils.getSentidosinString(itinerary.getWays()));
-        values.put(ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID,itinerary.getCityid());
         return values;
     }
 
@@ -87,7 +84,6 @@ public class TimesHelper {
         values.put(CodeContract.Code._ID,code.getId());
         values.put(CodeContract.Code.COLUMN_NAME_NAME,code.getName());
         values.put(CodeContract.Code.COLUMN_NAME_DESCRIPTION,code.getDescrition());
-        values.put(CodeContract.Code.COLUMN_NAME_CITY_ID,code.getCityid());
         return values;
     }
 
@@ -95,11 +91,11 @@ public class TimesHelper {
         ContentValues values = new ContentValues();
         values.put(BusContract.Bus._ID,bus.getId());
         values.put(BusContract.Bus.COLUMN_NAME_TIME,bus.getTime());
-        values.put(BusContract.Bus.COLUMN_NAME_CODE_ID,bus.getCodeId());
-        values.put(BusContract.Bus.COLUMN_NAME_TYPEDAY,bus.getTypeday().toString());
-        values.put(BusContract.Bus.COLUMN_NAME_WAY,bus.getWay());
-        values.put(BusContract.Bus.COLUMN_NAME_CITY_ID,bus.getCityid());
-        values.put(BusContract.Bus.COLUMN_NAME_ITINERARY_ID,bus.getItineraryId());
+        values.put(BusContract.Bus.COLUMN_NAME_CODE,bus.getCode());
+        //values.put(BusContract.Bus.COLUMN_NAME_TYPEDAY,bus.getTypeday().toString());
+        //values.put(BusContract.Bus.COLUMN_NAME_WAY,bus.getWay());
+        //values.put(BusContract.Bus.COLUMN_NAME_CITY_ID,bus.getCityid());
+        //values.put(BusContract.Bus.COLUMN_NAME_ITINERARY_ID,bus.getItineraryId());
         return values;
     }
 
@@ -148,40 +144,40 @@ public class TimesHelper {
     //CURSORTOOBJET
     protected static City cursorToCity(Cursor c){
         City city = new City();
-        city.setId(c.getLong(c.getColumnIndexOrThrow(CityContract.City._ID)));
+        //city.setId(c.getLong(c.getColumnIndexOrThrow(CityContract.City._ID)));
         city.setName(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_NAME)));
         city.setCountry(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_COUNTRY)));
-        city.setPosition(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_POSITION)));
+        Float latitude = Float.parseFloat(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LATITUDE)));
+        Float longitude = Float.parseFloat(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LONGITUDE)));
+        city.setLocation(new GeoPt().setLatitude(latitude));
         return city;
     }
 
     protected static Itinerary cursorToItinerary(Cursor c){
         Itinerary itinerary = new Itinerary();
-        itinerary.setId(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary._ID)));
+        //itinerary.setId(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary._ID)));
         itinerary.setName(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_NAME)));
         itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_WAYS)).split(COMMA_SEP))));
-        itinerary.setCityid(c.getLong(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID)));
         return itinerary;
     }
 
     protected static Code cursorToCode(Cursor c){
         Code code = new Code();
-        code.setId(c.getLong(c.getColumnIndexOrThrow(CodeContract.Code._ID)));
+        //code.setId(c.getLong(c.getColumnIndexOrThrow(CodeContract.Code._ID)));
         code.setName(c.getString(c.getColumnIndexOrThrow(CodeContract.Code.COLUMN_NAME_NAME)));
         code.setDescrition(c.getString(c.getColumnIndexOrThrow(CodeContract.Code.COLUMN_NAME_DESCRIPTION)));
-        code.setCityid(c.getLong(c.getColumnIndexOrThrow(CodeContract.Code.COLUMN_NAME_CITY_ID)));
         return code;
     }
 
     protected static Bus cursorToBus(Cursor c){
         Bus bus = new Bus();
-        bus.setId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus._ID)));
+        //bus.setId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus._ID)));
         bus.setTime(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TIME)));
-        bus.setCodeId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CODE_ID)));
-        bus.setCityid(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CITY_ID)));
-        bus.setItineraryId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_ITINERARY_ID)));
-        bus.setWay(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_WAY)));
-        bus.setTypeday(HoursUtils.getTypeDayforString(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TYPEDAY))));
+        bus.setCode(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CODE)));
+        //bus.setCityid(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CITY_ID)));
+        //bus.setItineraryId(c.getLong(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_ITINERARY_ID)));
+         //bus.setWay(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_WAY)));
+        //bus.setTypeday(HoursUtils.getTypeDayforString(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TYPEDAY))));
         return bus;
     }
 
@@ -279,7 +275,7 @@ public class TimesHelper {
 
     public static Code getCode(SQLiteDatabase db,String name,Long cityId){
         String where = CodeContract.Code.COLUMN_NAME_NAME+" = ? AND "+
-                CodeContract.Code.COLUMN_NAME_CITY_ID+" = ?";
+                CodeContract.Code.COLUMN_NAME_DESCRIPTION+" = ?";
         String arguments[] = {name,cityId.toString()};
         Cursor cursor = db.query(
                 CodeContract.Code.TABLE_NAME,
@@ -374,7 +370,8 @@ public class TimesHelper {
 
     public static List<Itinerary> getItineraries(SQLiteDatabase db,Long cityId){
         ArrayList<Itinerary> itineraries = new ArrayList<Itinerary>();
-        String where = ItineraryContract.Itinerary.COLUMN_NAME_CITY_ID+" = ?";
+        //TODO erro cloum name
+        String where = ItineraryContract.Itinerary.COLUMN_NAME_WAYS+" = ?";
         String arguments[] = {cityId.toString()};
         Cursor c;
         c = db.query(
@@ -396,9 +393,9 @@ public class TimesHelper {
         ArrayList<Bus> buses = new ArrayList<Bus>();
         //way = TextUtils.toSimpleNameWay(way);
         Cursor c;
-        String where = BusContract.Bus.COLUMN_NAME_ITINERARY_ID+" = ? AND "+
-                BusContract.Bus.COLUMN_NAME_WAY+" = ? AND "+
-                BusContract.Bus.COLUMN_NAME_TYPEDAY+" = ?";
+        String where = //BusContract.Bus.COLUMN_NAME_ITINERARY_ID+" = ? AND "+
+                //BusContract.Bus.COLUMN_NAME_WAY+" = ? AND "+
+                /*BusContract.Bus.COLUMN_NAME_TYPEDAY+*/" = ?";
         String arguments[] = {String.valueOf(itineraryId),way,typeday};
         c = db.query(
                 BusContract.Bus.TABLE_NAME,
@@ -423,9 +420,9 @@ public class TimesHelper {
             next.add(getNextBusforList(
                     getBuses(
                             db,
-                            itinerary.getId(),
+                            Long.parseLong(itinerary.getId()),
                             itinerary.getWays().get(j),
-                            HoursUtils.getStringTipoDeDia(Calendar.getInstance()).toString())));
+                            HoursUtils.getTypedayinCalendar(Calendar.getInstance()).toString())));
         }
         return next;
     }
@@ -439,7 +436,7 @@ public class TimesHelper {
             nextBus = buses.get(0);
             for (int i = 0; i < buses.size(); i++) {
                 nextBus = buses.get(i);
-                if (nowBus.compareTo(nextBus) <= 0) {
+                if (HoursUtils.compareTo(nowBus,nextBus) <= 0) {
                     nextBus = buses.get(i);
                     return nextBus;
                 } else {

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayoutItemListAlarm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="2dp"
+    android:animateLayoutChanges="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/textViewTime"
+                android:textAppearance="@style/AppTheme.TextAppearance.Time"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:padding="8dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:id="@+id/textViewName"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:id="@+id/textViewItineraryName"/>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textViewDaysSunday"
+                    android:text="@string/sundayFirstChar"
+                    style="@style/DayOfWeek.TextView"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textViewDaysMonday"
+                    android:text="@string/mondayFirstChar"
+                    style="@style/DayOfWeek.TextView"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textViewDaysTuesday"
+                    android:text="@string/tuesdayFirstChar"
+                    style="@style/DayOfWeek.TextView"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textViewDaysWednesday"
+                    android:text="@string/wednesdayFirstChar"
+                    style="@style/DayOfWeek.TextView"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textViewDaysThursday"
+                    android:text="@string/thursdayFirstChar"
+                    style="@style/DayOfWeek.TextView"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textViewDaysFriday"
+                    android:text="@string/fridayFirstChar"
+                    style="@style/DayOfWeek.TextView"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textViewDaysSaturday"
+                    android:text="@string/saturdayFirstChar"
+                    style="@style/DayOfWeek.TextView"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/toggleActived"
+            android:padding="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

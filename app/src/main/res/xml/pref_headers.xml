@@ -1,0 +1,33 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:id="@+id/general"
+        android:fragment="br.com.expressobits.hbus.ui.settings.GeneralPreferenceFragment"
+        android:title="@string/pref_header_general"
+        android:summary="@string/pref_header_summary_general"
+        android:icon="@drawable/ic_settings_amber_500_24dp"/>
+
+    <header
+        android:fragment="br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment"
+        android:title="@string/pref_header_notifications"
+        android:summary="@string/pref_header_summary_notification"
+        android:icon="@drawable/ic_notifications_amber_500_24dp"/>
+
+    <header
+        android:fragment="br.com.expressobits.hbus.ui.settings.DataSyncPreferenceFragment"
+        android:summary="@string/pref_header_summary_data_sync"
+        android:title="@string/pref_header_data_sync"
+        android:icon="@drawable/ic_sync_amber_500_24dp"/>
+
+    <header
+        android:fragment="br.com.expressobits.hbus.ui.settings.AboutPreferenceFragment"
+        android:summary="@string/pref_header_summary_about"
+        android:title="@string/pref_header_about"
+        android:icon="@drawable/ic_info_amber_500_24dp"/>
+
+
+
+</preference-headers>
