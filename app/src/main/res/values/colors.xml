@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="tour_color_palm">@color/colorPrimary</color>
+    <color name="tour_color_feedback">@color/colorPrimary</color>
+    <color name="tour_color_update">@color/colorPrimary</color>
+
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="redPure">#f00</color>

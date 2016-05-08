@@ -126,40 +126,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     @Override
     public void onClickListener(View view, final int position) {
         Log.d(TAG, "Selection city id=" + cities.get(position).getId());
-
-        /**AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.confirm_donwload_data_for_city, cities.get(position).getName()));
-        builder.setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(TAG,cities.get(position).getId());
-                editor.apply();
-
-                finish();
-            }
-        });
-        builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(TAG,cities.get(position).getId());
-                editor.apply();
-                //TODO implementar download do cloud datastore
-                //DownloadDataDialogFragment dialoge = new DownloadDataDialogFragment();
-                //dialoge.setParameters(SelectCityActivity.this,SelectCityActivity.this,cities.get(position));
-                //dialoge.show(SelectCityActivity.this.getSupportFragmentManager(), "DOWNLOAD");
-                //TODO implementa download do firebase por cidades especificas
-                //Com progress bar/
-                finish();
-
-            }
-        });
-        builder.show();*/
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(TAG, cities.get(position).getId());

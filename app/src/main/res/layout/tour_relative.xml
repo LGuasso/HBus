@@ -20,56 +20,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context="com.tapdoc.tapdocapp.ui.intro.PagerFragment">
+    android:background="@color/transparent">
 
-    <ImageView
-        android:id="@+id/iconImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
-        android:paddingTop="@dimen/activity_splash_margin_image_to_text"
-        android:src="@drawable/modelo" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="@dimen/activity_splash_margin_image_to_text"
+            android:layout_above="@+id/linearLayoutText"
+            android:layout_centerHorizontal="true">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_tour_background"
+                android:layout_centerInParent="true" />
 
+            <android.support.v7.widget.AppCompatImageView
+                android:tint="@color/md_amber_A200"
+                android:id="@+id/iconImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:paddingBottom="@dimen/activity_splash_margin_image_to_text"
-        android:paddingLeft="@dimen/activity_splash_margin_image_to_text"
-        android:paddingRight="@dimen/activity_splash_margin_image_to_text"
-        android:paddingTop="@dimen/activity_splash_margin_image_to_text">
+                />
 
-        <TextView
-            android:id="@+id/titleText"
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/white" />
+            android:orientation="vertical"
+            android:id="@+id/linearLayoutText"
+            android:paddingBottom="@dimen/activity_splash_margin_image_to_text"
+            android:paddingLeft="@dimen/activity_splash_margin_image_to_text"
+            android:paddingRight="@dimen/activity_splash_margin_image_to_text"
+            android:layout_above="@+id/view"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
-        <TextView
-            android:id="@+id/subtitleText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:singleLine="false"
-            android:text="Medium TextMedium Text\nMedium TextMedium Text\nMedium TextMedium Text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/white" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/app_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/white" />
 
-
+            <TextView
+                android:id="@+id/subtitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:singleLine="false"
+                android:text="Medium TextMedium Text\nMedium TextMedium Text\nMedium TextMedium Text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white" />
+        </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@android:drawable/divider_horizontal_bright" />
-
-
+        android:background="@android:drawable/divider_horizontal_bright"
+        android:id="@+id/view" />
 </RelativeLayout>

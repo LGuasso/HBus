@@ -18,7 +18,9 @@ import android.widget.Button;
 import java.util.ArrayList;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.ui.ManagerInit;
 import me.relex.circleindicator.CircleIndicator;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -34,7 +36,8 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static final String TAG = "Tour";
     private ViewPager defaultViewpager;
     private ContentPagerAdapter defaultPagerAdapter;
-
+    private boolean starter = false;
+    public static final String STARTER_MODE = "starter";
     private Button jumpButton;
     private Button nextButton;
     private Toolbar mToolbarBottom;
@@ -42,6 +45,9 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        starter = getIntent().getBooleanExtra(STARTER_MODE,false);
+        Log.e("TESTE",starter + " starter mode");
 
 
         setContentView(R.layout.activity_tour);
@@ -54,6 +60,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         setupToolbarBottom();
     }
+
 
     @Override
     protected void onResume() {
@@ -75,12 +82,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
         jumpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TourActivity.this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(TAG, true);
-                editor.apply();
-                startActivity(new Intent(TourActivity.this, MainActivity.class));
-                TourActivity.this.finish();
+                finishTour();
             }
         });
 
@@ -89,12 +91,9 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
             public void onClick(View v) {
 
                 if (defaultPagerAdapter.getCount() == defaultViewpager.getCurrentItem() + 1) {
-                    //startActivity(new Intent(TourActivity.this, MainActivity.class));
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TourActivity.this);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(TAG, true);
-                    editor.apply();
-                    finish();
+                    finishTour();
+
+
                 }
                 if(defaultViewpager.getCurrentItem() + 2 == defaultPagerAdapter.getCount()){
                     nextButton.setText(getResources().getText(R.string.finish));
@@ -107,6 +106,19 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
         });
     }
 
+    private void finishTour() {
+        if(starter){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TourActivity.this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(TourActivity.TAG, false);
+            editor.apply();
+            ManagerInit.manager(TourActivity.this);
+        }else{
+            finish();
+        }
+
+    }
+
     private void showCircleIndicatorDefault() {
         defaultViewpager = (ViewPager) findViewById(R.id.viewpager_default);
         defaultViewpager.setOffscreenPageLimit(2);
@@ -115,10 +127,28 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
         ArrayList<Fragment> fragments = new ArrayList<>();
         //TODO para resources este dados
         fragments.add(
-                PagerFragment.newInstance(1,0,getString(R.string.tour_title_welcome),getString(R.string.tour_subtitle_welcome),R.drawable.ic_launcher_splash)
+                PagerFragment.newInstance(
+                        getResources().getColor(R.color.tour_color_palm),
+                        0,
+                        getString(R.string.tour_title_palm),
+                        getString(R.string.tour_subtitle_palm),
+                        R.drawable.ic_bus_white_48dp)
         );
         fragments.add(
-                PagerFragment.newInstance(1,0,getString(R.string.tour_title_feedback),getString(R.string.tour_subtitle_feedback),R.drawable.ic_launcher_splash)
+                PagerFragment.newInstance(
+                        getResources().getColor(R.color.tour_color_update),
+                        1,
+                        getString(R.string.tour_title_update),
+                        getString(R.string.tour_subtitle_update),
+                        R.drawable.ic_refresh_white_48dp)
+        );
+        fragments.add(
+                PagerFragment.newInstance(
+                        getResources().getColor(R.color.tour_color_feedback),
+                        2,
+                        getString(R.string.tour_title_feedback),
+                        getString(R.string.tour_subtitle_feedback),
+                        R.drawable.ic_information_white_48dp)
         );
         //fragments.add(PagerFragment.newInstance(1, 0,"HBus", "A hora nas suas mãos!\nEncontre a linha urbana favorita!", R.drawable.modelo));
         //fragments.add(PagerFragment.newInstance(1, 0, "Fácil de usar!", "Com poucos toques utilize o máximo!\nCom favoritos que exibem já os próximos horários!", R.mipmap.ic_launcher));
