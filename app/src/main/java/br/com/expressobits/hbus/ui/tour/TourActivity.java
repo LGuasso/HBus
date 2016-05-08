@@ -114,9 +114,15 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         //TODO para resources este dados
-        fragments.add(PagerFragment.newInstance(1, 0, "HBus", "A hora nas suas mãos!\nEncontre a linha urbana favorita!", R.drawable.modelo));
-        fragments.add(PagerFragment.newInstance(1, 0, "Fácil de usar!", "Com poucos toques utilize o máximo!\nCom favoritos que exibem já os próximos horários!", R.mipmap.ic_launcher));
-        fragments.add(PagerFragment.newInstance(1, 0, "Ajude-nos!", "Ainda em fase de testes, este aplicativo vai crescer com sua ajuda e feedback!", R.mipmap.ic_launcher));
+        fragments.add(
+                PagerFragment.newInstance(1,0,getString(R.string.tour_title_welcome),getString(R.string.tour_subtitle_welcome),R.drawable.ic_launcher_splash)
+        );
+        fragments.add(
+                PagerFragment.newInstance(1,0,getString(R.string.tour_title_feedback),getString(R.string.tour_subtitle_feedback),R.drawable.ic_launcher_splash)
+        );
+        //fragments.add(PagerFragment.newInstance(1, 0,"HBus", "A hora nas suas mãos!\nEncontre a linha urbana favorita!", R.drawable.modelo));
+        //fragments.add(PagerFragment.newInstance(1, 0, "Fácil de usar!", "Com poucos toques utilize o máximo!\nCom favoritos que exibem já os próximos horários!", R.mipmap.ic_launcher));
+        //fragments.add(PagerFragment.newInstance(1, 0, "Ajude-nos!", "Ainda em fase de testes, este aplicativo vai crescer com sua ajuda e feedback!", R.mipmap.ic_launcher));
 
         defaultPagerAdapter = new ContentPagerAdapter(getSupportFragmentManager(), fragments);
         defaultViewpager.setAdapter(defaultPagerAdapter);

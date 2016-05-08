@@ -28,7 +28,7 @@
             android:gravity="center"
             android:id="@+id/textViewTimeAlarm"
             android:text="12:12"
-            android:textAppearance="@style/AppTheme.TextAppearance.Display4.Mono"/>
+            android:textAppearance="@style/AppTheme.TextAppearance.Display3.Mono"/>
     </android.support.design.widget.AppBarLayout>
 
 
