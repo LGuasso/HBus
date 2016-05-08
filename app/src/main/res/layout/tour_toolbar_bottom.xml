@@ -23,7 +23,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbarBottom"
-    android:background="@color/colorPrimary"
+    android:background="@color/transparent"
     >
 
     <RelativeLayout

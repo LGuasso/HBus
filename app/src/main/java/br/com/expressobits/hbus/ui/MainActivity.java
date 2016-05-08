@@ -148,9 +148,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         View naviView = naviHeader.findViewById(R.id.side_nav_bar);
         naviView.setOnClickListener(this);
         TextView textViewCityName = (TextView)naviHeader.findViewById(R.id.textViewCityName);
-        TextView textViewCoutry = (TextView)naviHeader.findViewById(R.id.textViewCountry);
-        textViewCityName.setText(DAOUtils.getNameCity(cityId));
-        textViewCoutry.setText(DAOUtils.getNameCountry(cityId));
+        textViewCityName.setText(DAOUtils.getNameCity(cityId)+" - "+DAOUtils.getNameCountry(cityId));
 
         ImageView imageViewCity = (ImageView)naviHeader.findViewById(R.id.imageViewCity);
         if(cityId.equals("RS/Santa Maria")){
