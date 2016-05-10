@@ -162,15 +162,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
                 break;
             case R.id.linearLayoutItemList:
-                if(saveItinerariesAsyncTask.isFinished() && saveCodesAsyncTask.isFinished()){
-                    ((MainActivity)getActivity()).onCreateDialogChooseWay(listItineraries.get(position).getId());
-                }else {
-                    Snackbar.make(
-                            view,
-                            "AGUARDEEEEEEEEEEEEEEEEE",
-                            Snackbar.LENGTH_LONG).show();
-                }
-
+                ((MainActivity)getActivity()).onCreateDialogChooseWay(listItineraries.get(position).getId());
                 break;
         }
 
@@ -309,12 +301,15 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     @Override
     public void finish() {
-        if(saveCodesAsyncTask.isFinished() && saveItinerariesAsyncTask.isFinished()){
-            recyclerViewItineraries.setVisibility(View.VISIBLE);
-            linearLayoutProgress.setVisibility(View.INVISIBLE);
-            Toast.makeText(getActivity(),getString(R.string.load_online_itineraries_with_sucess),Toast.LENGTH_LONG).show();
-            refreshRecyclerView();
+        if(saveItinerariesAsyncTask!=null && saveCodesAsyncTask!=null){
+            if(saveItinerariesAsyncTask.isFinished() && saveCodesAsyncTask.isFinished()){
+                recyclerViewItineraries.setVisibility(View.VISIBLE);
+                linearLayoutProgress.setVisibility(View.INVISIBLE);
+                Toast.makeText(getActivity(),getString(R.string.load_online_itineraries_with_sucess),Toast.LENGTH_LONG).show();
+                refreshRecyclerView();
+            }
         }
+
     }
 
     @Override
