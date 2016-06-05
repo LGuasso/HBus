@@ -1,28 +1,35 @@
 package br.com.expressobits.hbus.model;
 
+import java.util.List;
+
 /**
  * @author Rafael
  * @since 14/01/16.
  */
 public class Feedback {
     private Long id;
-    private String text;
-    private String type;
-    private String systemInformation;
+    private String message;
+    private String email;
+    private int type;
+    private List<String> systemInformation;
 
     public Long getId() {
         return id;
     }
 
-    public String getText() {
-        return text;
+    public String getMessage() {
+        return message;
     }
 
-    public String getType() {
+    public String getEmail() {
+        return email;
+    }
+
+    public int getType() {
         return type;
     }
 
-    public String getSystemInformation() {
+    public List<String> getSystemInformation() {
         return systemInformation;
     }
 
@@ -30,15 +37,19 @@ public class Feedback {
         this.id = id;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public void setType(String type) {
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setType(int type) {
         this.type = type;
     }
 
-    public void setSystemInformation(String systemInformation) {
+    public void setSystemInformation(List<String> systemInformation) {
         this.systemInformation = systemInformation;
     }
 }

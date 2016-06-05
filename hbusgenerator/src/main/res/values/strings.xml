@@ -9,4 +9,15 @@
     <string name="read_file_all_data">Read all file data</string>
     <string name="push_all_data">Push all data</string>
     <string name="save_in_database_file_all_data">Save in database all data</string>
+    <string name="readFileCity">Read city file</string>
+    <string name="pullCities">Pull cities</string>
+    <string name="pullBus" />
+    <string name="readBusFile">Read bus file</string>
+    <string name="pullItineraries">Pull itineraries</string>
+    <string name="read">Read</string>
+    <string name="pull">Pull</string>
+    <string name="data_manager">Data manager</string>
+    <string name="push">Push</string>
+    <string name="pushAllCodes">Push all codes</string>
+    <string name="pushAllItinerary">Push all data of itinerary</string>
 </resources>

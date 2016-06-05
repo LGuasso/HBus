@@ -9,13 +9,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.Alarm;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
+import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.MainActivity;
 
 /**
@@ -79,7 +77,6 @@ public class AlarmDAOAndroidTestUnitTest extends ActivityInstrumentationTestCase
         city.setName("Santa Maria");
         city.setCountry("RS");
         city.setId("RS/Santa Maria");
-        city.setLocation(new GeoPt());
     }
 
     @Test

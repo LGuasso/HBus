@@ -7,8 +7,8 @@ import android.util.Log;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.Alarm;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.model.Alarm;
+import br.com.expressobits.hbus.model.City;
 
 /**
  * Classe acesso a arquivos do sqlite do Alarmes

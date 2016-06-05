@@ -9,10 +9,10 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
 
 /**

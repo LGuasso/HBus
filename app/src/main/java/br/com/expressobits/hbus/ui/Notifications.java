@@ -13,29 +13,30 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.backend.Alarm;
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.model.Alarm;
+import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
-import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.DAOUtils;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * @author Rafael Correa
- * @since 14/04/16
+ * @since 14/04/16;
  */
 public class Notifications {
-
-    public static final int NOTIFICATION_ID = 1;
-
 
     public static void notifyBus(Context context,Alarm alarm){
 
 
         NotificationManager alarmNotificationManager;
-
         Log.d("AlarmService", "Preparing to send notification...: " + alarm.getId());
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(NotificationPreferenceFragment.PREF_NOTIFICATION_ALERT_BUS,true)){
             NotificationCompat.Builder alamNotificationBuilder = getBuilderNotification(context, alarm);
@@ -43,9 +44,7 @@ public class Notifications {
             // Creates an explicit intent for an Activity in your app
             Intent resultIntent = new Intent(context, AlarmEditorActivity.class);
             resultIntent.putExtra(AlarmEditorActivity.ARGS_ALARM_ID, alarm.getId());
-
-
-
+            resultIntent.putExtra(AlarmEditorActivity.ARGS_ALARM_CODE, alarm.getCode());
             // The stack builder object will contain an artificial back stack for the
             // started Activity.
             // This ensures that navigating backward from the Activity leads out of
@@ -77,14 +76,29 @@ public class Notifications {
 
     }
 
-    private static void setCodeToNotification(Context context, Alarm alarm, NotificationCompat.Builder alamNotificationBuilder) {
-        BusDAO dao = new BusDAO(context);
-        String cityId = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-        Code code = dao.getCode(cityId,alarm.getCode());
-        if(code!=null){
-            alamNotificationBuilder.setSubText(code.getDescrition());
-        }
+    private static void setCodeToNotification(Context context, Alarm alarm, final NotificationCompat.Builder alamNotificationBuilder) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //TODO implementar COMPANY
+        DatabaseReference codeTableRef  = database.getReference(FirebaseUtils.CODE_TABLE);
+        DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(alarm.getId()));
+        DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(alarm.getId()));
+        DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(alarm.getId()));
+        DatabaseReference codeRef = companyRef.child(alarm.getCode());
+        codeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Code code = dataSnapshot.getValue(Code.class);
+                if(code!=null){
+                    alamNotificationBuilder.setSubText(code.getDescrition());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private static NotificationCompat.Builder getBuilderNotification(Context context, Alarm alarm) {

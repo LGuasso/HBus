@@ -24,6 +24,7 @@ public class NotificationPreferenceFragment extends PreferenceFragment {
     public static final String PREF_NOTIFICATION_ALERT_BUS = "notifications_alert_bus";
     public static final String PREF_NOTIFICATION_ALERT_BUS_RINGTONE = "notifications_alert_bus_ringtone";
     public static final String PREF_NOTIFICATION_ALERT_BUS_VIBRATE = "notifications_alert_bus_vibrate";
+    public static final String PREF_NOTIFICATION_TIME_ALARM_AFTER = "time_alarm_after";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +35,14 @@ public class NotificationPreferenceFragment extends PreferenceFragment {
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
-        SettingsActivity2.bindPreferenceSummaryToValue(findPreference(PREF_NOTIFICATION_ALERT_BUS_RINGTONE));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference(PREF_NOTIFICATION_ALERT_BUS_RINGTONE));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            startActivity(new Intent(getActivity(), SettingsActivity2.class));
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

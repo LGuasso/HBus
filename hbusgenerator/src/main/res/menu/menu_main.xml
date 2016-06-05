@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="br.com.expressobits.hbusgenerator.MainActivity">
     <item
+        android:id="@+id/action_data_manager"
+        android:orderInCategory="100"
+        android:icon="@android:drawable/stat_notify_sync"
+        android:title="@string/data_manager"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"

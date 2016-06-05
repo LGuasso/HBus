@@ -7,10 +7,10 @@ import android.util.Log;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Itinerary;
 
 
 /**
@@ -51,7 +51,7 @@ public class BusDAOGenerator extends SQLiteOpenHelper{
     }
 
     public void insertCity(City city){
-        Log.d(TAG,"insert city "+city.getId()+" "+city.getName()+" "+city.getCountry()+" "+city.getLocation());
+        Log.d(TAG,"insert city "+city.getId()+" "+city.getName()+" "+city.getCountry()+" "+city.getLocalization());
         BusHelper.insert(getWritableDatabase(), city);
     }
 
@@ -74,8 +74,8 @@ public class BusDAOGenerator extends SQLiteOpenHelper{
         return BusHelper.getCity(getReadableDatabase(), id);
     }
 
-    /**public City getCity(String name,String country){
-        return BusHelper.getCity(getReadableDatabase(), name,country);
+    /**public City getCityName(String name,String country){
+        return BusHelper.getCityName(getReadableDatabase(), name,country);
     }*/
 
     public Code getCode(String name,Long cityId){

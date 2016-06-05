@@ -1,16 +1,19 @@
 package br.com.expressobits.hbus.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Rafael Correa
  * @since 18/10/15
  */
 public class City {
 
-
     private String id;
     private String name;
     private String country;
-    private String position;
+    private String companyDefault;
+    private Map<String,Double> localization = new HashMap<>();
 
     public String getId() {
         return id;
@@ -36,12 +39,20 @@ public class City {
         this.country = country;
     }
 
-    public String getPosition() {
-        return position;
+    public String getCompanyDefault() {
+        return companyDefault;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setCompanyDefault(String companyDefault) {
+        this.companyDefault = companyDefault;
+    }
+
+    public Map<String,Double>  getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(Map<String,Double>  localization) {
+        this.localization = localization;
     }
 
     @Override

@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:id="@+id/textViewTimeAlarm"
-            android:text="12:12"
+            android:text="00:00"
+            android:textSize="@dimen/AlarmEditor.TimeAlarm.TextSize"
             android:textAppearance="@style/AppTheme.TextAppearance.Display3.Mono"/>
     </android.support.design.widget.AppBarLayout>
 

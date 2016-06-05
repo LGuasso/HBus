@@ -29,7 +29,7 @@ public class Bus implements Comparable<Bus>{
     /**
      * Tipo do dia expresso em {@link TypeDay}
      */
-    private TypeDay typeday;
+    private String typeday;
 
     /**
      * Cidade onde esse ônibus passa
@@ -69,11 +69,11 @@ public class Bus implements Comparable<Bus>{
         this.way = way;
     }
 
-    public TypeDay getTypeday() {
+    public String getTypeday() {
         return typeday;
     }
 
-    public void setTypeday(TypeDay typeday) {
+    public void setTypeday(String typeday) {
         this.typeday = typeday;
     }
 

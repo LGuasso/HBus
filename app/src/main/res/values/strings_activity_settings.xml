@@ -66,6 +66,17 @@
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_title_time_alarm_after"></string>
+    <string-array name="pref_time_alarm_after_titles">
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+    </string-array>
+    <string-array name="pref_time_alarm_after_values">
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+    </string-array>
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
 

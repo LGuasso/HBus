@@ -22,6 +22,7 @@
     <dimen name="margin_buttons_day_week">3dp</dimen>
     <dimen name="margin_buttons_day_week_list">3dp</dimen>
     <dimen name="size_background_day_of_week">36dp</dimen>
+    <dimen name="AlarmEditor.TimeAlarm.TextSize">96sp</dimen>
 
 
 </resources>

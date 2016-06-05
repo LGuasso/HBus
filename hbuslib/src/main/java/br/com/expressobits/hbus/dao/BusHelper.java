@@ -8,13 +8,14 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.HoursUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
@@ -56,8 +57,8 @@ public class BusHelper {
         values.put(CityContract.City._ID,city.getId());
         values.put(CityContract.City.COLUMN_NAME_NAME,city.getName());
         values.put(CityContract.City.COLUMN_NAME_COUNTRY,city.getCountry());
-        values.put(CityContract.City.COLUMN_NAME_LATITUDE,city.getLocation().getLatitude());
-        values.put(CityContract.City.COLUMN_NAME_LONGITUDE,city.getLocation().getLongitude());
+        values.put(CityContract.City.COLUMN_NAME_LATITUDE,(Double)city.getLocalization().get(CityContract.City.COLUMN_NAME_LATITUDE));
+        values.put(CityContract.City.COLUMN_NAME_LONGITUDE,(Double)city.getLocalization().get(CityContract.City.COLUMN_NAME_LONGITUDE));
         return values;
     }
 
@@ -150,9 +151,12 @@ public class BusHelper {
         city.setId(c.getString(c.getColumnIndexOrThrow(CityContract.City._ID)));
         city.setName(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_NAME)));
         city.setCountry(c.getString(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_COUNTRY)));
-        Float latitude = c.getFloat(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LATITUDE));
-        Float longitude = c.getFloat(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LONGITUDE));
-        city.setLocation(new GeoPt().setLatitude(latitude).setLongitude(longitude));
+        Double latitude = c.getDouble(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LATITUDE));
+        Double longitude = c.getDouble(c.getColumnIndexOrThrow(CityContract.City.COLUMN_NAME_LONGITUDE));
+        Map<String,Double> localization = new HashMap<>();
+        localization.put(CityContract.City.COLUMN_NAME_LATITUDE,latitude);
+        localization.put(CityContract.City.COLUMN_NAME_LONGITUDE,longitude);
+        city.setLocalization(localization);
         return city;
     }
 

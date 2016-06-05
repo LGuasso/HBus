@@ -5,14 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.Alarm;
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.model.Alarm;
+import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.utils.BooleanConvert;
-import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
  * @author Rafael Correa

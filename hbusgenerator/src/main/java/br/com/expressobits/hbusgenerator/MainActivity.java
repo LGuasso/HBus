@@ -1,6 +1,7 @@
 package br.com.expressobits.hbusgenerator;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,18 +21,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.backend.codeApi.model.Code;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.BusDAOGenerator;
-import br.com.expressobits.hbus.file.ReadFile;
+import br.com.expressobits.hbus.file.ReadFileCloud;
 import br.com.expressobits.hbus.gae.ProgressAsyncTask;
 import br.com.expressobits.hbus.gae.PushBusEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.PushCitiesEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.PushCodesEndpointsAsyncTask;
 import br.com.expressobits.hbus.gae.PushItinerariesEndpointsAsyncTask;
+import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.utils.DAOUtils;
-import br.com.expressobits.hbus.utils.TextUtils;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,ProgressAsyncTask{
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private HashMap<City,List<Code>> codes = new HashMap<>();
     private HashMap<City,HashMap<Itinerary,List<Bus>>> buses = new HashMap<>();
     private Spinner spinnerCities;
-    ReadFile file = new ReadFile(MainActivity.this);
+    ReadFileCloud file = new ReadFileCloud(MainActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    public void readFiles(){
+    /**public void readFiles(){
         cities = file.getCities();
 
         for(City city:cities){
@@ -92,9 +91,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    }
+    }*/
 
-    public void saveInDataBaseAllData(Context context){
+    /**public void saveInDataBaseAllData(Context context){
         BusDAOGenerator dao = new BusDAOGenerator(context);
         for(City city:cities){
 
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-    }
+    }*/
 
 
 
@@ -133,12 +132,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void pushCitytoFirebase(City city){
+    }
+
+
 
     private void pushCity(City city){
         PushCitiesEndpointsAsyncTask pushCitiesEndpointsAsyncTask = new PushCitiesEndpointsAsyncTask();
         pushCitiesEndpointsAsyncTask.setContext(this);
         pushCitiesEndpointsAsyncTask.setProgressAsyncTask(this);
-        pushCitiesEndpointsAsyncTask.execute(city);
+        //pushCitiesEndpointsAsyncTask.execute(city);
     }
 
     private void pushItinerary(City city,Itinerary itinerary){
@@ -201,6 +204,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_data_manager) {
+            startActivity(new Intent(this,FirebaseActivity.class));
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -214,12 +220,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.button_read_all_data:
-                readFiles();
+                //readFiles();
                 refreshSpinner(cities);
                 break;
 
             case R.id.button_save_in_database_all_data:
-                saveInDataBaseAllData(this);
+                //saveInDataBaseAllData(this);
                 break;
 
             case R.id.button_push_all_data:

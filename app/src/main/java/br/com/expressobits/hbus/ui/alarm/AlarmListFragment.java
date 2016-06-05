@@ -13,14 +13,13 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.adapters.ItemAlarmAdapter;
-import br.com.expressobits.hbus.backend.Alarm;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.ui.adapters.ItemAlarmAdapter;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,9 +27,13 @@ import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 public class AlarmListFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
     public static final String TAG = "AlarmListFragment";
-    public static final String ARGS_CITYID = "cityId";
+    public static final String ARGS_COUNTRY = "country";
+    public static final String ARGS_CITY = "city";
+    public static final String ARGS_COMPANY = "company";
 
-    private String cityId;
+    private String country;
+    private String city;
+    private String company;
 
     private RecyclerView recyclerViewAlarms;
     private List<Alarm> alarmList;
@@ -50,8 +53,12 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         initViews(view);
 
         Bundle arguments = getArguments();
-        if(arguments!=null && arguments.getString(ARGS_CITYID)!=null){
-            cityId = arguments.getString(ARGS_CITYID);
+        if(arguments!=null && arguments.getString(ARGS_COUNTRY)!=null
+                && arguments.getString(ARGS_CITY)!=null
+                && arguments.getString(ARGS_COMPANY)!=null){
+            country = arguments.getString(ARGS_COUNTRY);
+            city = arguments.getString(ARGS_CITY);
+            company = arguments.getString(ARGS_COMPANY);
         }
         return view;
     }
@@ -63,7 +70,8 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     private void updateListAlarms(Context context){
         AlarmDAO alarmDAO = new AlarmDAO(context);
         BusDAO busDAO = new BusDAO(context);
-        City city = busDAO.getCity(cityId);
+        City city = new City();
+
         busDAO.close();
         if(city!=null){
             alarmList = alarmDAO.getAlarms(city);
@@ -75,7 +83,6 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         recyclerViewAlarms = (RecyclerView) view.findViewById(R.id.recyclerViewAlarms);
         recyclerViewAlarms.setHasFixedSize(true);
         recyclerViewAlarms.setSelected(true);
-        recyclerViewAlarms.addItemDecoration(new SimpleDividerItemDecoration(context));
         LinearLayoutManager llmUseful = new LinearLayoutManager(context);
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewAlarms.setLayoutManager(llmUseful);
@@ -83,7 +90,7 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
 
     private void udpateRecyclerViewAlarms(Context context){
         ItemAlarmAdapter adapter =
-                new ItemAlarmAdapter(context,alarmList,cityId);
+                new ItemAlarmAdapter(context,alarmList);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewAlarms.setAdapter(adapter);
     }

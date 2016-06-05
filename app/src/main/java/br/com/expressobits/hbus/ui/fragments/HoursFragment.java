@@ -2,25 +2,32 @@ package br.com.expressobits.hbus.ui.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.adapters.ItemBusAdapter;
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.ui.adapters.ItemBusAdapter;
 import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.model.TypeDay;
-import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,14 +38,18 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
     private List<Bus> listBus;
     private Context context;
     private static final String TAG = "HoursFragment";
-    public static final String ARGS_CITYID = "cityId";
-    public static final String ARGS_ITINERARYID = "itineraryId";
+    public static final String ARGS_COUNTRY = "country";
+    public static final String ARGS_CITY = "city";
+    public static final String ARGS_COMPANY = "company";
+    public static final String ARGS_ITINERARY = "itinerary";
     public static final String ARGS_WAY = "Way";
     public static final String ARGS_TYPEDAY = "typeday";
-    private String cityId;
-    private String itineraryId;
+    private String country;
+    private String city;
+    private String company;
+    private String itinerary;
     private String way;
-    public TypeDay typeday = TypeDay.USEFUL;
+    private String typeday;
 
     public HoursFragment() {
         // Required empty public constructor
@@ -51,20 +62,24 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
         View view = inflater.inflate(R.layout.fragment_hours, container, false);
         this.context = inflater.getContext();
         initRecyclerView(view);
+        listBus = new ArrayList<>();
         Bundle arguments = getArguments();
-        if(arguments!=null && arguments.getString(ARGS_CITYID)!=null &&
-                arguments.getString(ARGS_ITINERARYID)!=null &&
-                arguments.getString(ARGS_WAY)!=null/** &&
-                arguments.getString(ARGS_TYPEDAY)!=null*/){
-            this.cityId = arguments.getString(ARGS_CITYID);
-            this.itineraryId = arguments.getString(ARGS_ITINERARYID);
+        if(arguments!=null && arguments.getString(ARGS_COUNTRY)!=null &&
+                arguments.getString(ARGS_CITY)!=null &&
+                arguments.getString(ARGS_COMPANY)!=null &&
+                arguments.getString(ARGS_ITINERARY)!=null &&
+                arguments.getString(ARGS_WAY)!=null &&
+                arguments.getString(ARGS_TYPEDAY)!=null){
+            this.country = arguments.getString(ARGS_COUNTRY);
+            this.city = arguments.getString(ARGS_CITY);
+            this.company = arguments.getString(ARGS_COMPANY);
+            this.itinerary = arguments.getString(ARGS_ITINERARY);
             this.way = arguments.getString(ARGS_WAY);
-
-            refresh(context,
-                    cityId,
-                    itineraryId,
-                    way,
-                    typeday);
+            this.typeday = arguments.getString(ARGS_TYPEDAY);
+            refresh(country, city, company, itinerary, way ,typeday);
+        }else{
+            Log.e(TAG,"null references in args!"+arguments.get(ARGS_COUNTRY)+arguments.get(ARGS_CITY)+arguments.get(ARGS_COMPANY)+
+                    arguments.get(ARGS_TYPEDAY)+arguments.get(ARGS_ITINERARY));
         }
         return view;
     }
@@ -72,32 +87,73 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        refresh(context,cityId,itineraryId,way,typeday);
+        //refresh(country, city, company, itinerary, way ,TypeDay.SATURDAY);
     }
 
     private void initRecyclerView(View view){
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_listline_line);
         recyclerView.setHasFixedSize(true);
         recyclerView.setSelected(true);
-        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
-
     }
 
-    public void setTypeday(TypeDay typeday){
-        this.typeday = typeday;
-    }
 
     protected void refresh(Context context,String cityId,String itineraryId,String way,TypeDay typeday){
         BusDAO dao = new BusDAO(context);
         listBus = dao.getBuses(cityId,itineraryId,way,typeday);
         dao.close();
-        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus,cityId);
+        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus);
         adapterUeful.setRecyclerViewOnClickListenerHack(this);
         recyclerView.setAdapter(adapterUeful);
 
+    }
+
+    protected void refresh(final String country, final String city, final String company, final String itinerary, final String way, final String typeday){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference busTableRef = database.getReference(FirebaseUtils.BUS_TABLE);
+        DatabaseReference countryRef = busTableRef.child(country);
+        DatabaseReference cityRef = countryRef.child(city);
+        DatabaseReference companyRef = cityRef.child(company);
+        DatabaseReference itineraryRef = companyRef.child(itinerary);
+        DatabaseReference wayRef = itineraryRef.child(way);
+        DatabaseReference typedayRef = wayRef.child(typeday);
+        typedayRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Bus bus = dataSnapshot.getValue(Bus.class);
+                bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,bus.getTime()));
+                addBus(bus);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addBus(Bus bus){
+        listBus.add(bus);
+        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus);
+        adapterUeful.setRecyclerViewOnClickListenerHack(this);
+        recyclerView.setAdapter(adapterUeful);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class Itinerary {
 
     public List<String> ways;
 
-    private ArrayList<String> codigos;
+    private ArrayList<String> codes;
 
     public String getId() {
         return id;
@@ -44,12 +44,12 @@ public class Itinerary {
         this.ways = ways;
     }
 
-    public ArrayList<String> getCodigos(){
-        return codigos;
+    public ArrayList<String> getCodes(){
+        return codes;
     }
 
-    public void setCodigos(ArrayList<String> codigos) {
-        this.codigos = codigos;
+    public void setCodes(ArrayList<String> codes) {
+        this.codes = codes;
     }
 
 }

@@ -35,15 +35,15 @@ public class AboutPreferenceFragment extends PreferenceFragment{
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
-        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("tour"));
-        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("debug"));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference("tour"));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference("debug"));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            startActivity(new Intent(getActivity(), SettingsActivity2.class));
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

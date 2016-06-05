@@ -43,12 +43,6 @@
         <item name="fontPath">fonts/Roboto-Regular.ttf</item>
     </style>
 
-    <!-- TODO implementar todo app com AppTheme -->
-
-
-
-
-
     <!--BASE -->
     <style name="AppTheme.TextAppearance.AppCompat.HeadLine" parent="@style/Base.TextAppearance.AppCompat.Headline">
         <item name="fontPath">fonts/Roboto-Thin.ttf</item>

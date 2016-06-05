@@ -8,10 +8,10 @@ public interface OnSettingsListener {
 
     /**
      * Escolhe atividade deve iniciar com hor�rios da itinerary e way selecionado
-     * @param itineraryId itinerario
+     * @param itinerary itinerario
      * @param way way
      */
-    public void onSettingsDone(String itineraryId,String way);
+    public void onSettingsDone(String itinerary,String way);
 
     /**
      * Escolhe atividade deve iniciar com hor�rios da itinerary e way selecionado

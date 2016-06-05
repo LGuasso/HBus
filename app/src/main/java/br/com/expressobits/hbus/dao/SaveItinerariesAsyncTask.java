@@ -7,7 +7,8 @@ import android.util.Pair;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.model.Itinerary;
+
 
 /**
  * @author Rafael Correa
@@ -47,7 +48,7 @@ public class SaveItinerariesAsyncTask extends AsyncTask<Pair<String,List<Itinera
         for (int i=0;i<list.size();i++){
             Itinerary itinerary = list.get(i);
             Log.d(TAG,"itinerary "+itinerary.getName()+" load from datastore ways"+itinerary.getWays());
-            db.insert(itinerary);
+            //db.insert(itinerary);
             publishProgress(i);
         }
         Log.i(TAG, list.toString());

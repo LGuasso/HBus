@@ -9,8 +9,10 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 
@@ -81,6 +83,8 @@ public class TPCDataBaseInit extends Application{
             tracker.enableAdvertisingIdCollection(true);
             tracker.enableAutoActivityTracking(true);
         }
+
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
 
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()

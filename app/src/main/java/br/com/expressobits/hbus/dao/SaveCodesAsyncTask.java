@@ -7,8 +7,7 @@ import android.util.Pair;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.model.Code;
 
 /**
  * @author Rafael Correa

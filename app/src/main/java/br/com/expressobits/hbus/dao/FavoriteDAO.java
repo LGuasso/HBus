@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Itinerary;
 
 /**
  * Classe que determina database para {@link br.com.expressobits.hbus.model.Itinerary} favoritos,
