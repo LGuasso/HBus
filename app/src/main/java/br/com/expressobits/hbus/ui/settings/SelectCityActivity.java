@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,15 +28,13 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.ui.adapters.ItemCityAdapter;
-import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,
-        FinishListener{
+public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FinishListener{
 
     private List<City> cities;
     public boolean initial = false;
@@ -45,10 +42,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private ImageView imageViewNetworkError;
-    private BusDAO db;
     private boolean starter = false;
     public static final String NOT_CITY = "not_city";
     public static final String STARTER_MODE = "starter";
+    public static final String DEFAULT_COUNTRY = "RS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +66,9 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_refresh) {
-            //refreshDatabaseCities("RS");
-            refresh("RS");
+            refresh(DEFAULT_COUNTRY);
         }
         return false;
     }
@@ -97,18 +90,13 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         LinearLayoutManager llmUseful = new LinearLayoutManager(this);
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
-
         cities = new ArrayList<>();
-
-        db = new BusDAO(this);
-        //cities = db.getCities();
-        refreshRecyclerView();
         //Se houver cidades no database local não haverá procura no remoto
         if(cities.size()>0){
             recyclerView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
         }else{
-            refresh("RS");
+            refresh(DEFAULT_COUNTRY);
         }
     }
 
@@ -116,7 +104,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this, cities);
         itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerView.setAdapter(itemCityAdapter);
-
     }
 
     private void initProgressBar() {
@@ -132,14 +119,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         editor.putString(TAG, cities.get(position).getId());
         editor.putString(cities.get(position).getId(),cities.get(position).getCompanyDefault());
         editor.apply();
-
-
         if(starter){
             ManagerInit.manager(this);
         }
-
         finish();
-
     }
 
     @Override
@@ -161,14 +144,22 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         }
     }
 
-    public void addCompany(Company company){
-        BusDAO busDAO = new BusDAO(this);
-        Log.e("TESTE",company.getName());
+    private void addCity(City city){
+        if(cities.size()>0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        cities.add(city);
+        refreshRecyclerView();
+    }
+
+    private void addCompany(Company company){
+        Log.d(TAG,"add company "+company.getName());
+        //TODO implementar adiçao de empresa
     }
 
 
     /**
-     * TODO criar
      * @param country
      * @param city
      */
@@ -180,7 +171,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         cityRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 Company company = dataSnapshot.getValue(Company.class);
                 company.setId(FirebaseUtils.getIdCompany(country,city,company.getName()));
                 addCompany(company);
@@ -209,15 +199,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     }
 
 
-    public void addCity(City city){
-        if(cities.size()>0){
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-        cities.add(city);
-        db.insert(city);
-        refreshRecyclerView();
-    }
+
 
     public void refresh(final String country){
         cities.clear();

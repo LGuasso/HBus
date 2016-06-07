@@ -13,6 +13,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
@@ -84,8 +85,9 @@ public class TPCDataBaseInit extends Application{
             tracker.enableAutoActivityTracking(true);
         }
 
-        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                         //.setDefaultFontPath("fonts/Roboto-Regular.ttf")

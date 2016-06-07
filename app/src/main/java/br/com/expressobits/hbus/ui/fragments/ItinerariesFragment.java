@@ -59,8 +59,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     public static final String TAG = "ItinerariesFragment";
     private RecyclerView recyclerViewItineraries;
     private ProgressBar progressBar;
-    private TextView textViewProgress;
-    private LinearLayout linearLayoutProgress;
     public int lastPositionItinerary;
     private SaveItinerariesAsyncTask saveItinerariesAsyncTask;
     private SaveCodesAsyncTask saveCodesAsyncTask;
@@ -91,8 +89,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     private void initListViews(View view){
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        linearLayoutProgress = (LinearLayout)view.findViewById(R.id.progressLayout);
-        textViewProgress = (TextView) view.findViewById(R.id.textViewProgress);
         recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
         recyclerViewItineraries.setHasFixedSize(true);
 
@@ -104,7 +100,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
         if(listItineraries.size()>0){
             recyclerViewItineraries.setVisibility(View.VISIBLE);
-            linearLayoutProgress.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
             refreshRecyclerView();
         }else {
             String country = FirebaseUtils.getCountry(cityId);
