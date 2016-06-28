@@ -371,12 +371,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 }
                 break;
             case AlarmListFragment.TAG:
-                Bundle args = new Bundle();
-                args.putString(AlarmListFragment.ARGS_COUNTRY,country);
-                args.putString(AlarmListFragment.ARGS_CITY,city);
-                args.putString(AlarmListFragment.ARGS_COMPANY,company);
                 fragment = new AlarmListFragment();
-                fragment.setArguments(args);
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -416,24 +411,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         pToolbar.setTitle("HBus");
         pToolbar.setSubtitle(FirebaseUtils.getCityName(cityId) + " - " + FirebaseUtils.getCountry(cityId));
     }
-
-    /**public void onCreateDialogChooseWay(String itineraryId) {
-        BusDAO dao = new BusDAO(this);
-        List<String> ways;
-        try {
-            ways = dao.getItinerary(itineraryId).getWays();
-            if (ways.size() > 1) {
-                ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-                chooseWayDialogFragment.setParameters(this, itineraryId, ways);
-                chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
-            } else {
-                onSettingsDone(itineraryId, ways.get(0));
-            }
-            dao.close();
-        }catch (SQLiteCantOpenDatabaseException exception){
-            Toast.makeText(this,"aguarde alguns segundos...",Toast.LENGTH_LONG).show();
-        }
-    }*/
 
     public void onCreateDialogChooseWay(Itinerary itinerary) {
         List<String> ways;

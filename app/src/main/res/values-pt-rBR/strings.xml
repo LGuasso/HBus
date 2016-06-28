@@ -102,4 +102,5 @@
     <string name="notification_alarm_title_text">%1$s parte ás %2$s</string>
     <string name="notification_alarm_text">Sentido %1$s</string>
     <string name="notificates_about_a_bus">Notificações dos alarmes de itinerários</string>
+    <string name="notification_alarm_subtext">Empresa %1$s</string>
 </resources>

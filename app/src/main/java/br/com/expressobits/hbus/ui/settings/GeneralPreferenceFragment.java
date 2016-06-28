@@ -24,6 +24,13 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
         preferenceCity = findPreference(SelectCityActivity.TAG);
+        preferenceCity.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(preference.getContext(), SelectCityActivity.class));
+                return false;
+            }
+        });
         setHasOptionsMenu(true);
         refreshComponents();
     }
@@ -45,7 +52,7 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
     }
 
     private void refreshComponents() {
-        SettingsActivity.bindPreferenceSummaryToValue(findPreference("city"));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference(SelectCityActivity.TAG));
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("time_home_screen"));
     }
 }

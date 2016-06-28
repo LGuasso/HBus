@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,11 +23,8 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.ui.adapters.ItemBusAdapter;
-import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.adapters.ItemBusAdapter;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
@@ -87,7 +85,7 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        //refresh(country, city, company, itinerary, way ,TypeDay.SATURDAY);
+        refresh(country, city, company, itinerary, way ,typeday);
     }
 
     private void initRecyclerView(View view){
@@ -99,16 +97,6 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
         recyclerView.setLayoutManager(llmUseful);
     }
 
-
-    protected void refresh(Context context,String cityId,String itineraryId,String way,TypeDay typeday){
-        BusDAO dao = new BusDAO(context);
-        listBus = dao.getBuses(cityId,itineraryId,way,typeday);
-        dao.close();
-        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus);
-        adapterUeful.setRecyclerViewOnClickListenerHack(this);
-        recyclerView.setAdapter(adapterUeful);
-
-    }
 
     protected void refresh(final String country, final String city, final String company, final String itinerary, final String way, final String typeday){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -144,7 +132,8 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getActivity(),"Erro "+databaseError.getCode(),Toast.LENGTH_LONG).show();
+                Log.e(TAG,databaseError.getDetails()+" message:"+databaseError.getMessage());
             }
         });
     }

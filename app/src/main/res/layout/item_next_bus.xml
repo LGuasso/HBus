@@ -4,15 +4,28 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textViewHourforNextBus"
-        android:textAppearance="@style/AppTheme.TextAppearance.AppCompat"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingRight="8dp"/>
+        android:orientation="horizontal"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/textViewHourforNextBus"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:id="@+id/textViewWayforNextBus"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/textViewWayforNextBus"
+        android:id="@+id/textViewCodeforNextBus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

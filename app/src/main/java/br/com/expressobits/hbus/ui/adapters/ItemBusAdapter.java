@@ -164,7 +164,8 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                myViewHolder.txtViewDescrition.setText("Erro "+"Code "+databaseError.getCode() +" - Details "+databaseError.getDetails()+ " "+
+                databaseError.getMessage());
             }
         });
 

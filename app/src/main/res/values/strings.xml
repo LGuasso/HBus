@@ -98,6 +98,7 @@
     <string name="notification">Notification</string>
     <string name="notification_alarm_title_text">%1$s left ace %2$s</string>
     <string name="notification_alarm_text">Way %1$s</string>
+    <string name="notification_alarm_subtext">Company %1$s</string>
     <plurals name="delay_content">
         <item quantity="few">Bus after %1$s minutes</item>
         <item quantity="zero">Bus now!</item>
