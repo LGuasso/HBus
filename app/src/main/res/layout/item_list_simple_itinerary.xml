@@ -8,9 +8,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAppearance="@style/Animation.AppCompat.Dialog"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:padding="16dp"
-        android:id="@+id/textViewItineraryName"/>
+        android:id="@+id/text1"/>
 
 
     <ImageView

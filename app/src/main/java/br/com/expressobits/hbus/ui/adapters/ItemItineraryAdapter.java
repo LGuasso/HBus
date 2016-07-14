@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -22,7 +24,7 @@ import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
  * @author Rafael Correa
  * @since 13/08/15.
  */
-public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdapter.MyViewHolder> {
+public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdapter.ItineraryViewHolder> {
 
     private Context context;
     private List<Itinerary> listItineraries;
@@ -51,15 +53,16 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItineraryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //View view = layoutInflater.inflate(R.layout.item_list_simple_itinerary,parent,false);
         View view = layoutInflater.inflate(R.layout.item_list_simple_itinerary,parent,false);
-        return new MyViewHolder(view);
+        return new ItineraryViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(ItineraryViewHolder holder, int position) {
 
-        if(dao.getItinerary(listItineraries.get(position).getId())!=null){
+        /**if(dao.getItinerary(listItineraries.get(position).getId())!=null){
             holder.imageViewStar.setSelected(true);
            // holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
 
@@ -68,7 +71,8 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
             //holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_outline_accent_24dp));
         }
 
-        holder.textViewName.setText(listItineraries.get(position).getName());
+        holder.textViewName.setText(listItineraries.get(position).getName());*/
+        holder.text1.setText(listItineraries.get(position).getName());
     }
 
     @Override
@@ -80,30 +84,30 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public TextView textViewName;
-        public LinearLayout linearLayout;
-        public ImageView imageViewStar;
+        public TextView text1;
+        public ImageView icon;
 
 
-        public MyViewHolder(View itemView) {
+        public ItineraryViewHolder(View itemView) {
             super(itemView);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
+            text1 = (TextView) itemView.findViewById(R.id.text1);
+            /**linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
             textViewName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
             imageViewStar = (ImageView) itemView.findViewById(R.id.imageViewStar);
             linearLayout.setOnClickListener(this);
             imageViewStar.setOnClickListener(this);
             if(textViewName.isEnabled()){
                 linearLayout.setClickable(true);
-            }
+            }*/
 
         }
         @Override
         public void onClick(View v) {
 
 
-            switch (v.getId()){
+            /**switch (v.getId()){
                 case R.id.imageViewStar:
                     if(imageViewStar.isEnabled() & recyclerViewOnClickListenerHack != null){
                         imageViewStar.setSelected(!imageViewStar.isSelected());
@@ -115,7 +119,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
                         recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
                     }
                     break;
-            }
+            }*/
 
 
         }

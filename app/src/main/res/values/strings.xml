@@ -111,4 +111,6 @@
     <string name="after_5_minutes">5 minutes after</string>
     <string name="after_10_minutes">10 minutes after</string>
     <string name="company_name" translatable="false">Expresso Bits</string>
+    <string name="companies">Companies</string>
+    <string name="news">News</string>
 </resources>

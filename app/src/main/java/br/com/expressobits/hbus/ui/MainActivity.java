@@ -42,6 +42,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
+import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
@@ -98,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     private void loadParams() {
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        Log.e("TESTE",cityId);
         city = FirebaseUtils.getCityName(cityId);
         country = FirebaseUtils.getCountry(cityId);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -343,6 +343,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             case ItinerariesFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_all_itineraries).setChecked(true);
                 break;
+            case CompaniesFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_companies).setChecked(true);
+                break;
             case AlarmListFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_alarms).setChecked(true);
                 break;
@@ -350,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     }
 
     /**
-     * S
+     *
      * @param TAG
      */
     public void addFragment(String TAG) {
@@ -367,6 +370,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             case ItinerariesFragment.TAG:
                 fragment = new ItinerariesFragment();
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case CompaniesFragment.TAG:
+                fragment = new CompaniesFragment();
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
                 break;
@@ -459,6 +468,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             addFragment(ItinerariesFragment.TAG);
         }else if (id == R.id.nav_alarms) {
             addFragment(AlarmListFragment.TAG);
+        }else if (id == R.id.nav_companies) {
+            addFragment(CompaniesFragment.TAG);
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_help) {
