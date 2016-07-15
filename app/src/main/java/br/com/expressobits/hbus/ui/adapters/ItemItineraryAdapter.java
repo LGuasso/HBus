@@ -62,17 +62,16 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
     @Override
     public void onBindViewHolder(ItineraryViewHolder holder, int position) {
 
-        /**if(dao.getItinerary(listItineraries.get(position).getId())!=null){
+        if(dao.getItinerary(listItineraries.get(position).getId())!=null){
             holder.imageViewStar.setSelected(true);
-           // holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
+           //holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
 
         }else {
             holder.imageViewStar.setSelected(false);
             //holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_outline_accent_24dp));
         }
 
-        holder.textViewName.setText(listItineraries.get(position).getName());*/
-        holder.text1.setText(listItineraries.get(position).getName());
+        holder.textViewName.setText(listItineraries.get(position).getName());
     }
 
     @Override
@@ -86,29 +85,29 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
 
     public class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public TextView text1;
-        public ImageView icon;
+        public LinearLayout linearLayout;
+        public TextView textViewName;
+        public ImageView imageViewStar;
 
 
         public ItineraryViewHolder(View itemView) {
             super(itemView);
-            text1 = (TextView) itemView.findViewById(R.id.text1);
-            /**linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
-            textViewName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
-            imageViewStar = (ImageView) itemView.findViewById(R.id.imageViewStar);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
+            textViewName = (TextView) itemView.findViewById(R.id.text1);
+            imageViewStar = (ImageView) itemView.findViewById(R.id.icon);
             linearLayout.setOnClickListener(this);
             imageViewStar.setOnClickListener(this);
             if(textViewName.isEnabled()){
                 linearLayout.setClickable(true);
-            }*/
+            }
 
         }
         @Override
         public void onClick(View v) {
 
 
-            /**switch (v.getId()){
-                case R.id.imageViewStar:
+            switch (v.getId()){
+                case R.id.icon:
                     if(imageViewStar.isEnabled() & recyclerViewOnClickListenerHack != null){
                         imageViewStar.setSelected(!imageViewStar.isSelected());
                         recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
@@ -119,7 +118,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
                         recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
                     }
                     break;
-            }*/
+            }
 
 
         }

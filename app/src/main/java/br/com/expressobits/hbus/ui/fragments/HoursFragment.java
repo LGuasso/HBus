@@ -74,7 +74,7 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
             this.itinerary = arguments.getString(ARGS_ITINERARY);
             this.way = arguments.getString(ARGS_WAY);
             this.typeday = arguments.getString(ARGS_TYPEDAY);
-            refresh(country, city, company, itinerary, way ,typeday);
+            //refresh(country, city, company, itinerary, way ,typeday);
         }else{
             Log.e(TAG,"null references in args!"+arguments.get(ARGS_COUNTRY)+arguments.get(ARGS_CITY)+arguments.get(ARGS_COMPANY)+
                     arguments.get(ARGS_TYPEDAY)+arguments.get(ARGS_ITINERARY));

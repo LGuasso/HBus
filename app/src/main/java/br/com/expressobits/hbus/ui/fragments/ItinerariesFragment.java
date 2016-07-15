@@ -202,7 +202,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
         Itinerary itinerary = listItineraries.get(position);
         switch (view.getId()){
-            case R.id.imageViewStar:
+            case R.id.icon:
                 FavoriteDAO dao = new FavoriteDAO(getActivity());
                 if(dao.getItinerary(itinerary.getId())!=null){
                     dao.removeFavorite(itinerary);
@@ -233,7 +233,8 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                 break;
             case R.id.linearLayoutItemList:
                 ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
-                FirebaseManager.loadBusesForItinerary(itinerary);
+                //TODO verificar se é preciso carregar os horários com acesso desse menu apenas!
+                //FirebaseManager.loadBusesForItinerary(itinerary);
                 break;
         }
 
