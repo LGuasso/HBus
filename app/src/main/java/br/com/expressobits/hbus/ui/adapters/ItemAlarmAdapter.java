@@ -125,7 +125,7 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
 
     @Override
     public void onClick(View v) {
-        /**MyViewHolder holder = (MyViewHolder) v.getTag();
+        /**ItineraryViewHolder holder = (ItineraryViewHolder) v.getTag();
         String theString = alarmList.get(holder.getLocalization()).getTimeAlarm();
         // Check for an expanded view, collapse if you find one
         if (expandedPosition >= 0) {

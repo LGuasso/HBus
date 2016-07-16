@@ -42,6 +42,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
+import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
@@ -98,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     private void loadParams() {
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        Log.e("TESTE",cityId);
         city = FirebaseUtils.getCityName(cityId);
         country = FirebaseUtils.getCountry(cityId);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -343,6 +343,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             case ItinerariesFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_all_itineraries).setChecked(true);
                 break;
+            case CompaniesFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_companies).setChecked(true);
+                break;
             case AlarmListFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_alarms).setChecked(true);
                 break;
@@ -350,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     }
 
     /**
-     * S
+     *
      * @param TAG
      */
     public void addFragment(String TAG) {
@@ -370,13 +373,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                     getSupportFragmentManager().popBackStack();
                 }
                 break;
+            case CompaniesFragment.TAG:
+                fragment = new CompaniesFragment();
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
             case AlarmListFragment.TAG:
-                Bundle args = new Bundle();
-                args.putString(AlarmListFragment.ARGS_COUNTRY,country);
-                args.putString(AlarmListFragment.ARGS_CITY,city);
-                args.putString(AlarmListFragment.ARGS_COMPANY,company);
                 fragment = new AlarmListFragment();
-                fragment.setArguments(args);
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -416,24 +420,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         pToolbar.setTitle("HBus");
         pToolbar.setSubtitle(FirebaseUtils.getCityName(cityId) + " - " + FirebaseUtils.getCountry(cityId));
     }
-
-    /**public void onCreateDialogChooseWay(String itineraryId) {
-        BusDAO dao = new BusDAO(this);
-        List<String> ways;
-        try {
-            ways = dao.getItinerary(itineraryId).getWays();
-            if (ways.size() > 1) {
-                ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-                chooseWayDialogFragment.setParameters(this, itineraryId, ways);
-                chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
-            } else {
-                onSettingsDone(itineraryId, ways.get(0));
-            }
-            dao.close();
-        }catch (SQLiteCantOpenDatabaseException exception){
-            Toast.makeText(this,"aguarde alguns segundos...",Toast.LENGTH_LONG).show();
-        }
-    }*/
 
     public void onCreateDialogChooseWay(Itinerary itinerary) {
         List<String> ways;
@@ -482,6 +468,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             addFragment(ItinerariesFragment.TAG);
         }else if (id == R.id.nav_alarms) {
             addFragment(AlarmListFragment.TAG);
+        }else if (id == R.id.nav_companies) {
+            addFragment(CompaniesFragment.TAG);
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_help) {

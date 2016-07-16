@@ -59,7 +59,7 @@
     <string name="send_feedback_with_sucess">Enviado feedback com sucesso!</string>
     <string name="add_itinerary">Adicionar itinerário</string>
     <string name="all_itinerary">Todos itinerários</string>
-    <string name="see_all_itinerary">Ver todos ititnerários</string>
+    <string name="see_all_itinerary">Ver todos itinerários</string>
     <string name="load_online_buses_with_sucess"></string>
     <string name="load_online_codes_with_sucess"></string>
     <string name="load_online_itineraries_with_sucess">Os itinerários foram sincronizados</string>
@@ -102,4 +102,7 @@
     <string name="notification_alarm_title_text">%1$s parte ás %2$s</string>
     <string name="notification_alarm_text">Sentido %1$s</string>
     <string name="notificates_about_a_bus">Notificações dos alarmes de itinerários</string>
+    <string name="notification_alarm_subtext">Empresa %1$s</string>
+    <string name="companies">Empresas</string>
+    <string name="news">Notícias</string>
 </resources>

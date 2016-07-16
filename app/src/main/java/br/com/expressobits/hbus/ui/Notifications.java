@@ -111,12 +111,13 @@ public class Notifications {
                 //        R.drawable.ic_close_white_24dp,getResources().getString(R.string.remove),
                 //        PendingIntent.getBroadcast(this,0,new Intent(this, HelpActivity.class),0)))
                 .setContentTitle(context.getString(R.string.notification_alarm_title_text,
-                        DAOUtils.getNameItinerary(alarm.getId()),DAOUtils.getTimeForBus(alarm.getId())))
+                        FirebaseUtils.getItinerary(alarm.getId()),FirebaseUtils.getTimeForBus(alarm.getId())))
                 .setContentText(context.getString(R.string.notification_alarm_text,
-                        DAOUtils.getWayForBus(alarm.getId())))
+                        FirebaseUtils.getWay(alarm.getId())))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 //.setSubText(context.getResources().getQuantityText(R.plurals.delay_content, alarm.getMinuteDelay()))
-                .setTicker(context.getString(R.string.notification_alarm_ticker, DAOUtils.getNameItinerary(alarm.getId())))
+                .setSubText(context.getString(R.string.notification_alarm_subtext,FirebaseUtils.getCompany(alarm.getId())))
+                .setTicker(context.getString(R.string.notification_alarm_ticker, FirebaseUtils.getItinerary(alarm.getId())))
                 .setSound(getUriRingtone(context))
                 .setWhen(System.currentTimeMillis())
                 .setColor(context.getResources().getColor(R.color.colorAccent))

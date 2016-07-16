@@ -15,9 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,8 +29,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
-import br.com.expressobits.hbus.dao.SaveCodesAsyncTask;
-import br.com.expressobits.hbus.dao.SaveItinerariesAsyncTask;
+import br.com.expressobits.hbus.firebase.FirebaseManager;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
@@ -55,17 +52,10 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     private List<Itinerary> listItineraries = new ArrayList<>();
     private List<Itinerary> favoriteItineraries;
-    private List<Code> codes;
     public static final String TAG = "ItinerariesFragment";
     private RecyclerView recyclerViewItineraries;
     private ProgressBar progressBar;
     public int lastPositionItinerary;
-    private SaveItinerariesAsyncTask saveItinerariesAsyncTask;
-    private SaveCodesAsyncTask saveCodesAsyncTask;
-    int totalCodes=0;
-    int totalItineraries=0;
-    int progressCodes =0;
-    int progressItineraries =0;
 
     @Nullable
     @Override
@@ -81,17 +71,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         super.onResume();
         ((MainActivity)getActivity()).setActionBarTitle();
         ((MainActivity)getActivity()).setSelectItemNavigation(TAG);
-    }
-
-    private void initViews(View view){
-        initListViews(view);
-    }
-
-    private void initListViews(View view){
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
-        recyclerViewItineraries.setHasFixedSize(true);
-
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
 
         FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
@@ -103,32 +82,48 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
             progressBar.setVisibility(View.INVISIBLE);
             refreshRecyclerView();
         }else {
-            String country = FirebaseUtils.getCountry(cityId);
-            String city = FirebaseUtils.getCityName(cityId);
-            String company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"SIMSM");
-            refresh(country,city,company);
+
         }
+        String country = FirebaseUtils.getCountry(cityId);
+        String city = FirebaseUtils.getCityName(cityId);
+        String company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"SIMSM");
+        refresh(country,city,company);
+    }
+
+    private void initViews(View view){
+        initListViews(view);
+    }
+
+    private void initListViews(View view){
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
+        recyclerViewItineraries.setHasFixedSize(true);
 
     }
 
 
 
     private void addItinerary(Itinerary itinerary){
+        if(itinerary.getId()!=null){
+            listItineraries.add(itinerary);
+        }
         if(listItineraries.size()>0){
             progressBar.setVisibility(View.INVISIBLE);
             recyclerViewItineraries.setVisibility(View.VISIBLE);
-        }
-        if(itinerary.getId()!=null){
-            listItineraries.add(itinerary);
         }
         refreshRecyclerView();
 
     }
 
-    public void refresh(final String country, final String city,final String company){
+    private void refresh(String country,String city,String company){
         listItineraries.clear();
         progressBar.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
+        loadItinerariesFromFirebase(country, city, company);
+        loadCodesFromFirebase(country, city, company);
+    }
+
+    private void loadItinerariesFromFirebase(final String country, final String city, final String company) {
         FirebaseDatabase database= FirebaseDatabase.getInstance();
         DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.ITINERARY_TABLE);
         DatabaseReference countryRef = itinerariesTableRef.child(country);
@@ -165,12 +160,49 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         });
     }
 
+    private void loadCodesFromFirebase(final String country, final String city, final String company) {
+        FirebaseDatabase database= FirebaseDatabase.getInstance();
+        DatabaseReference codesTableRef = database.getReference(FirebaseUtils.CODE_TABLE);
+        DatabaseReference countryRef = codesTableRef.child(country);
+        DatabaseReference cityRef = countryRef.child(city);
+        DatabaseReference companyRef = cityRef.child(company);
+        companyRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Code code = dataSnapshot.getValue(Code.class);
+                code.setId(FirebaseUtils.getIdCode(country,city,company,code.getName()));
+                Log.d("CODE LOAD FORM FIREBASE","Code "+code.getName());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public void onClickListener(View view, int position) {
 
         Itinerary itinerary = listItineraries.get(position);
         switch (view.getId()){
-            case R.id.imageViewStar:
+            case R.id.icon:
                 FavoriteDAO dao = new FavoriteDAO(getActivity());
                 if(dao.getItinerary(itinerary.getId())!=null){
                     dao.removeFavorite(itinerary);
@@ -187,10 +219,8 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                     Log.d(TAG,"insert favorite "+itinerary.getId());
                     dao.close();
 
-                    /**BusDAO db = new BusDAO(getActivity());
-                    if(db.getBuses(cityId,itinerary.getId()).size()<1){
-                        //pullBuses(itinerary);
-                    }*/
+                    FirebaseManager.loadBusesForItinerary(itinerary);
+
 
                     lastPositionItinerary = position;
 
@@ -203,10 +233,14 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                 break;
             case R.id.linearLayoutItemList:
                 ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
+                //TODO verificar se é preciso carregar os horários com acesso desse menu apenas!
+                //FirebaseManager.loadBusesForItinerary(itinerary);
                 break;
         }
 
     }
+
+
 
     @Override
     public boolean onLongClickListener(View view, int position) {
@@ -222,55 +256,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewItineraries.setLayoutManager(llmUseful);
     }
-
-
-    /**
-     * TODO remove CLoud
-     * public void pullItineraries(String cityId){
-        linearLayoutProgress.setVisibility(View.VISIBLE);
-        recyclerViewItineraries.setVisibility(View.INVISIBLE);
-        Log.d(TAG, "initial push itinerary");
-        if(NetworkUtils.isWifiConnected(getActivity()) || NetworkUtils.isMobileConnected(getActivity())) {
-            PullItinerariesEndpointsAsyncTask pullItinerariesEndpointsAsyncTask = new PullItinerariesEndpointsAsyncTask();
-            pullItinerariesEndpointsAsyncTask.setContext(getActivity());
-            pullItinerariesEndpointsAsyncTask.setResultListenerAsyncTask(this);
-            City city = new City();
-            city.setName(DAOUtils.getNameCity(cityId));
-            city.setCountry(DAOUtils.getNameCountry(cityId));
-            pullItinerariesEndpointsAsyncTask.execute(city);
-        }else{
-            linearLayoutProgress.setVisibility(View.INVISIBLE);
-            //imageViewNetworkError.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void pullCodes(String cityId){
-        Log.d(TAG,"initial push code");
-        if(NetworkUtils.isWifiConnected(getActivity()) || NetworkUtils.isMobileConnected(getActivity())) {
-            PullCodesEndpointsAsyncTask pullCodesEndpointsAsyncTask = new PullCodesEndpointsAsyncTask();
-            pullCodesEndpointsAsyncTask.setContext(getActivity());
-            pullCodesEndpointsAsyncTask.setResultListenerAsyncTask(this);
-            City city = new City();
-            city.setName(DAOUtils.getNameCity(cityId));
-            city.setCountry(DAOUtils.getNameCountry(cityId));
-            pullCodesEndpointsAsyncTask.execute(city);
-        }
-    }
-
-    private void pullBuses(Itinerary itinerary){
-        Log.d(TAG,"initial push buses");
-        if(NetworkUtils.isWifiConnected(getActivity()) || NetworkUtils.isMobileConnected(getActivity())) {
-            PullBusEndpointsAsyncTask pullBusEndpointsAsyncTask = new PullBusEndpointsAsyncTask();
-            pullBusEndpointsAsyncTask.setContext(getActivity());
-            pullBusEndpointsAsyncTask.setResultListenerAsyncTask(this);
-            City city = new City();
-            city.setName(DAOUtils.getNameCity(cityId));
-            city.setCountry(DAOUtils.getNameCountry(cityId));
-            Pair<City,Itinerary> pair = new Pair<>(city,itinerary);
-
-            pullBusEndpointsAsyncTask.execute(pair);
-        }
-    }*/
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -305,91 +290,10 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                 }
             });
 
-            /**BusDAO dao = new BusDAO(getActivity());
-            City city = dao.getCityName(cityId);
-
-            //TODO reformular o DB para usar o company default field
-            city.setCompanyDefault("SIMSM");
-            refresh(city.getCountry(),city.getName(),city.getCompanyDefault());*/
-
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /** TODO remove cloud
-    @Override
-    public void finished(List list) {
 
-        if(list!=null){
-            if(list.size()>0){
-                if(list.get(0) instanceof Itinerary){
-                    listItineraries = list;
-                    Log.d(TAG,list.toString());
-                    saveItinerariesAsyncTask = new SaveItinerariesAsyncTask();
-                    saveItinerariesAsyncTask.setContext(getActivity());
-                    saveItinerariesAsyncTask.setFinishSaveDAO(this);
-                    saveItinerariesAsyncTask.execute(new Pair<String, List<Itinerary>>(cityId,list));
-                    totalItineraries = list.size();
-                    progressItineraries =0;
-
-                }else if(list.get(0) instanceof Code){
-                    codes = list;
-                    Log.d(TAG,codes.toString());
-                    saveCodesAsyncTask = new SaveCodesAsyncTask();
-                    saveCodesAsyncTask.setContext(getActivity());
-                    saveCodesAsyncTask.setFinishSaveDAO(this);
-                    saveCodesAsyncTask.execute(new Pair<String, List<Code>>(cityId,list));
-                    totalCodes = list.size();
-                    progressCodes =0;
-
-                }else if(list.get(0) instanceof Bus){
-                    List<Bus> buses = list;
-                    Log.d(TAG,buses.toString());
-                    BusDAO db = new BusDAO(getActivity());
-                    int result = db.deleteBuses(cityId, listItineraries.get(lastPositionItinerary).getId());
-                    Log.d(TAG, "result delete bus " + result);
-                    for (Bus bus:buses){
-                        Log.d(TAG,"bus "+bus.getTime()+" load from datastore way "+bus.getWay());
-                        db.insert(bus);
-                    }
-                    Log.i(TAG, buses.toString());
-                    if(BuildConfig.DEBUG) {
-                        Toast.makeText(getActivity(), getString(R.string.load_online_buses_with_sucess), Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        }
-    }*/
-
-    /**@Override
-    public void finish() {
-            if(saveItinerariesAsyncTask.isFinished() && saveCodesAsyncTask.isFinished()){
-                recyclerViewItineraries.setVisibility(View.VISIBLE);
-                linearLayoutProgress.setVisibility(View.INVISIBLE);
-                Toast.makeText(getActivity(),getString(R.string.load_online_itineraries_with_sucess),Toast.LENGTH_LONG).show();
-                refreshRecyclerView();
-
-        }
-
-    }
-
-    @Override
-    public void progressUpdate(Object type, int progress, int total) {
-
-
-
-        if(type instanceof Code){
-            progressCodes++;
-
-
-        }else if(type instanceof Itinerary){
-            progressItineraries++;
-        }
-        float number = ((float)(progressCodes+progressItineraries)/ (float)(totalCodes+totalItineraries));
-        textViewProgress.setText(((int)(number*100))+"%");
-        progressBar.setMax(totalItineraries+totalCodes);
-        progressBar.setProgress(progressItineraries+progressCodes);
-
-    }*/
 }

@@ -36,8 +36,8 @@ public class FirebaseUtils {
         return BARS+country+BARS+city+BARS+company+BARS+itinerary;
     }
 
-    public static String getIdCode(City city,Code code){
-        return BARS+city.getCountry()+BARS+city.getName()+BARS+code.getName();
+    public static String getIdCode(String country,String city,String company,String code){
+        return BARS+country+BARS+city+BARS+company+BARS+code;
     }
 
     public static String getIdBus(String country,String city,String company,String itinerary,String way,String typeday,String time){
@@ -47,6 +47,8 @@ public class FirebaseUtils {
     public static String getIdCityforItinerary(City city){
         return BARS+ CityContract.City.TABLE_NAME+BARS+city.getCountry()+BARS+city.getName();
     }
+
+
 
     public static String getCountry(String id){
         return id.split(BARS)[1];
@@ -58,5 +60,17 @@ public class FirebaseUtils {
 
     public static String getCompany(String id){
         return id.split(BARS)[3];
+    }
+
+    public static String getItinerary(String id){
+        return id.split(BARS)[4];
+    }
+
+    public static String getWay(String id){
+        return id.split(BARS)[5];
+    }
+
+    public static String getTimeForBus(String id) {
+        return id.split(BARS)[7];
     }
 }

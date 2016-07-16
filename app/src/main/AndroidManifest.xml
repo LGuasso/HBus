@@ -141,7 +141,13 @@
         <activity
             android:name=".ui.alarm.AlarmEditorActivity"
             android:label="@string/title_activity_help_content"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>>
 
         <service
             android:name=".alarm.AlarmService"

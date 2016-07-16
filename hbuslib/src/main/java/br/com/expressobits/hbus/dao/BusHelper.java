@@ -17,6 +17,7 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
+import br.com.expressobits.hbus.utils.BusUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 
@@ -338,7 +339,7 @@ public class BusHelper {
     public static List<Itinerary> getItineraries(SQLiteDatabase db,City city){
         ArrayList<Itinerary> itineraries = new ArrayList<Itinerary>();
         String where = ItineraryContract.Itinerary._ID+" LIKE ?";
-        String arguments[] = {city.getCountry()+BARS+city.getName()+"%"};
+        String arguments[] = {BARS+city.getCountry()+BARS+city.getName()+"%"};
         Cursor c;
         c = db.query(
                 ItineraryContract.Itinerary.TABLE_NAME,
@@ -465,7 +466,7 @@ public class BusHelper {
         ArrayList<Bus> next = new ArrayList<Bus>();
         if(itinerary.getWays()!=null){
             for(int j = 0;j< itinerary.getWays().size();j++) {
-                next.add(getNextBusforList(
+                next.add(BusUtils.getNextBusforList(
                         getBuses(db,
                                 city,
                                 itinerary,
@@ -476,30 +477,6 @@ public class BusHelper {
 
         return next;
     }
-
-    private static Bus getNextBusforList(List<Bus> buses){
-        //TODO Create metodo separado
-        Bus nowBus = new Bus();
-        Bus nextBus;
-        nowBus.setTime(HoursUtils.getNowTimeinString());
-        if(buses.size() > 0) {
-            nextBus = buses.get(0);
-            for (int i = 0; i < buses.size(); i++) {
-                nextBus = buses.get(i);
-                if (HoursUtils.compareTo(nowBus,nextBus) <= 0) {
-                    nextBus = buses.get(i);
-                    return nextBus;
-                } else {
-
-                }
-            }
-            return nextBus;
-        }else{
-            nowBus.setTime(NOT_FOUND_TIME);
-            return nowBus;
-        }
-    }
-
 
 
     //
