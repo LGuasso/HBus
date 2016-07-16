@@ -59,6 +59,9 @@ public class AlarmEditorActivity extends AppCompatActivity {
         }else {
             setTitle(getString(R.string.new_alarm));
         }
+
+        Toolbar pToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(pToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
