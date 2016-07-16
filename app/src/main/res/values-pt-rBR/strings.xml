@@ -105,4 +105,5 @@
     <string name="notification_alarm_subtext">Empresa %1$s</string>
     <string name="companies">Empresas</string>
     <string name="news">Notícias</string>
+    <string name="company_use">Horários da %1$s</string>
 </resources>

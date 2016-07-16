@@ -113,4 +113,5 @@
     <string name="company_name" translatable="false">Expresso Bits</string>
     <string name="companies">Companies</string>
     <string name="news">News</string>
+    <string name="company_use">of %1$s times</string>
 </resources>

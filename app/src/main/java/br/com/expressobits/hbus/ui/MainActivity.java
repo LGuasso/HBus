@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     private NavigationView navigationView;
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
+    TextView textViewCompanyUse;
 
     private String country;
     private String city;
@@ -123,25 +124,23 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     protected void onResume() {
         super.onResume();
         loadParams();
+        refresh();
         //TODO "resumir" os views sem ter carregar novamente
         initNavigationDrawer();
     }
 
+    public void refresh(){
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
+    }
+
+
+
     private void initViews() {
-        /**PullCitiesAsyncTask pullCitiesAsyncTask = new PullCitiesAsyncTask();
-        pullCitiesAsyncTask.setResultListenerAsyncTask(new ResultListenerAsyncTask<City>() {
-            @Override
-            public void finished(List<City> cities) {
-                for (City city:cities){
-                    Log.e("FIREBASE",city.getName());
-                }
-            }
-        });
-        pullCitiesAsyncTask.setContext(this);
-        pullCitiesAsyncTask.execute("RS");*/
         initActionBar();
         initNavigationDrawer();
         initAdInterstitial();
+        textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
     }
 
     private void initAdInterstitial(){
@@ -186,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         View naviHeader = navigationView.getHeaderView(0);
         View naviView = naviHeader.findViewById(R.id.side_nav_bar);
+        /**TODO mostrar empresa selecionada no menu com companies */
         naviView.setOnClickListener(this);
         TextView textViewCityName = (TextView)naviHeader.findViewById(R.id.textViewCityName);
         textViewCityName.setText(city + " - " + country);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -23,6 +25,7 @@ import java.util.Random;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.DAOUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -39,6 +42,7 @@ public class TimesActivity extends AppCompatActivity {
     public static final String ARGS_WAY = "way";
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
+    TextView textViewCompanyUse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,9 @@ public class TimesActivity extends AppCompatActivity {
         ft.add(R.id.framelayout_times, onibusFragment, OnibusFragment.TAG);
         ft.commit();
         initAdView();
+        textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
     }
 
 

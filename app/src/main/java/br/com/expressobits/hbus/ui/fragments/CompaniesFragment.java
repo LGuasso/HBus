@@ -164,6 +164,7 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
         editor.putString(cityId,listCompanies.get(position).getName());
         editor.apply();
         refreshRecyclerView();
+        ((MainActivity)getActivity()).refresh();
     }
 
     @Override
