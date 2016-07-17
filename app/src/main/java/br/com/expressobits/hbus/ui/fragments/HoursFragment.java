@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -17,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,7 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 public class HoursFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
     private RecyclerView recyclerView;
+    private LinearLayout linearLayoutEmptyState;
     private List<Bus> listBus;
     private Context context;
     private static final String TAG = "HoursFragment";
@@ -60,6 +64,7 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
         View view = inflater.inflate(R.layout.fragment_hours, container, false);
         this.context = inflater.getContext();
         initRecyclerView(view);
+        linearLayoutEmptyState = (LinearLayout) view.findViewById(R.id.empty_list);
         listBus = new ArrayList<>();
         Bundle arguments = getArguments();
         if(arguments!=null && arguments.getString(ARGS_COUNTRY)!=null &&
@@ -106,36 +111,54 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
         DatabaseReference companyRef = cityRef.child(company);
         DatabaseReference itineraryRef = companyRef.child(itinerary);
         DatabaseReference wayRef = itineraryRef.child(way);
-        DatabaseReference typedayRef = wayRef.child(typeday);
-        typedayRef.addChildEventListener(new ChildEventListener() {
+        final DatabaseReference typedayRef = wayRef.child(typeday);
+        typedayRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Bus bus = dataSnapshot.getValue(Bus.class);
-                bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,bus.getTime()));
-                addBus(bus);
-            }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println("We're done loading the initial "+dataSnapshot.getChildrenCount()+" items");
+                if(dataSnapshot.getChildrenCount()>0){
+                    typedayRef.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Bus bus = dataSnapshot.getValue(Bus.class);
+                            bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,bus.getTime()));
+                            addBus(bus);
+                        }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
+                        }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+                        }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getActivity(),"Erro "+databaseError.getCode(),Toast.LENGTH_LONG).show();
+                            Log.e(TAG,databaseError.getDetails()+" message:"+databaseError.getMessage());
+                        }
+                    });
+                }else{
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    linearLayoutEmptyState.setVisibility(View.VISIBLE);
+                }
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(),"Erro "+databaseError.getCode(),Toast.LENGTH_LONG).show();
-                Log.e(TAG,databaseError.getDetails()+" message:"+databaseError.getMessage());
+
             }
         });
+
     }
 
     private void addBus(Bus bus){

@@ -366,22 +366,34 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 break;
             case ItinerariesFragment.TAG:
                 fragment = new ItinerariesFragment();
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 break;
             case CompaniesFragment.TAG:
                 fragment = new CompaniesFragment();
-                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
                 break;
             case AlarmListFragment.TAG:
                 fragment = new AlarmListFragment();
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
                 break;
