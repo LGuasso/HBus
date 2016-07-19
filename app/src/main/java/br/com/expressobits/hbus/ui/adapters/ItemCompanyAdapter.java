@@ -1,12 +1,15 @@
 package br.com.expressobits.hbus.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -40,7 +43,7 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
 
     @Override
     public CompanyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = layoutInflater.inflate(android.R.layout.simple_list_item_checked,viewGroup,false);
+        View view = layoutInflater.inflate(R.layout.item_list_company,viewGroup,false);
         return new CompanyViewHolder(view);
     }
 
@@ -48,8 +51,9 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
     public void onBindViewHolder(CompanyViewHolder holder, int position) {
         Company company = companies.get(position);
         holder.textView1.setText(company.getName());
+        holder.textView2.setText(company.getEmail());
         if(company.getName().equals(companySelected)){
-            holder.textView1.setChecked(true);
+            holder.imageView.setSelected(true);
         }
 
     }
@@ -61,19 +65,33 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
 
     public class CompanyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public CheckedTextView textView1;
+        public TextView textView1;
         public TextView textView2;
+        public ImageView imageView;
+        public LinearLayout linearLayout;
 
         public CompanyViewHolder(View itemView) {
             super(itemView);
-            textView1 = (CheckedTextView) itemView.findViewById(android.R.id.text1);
-            textView1.setChecked(false);
-            textView1.setOnClickListener(this);
+            textView1 = (TextView) itemView.findViewById(R.id.text1);
+            textView2 = (TextView) itemView.findViewById(R.id.text2);
+            imageView = (ImageView) itemView.findViewById(R.id.icon);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
+            imageView.setSelected(false);
+            linearLayout.setOnClickListener(this);
+            textView2.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            recyclerViewOnClickListenerHack.onClickListener(v,getAdapterPosition());
+            if(v.getId()==R.id.text2){
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/html");
+                intent.putExtra(Intent.EXTRA_EMAIL,companies.get(getAdapterPosition()).getEmail());
+                context.startActivity(Intent.createChooser(intent, "Send Email"));
+            }else{
+                recyclerViewOnClickListenerHack.onClickListener(v,getAdapterPosition());
+            }
+
         }
     }
 

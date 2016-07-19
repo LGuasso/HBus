@@ -33,11 +33,20 @@
 
             <TextView
                 android:id="@+id/textViewItineraryName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/itinerary_name"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/textViewCompanyName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="@string/itinerary_name"
-                android:textAppearance="?android:textAppearanceLarge" />
+                android:text="@string/company_use"
+                android:textAppearance="?android:textAppearanceSmall" />
+
 
 
 

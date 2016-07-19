@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
 
     @Override
-    public void onSettingsDone(String itinerary, String way) {
+    public void onSettingsDone(String company,String itinerary, String way) {
         this.itinerary = itinerary;
         this.way = way;
         if(showAdIntersticial()){
@@ -435,14 +435,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     public void onCreateDialogChooseWay(Itinerary itinerary) {
         List<String> ways;
+        String company = FirebaseUtils.getCompany(itinerary.getId());
         try {
             ways = itinerary.getWays();
             if (ways.size() > 1) {
                 ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-                chooseWayDialogFragment.setParameters(this,itinerary.getName(), ways);
+                chooseWayDialogFragment.setParameters(this,company,itinerary.getName(), ways);
                 chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
             } else {
-                onSettingsDone(itinerary.getName(), ways.get(0));
+                onSettingsDone(company,itinerary.getName(), ways.get(0));
             }
         }catch (SQLiteCantOpenDatabaseException exception){
             Toast.makeText(this,"aguarde alguns segundos...",Toast.LENGTH_LONG).show();
@@ -464,8 +465,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     }
 
     @Override
-    public void onItemClick(String itinerary, String way) {
-        onSettingsDone(itinerary, way);
+    public void onItemClick(String company,String itinerary, String way) {
+        onSettingsDone(company,itinerary, way);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

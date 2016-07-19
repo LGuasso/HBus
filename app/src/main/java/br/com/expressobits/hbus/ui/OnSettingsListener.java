@@ -11,7 +11,7 @@ public interface OnSettingsListener {
      * @param itinerary itinerario
      * @param way way
      */
-    public void onSettingsDone(String itinerary,String way);
+    public void onSettingsDone(String company,String itinerary,String way);
 
     /**
      * Escolhe atividade deve iniciar com hor�rios da itinerary e way selecionado

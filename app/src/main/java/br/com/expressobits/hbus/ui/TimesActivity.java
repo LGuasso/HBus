@@ -76,8 +76,7 @@ public class TimesActivity extends AppCompatActivity {
         ft.commit();
         initAdView();
         textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
-        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
+        textViewCompanyUse.setText(getString(R.string.company_use,getIntent().getStringExtra(ARGS_COMPANY)));
     }
 
 
