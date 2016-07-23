@@ -79,18 +79,13 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
             imageView.setSelected(false);
             linearLayout.setOnClickListener(this);
             textView2.setOnClickListener(this);
+            imageView.setOnClickListener(this);
+            textView1.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if(v.getId()==R.id.text2){
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/html");
-                intent.putExtra(Intent.EXTRA_EMAIL,companies.get(getAdapterPosition()).getEmail());
-                context.startActivity(Intent.createChooser(intent, "Send Email"));
-            }else{
-                recyclerViewOnClickListenerHack.onClickListener(v,getAdapterPosition());
-            }
+            recyclerViewOnClickListenerHack.onClickListener(v,getAdapterPosition());
 
         }
     }

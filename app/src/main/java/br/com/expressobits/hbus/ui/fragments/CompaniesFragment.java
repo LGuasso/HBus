@@ -1,6 +1,7 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,8 +24,10 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.ui.CompanyDetailsActivity;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.TimesActivity;
 import br.com.expressobits.hbus.ui.adapters.ItemCompanyAdapter;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
@@ -158,13 +161,35 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     @Override
     public void onClickListener(View view, int position) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(cityId,listCompanies.get(position).getName());
-        editor.apply();
-        refreshRecyclerView();
-        ((MainActivity)getActivity()).refresh();
+
+        Intent intent;
+        Company company = listCompanies.get(position);
+        switch (view.getId()){
+            case R.id.text2:
+                intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/html");
+                intent.putExtra(Intent.EXTRA_EMAIL,company.getEmail());
+                intent.putExtra(Intent.EXTRA_SUBJECT,company.getEmail());
+                getActivity().startActivity(Intent.createChooser(intent, "Send Email"));
+                break;
+            case R.id.text1:
+                intent = new Intent(getContext(), CompanyDetailsActivity.class);
+                intent.putExtra(TimesActivity.ARGS_COUNTRY,FirebaseUtils.getCountry(company.getId()));
+                intent.putExtra(TimesActivity.ARGS_CITY, FirebaseUtils.getCityName(company.getId()));
+                intent.putExtra(TimesActivity.ARGS_COMPANY, company.getName());
+                startActivity(intent);
+                break;
+            case R.id.icon:
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(cityId,company.getName());
+                editor.apply();
+                refreshRecyclerView();
+                ((MainActivity)getActivity()).refresh();
+                break;
+
+        }
     }
 
     @Override

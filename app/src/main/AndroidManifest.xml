@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.expressobits.hbus" >
+    package="br.com.expressobits.hbus">
 
     <!-- Permissão para ler memória externa -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -35,7 +35,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-
         <!-- Esta meta data é requerida com o play services -->
         <meta-data
             android:name="com.google.android.gms.version"
@@ -47,7 +46,7 @@
         -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
@@ -64,7 +63,7 @@
         -->
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -92,7 +91,7 @@
             android:name=".ui.splash.SplashActivity"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -103,7 +102,7 @@
             android:name=".ui.help.HelpActivity"
             android:label="@string/title_activity_help"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
@@ -112,7 +111,7 @@
             android:name=".ui.help.FeedbackActivity"
             android:label="@string/title_activity_feedback"
             android:parentActivityName=".ui.help.HelpActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.help.HelpActivity" />
@@ -121,7 +120,7 @@
             android:name=".ui.TimesActivity"
             android:label="@string/title_activity_times"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
@@ -129,7 +128,7 @@
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.MainActivity" >
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
@@ -141,14 +140,13 @@
         <activity
             android:name=".ui.alarm.AlarmEditorActivity"
             android:label="@string/title_activity_help_content"
-            android:theme="@style/AppTheme.NoActionBar"
-
-            android:parentActivityName=".ui.MainActivity" >
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
-        </activity>>
-
+        </activity>
+        >
         <service
             android:name=".alarm.AlarmService"
             android:enabled="true" />
@@ -156,7 +154,7 @@
         <receiver android:name=".alarm.AlarmReceiver" />
         <receiver
             android:name=".alarm.BootReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -166,6 +164,15 @@
         <service
             android:name=".alarm.BootService"
             android:enabled="true" />
+
+        <activity
+            android:name=".ui.CompanyDetailsActivity"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
