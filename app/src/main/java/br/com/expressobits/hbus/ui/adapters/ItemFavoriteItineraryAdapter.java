@@ -61,17 +61,18 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     @Override
     public void onBindViewHolder(HolderFavoriteItinerary holder, int position) {
         String name  = "";
+        String companyName = "";
         Itinerary itinerary = itineraryList.get(position);
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(MainActivity.DEBUG,false)){
-            name += itinerary.getId()+" - "+ itinerary.getName();
+            name += itinerary.getId();
         }else{
             name += itinerary.getName();
+            companyName += context.getString(R.string.company_use,FirebaseUtils.getCompany(itinerary.getId()));
         }
         holder.textItineraryName.setText(name);
+        holder.textViewCompanyName.setText(companyName);
         if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemFavoriteItineraryAdapter.PREF_TIME_HOME_SCREEN,true)){
-
             getBusList(holder,itinerary).toString();
-
         }
 
     }
@@ -168,7 +169,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     public class HolderFavoriteItinerary extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         public TextView textItineraryName;
-        //public TextView textViewItineraryHours;
+        public TextView textViewCompanyName;
         public Button buttonRemove;
         public Button buttonLookHours;
         public LinearLayout linearLayoutInfo;
@@ -178,7 +179,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             super(itemView);
 
             textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
-            //textViewItineraryHours = (TextView) itemView.findViewById(R.id.linear_layout_nextbuses);
+            textViewCompanyName = (TextView) itemView.findViewById(R.id.textViewCompanyName);
             linearLayoutInfo = (LinearLayout) itemView.findViewById(R.id.linearlayout_background_info);
             linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
             buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);

@@ -105,4 +105,10 @@
     <string name="notification_alarm_subtext">Empresa %1$s</string>
     <string name="companies">Empresas</string>
     <string name="news">Notícias</string>
+    <string name="company_use">Horários da %1$s</string>
+    <string name="address">Endereço</string>
+    <string name="email">E-mail</string>
+    <string name="loading">Carregando\u2026</string>
+    <string name="phoneNumber">Telefone</string>
+    <string name="website">Site</string>
 </resources>

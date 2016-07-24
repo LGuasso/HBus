@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:text="@string/see_all_itinerary"
             android:layout_gravity="center_horizontal"
-            android:textAppearance="@android:style/TextAppearance.Widget.TabWidget" />
+            android:textColor="@color/colorAccent"
+            android:textAppearance="?android:textAppearanceButton" />
 
     </LinearLayout>
 

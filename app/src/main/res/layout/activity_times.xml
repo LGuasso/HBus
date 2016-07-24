@@ -8,7 +8,7 @@
     android:id = "@+id/cordinatorLayout"
     tools:context="br.com.expressobits.hbus.ui.TimesActivity">
 
-    <include layout="@layout/toolbar_default" />
+    <include layout="@layout/toolbar_times" />
 
     <include layout="@layout/content_times" />
 

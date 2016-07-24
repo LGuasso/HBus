@@ -8,8 +8,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import br.com.expressobits.hbus.gae.ProgressAsyncTask;
-import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
@@ -21,15 +19,6 @@ public class PushCitiesASyncTask extends AsyncTask<City,Integer,City> {
 
     private static final String TAG = PushCitiesASyncTask.class.getName();
     FirebaseDatabase database;
-    private ProgressAsyncTask progressAsyncTask;
-    private ResultListenerAsyncTask<Integer> resultListenerAsyncTask;
-    public void setProgressAsyncTask(ProgressAsyncTask progressAsyncTask) {
-        this.progressAsyncTask = progressAsyncTask;
-    }
-
-    public void setResultListenerAsyncTask(ResultListenerAsyncTask<Integer> resultListenerAsyncTask) {
-        this.resultListenerAsyncTask = resultListenerAsyncTask;
-    }
 
     @Override
     protected City doInBackground(City... params) {
@@ -42,6 +31,8 @@ public class PushCitiesASyncTask extends AsyncTask<City,Integer,City> {
             DatabaseReference countryRef = citiesTableRef.child(city.getCountry());
             DatabaseReference cityRef = countryRef.child(city.getName());
             cityRef.setValue(city);
+
+            Log.d(TAG,city.getName());
             //publishProgress((int) ((i+1 / params.length) * 100));
 
             return city;
@@ -49,22 +40,4 @@ public class PushCitiesASyncTask extends AsyncTask<City,Integer,City> {
         return null;
     }
 
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        if(progressAsyncTask!=null){
-            progressAsyncTask.setProgressUdate(values[0],City.class);
-        }else{
-            Log.w(TAG,"progressAsyncTask is null!");
-        }
-    }
-
-    @Override
-    protected void onPostExecute(City city) {
-        Log.d(TAG, "SEND OK! "+city.getName());
-        if(resultListenerAsyncTask!=null){
-            resultListenerAsyncTask.finished(new ArrayList<Integer>(0));
-        }else{
-            Log.w(TAG,"resultListenerAsyncTask is null!");
-        }
-    }
 }

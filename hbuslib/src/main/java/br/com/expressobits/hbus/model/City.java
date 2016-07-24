@@ -14,6 +14,7 @@ public class City {
     private String country;
     private String companyDefault;
     private Map<String,Double> localization = new HashMap<>();
+    private boolean actived;
 
     public String getId() {
         return id;
@@ -53,6 +54,14 @@ public class City {
 
     public void setLocalization(Map<String,Double>  localization) {
         this.localization = localization;
+    }
+
+    public boolean isActived() {
+        return actived;
+    }
+
+    public void setActived(boolean actived) {
+        this.actived = actived;
     }
 
     @Override

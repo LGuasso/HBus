@@ -45,21 +45,24 @@ public class ReadFile {
 
     public City toCity(String text){
         City city = new City();
-        city.setName(text.split(SPLIT_FILE)[0]);
-        city.setCountry(text.split(SPLIT_FILE)[1]);
-        city.setCompanyDefault(text.split(SPLIT_FILE)[2]);
+        city.setActived(text.split(SPLIT_FILE)[0].equals("1"));
+        city.setName(text.split(SPLIT_FILE)[1]);
+        city.setCountry(text.split(SPLIT_FILE)[2]);
+        city.setCompanyDefault(text.split(SPLIT_FILE)[3]);
         HashMap<String,Double> hashMap = new HashMap<>();
-        hashMap.put(CityContract.City.COLUMN_NAME_LATITUDE,Double.parseDouble(text.split(SPLIT_FILE)[3].split(SPLIT_FILE_SECONDARY)[0]));
-        hashMap.put(CityContract.City.COLUMN_NAME_LONGITUDE,Double.parseDouble(text.split(SPLIT_FILE)[3].split(SPLIT_FILE_SECONDARY)[1]));
+        hashMap.put(CityContract.City.COLUMN_NAME_LATITUDE,Double.parseDouble(text.split(SPLIT_FILE)[4].split(SPLIT_FILE_SECONDARY)[0]));
+        hashMap.put(CityContract.City.COLUMN_NAME_LONGITUDE,Double.parseDouble(text.split(SPLIT_FILE)[4].split(SPLIT_FILE_SECONDARY)[1]));
         city.setLocalization(hashMap);
         return city;
     }
 
     public Company toCompany(String text){
         Company company = new Company();
-        company.setName(text.split(SPLIT_FILE)[0]);
-        company.setEmail(text.split(SPLIT_FILE)[1]);
-        company.setWebsite(text.split(SPLIT_FILE)[2]);
+
+        company.setActived(text.split(SPLIT_FILE)[0].equals("1"));
+        company.setName(text.split(SPLIT_FILE)[1]);
+        company.setEmail(text.split(SPLIT_FILE)[2]);
+        company.setWebsite(text.split(SPLIT_FILE)[3]);
         company.setPhoneNumber(text.split(SPLIT_FILE)[3]);
         return company;
     }

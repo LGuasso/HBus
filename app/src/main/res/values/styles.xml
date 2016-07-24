@@ -32,18 +32,17 @@
     </style>
 
     <style name="Text" parent="@style/TextAppearance.AppCompat.Large">
-        <!-- Support library compatibility -->
+        <!-- Support library compatibili 7fcty -->
 
     </style>
 
 
     <style name="AppTheme.Button.Borderless.Colored" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
-        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
+        <item name="android:textAppearance">?android:textAppearanceButton</item>
         <item name="android:minHeight">36dip</item>
         <item name="android:minWidth">64dip</item>
         <item name="android:padding">8dp</item>
         <item name="android:paddingLeft">24dp</item>
-        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="AppTheme.Base.Widget.AppCompat.Button.Colored" parent="@style/Base.Widget.AppCompat.Button.Colored">

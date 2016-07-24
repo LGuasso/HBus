@@ -4,9 +4,9 @@ import android.content.Context;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.dao.BusDAOGenerator;
 import br.com.expressobits.hbus.file.ReadFileCloud;
+import br.com.expressobits.hbus.model.City;
 
 /**
  * @author Rafael
@@ -34,9 +34,9 @@ public class DbManager /**implements SaveModel*/{
     }
 
 
-    public List<City> readFileCity(){
+    /**public List<City> readFileCity(){
         return file.getCities();
-    }
+    }*/
 
     /**public List<Itinerary> readFileItinerary(City city){
         return file.getItineraries(city);

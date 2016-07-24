@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     private NavigationView navigationView;
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
+    TextView textViewCompanyUse;
 
     private String country;
     private String city;
@@ -123,25 +124,23 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     protected void onResume() {
         super.onResume();
         loadParams();
+        refresh();
         //TODO "resumir" os views sem ter carregar novamente
         initNavigationDrawer();
     }
 
+    public void refresh(){
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
+    }
+
+
+
     private void initViews() {
-        /**PullCitiesAsyncTask pullCitiesAsyncTask = new PullCitiesAsyncTask();
-        pullCitiesAsyncTask.setResultListenerAsyncTask(new ResultListenerAsyncTask<City>() {
-            @Override
-            public void finished(List<City> cities) {
-                for (City city:cities){
-                    Log.e("FIREBASE",city.getName());
-                }
-            }
-        });
-        pullCitiesAsyncTask.setContext(this);
-        pullCitiesAsyncTask.execute("RS");*/
         initActionBar();
         initNavigationDrawer();
         initAdInterstitial();
+        textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
     }
 
     private void initAdInterstitial(){
@@ -186,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         View naviHeader = navigationView.getHeaderView(0);
         View naviView = naviHeader.findViewById(R.id.side_nav_bar);
+        /**TODO mostrar empresa selecionada no menu com companies */
         naviView.setOnClickListener(this);
         TextView textViewCityName = (TextView)naviHeader.findViewById(R.id.textViewCityName);
         textViewCityName.setText(city + " - " + country);
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
 
     @Override
-    public void onSettingsDone(String itinerary, String way) {
+    public void onSettingsDone(String company,String itinerary, String way) {
         this.itinerary = itinerary;
         this.way = way;
         if(showAdIntersticial()){
@@ -366,22 +366,34 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 break;
             case ItinerariesFragment.TAG:
                 fragment = new ItinerariesFragment();
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 break;
             case CompaniesFragment.TAG:
                 fragment = new CompaniesFragment();
-                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
                 break;
             case AlarmListFragment.TAG:
                 fragment = new AlarmListFragment();
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
                 break;
@@ -423,14 +435,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     public void onCreateDialogChooseWay(Itinerary itinerary) {
         List<String> ways;
+        String company = FirebaseUtils.getCompany(itinerary.getId());
         try {
             ways = itinerary.getWays();
             if (ways.size() > 1) {
                 ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-                chooseWayDialogFragment.setParameters(this,itinerary.getName(), ways);
+                chooseWayDialogFragment.setParameters(this,company,itinerary.getName(), ways);
                 chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
             } else {
-                onSettingsDone(itinerary.getName(), ways.get(0));
+                onSettingsDone(company,itinerary.getName(), ways.get(0));
             }
         }catch (SQLiteCantOpenDatabaseException exception){
             Toast.makeText(this,"aguarde alguns segundos...",Toast.LENGTH_LONG).show();
@@ -452,8 +465,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     }
 
     @Override
-    public void onItemClick(String itinerary, String way) {
-        onSettingsDone(itinerary, way);
+    public void onItemClick(String company,String itinerary, String way) {
+        onSettingsDone(company,itinerary, way);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
