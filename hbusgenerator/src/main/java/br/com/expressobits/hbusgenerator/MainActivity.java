@@ -1,40 +1,25 @@
 package br.com.expressobits.hbusgenerator;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
-import br.com.expressobits.hbus.dao.BusDAOGenerator;
 import br.com.expressobits.hbus.file.ReadFileCloud;
-import br.com.expressobits.hbus.gae.ProgressAsyncTask;
-import br.com.expressobits.hbus.gae.PushBusEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.PushCitiesEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.PushCodesEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.PushItinerariesEndpointsAsyncTask;
 import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.utils.DAOUtils;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,ProgressAsyncTask{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "GENERATOR";
     private Button buttonSaveAllData;
@@ -43,10 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonPushAllData;
     private Button buttonDeleteAllDataFirebase;
     private FloatingActionButton fab;
-    private List<City> cities = new ArrayList<>();
-    private HashMap<City,List<Itinerary>> itineraries = new HashMap<>();
-    private HashMap<City,List<Code>> codes = new HashMap<>();
-    private HashMap<City,HashMap<Itinerary,List<Bus>>> buses = new HashMap<>();
     private Spinner spinnerCities;
     ReadFileCloud file = new ReadFileCloud(MainActivity.this);
 
@@ -115,62 +96,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    public void pushAll(){
-        City city = (City)spinnerCities.getSelectedItem();
-        pushCity(city);
-        for (Itinerary itinerary : itineraries.get(city)) {
-            pushItinerary(city, itinerary);
-            for (Bus bus : buses.get(city).get(itinerary)) {
-                Log.e(TAG, "TEST " + bus.getTime());
-                if(itinerary.getName().equals("Vila Oliveira")) {
-                    pushBus(city, itinerary, bus);
-                }
-            }
-        }
-        for (Code code : codes.get(city)) {
-            pushCode(city, code);
-        }
-    }
 
     private void pushCitytoFirebase(City city){
     }
 
-
-
-    private void pushCity(City city){
-        PushCitiesEndpointsAsyncTask pushCitiesEndpointsAsyncTask = new PushCitiesEndpointsAsyncTask();
-        pushCitiesEndpointsAsyncTask.setContext(this);
-        pushCitiesEndpointsAsyncTask.setProgressAsyncTask(this);
-        //pushCitiesEndpointsAsyncTask.execute(city);
-    }
-
-    private void pushItinerary(City city,Itinerary itinerary){
-        PushItinerariesEndpointsAsyncTask pushItinerariesEndpointsAsyncTask = new PushItinerariesEndpointsAsyncTask();
-        pushItinerariesEndpointsAsyncTask.setContext(this);
-        pushItinerariesEndpointsAsyncTask.setProgressAsyncTask(this);
-        pushItinerariesEndpointsAsyncTask.setCityName(city.getName());
-        pushItinerariesEndpointsAsyncTask.setCountry(city.getCountry());
-        pushItinerariesEndpointsAsyncTask.execute(itinerary);
-    }
-
-    private void pushCode(City city,Code code){
-        PushCodesEndpointsAsyncTask pushCodesEndpointsAsyncTask = new PushCodesEndpointsAsyncTask();
-        pushCodesEndpointsAsyncTask.setContext(this);
-        pushCodesEndpointsAsyncTask.setProgressAsyncTask(this);
-        pushCodesEndpointsAsyncTask.setCityName(city.getName());
-        pushCodesEndpointsAsyncTask.setCountry(city.getCountry());
-        pushCodesEndpointsAsyncTask.execute(code);
-    }
-
-    private void pushBus(City city,Itinerary itinerary,Bus bus){
-        PushBusEndpointsAsyncTask pushBusEndpointsAsyncTask = new PushBusEndpointsAsyncTask();
-        pushBusEndpointsAsyncTask.setContext(this);
-        pushBusEndpointsAsyncTask.setProgressAsyncTask(this);
-        pushBusEndpointsAsyncTask.setCountry(city.getCountry());
-        pushBusEndpointsAsyncTask.setCityName(city.getName());
-        pushBusEndpointsAsyncTask.setItineraryName(itinerary.getName());
-        pushBusEndpointsAsyncTask.execute(bus);
-    }
 
 
 
@@ -221,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button_read_all_data:
                 //readFiles();
-                refreshSpinner(cities);
                 break;
 
             case R.id.button_save_in_database_all_data:
@@ -229,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.button_push_all_data:
-                pushAll();
                 break;
             case R.id.button_delete_all_data_firebase:
                 break;
@@ -240,11 +167,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-    @Override
-    public void setProgressUdate(Integer progress,Class c) {
-        if(c.equals(City.class)){
-            Toast.makeText(this,"Porcent test "+progress.toString()+"%",Toast.LENGTH_LONG).show();
-        }
-
-    }
 }

@@ -1,37 +1,24 @@
 package br.com.expressobits.hbusgenerator;
 
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.file.ReadFileCloud;
-import br.com.expressobits.hbus.gae.ProgressAsyncTask;
-import br.com.expressobits.hbus.gae.PushBusEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.PushCitiesEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.PushCodesEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.PushItinerariesEndpointsAsyncTask;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Itinerary;
 
 /**
  * @deprecated
  */
-public class DataManagerActivity extends AppCompatActivity implements ProgressAsyncTask,View.OnClickListener,AdapterView.OnItemClickListener{
+public class DataManagerActivity extends AppCompatActivity /*implements View.OnClickListener,AdapterView.OnItemClickListener*/{
 
     private Button buttonReadCity;
     private Button buttonReadItinerary;
@@ -56,10 +43,10 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
     private HashMap<City,List<Code>> codes = new HashMap<>();
     private HashMap<City,HashMap<Itinerary,List<Bus>>> buses = new HashMap<>();
 
-    private CityAdapter adapterCities;
+    /**private CityAdapter adapterCities;
     private ItineraryAdapter adapterItineraries;
     private CodeAdapter adapterCodes;
-    private BusAdapter adapterBus;
+    private BusAdapter adapterBus;*/
 
 
     @Override
@@ -87,7 +74,7 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
         spinnerItinerary = (Spinner)findViewById(R.id.spinnerItineraries);
         spinnerCodes = (Spinner)findViewById(R.id.spinnerCodes);
         spinnerBus = (Spinner)findViewById(R.id.spinnerBus);
-        buttonReadCity.setOnClickListener(this);
+        /*buttonReadCity.setOnClickListener(this);
         buttonReadItinerary.setOnClickListener(this);
         buttonReadCodes.setOnClickListener(this);
         buttonReadBus.setOnClickListener(this);
@@ -97,7 +84,7 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
         buttonPushBus.setOnClickListener(this);
         buttonPushAll.setOnClickListener(this);
         buttonPushAllItinerary.setOnClickListener(this);
-        buttonPushAllCodes.setOnClickListener(this);
+        buttonPushAllCodes.setOnClickListener(this);*/
         buttonReadCity.setEnabled(true);
         buttonReadItinerary.setEnabled(false);
         buttonReadCodes.setEnabled(false);
@@ -116,13 +103,12 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
 
 
     }
-
+/*
     @Override
     public void onClick(View v) {
         City city;
         switch (v.getId()){
             case R.id.buttonReadCity:
-                cities = readFileCloud.getCities();
                 adapterCities = new CityAdapter(this,cities);
                 spinnerCity.setAdapter(adapterCities);
                 spinnerCity.setEnabled(true);
@@ -135,7 +121,7 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
                 break;
             case R.id.buttonReadItineraries:
                 city = (City)spinnerCity.getSelectedItem();
-                itineraries.put(city, readFileCloud.getItineraries(city));
+                //itineraries.put(city, readFileCloud.getItineraries(city));
                 adapterItineraries = new ItineraryAdapter(this,itineraries.get(city));
                 spinnerItinerary.setAdapter(adapterItineraries);
                 spinnerItinerary.setEnabled(true);
@@ -147,7 +133,7 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
                 break;
             case R.id.buttonReadCodes:
                 city = (City)spinnerCity.getSelectedItem();
-                codes.put(city, readFileCloud.getCodes(city));
+                //codes.put(city, readFileCloud.getCodes(city));
                 adapterCodes = new CodeAdapter(this,codes.get(city));
                 spinnerCodes.setAdapter(adapterCodes);
                 spinnerCodes.setEnabled(true);
@@ -160,8 +146,7 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
             case R.id.buttonReadBus:
                 Itinerary itinerary = (Itinerary)spinnerItinerary.getSelectedItem();
                 city = (City) spinnerCity.getSelectedItem();
-                buses.put(city, readFileCloud.getBuses(city,itineraries.get(city
-                )));
+                //buses.put(city, readFileCloud.getBuses(city,itineraries.get(city)));
                 adapterBus = new BusAdapter(this,buses.get(city).get(itinerary));
                 spinnerBus.setAdapter(adapterBus);
                 spinnerBus.setEnabled(true);
@@ -199,9 +184,9 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
                 break;
 
         }
-    }
+    }*/
 
-    private void pushCity(City city){
+    /**private void pushCity(City city){
         PushCitiesEndpointsAsyncTask pushCitiesEndpointsAsyncTask = new PushCitiesEndpointsAsyncTask();
         pushCitiesEndpointsAsyncTask.setContext(this);
         pushCitiesEndpointsAsyncTask.setProgressAsyncTask(this);
@@ -421,6 +406,6 @@ public class DataManagerActivity extends AppCompatActivity implements ProgressAs
             textView.setText(buses.get(position).getTime() + "-"+buses.get(position).getWay());
             return view;
         }
-    }
+    }*/
 
 }
