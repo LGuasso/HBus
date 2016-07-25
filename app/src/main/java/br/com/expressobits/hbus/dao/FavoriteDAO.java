@@ -3,15 +3,17 @@ package br.com.expressobits.hbus.dao;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * Classe que determina database para {@link br.com.expressobits.hbus.model.Itinerary} favoritos,
- * aqui e armazenado da mesma forma que BusDAO , mas somente a classe Itineray
+ * aqui e armazenado da mesma forma que dados , mas somente a classe Itineray
  * @author Rafael Correa
  * @since 28/11/15.
  */
@@ -45,9 +47,9 @@ public class FavoriteDAO extends SQLiteOpenHelper{
     }
 
     public List<Itinerary> getItineraries(String cityId){
-        BusDAO dao = new BusDAO(context);
-        City city = dao.getCity(cityId);
-        dao.close();
+        City city = new City();
+        city.setCountry(FirebaseUtils.getCountry(cityId));
+        city.setName(FirebaseUtils.getCityName(cityId));
         return BusHelper.getItineraries(getReadableDatabase(),city);
     }
 

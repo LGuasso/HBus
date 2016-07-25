@@ -1,28 +1,14 @@
 package br.com.expressobits.hbus.alarm;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import java.util.Calendar;
 
-import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.backend.Alarm;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.ui.Notifications;
-import br.com.expressobits.hbus.ui.help.HelpActivity;
-import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
-import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
  * @author Rafael

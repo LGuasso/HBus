@@ -31,13 +31,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 public class TimesActivity extends AppCompatActivity {
 
-    private Toolbar pToolbar;
-
     public static final String TAG = "TimesActivity";
-    public static final String ARGS_CITYID = "cityId";
-    public static final String ARGS_ITINERARYID = "itineraryId";
-    public static final String ARGS_WAY = "Way";
-
+    public static final String ARGS_COUNTRY = "country";
+    public static final String ARGS_CITY = "city";
+    public static final String ARGS_COMPANY = "company";
+    public static final String ARGS_ITINERARY = "itinerary";
+    public static final String ARGS_WAY = "way";
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -45,7 +44,7 @@ public class TimesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_times);
-        pToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -53,8 +52,7 @@ public class TimesActivity extends AppCompatActivity {
                 ((AppBarLayout)findViewById(R.id.appBar)).setElevation(0);
             }
         }
-
-        getSupportActionBar().setTitle(DAOUtils.getNameItinerary(getIntent().getStringExtra(ARGS_ITINERARYID)));
+        getSupportActionBar().setTitle(getIntent().getStringExtra(ARGS_ITINERARY));
         pToolbar.setSubtitle(getIntent().getStringExtra(ARGS_WAY));
         initViews();
     }
@@ -63,8 +61,10 @@ public class TimesActivity extends AppCompatActivity {
     public void initViews(){
         OnibusFragment onibusFragment = new OnibusFragment();
         Bundle args = new Bundle();
-        args.putString(OnibusFragment.ARGS_CITYID,getIntent().getStringExtra(ARGS_CITYID));
-        args.putString(OnibusFragment.ARGS_ITINERARYID, getIntent().getStringExtra(ARGS_ITINERARYID));
+        args.putString(OnibusFragment.ARGS_COUNTRY,getIntent().getStringExtra(ARGS_COUNTRY));
+        args.putString(OnibusFragment.ARGS_CITY,getIntent().getStringExtra(ARGS_CITY));
+        args.putString(OnibusFragment.ARGS_COMPANY,getIntent().getStringExtra(ARGS_COMPANY));
+        args.putString(OnibusFragment.ARGS_ITINERARY, getIntent().getStringExtra(ARGS_ITINERARY));
         args.putString(OnibusFragment.ARGS_WAY, getIntent().getStringExtra(ARGS_WAY));
         onibusFragment.setArguments(args);
         FragmentTransaction ft = fragmentManager.beginTransaction();

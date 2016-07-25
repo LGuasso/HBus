@@ -20,10 +20,10 @@ package br.com.expressobits.hbus.ui.tour;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import br.com.expressobits.hbus.R;
@@ -109,13 +109,13 @@ public class PagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tour_relative, container, false);
 
-        ImageView iconImage = (ImageView) view.findViewById(R.id.iconImage);
+        AppCompatImageView iconImage = (AppCompatImageView) view.findViewById(R.id.iconImage);
 
         TextView titleText = (TextView) view.findViewById(R.id.titleText);
 
         TextView subtitleText = (TextView) view.findViewById(R.id.subtitleText);
 
-        view.setBackgroundColor(mColor);
+
         iconImage.setImageResource(mIcon);
         titleText.setText(mTitle);
         subtitleText.setText(mSubTitle);

@@ -1,0 +1,61 @@
+{
+  "project_info": {
+    "project_number": "36454287226",
+    "firebase_url": "https://hbus-1206.firebaseio.com",
+    "project_id": "hbus-1206",
+    "storage_bucket": "hbus-1206.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36454287226:android:40308d4a69883c26",
+        "android_client_info": {
+          "package_name": "br.com.expressobits.hbus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36454287226-8h2qtuedv1tldr84a3k44r7qqojs0rkq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.expressobits.hbus",
+            "certificate_hash": "CCC7C521BBF5592A58C72ABDF1C3E2F34860D4F2"
+          }
+        },
+        {
+          "client_id": "36454287226-fb7bl7c8rhhs6au3pgssnnkb1g558j8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.expressobits.hbus",
+            "certificate_hash": "CD9CB350DA13FA9FE99F6F2EDE9826849D719231"
+          }
+        },
+        {
+          "client_id": "36454287226-4jrfk9i6pud4jn0uqlg08tf5idh58o5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxmUGBP5xHUbcnd0Soqoa4io0s1R__F3k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-69666206-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

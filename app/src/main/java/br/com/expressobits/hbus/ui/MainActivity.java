@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,24 +25,32 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AppManager;
-import br.com.expressobits.hbus.dao.BusDAO;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
+import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import br.com.expressobits.hbus.ui.settings.SettingsActivity2;
+import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.DAOUtils;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements OnSettingsListener,
@@ -54,9 +63,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     private NavigationView navigationView;
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
-    String cityId;
-    String itineraryId;
-    String way;
+
+    private String country;
+    private String city;
+    private String company;
+    private String itinerary;
+    private String way;
     private boolean isDualPane;
     public InterstitialAd mInterstitialAd;
 
@@ -65,14 +77,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+
+        loadParams();
         if (savedInstanceState == null) {
-
             Fragment fragment = new FavoritesItineraryFragment();
-
-
-
-
             if (findViewById(R.id.framelayout_main) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
                 ft.add(R.id.framelayout_main, fragment,FavoritesItineraryFragment.TAG);
@@ -89,15 +97,48 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         initViews();
     }
 
+    private void loadParams() {
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        city = FirebaseUtils.getCityName(cityId);
+        country = FirebaseUtils.getCountry(cityId);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference cityTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
+        DatabaseReference countryRef = cityTableRef.child(country);
+        DatabaseReference cityRef = countryRef.child(city);
+        cityRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                City city = dataSnapshot.getValue(City.class);
+                company = city.getCompanyDefault();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        this.cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        loadParams();
         //TODO "resumir" os views sem ter carregar novamente
         initNavigationDrawer();
     }
 
     private void initViews() {
+        /**PullCitiesAsyncTask pullCitiesAsyncTask = new PullCitiesAsyncTask();
+        pullCitiesAsyncTask.setResultListenerAsyncTask(new ResultListenerAsyncTask<City>() {
+            @Override
+            public void finished(List<City> cities) {
+                for (City city:cities){
+                    Log.e("FIREBASE",city.getName());
+                }
+            }
+        });
+        pullCitiesAsyncTask.setContext(this);
+        pullCitiesAsyncTask.execute("RS");*/
         initActionBar();
         initNavigationDrawer();
         initAdInterstitial();
@@ -110,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                openTimes(itineraryId, way);
+                openTimes(country, city, company, itinerary, way);
             }
 
         });
@@ -121,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
                 .build();
-
         mInterstitialAd.loadAd(adRequest);
     }
 
@@ -148,15 +188,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         View naviView = naviHeader.findViewById(R.id.side_nav_bar);
         naviView.setOnClickListener(this);
         TextView textViewCityName = (TextView)naviHeader.findViewById(R.id.textViewCityName);
-        TextView textViewCoutry = (TextView)naviHeader.findViewById(R.id.textViewCountry);
-        textViewCityName.setText(DAOUtils.getNameCity(cityId));
-        textViewCoutry.setText(DAOUtils.getNameCountry(cityId));
-
+        textViewCityName.setText(city + " - " + country);
         ImageView imageViewCity = (ImageView)naviHeader.findViewById(R.id.imageViewCity);
-        if(cityId.equals("RS/Santa Maria")){
+        if(city.equals("Santa Maria")){
             imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.santa_maria_rs));
         }
-        if(cityId.equals("RS/Cruz Alta")){
+        if(city.equals("Cruz Alta")){
             imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.cruz_alta_rs));
         }
     }
@@ -185,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
-            startActivity(new Intent(this, SettingsActivity2.class));
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
         if (id == R.id.menu_action_help) {
@@ -209,25 +246,23 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
 
     @Override
-    public void onSettingsDone(String itineraryId, String sentido) {
-        this.itineraryId = itineraryId;
-        this.way = sentido;
+    public void onSettingsDone(String itinerary, String way) {
+        this.itinerary = itinerary;
+        this.way = way;
         if(showAdIntersticial()){
 
         }else {
-            openTimes(itineraryId, sentido);
+            openTimes(country, city, company, itinerary, way);
         }
 
     }
 
-    private void openTimes(String itineraryId, String sentido) {
-        BusDAO db = new BusDAO(this);
+    private void openTimes(String country, String city, String company, String itinerary, String way) {
+        registerEvent(itinerary, way);
         if (isDualPane) {
-            pToolbar.setTitle(db.getItinerary(itineraryId).getName());
-            db.close();
-            pToolbar.setSubtitle(sentido);
+            pToolbar.setTitle(itinerary);
+            pToolbar.setSubtitle(way);
             FragmentTransaction ft = fragmentManager.beginTransaction();
-
             /** Se for acessodado de um smartphone o espaco main existir */
             /** Adiciona o fragment com o novo conteudo no unico espaco */
             OnibusFragment onibusFragment = (OnibusFragment) fragmentManager.findFragmentByTag("onibusFragment");
@@ -235,15 +270,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             if (findViewById(R.id.framelayout_main) != null) {
 
                 if (onibusFragment != null) {
-                    onibusFragment.refresh(
-                            cityId,
-                            itineraryId, sentido);
+                    onibusFragment.refresh(country, city, company, itinerary, way);
                 } else {
                     onibusFragment = new OnibusFragment();
                     Bundle args = new Bundle();
-                    args.putString(OnibusFragment.ARGS_CITYID, cityId);
-                    args.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
-                    args.putString(OnibusFragment.ARGS_WAY, sentido);
+                    args.putString(OnibusFragment.ARGS_COUNTRY, country);
+                    args.putString(OnibusFragment.ARGS_CITY, city);
+                    args.putString(OnibusFragment.ARGS_COMPANY, company);
+                    args.putString(OnibusFragment.ARGS_ITINERARY, itinerary);
+                    args.putString(OnibusFragment.ARGS_WAY, way);
                     onibusFragment.setArguments(args);
                     // Troca o que quer que tenha na view do fragment_container por este fragment,
                     // e adiciona a transa��o novamente na pilha de navega��o
@@ -252,15 +287,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 }
             } else if (findViewById(R.id.framelayout_content) != null) {
                 if (onibusFragment != null) {
-                    onibusFragment.refresh(
-                            PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY),
-                            itineraryId, sentido);
+                    onibusFragment.refresh(country, city, company, itinerary, way);
                 } else {
                     onibusFragment = new OnibusFragment();
                     Bundle args = new Bundle();
-                    args.putString(OnibusFragment.ARGS_CITYID, cityId);
-                    args.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
-                    args.putString(OnibusFragment.ARGS_WAY, sentido);
+                    args.putString(OnibusFragment.ARGS_COUNTRY, country);
+                    args.putString(OnibusFragment.ARGS_CITY, city);
+                    args.putString(OnibusFragment.ARGS_COMPANY, company);
+                    args.putString(OnibusFragment.ARGS_ITINERARY, itinerary);
+                    args.putString(OnibusFragment.ARGS_WAY, way);
                     onibusFragment.setArguments(args);
                     // Troca o que quer que tenha na view do fragment_container por este fragment,
                     // e adiciona a transacao novamente na pilha de navegacao
@@ -270,11 +305,28 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             ft.commit();
         } else {
             Intent intent = new Intent(this, TimesActivity.class);
-            intent.putExtra(TimesActivity.ARGS_CITYID, cityId);
-            intent.putExtra(TimesActivity.ARGS_ITINERARYID, itineraryId);
+            intent.putExtra(TimesActivity.ARGS_COUNTRY, country);
+            intent.putExtra(TimesActivity.ARGS_CITY, city);
+            intent.putExtra(TimesActivity.ARGS_COMPANY, company);
+            intent.putExtra(TimesActivity.ARGS_ITINERARY, itinerary);
             intent.putExtra(TimesActivity.ARGS_WAY, way);
             startActivity(intent);
         }
+    }
+
+    /**
+     * https://support.google.com/firebase/answer/6317508?hl=en&ref_topic=6317484
+     * @param itinerary
+     * @param way
+     */
+    private void registerEvent(String itinerary, String way) {
+        // Obtain the FirebaseAnalytics instance.
+        FirebaseAnalytics mFirebaseAnalytics;
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.DESTINATION, way);
+        bundle.putString(FirebaseAnalytics.Param.FLIGHT_NUMBER, itinerary);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 
 
@@ -291,6 +343,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             case ItinerariesFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_all_itineraries).setChecked(true);
                 break;
+            case CompaniesFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_companies).setChecked(true);
+                break;
             case AlarmListFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_alarms).setChecked(true);
                 break;
@@ -298,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     }
 
     /**
-     * S
+     *
      * @param TAG
      */
     public void addFragment(String TAG) {
@@ -318,11 +373,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                     getSupportFragmentManager().popBackStack();
                 }
                 break;
+            case CompaniesFragment.TAG:
+                fragment = new CompaniesFragment();
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
             case AlarmListFragment.TAG:
-                Bundle args = new Bundle();
-                args.putString(AlarmListFragment.ARGS_CITYID, cityId);
                 fragment = new AlarmListFragment();
-                fragment.setArguments(args);
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -349,8 +407,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString(OnibusFragment.ARGS_CITYID, cityId);
-        outState.putString(OnibusFragment.ARGS_ITINERARYID, itineraryId);
+        outState.putString(OnibusFragment.ARGS_COUNTRY, country);
+        outState.putString(OnibusFragment.ARGS_CITY, city);
+        outState.putString(OnibusFragment.ARGS_COMPANY, company);
+        outState.putString(OnibusFragment.ARGS_ITINERARY, itinerary);
         outState.putString(OnibusFragment.ARGS_WAY, way);
         super.onSaveInstanceState(outState, outPersistentState);
     }
@@ -358,27 +418,23 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     public void setActionBarTitle() {
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         pToolbar.setTitle("HBus");
-        pToolbar.setSubtitle(DAOUtils.getNameCity(cityId) + " - " + DAOUtils.getNameCountry(cityId));
+        pToolbar.setSubtitle(FirebaseUtils.getCityName(cityId) + " - " + FirebaseUtils.getCountry(cityId));
     }
 
-    public void onCreateDialogChooseWay(String itineraryId) {
-        BusDAO dao = new BusDAO(this);
+    public void onCreateDialogChooseWay(Itinerary itinerary) {
         List<String> ways;
         try {
-            ways = dao.getItinerary(itineraryId).getWays();
+            ways = itinerary.getWays();
             if (ways.size() > 1) {
                 ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-                chooseWayDialogFragment.setParameters(this, itineraryId, ways);
+                chooseWayDialogFragment.setParameters(this,itinerary.getName(), ways);
                 chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
             } else {
-                onSettingsDone(itineraryId, ways.get(0));
+                onSettingsDone(itinerary.getName(), ways.get(0));
             }
-            dao.close();
         }catch (SQLiteCantOpenDatabaseException exception){
             Toast.makeText(this,"aguarde alguns segundos...",Toast.LENGTH_LONG).show();
         }
-
-
     }
 
     public void openHelp(){
@@ -396,8 +452,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     }
 
     @Override
-    public void onItemClick(String itineraryId, String way) {
-        onSettingsDone(itineraryId, way);
+    public void onItemClick(String itinerary, String way) {
+        onSettingsDone(itinerary, way);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -412,8 +468,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             addFragment(ItinerariesFragment.TAG);
         }else if (id == R.id.nav_alarms) {
             addFragment(AlarmListFragment.TAG);
+        }else if (id == R.id.nav_companies) {
+            addFragment(CompaniesFragment.TAG);
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(this, SettingsActivity2.class));
+            startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_help) {
             openHelp();
         }

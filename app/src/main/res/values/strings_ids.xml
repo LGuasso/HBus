@@ -11,6 +11,6 @@
     <!-- Intersticial de testes -->
     <string name="intersticial_ad_developer_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
 
-    <string name="intersticial_ad_unit_id" translatable="false">@string/intersticial_ad_product_unit_id</string>
-    <string name="banner_ad_unit_id" translatable="false">@string/banner_ad_product_unit_id</string>
+    <string name="intersticial_ad_unit_id" translatable="false">@string/intersticial_ad_developer_unit_id</string>
+    <string name="banner_ad_unit_id" translatable="false">@string/banner_ad_developer_unit_id</string>
 </resources>

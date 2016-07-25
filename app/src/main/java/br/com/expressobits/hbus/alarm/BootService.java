@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.Alarm;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 
 /**

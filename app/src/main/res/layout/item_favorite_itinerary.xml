@@ -39,17 +39,11 @@
                 android:text="@string/itinerary_name"
                 android:textAppearance="@style/AppTheme.TitleItinerary" />
 
-            <TextView
-                android:id="@+id/item_list_textview_line_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewItineraryName"
-                android:text="@string/next_bus"
-                android:textAppearance="@style/AppTheme.SubTitleItinerary" />
+
 
             <LinearLayout
                 android:id="@+id/linearLayoutHours"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 

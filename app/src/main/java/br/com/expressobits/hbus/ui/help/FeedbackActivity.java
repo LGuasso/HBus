@@ -24,12 +24,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.backend.feedbackApi.model.Feedback;
-import br.com.expressobits.hbus.gae.PushFeedbackEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
+import br.com.expressobits.hbus.model.Feedback;
 import br.com.expressobits.hbus.ui.dialog.VersionInfoDialogFragment;
 
-public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener,ResultListenerAsyncTask<Integer>{
+public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final String KEY_VERSION_INFO="VERSION_INFO";
     private String versionInfo;
@@ -101,14 +99,11 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             informations.add("Dispĺay="+ Build.DISPLAY);
             informations.add("Type="+ Build.TYPE);
 
-            feedback.setInformationSystem(informations);
+            feedback.setSystemInformation(informations);
         }else{
             //feedback.setInformationSystem("Not system info...");
         }
-        PushFeedbackEndpointsAsyncTask pushFeedbackEndpointsAsyncTask = new PushFeedbackEndpointsAsyncTask();
-        pushFeedbackEndpointsAsyncTask.setContext(this);
-        pushFeedbackEndpointsAsyncTask.setResultListenerAsyncTask(this);
-        pushFeedbackEndpointsAsyncTask.execute(feedback);
+        //todo PUSH TO FIREBASE
 
     }
 
@@ -130,11 +125,5 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 sendFeedback();
                 break;
         }
-    }
-
-    @Override
-    public void finished(List<Integer> integers) {
-        Toast.makeText(this,getString(R.string.send_feedback_with_sucess),Toast.LENGTH_LONG).show();
-        finish();
     }
 }

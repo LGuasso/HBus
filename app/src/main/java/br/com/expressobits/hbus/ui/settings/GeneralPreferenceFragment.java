@@ -24,6 +24,13 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
         preferenceCity = findPreference(SelectCityActivity.TAG);
+        preferenceCity.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(preference.getContext(), SelectCityActivity.class));
+                return false;
+            }
+        });
         setHasOptionsMenu(true);
         refreshComponents();
     }
@@ -32,7 +39,7 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            startActivity(new Intent(getActivity(), SettingsActivity2.class));
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -45,7 +52,7 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
     }
 
     private void refreshComponents() {
-        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("city"));
-        SettingsActivity2.bindPreferenceSummaryToValue(findPreference("time_home_screen"));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference(SelectCityActivity.TAG));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference("time_home_screen"));
     }
 }

@@ -11,12 +11,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.dao.CodeContract;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
@@ -31,6 +32,7 @@ public class ReadFile {
     private static final String SPLIT_FILE_TIMES = "\t-\t";
     private static final String CITIES_FILE = "cities.dat";
     private static final String ITINERARIES_FILE = "itineraries.dat";
+    private static final String COMPANIES_FILE = "companies.dat";
     private static final String CODES_FILE = "codes.dat";
     private static final String TAG = "FILEGENERATOR";
     private static final String FORMAT = ".dat";
@@ -45,13 +47,21 @@ public class ReadFile {
         City city = new City();
         city.setName(text.split(SPLIT_FILE)[0]);
         city.setCountry(text.split(SPLIT_FILE)[1]);
-        String[] location = text.split(SPLIT_FILE)[2].split(",");
-        city.setLocation(
-                new GeoPt()
-                        .setLatitude(Float.valueOf(location[0]))
-                        .setLongitude(Float.valueOf(location[1]))
-        );
+        city.setCompanyDefault(text.split(SPLIT_FILE)[2]);
+        HashMap<String,Double> hashMap = new HashMap<>();
+        hashMap.put(CityContract.City.COLUMN_NAME_LATITUDE,Double.parseDouble(text.split(SPLIT_FILE)[3].split(SPLIT_FILE_SECONDARY)[0]));
+        hashMap.put(CityContract.City.COLUMN_NAME_LONGITUDE,Double.parseDouble(text.split(SPLIT_FILE)[3].split(SPLIT_FILE_SECONDARY)[1]));
+        city.setLocalization(hashMap);
         return city;
+    }
+
+    public Company toCompany(String text){
+        Company company = new Company();
+        company.setName(text.split(SPLIT_FILE)[0]);
+        company.setEmail(text.split(SPLIT_FILE)[1]);
+        company.setWebsite(text.split(SPLIT_FILE)[2]);
+        company.setPhoneNumber(text.split(SPLIT_FILE)[3]);
+        return company;
     }
 
     public Itinerary toItinerary(String text){
@@ -94,28 +104,36 @@ public class ReadFile {
         return cities;
     }
 
-    public List<Itinerary> getItineraries(City city){
+    public List<Company> getCompanies(City city){
+        List<Company> companies = new ArrayList<>();
+        for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+COMPANIES_FILE)){
+            companies.add(toCompany(text));
+        }
+        return companies;
+    }
+
+    public List<Itinerary> getItineraries(City city,Company company){
         List<Itinerary> itineraries = new ArrayList<>();
-        for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+ITINERARIES_FILE)){
+        for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+ITINERARIES_FILE)){
             itineraries.add(toItinerary(text));
         }
         return itineraries;
     }
 
-    public List<Code> getCodes(City city){
+    public List<Code> getCodes(City city,Company company){
         List<Code> codes = new ArrayList<>();
-        for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+CODES_FILE)){
+        for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+CODES_FILE)){
             codes.add(toCode(text));
         }
         return codes;
     }
 
-    public List<Bus> getBuses(City city,Itinerary itinerary,String way,String typeday){
+    public List<Bus> getBuses(City city,Company company,Itinerary itinerary,String way,String typeday){
 
 
         List<Bus> buses = new ArrayList<>();
         for(String text:readFile(city.getCountry()+BARS+
-                        city.getName()+BARS+
+                        city.getName()+BARS+company.getName()+BARS+
                         TextUtils.toSimpleNameFile(itinerary.getName())+BARS+
                         TextUtils.toSimpleNameWay(way)+"_"+typeday+FORMAT
         )){
@@ -124,7 +142,7 @@ public class ReadFile {
         return buses;
     }
 
-    public HashMap<Itinerary,List<Bus>> getBuses(City city,List<Itinerary> itineraries){
+    public HashMap<Itinerary,List<Bus>> getBuses(City city,Company company,List<Itinerary> itineraries){
 
 
         HashMap<Itinerary,List<Bus>> buses = new HashMap<>();
@@ -135,7 +153,7 @@ public class ReadFile {
             for(String way:itinerary.getWays()){
                 for(int i=0;i<3;i++){
                     for(String text:readFile(city.getCountry() + BARS +
-                                    city.getName() + BARS +
+                                    city.getName() + BARS +company.getName()+BARS+
                                     TextUtils.toSimpleNameFile(itinerary.getName()) + BARS +
                                     TextUtils.toSimpleNameWay(way) + "_" + TextUtils.getTypeDayInt(i) + FORMAT
                     )){

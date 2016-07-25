@@ -3,16 +3,14 @@ package br.com.expressobits.hbus.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.Alarm;
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.model.Alarm;
+import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.utils.BooleanConvert;
-import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
  * @author Rafael Correa
@@ -119,9 +117,10 @@ public class AlarmHelper {
     }
 
     public static List<Alarm> getAlarms(SQLiteDatabase db,City city){
+        Log.e("TESTE","TESTE");
         ArrayList<Alarm> alarms = new ArrayList<Alarm>();
         String where = AlarmContract.Alarm._ID+" LIKE ?";
-        String arguments[] = {city.getCountry()+BusHelper.BARS+city.getName()+"%"};
+        String arguments[] = {BusHelper.BARS+city.getCountry()+BusHelper.BARS+city.getName()+"%"};
         Cursor c;
         c = db.query(
                 AlarmContract.Alarm.TABLE_NAME,
@@ -143,7 +142,7 @@ public class AlarmHelper {
         ArrayList<Alarm> alarms = new ArrayList<Alarm>();
         //TODO DELAY implementar
         String where = AlarmContract.Alarm._ID+" LIKE ? AND "+ AlarmContract.Alarm.COLUMN_NAME_TIME+" = ?";
-        String arguments[] = {city.getCountry()+BusHelper.BARS+city.getName()+"%",time};
+        String arguments[] = {BusHelper.BARS+city.getCountry()+BusHelper.BARS+city.getName()+"%",time};
         Cursor c;
         c = db.query(
                 AlarmContract.Alarm.TABLE_NAME,

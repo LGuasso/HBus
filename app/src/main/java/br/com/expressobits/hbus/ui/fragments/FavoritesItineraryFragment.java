@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -14,20 +13,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
+import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.adapters.ItemFavoriteItineraryAdapter;
+import br.com.expressobits.hbus.ui.adapters.ItemFavoriteItineraryAdapter;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
@@ -157,15 +152,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
         switch (view.getId()){
             case R.id.buttonLookTime:
-                selectedItem = itineraries.get(position).getId();
-                List<String> ways = itineraries.get(position).getWays();
-                if(ways.size()>1) {
-                    ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-                    chooseWayDialogFragment.setParameters(this,selectedItem,ways);
-                    chooseWayDialogFragment.show(this.getFragmentManager(),ChooseWayDialogFragment.TAG);
-                }else{
-                    mCallback.onSettingsDone(selectedItem, ways.get(0));
-                }
+                Itinerary itinerary = itineraries.get(position);
+                ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
                 break;
             case R.id.buttonRemove:
                 selectedItem = itineraries.get(position).getId();

@@ -26,17 +26,23 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter {
     private final List<HoursFragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    String cityId;
-    String itineraryId;
+    String country;
+    String city;
+    String company;
+    String itinerary;
     String way;
+
     Context context;
 
-    public ViewPagerAdapter(FragmentManager manager,Context context,String cityId,String itineraryId,String way) {
+    public ViewPagerAdapter(FragmentManager manager,Context context,String country,String city,
+                            String company,String itinerary,String way) {
         super(manager);
         this.context = context;
+        this.country = country;
+        this.city = city;
+        this.company = company;
+        this.itinerary = itinerary;
         this.way = way;
-        this.itineraryId = itineraryId;
-        this.cityId = cityId;
     }
 
     @Override
@@ -63,10 +69,12 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
 
 
-    public void refresh(String cityId,String itineraryId,String way){
-        this.cityId = cityId;
+    public void refresh(String country,String city,String company,String itinerary,String way){
+        this.country = country;
+        this.city = city;
+        this.company = company;
+        this.itinerary = itinerary;
         this.way = way;
-        this.itineraryId = itineraryId;
     }
 
 

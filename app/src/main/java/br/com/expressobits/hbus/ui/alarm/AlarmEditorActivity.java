@@ -22,10 +22,10 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.alarm.AlarmReceiver;
 import br.com.expressobits.hbus.alarm.AlarmService;
 import br.com.expressobits.hbus.alarm.Alarms;
-import br.com.expressobits.hbus.backend.Alarm;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.utils.DAOUtils;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -59,6 +59,10 @@ public class AlarmEditorActivity extends AppCompatActivity {
         }else {
             setTitle(getString(R.string.new_alarm));
         }
+
+        Toolbar pToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(pToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -136,7 +140,7 @@ public class AlarmEditorActivity extends AppCompatActivity {
                 break;
         }*/
         editTextName.setText(alarm.getName());
-        textViewTime.setText(DAOUtils.getTimeForBus(alarm.getId()));
+        textViewTime.setText(FirebaseUtils.getTimeForBus(alarm.getId()));
         resumeWeekDays();
         alarm.setCode(code);
         return editing;

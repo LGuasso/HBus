@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="tour_title_welcome">Welcome!</string>
+    <string name="tour_title_feedback">Help!</string>
+
+    <string name="tour_subtitle_welcome"></string>
+    <string name="tour_subtitle_feedback"></string>
+
+</resources>

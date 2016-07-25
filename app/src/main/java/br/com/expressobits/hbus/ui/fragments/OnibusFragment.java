@@ -1,9 +1,6 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,32 +19,28 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
-import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.gae.PullBusEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.PullItinerariesEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.util.NetworkUtils;
-import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  * Que exibe as listas de horarios
  */
-public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack,ResultListenerAsyncTask<Bus>{
+public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
     public static final String TAG = "OnibusFragment";
-    public static final String ARGS_CITYID = "cityId";
-    public static final String ARGS_ITINERARYID = "itineraryId";
-    public static final String ARGS_WAY = "Way";
 
-    private String cityId;
-    private String itineraryId;
+    public static final String ARGS_COUNTRY = "country";
+    public static final String ARGS_CITY = "city";
+    public static final String ARGS_COMPANY = "company";
+    public static final String ARGS_ITINERARY = "itinerary";
+    public static final String ARGS_WAY = "way";
+
+    private String country;
+    private String city;
+    private String company;
+    private String itinerary;
     private String way;
 
     private ProgressBar progressBar;
@@ -63,16 +56,16 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         initViews(view);
 
         Bundle arguments = getArguments();
-        if(arguments!=null && arguments.getString(ARGS_CITYID)!=null &&arguments.getString(ARGS_ITINERARYID)!=null && arguments.getString(ARGS_WAY)!=null){
-
-
-            this.cityId = arguments.getString(ARGS_CITYID);
-            this.itineraryId = arguments.getString(ARGS_ITINERARYID);
+        if(arguments!=null && arguments.getString(ARGS_COUNTRY)!=null &&
+                arguments.getString(ARGS_CITY)!=null && arguments.getString(ARGS_COMPANY)!=null &&
+                arguments.getString(ARGS_ITINERARY)!=null && arguments.getString(ARGS_WAY)!=null){
+            this.country = arguments.getString(ARGS_COUNTRY);
+            this.city = arguments.getString(ARGS_CITY);
+            this.company = arguments.getString(ARGS_COMPANY);
+            this.itinerary = arguments.getString(ARGS_ITINERARY);
             this.way = arguments.getString(ARGS_WAY);
-            refresh(cityId,itineraryId,way);
-
+            refresh(country,city,company,itinerary,way);
         }
-
         setHasOptionsMenu(true);
         return view;
 
@@ -89,33 +82,43 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         Bundle arguments = getArguments();
-        setupViewPager(viewPager,arguments.getString(ARGS_CITYID),arguments.getString(ARGS_ITINERARYID), arguments.getString(ARGS_WAY));
+        setupViewPager(viewPager,arguments.getString(ARGS_COUNTRY),arguments.getString(ARGS_CITY),
+                arguments.getString(ARGS_COMPANY),arguments.getString(ARGS_ITINERARY),arguments.getString(ARGS_WAY));
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager,String cityId,String itineraryId,String way) {
+    private void setupViewPager(ViewPager viewPager,String country,String city,String company,String itinerary,String way) {
         viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager(),
-                getActivity(),
-                cityId,
-                itineraryId,
-                way);
-        Bundle args = new Bundle();
-        args.putString(HoursFragment.ARGS_CITYID, cityId);
-        args.putString(HoursFragment.ARGS_ITINERARYID,itineraryId);
-        args.putString(HoursFragment.ARGS_WAY, way);
-
-
+                getActivity(),country,city,company,itinerary,way);
+        Bundle argsUseful = new Bundle();
+        argsUseful.putString(HoursFragment.ARGS_COUNTRY,country);
+        argsUseful.putString(HoursFragment.ARGS_CITY,city);
+        argsUseful.putString(HoursFragment.ARGS_COMPANY,company);
+        argsUseful.putString(HoursFragment.ARGS_ITINERARY,itinerary);
+        argsUseful.putString(HoursFragment.ARGS_WAY, way);
+        argsUseful.putString(HoursFragment.ARGS_TYPEDAY, TypeDay.USEFUL.toString());
         HoursFragment hoursFragmentUseful = new HoursFragment();
-        hoursFragmentUseful.setArguments(args);
-        hoursFragmentUseful.setTypeday(TypeDay.USEFUL);
+        hoursFragmentUseful.setArguments(argsUseful);
 
+        Bundle argsSaturday = new Bundle();
+        argsSaturday.putString(HoursFragment.ARGS_COUNTRY,country);
+        argsSaturday.putString(HoursFragment.ARGS_CITY,city);
+        argsSaturday.putString(HoursFragment.ARGS_COMPANY,company);
+        argsSaturday.putString(HoursFragment.ARGS_ITINERARY,itinerary);
+        argsSaturday.putString(HoursFragment.ARGS_WAY, way);
+        argsSaturday.putString(HoursFragment.ARGS_TYPEDAY, TypeDay.SATURDAY.toString());
         HoursFragment hoursFragmentSaturday = new HoursFragment();
-        hoursFragmentSaturday.setArguments(args);
-        hoursFragmentSaturday.setTypeday(TypeDay.SATURDAY);
+        hoursFragmentSaturday.setArguments(argsSaturday);
 
+        Bundle argsSunday = new Bundle();
+        argsSunday.putString(HoursFragment.ARGS_COUNTRY,country);
+        argsSunday.putString(HoursFragment.ARGS_CITY,city);
+        argsSunday.putString(HoursFragment.ARGS_COMPANY,company);
+        argsSunday.putString(HoursFragment.ARGS_ITINERARY,itinerary);
+        argsSunday.putString(HoursFragment.ARGS_WAY, way);
+        argsSunday.putString(HoursFragment.ARGS_TYPEDAY, TypeDay.SUNDAY.toString());
         HoursFragment hoursFragmentSunday = new HoursFragment();
-        hoursFragmentSunday.setArguments(args);
-        hoursFragmentSunday.setTypeday(TypeDay.SUNDAY);
+        hoursFragmentSunday.setArguments(argsSunday);
 
         viewPagerAdapter.addFragment(hoursFragmentUseful,
                 getString(R.string.useful));
@@ -126,21 +129,15 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    /**
-     * @param itineraryId
-     * @param way
-     */
-    public void refresh(String cityId,String itineraryId,String way){
-
-        viewPagerAdapter.refresh(cityId, itineraryId, way);
+    public void refresh(String country,String city,String company,String itinerary,String way){
+        viewPagerAdapter.refresh(country,city,company,itinerary,way);
         viewPager.setAdapter(viewPagerAdapter);
-
         //TODO implement sunday days in holiday
         int typeday  = HoursUtils.getTipoDeDia(GregorianCalendar.getInstance());
         Log.d(TAG, "Typday of now " + typeday);
-
         viewPager.setCurrentItem(typeday);
     }
+
 
     @Override
     public void onClickListener(View view, int position) {
@@ -169,54 +166,12 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
 
         int id = item.getItemId();
         if (id == R.id.menu_action_refresh) {
-            pullBuses();
+           // pullBuses();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void pullBuses(){
-        progressBar.setVisibility(View.VISIBLE);
-        viewPager.setVisibility(View.INVISIBLE);
-        Log.d(TAG,"initial push buses");
-        if(NetworkUtils.isWifiConnected(getActivity()) || NetworkUtils.isMobileConnected(getActivity())) {
-            PullBusEndpointsAsyncTask pullBusEndpointsAsyncTask = new PullBusEndpointsAsyncTask();
-            pullBusEndpointsAsyncTask.setContext(getActivity());
-            pullBusEndpointsAsyncTask.setResultListenerAsyncTask(this);
-            City city = new City();
-            city.setName(DAOUtils.getNameCity(cityId));
-            city.setCountry(DAOUtils.getNameCountry(cityId));
 
-            BusDAO dao = new BusDAO(getActivity());
 
-            Itinerary itinerary = dao.getItinerary(itineraryId);
-
-            Pair<City,Itinerary> pair = new Pair<>(city,itinerary);
-
-            pullBusEndpointsAsyncTask.execute(pair);
-        }else{
-            progressBar.setVisibility(View.INVISIBLE);
-            //imageViewNetworkError.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void finished(List<Bus> buses) {
-        if(buses!=null){
-            //listItineraries = itineraries;
-            BusDAO db = new BusDAO(getActivity());
-            int result = db.deleteBuses(cityId,itineraryId);
-            for (Bus bus:buses){
-                Log.d(TAG,"bus "+bus.getTime()+"load from datastore way"+bus.getWay());
-                db.insert(bus);
-            }
-
-            viewPager.setVisibility(View.VISIBLE);
-        }else{
-            //imageViewNetworkError.setVisibility(View.VISIBLE);
-            viewPager.setVisibility(View.VISIBLE);
-        }
-        progressBar.setVisibility(View.INVISIBLE);
-        refresh(cityId,itineraryId,way);
-    }
 }

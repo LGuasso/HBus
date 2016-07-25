@@ -1,44 +1,40 @@
 package br.com.expressobits.hbus.ui.settings;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.adapters.ItemCityAdapter;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.dao.BusDAO;
-import br.com.expressobits.hbus.gae.ProgressAsyncTask;
-import br.com.expressobits.hbus.gae.PullCitiesEndpointsAsyncTask;
-import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.ui.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.ui.dialog.DownloadDataDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
-import br.com.expressobits.hbus.util.NetworkUtils;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,
-        FinishListener, ProgressAsyncTask,ResultListenerAsyncTask<City> {
+public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FinishListener{
 
     private List<City> cities;
     public boolean initial = false;
@@ -46,16 +42,18 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private ImageView imageViewNetworkError;
-    private BusDAO db;
     private boolean starter = false;
     public static final String NOT_CITY = "not_city";
     public static final String STARTER_MODE = "starter";
+    public static final String DEFAULT_COUNTRY = "RS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         starter = getIntent().getBooleanExtra(STARTER_MODE,false);
         setContentView(R.layout.activity_select_city);
+        //Define se e primeira vez do app ou se tem alguma cidade definida...
+        initial = (PreferenceManager.getDefaultSharedPreferences(this).getString(TAG,NOT_CITY).equals(NOT_CITY));
         initViews();
     }
 
@@ -68,19 +66,14 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_refresh) {
-            refreshDatabaseCities("RS");
+            refresh(DEFAULT_COUNTRY);
         }
         return false;
     }
 
     private void initActionBar() {
-        //Define se e primeira vez do app ou se tem alguma cidade definida...
-        initial = (PreferenceManager.getDefaultSharedPreferences(this).getString(TAG,NOT_CITY).equals(NOT_CITY));
         Toolbar pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
     }
@@ -97,18 +90,13 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         LinearLayoutManager llmUseful = new LinearLayoutManager(this);
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
-
         cities = new ArrayList<>();
-
-        db = new BusDAO(this);
-        cities = db.getCities();
-        refreshRecyclerView();
         //Se houver cidades no database local não haverá procura no remoto
         if(cities.size()>0){
             recyclerView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
         }else{
-            refreshDatabaseCities("RS");
+            refresh(DEFAULT_COUNTRY);
         }
     }
 
@@ -116,7 +104,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this, cities);
         itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerView.setAdapter(itemCityAdapter);
-
     }
 
     private void initProgressBar() {
@@ -125,52 +112,17 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onClickListener(View view, final int position) {
+        pullCompanies(cities.get(position).getCountry(),cities.get(position).getName());
         Log.d(TAG, "Selection city id=" + cities.get(position).getId());
-
-        /**AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.confirm_donwload_data_for_city, cities.get(position).getName()));
-        builder.setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(TAG,cities.get(position).getId());
-                editor.apply();
-
-                finish();
-            }
-        });
-        builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(TAG,cities.get(position).getId());
-                editor.apply();
-                //TODO implementar download do cloud datastore
-                //DownloadDataDialogFragment dialoge = new DownloadDataDialogFragment();
-                //dialoge.setParameters(SelectCityActivity.this,SelectCityActivity.this,cities.get(position));
-                //dialoge.show(SelectCityActivity.this.getSupportFragmentManager(), "DOWNLOAD");
-                //TODO implementa download do firebase por cidades especificas
-                //Com progress bar/
-                finish();
-
-            }
-        });
-        builder.show();*/
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(TAG, cities.get(position).getId());
+        editor.putString(cities.get(position).getId(),cities.get(position).getCompanyDefault());
         editor.apply();
-
         if(starter){
             ManagerInit.manager(this);
         }
-
         finish();
-
     }
 
     @Override
@@ -192,41 +144,99 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         }
     }
 
-    @Override
-    public void setProgressUdate(Integer progress, Class c) {
-        Toast.makeText(this,"Download cities "+progress+"%",Toast.LENGTH_LONG).show();
+    private void addCity(City city){
+        if(cities.size()>0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        cities.add(city);
+        refreshRecyclerView();
     }
 
-    public void refreshDatabaseCities(String country){
+    private void addCompany(Company company){
+        Log.d(TAG,"add company "+company.getName());
+        //TODO implementar adiçao de empresa
+    }
+
+
+    /**
+     * @param country
+     * @param city
+     */
+    private void pullCompanies(final String country, final String city){
+        FirebaseDatabase database= FirebaseDatabase.getInstance();
+        DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.COMPANY_TABLE);
+        DatabaseReference countryRef = itinerariesTableRef.child(country);
+        DatabaseReference cityRef = countryRef.child(city);
+        cityRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Company company = dataSnapshot.getValue(Company.class);
+                company.setId(FirebaseUtils.getIdCompany(country,city,company.getName()));
+                addCompany(company);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
+
+    public void refresh(final String country){
+        cities.clear();
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
-        if(NetworkUtils.isWifiConnected(this) || NetworkUtils.isMobileConnected(this)){
-            PullCitiesEndpointsAsyncTask pullCitiesEndpointsAsyncTask = new PullCitiesEndpointsAsyncTask();
-            pullCitiesEndpointsAsyncTask.setProgressAsyncTask(this);
-            pullCitiesEndpointsAsyncTask.setContext(this);
-            pullCitiesEndpointsAsyncTask.setResultListenerAsyncTask(this);
-            pullCitiesEndpointsAsyncTask.execute(country);
-        }else{
-            progressBar.setVisibility(View.INVISIBLE);
-            imageViewNetworkError.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void finished(List result) {
-        if(result!=null){
-            cities = result;
-            for (City city:cities){
-                db.insert(city);
+        FirebaseDatabase database= FirebaseDatabase.getInstance();
+        DatabaseReference citiesTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
+        DatabaseReference countryRef = citiesTableRef.child(country);
+        countryRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("FIREBASE","onChildAdded");
+                City city = dataSnapshot.getValue(City.class);
+                city.setId(FirebaseUtils.getIdCity(country,city.getName()));
+                addCity(city);
+                Log.d("FIREBASE",city.getId());
             }
-            Log.i(TAG,cities.toString());
-            recyclerView.setVisibility(View.VISIBLE);
-        }else{
-            //imageViewNetworkError.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-        progressBar.setVisibility(View.INVISIBLE);
-        refreshRecyclerView();
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d("FIREBASE","onChildChanged");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d("FIREBASE","onChildRemoved");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d("FIREBASE","onChildMoved");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("FIREBASE","onCancelled");
+            }
+        });
     }
 }

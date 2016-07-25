@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
+import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
 
 /**

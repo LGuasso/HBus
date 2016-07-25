@@ -1,9 +1,10 @@
 package br.com.expressobits.hbus.utils;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
-import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.model.Itinerary;
 
 /**
  * Class utils import to generator ids
@@ -14,6 +15,8 @@ public class DAOUtils {
 
     public static String BARS = "/";
     public static String ERROR = "ERROR";
+
+
 
     public static String getId(City city){
         return city.getCountry()+BARS+city.getName();
@@ -122,5 +125,14 @@ public class DAOUtils {
             return ERROR;
         }
 
+    }
+
+
+    //FIREBASE
+    public static String getReference(City city, Company company,Itinerary itinerary,Class c){
+        if(c.equals(Bus.class)){
+           return "buses"+BARS+city.getName()+BARS+company.getName()+BARS+itinerary.getName();
+        }
+        return null;
     }
 }

@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import br.com.expressobits.hbus.backend.Alarm;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**

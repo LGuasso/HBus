@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.ui.alarm;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,14 +14,14 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.adapters.ItemAlarmAdapter;
-import br.com.expressobits.hbus.backend.Alarm;
-import br.com.expressobits.hbus.backend.cityApi.model.City;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.ui.adapters.ItemAlarmAdapter;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
-import br.com.expressobits.hbus.dao.BusDAO;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,9 +29,6 @@ import br.com.expressobits.hbus.ui.views.SimpleDividerItemDecoration;
 public class AlarmListFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
     public static final String TAG = "AlarmListFragment";
-    public static final String ARGS_CITYID = "cityId";
-
-    private String cityId;
 
     private RecyclerView recyclerViewAlarms;
     private List<Alarm> alarmList;
@@ -48,11 +46,6 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_alarm_list, container, false);
         initViews(view);
-
-        Bundle arguments = getArguments();
-        if(arguments!=null && arguments.getString(ARGS_CITYID)!=null){
-            cityId = arguments.getString(ARGS_CITYID);
-        }
         return view;
     }
 
@@ -62,9 +55,11 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
 
     private void updateListAlarms(Context context){
         AlarmDAO alarmDAO = new AlarmDAO(context);
-        BusDAO busDAO = new BusDAO(context);
-        City city = busDAO.getCity(cityId);
-        busDAO.close();
+        String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
+        String companyId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,SelectCityActivity.DEFAULT_COUNTRY);
+        City city= new City();
+        city.setName(FirebaseUtils.getCityName(cityId));
+        city.setCountry(FirebaseUtils.getCountry(cityId));
         if(city!=null){
             alarmList = alarmDAO.getAlarms(city);
         }
@@ -75,7 +70,6 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         recyclerViewAlarms = (RecyclerView) view.findViewById(R.id.recyclerViewAlarms);
         recyclerViewAlarms.setHasFixedSize(true);
         recyclerViewAlarms.setSelected(true);
-        recyclerViewAlarms.addItemDecoration(new SimpleDividerItemDecoration(context));
         LinearLayoutManager llmUseful = new LinearLayoutManager(context);
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewAlarms.setLayoutManager(llmUseful);
@@ -83,7 +77,7 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
 
     private void udpateRecyclerViewAlarms(Context context){
         ItemAlarmAdapter adapter =
-                new ItemAlarmAdapter(context,alarmList,cityId);
+                new ItemAlarmAdapter(context,alarmList);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewAlarms.setAdapter(adapter);
     }
