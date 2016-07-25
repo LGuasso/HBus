@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,15 +94,20 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     }
 
-    private void addItinerary(Company company){
-        if(company.getId()!=null){
-            listCompanies.add(company);
+    private void addCompany(Company company){
+        if(company.isActived() || PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("no_actived_itens",false)){
+            if(company.getId()!=null){
+                listCompanies.add(company);
+            }
+            if(listCompanies.size()>0){
+                progressBar.setVisibility(View.INVISIBLE);
+                recyclerViewCompanies.setVisibility(View.VISIBLE);
+            }
+            refreshRecyclerView();
+        }else{
+            Log.d(TAG,"no listed company "+company.getName()+" no actived!");
         }
-        if(listCompanies.size()>0){
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerViewCompanies.setVisibility(View.VISIBLE);
-        }
-        refreshRecyclerView();
+
 
     }
 
@@ -122,7 +128,7 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Company company = dataSnapshot.getValue(Company.class);
                 company.setId(FirebaseUtils.getIdCompany(country,city,company.getName()));
-                addItinerary(company);
+                addCompany(company);
             }
 
             @Override

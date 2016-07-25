@@ -27,6 +27,8 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".application.TPCDataBaseInit"
@@ -172,6 +174,9 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity android:name=".ui.LoginActivity">
+
         </activity>
     </application>
 

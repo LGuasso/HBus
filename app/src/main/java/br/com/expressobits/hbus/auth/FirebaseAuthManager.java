@@ -28,8 +28,8 @@ public class FirebaseAuthManager {
     /**
      * Obter o usuário atualmente conectado
      */
-    public static void getActualUser(){
-        new FirebaseAuth.AuthStateListener() {
+    public static FirebaseAuth.AuthStateListener getActualUser(){
+        return new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
