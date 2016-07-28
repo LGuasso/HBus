@@ -28,7 +28,7 @@ public class Alarms {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent displayIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-                HoursUtils.getTimeInCalendar(alarm.getTimeAlarm()).getTimeInMillis(),
+                alarm.getTimeAlarm(),
                 AlarmManager.INTERVAL_DAY,
                 displayIntent);
         Log.d(TAG,"Save alarm "+alarm.getTimeAlarm()+" id:"+alarm.getId());

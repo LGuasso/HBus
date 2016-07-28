@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -56,6 +57,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     public ItemBusAdapter(Context context, List<Bus> listBus){
         this.context = context;
         Pair<Integer,List<Bus>> pair = HoursUtils.sortByTimeBus(listBus);
+        //Pair<Integer,List<Bus>> pair = new Pair<>(0,listBus);
         this.listBus = pair.second;
         this.countLastBus = pair.first;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -130,7 +132,8 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int i) {
         final Bus bus = listBus.get(i);
-        myViewHolder.txtViewHorario.setText(bus.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        myViewHolder.txtViewHorario.setText(sdf.format(bus.getTime()));
         /**Code code = db.getCode(cityId,listBus.get(i).getCode());
         if(code!=null) {
             myViewHolder.txtViewCode.setText(code.getName());
@@ -204,7 +207,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
                     alarm.setSaturday(true);
                     alarm.setActived(true);
                     alarm.setMinuteDelay(-5);
-                    alarm.setTimeAlarm(TextUtils.getTimeWithDelayTime(bus.getTime(), alarm.getMinuteDelay()));
+                    alarm.setTimeAlarm(TextUtils.getTimeWithDelayTime(new SimpleDateFormat("HH:mm").format(bus.getTime()), alarm.getMinuteDelay()));
                     alarmDAO.insert(alarm);
                     Toast.makeText(context,
                             context.getString(R.string.alarm_added), Toast.LENGTH_SHORT).show();

@@ -1,5 +1,8 @@
 package br.com.expressobits.hbus.model;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * @author Rafael Correa
  * @since 21/05/2015.
@@ -20,7 +23,7 @@ public class Bus implements Comparable<Bus>{
     /**
      * Horário do bus expresso em {@link String}
      */
-    private String time;
+    private long time;
     /**
      * Codigo único desse ônibus {@link Code}
      */
@@ -31,20 +34,16 @@ public class Bus implements Comparable<Bus>{
      */
     private String typeday;
 
-    /**
-     * Cidade onde esse ônibus passa
-     */
-    private Long cityid;
 
     public String getId() {
         return id;
     }
 
-    public void setTime(String horario) {
+    public void setTime(long horario) {
         this.time = horario;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
@@ -77,16 +76,37 @@ public class Bus implements Comparable<Bus>{
         this.typeday = typeday;
     }
 
-    public Long getCityid() {
-        return cityid;
-    }
-
-    public void setCityid(Long cityid) {
-        this.cityid = cityid;
-    }
 
     @Override
     public int compareTo(Bus another) {
+
+        Calendar thisCalendar = Calendar.getInstance();
+        Calendar anotherCalendar = Calendar.getInstance();
+        thisCalendar.setTimeInMillis(this.getTime());
+        anotherCalendar.setTimeInMillis(another.getTime());
+
+        int hourThis = thisCalendar.get(Calendar.HOUR_OF_DAY);
+        int hourAnother = anotherCalendar.get(Calendar.HOUR_OF_DAY);
+        int minuteThis = thisCalendar.get(Calendar.MINUTE);
+        int minuteAnother = anotherCalendar.get(Calendar.MINUTE);
+
+        if(hourThis>hourAnother){
+            return 1;
+        }else if(hourThis<hourAnother){
+            return -1;
+        }else{
+            if(minuteThis>minuteAnother){
+                return 1;
+            }else if(minuteThis<minuteAnother){
+                return -1;
+            }else{
+                return 0;
+            }
+        }
+    }
+
+    /**@Override
+    public int compareToOld(Bus another) {
 
         int hourThis = Integer.parseInt(this.time.split(":")[0]);
         int hourAnother = Integer.parseInt(another.time.split(":")[0]);
@@ -107,7 +127,7 @@ public class Bus implements Comparable<Bus>{
             }
         }
     }
-
+*/
     @Override
     public String toString() {
         return getTime()+" - "+getCode()+" - "

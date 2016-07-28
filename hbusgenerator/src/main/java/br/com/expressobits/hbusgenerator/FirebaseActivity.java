@@ -106,11 +106,15 @@ public class FirebaseActivity extends Activity{
     }
 
     private void pushData(){
-        removeAllValues(FirebaseUtils.BUS_TABLE);
+        /**removeAllValues(FirebaseUtils.BUS_TABLE);
         removeAllValues(FirebaseUtils.ITINERARY_TABLE);
         removeAllValues(FirebaseUtils.CITY_TABLE);
         removeAllValues(FirebaseUtils.COMPANY_TABLE);
-        removeAllValues(FirebaseUtils.CODE_TABLE);
+        removeAllValues(FirebaseUtils.CODE_TABLE);*/
+        pushToFirebase();
+    }
+
+    private void pushToFirebase() {
         for(City city:cities){
             push(city);
             for(Company company:companies.get(city)){

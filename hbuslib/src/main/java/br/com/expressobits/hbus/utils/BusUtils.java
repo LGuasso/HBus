@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.utils;
 
+import java.util.Calendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.Bus;
@@ -13,12 +14,14 @@ public class BusUtils {
         //TODO Create metodo separado
         Bus nowBus = new Bus();
         Bus nextBus;
-        nowBus.setTime(HoursUtils.getNowTimeinString());
+        //nowBus.setTime(HoursUtils.getNowTimeinString());
+        nowBus.setTime(Calendar.getInstance().getTimeInMillis());
+
         if(buses.size() > 0) {
             nextBus = buses.get(0);
             for (int i = 0; i < buses.size(); i++) {
                 nextBus = buses.get(i);
-                if (HoursUtils.compareTo(nowBus,nextBus) <= 0) {
+                if (nowBus.compareTo(nextBus) <= 0) {
                     nextBus = buses.get(i);
                     return nextBus;
                 } else {
@@ -28,8 +31,8 @@ public class BusUtils {
             return nextBus;
         }else{
             //TODO create default pattern not found bus
-            nowBus.setTime("--:--");
+            nowBus.setTime(0l);
             return nowBus;
-        }
+       }
     }
 }

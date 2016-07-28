@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.alarm.AlarmReceiver;
 import br.com.expressobits.hbus.alarm.AlarmService;
@@ -26,6 +30,7 @@ import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -33,6 +38,7 @@ public class AlarmEditorActivity extends AppCompatActivity {
 
     public static final String ARGS_ALARM_ID = "br.com.expressobits.hbus.ui.AlarmIdKey";
     public static final String ARGS_ALARM_CODE = "br.com.expressobits.hbus.ui.AlarmCodeKey";
+    private static final String TAG = "AlarmEditor";
     private Alarm alarm;
     private boolean editing;
     private Toolbar toolbar;
@@ -140,7 +146,9 @@ public class AlarmEditorActivity extends AppCompatActivity {
                 break;
         }*/
         editTextName.setText(alarm.getName());
-        textViewTime.setText(FirebaseUtils.getTimeForBus(alarm.getId()));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
+        textViewTime.setText(HoursUtils.getFormatTime(calendar));
         resumeWeekDays();
         alarm.setCode(code);
         return editing;
@@ -171,7 +179,11 @@ public class AlarmEditorActivity extends AppCompatActivity {
                 break;
 
         }*/
-        alarm.setTimeAlarm(TextUtils.getTimeWithDelayTime(textViewTime.getText().toString(),alarm.getMinuteDelay()));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
+        calendar.add(Calendar.MINUTE,alarm.getMinuteDelay());
+        Log.d(TAG,"minute delay "+alarm.getMinuteDelay());
+        alarm.setTimeAlarm(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
         /**AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
          Intent intent = new Intent(this, AlarmReceiver.class);
          intent.putExtra(AlarmService.ALARM_ID_KEY,alarm.getId());

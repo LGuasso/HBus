@@ -105,7 +105,7 @@ public class TextUtils {
         return 0;
     }
 
-    public static String getTimeWithDelayTime(String time,int delay){
+    public static String getTimeStringWithDelayTime(String time,int delay){
         int hour = Integer.parseInt(time.split(":")[0]);
         int minute = Integer.parseInt(time.split(":")[1]);
         Calendar c = Calendar.getInstance();
@@ -118,6 +118,21 @@ public class TextUtils {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
         return format.format(d);
+
+
+    }
+
+    public static long getTimeWithDelayTime(String time,int delay){
+        int hour = Integer.parseInt(time.split(":")[0]);
+        int minute = Integer.parseInt(time.split(":")[1]);
+        Calendar c = Calendar.getInstance();
+        c.set(0, 0, 0, hour, minute);
+
+        c.add(Calendar.MINUTE,delay);
+
+        Date d = c.getTime();
+
+        return c.getTimeInMillis();
 
 
     }

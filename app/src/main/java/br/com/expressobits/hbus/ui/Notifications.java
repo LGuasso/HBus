@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.model.Code;
@@ -26,6 +28,7 @@ import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
 import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * @author Rafael Correa
@@ -103,7 +106,8 @@ public class Notifications {
 
     private static NotificationCompat.Builder getBuilderNotification(Context context, Alarm alarm) {
 
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
         return new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_bus_white_24dp)
                 .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
@@ -111,7 +115,7 @@ public class Notifications {
                 //        R.drawable.ic_close_white_24dp,getResources().getString(R.string.remove),
                 //        PendingIntent.getBroadcast(this,0,new Intent(this, HelpActivity.class),0)))
                 .setContentTitle(context.getString(R.string.notification_alarm_title_text,
-                        FirebaseUtils.getItinerary(alarm.getId()),FirebaseUtils.getTimeForBus(alarm.getId())))
+                        FirebaseUtils.getItinerary(alarm.getId()), HoursUtils.getFormatTime(calendar)))
                 .setContentText(context.getString(R.string.notification_alarm_text,
                         FirebaseUtils.getWay(alarm.getId())))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

@@ -180,7 +180,7 @@ public class BusHelper {
     protected static Bus cursorToBus(Cursor c){
         Bus bus = new Bus();
         bus.setId(c.getString(c.getColumnIndexOrThrow(BusContract.Bus._ID)));
-        bus.setTime(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TIME)));
+        bus.setTime(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_TIME));
         bus.setCode(c.getString(c.getColumnIndexOrThrow(BusContract.Bus.COLUMN_NAME_CODE)));
         return bus;
     }

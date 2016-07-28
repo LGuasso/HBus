@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -93,6 +94,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             for (int j = 0; j < itinerary.getWays().size(); j++) {
                 final String way = itinerary.getWays().get(j);
                 final List<Bus> buses = new ArrayList<>();
+                final String typeday = HoursUtils.getTypedayinCalendar(Calendar.getInstance()).toString();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference busTable = database.getReference(FirebaseUtils.BUS_TABLE);
                 DatabaseReference countryRef = busTable.child(FirebaseUtils.getCountry(itinerary.getId()));
@@ -100,11 +102,18 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                 DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(itinerary.getId()));
                 DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
                 DatabaseReference wayRef = itineraryRef.child(way);
-                DatabaseReference typedayRef = wayRef.child(HoursUtils.getTypedayinCalendar(Calendar.getInstance()).toString());
+                DatabaseReference typedayRef = wayRef.child(typeday);
                 typedayRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Bus bus = dataSnapshot.getValue(Bus.class);
+                        bus.setId(FirebaseUtils.getIdBus(FirebaseUtils.getCountry(itinerary.getId()),
+                                FirebaseUtils.getCityName(itinerary.getId()),
+                                FirebaseUtils.getCompany(itinerary.getId()),
+                                itinerary.getName(),
+                                way,
+                                typeday,
+                                String.valueOf(bus.getTime())));
                         buses.add(bus);
                         next.put(way,BusUtils.getNextBusforList(buses));
                         updateFieldNextBus(holder,itinerary,next);
@@ -147,7 +156,8 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             TextView textViewHour = (TextView) view.findViewById(R.id.textViewHourforNextBus);
             TextView textViewWay = (TextView) view.findViewById(R.id.textViewWayforNextBus);
             TextView textViewCode = (TextView) view.findViewById(R.id.textViewCodeforNextBus);
-            String time = next.get(way).getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            String time = sdf.format(next.get(way).getTime());
             String code = next.get(way).getCode();
             textViewWay.setText(way);
             textViewHour.setText(time);

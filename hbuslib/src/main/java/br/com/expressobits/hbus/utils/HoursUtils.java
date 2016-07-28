@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import org.jetbrains.annotations.Contract;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -111,11 +112,17 @@ public class HoursUtils {
      * @return String do horario atual em HH:mm
      */
     public static Calendar getTimeInCalendar(String time){
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.split(":")[0]));
-        cal.set(Calendar.MINUTE,Integer.parseInt(time.split(":")[1]));
-        Log.d(TAG,"Criado calendar com atual hora "+time);
-        return cal;
+        if(time.contains(":")){
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.split(":")[0]));
+            cal.set(Calendar.MINUTE,Integer.parseInt(time.split(":")[1]));
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Log.d(TAG,"Criado calendar com atual hora "+time+" = "+sdf.format(cal.getTime()));
+            return cal;
+        }else{
+            return null;
+        }
+
     }
 
 
@@ -123,7 +130,8 @@ public class HoursUtils {
 
         //Collections.sort(busList);
         Bus bus = new Bus();
-        bus.setTime(HoursUtils.getNowTimeinString());
+        //bus.setTime(HoursUtils.getNowTimeinString());
+        bus.setTime(Calendar.getInstance().getTimeInMillis());
         List<Bus> busFinal = new ArrayList<>();
         ArrayList<Bus> twoLastBuses = new ArrayList<>();
         ArrayList<Bus> lastBuses = new ArrayList<>();
@@ -132,15 +140,15 @@ public class HoursUtils {
         int countTwoLast;
 
         for (int i=0;i<busList.size();i++){
-            if(getHour(busList.get(i))>getHour(bus)){
+            if(getHour(busList.get(i).getTime())>getHour(bus.getTime())){
                 nextBuses.add(busList.get(i));
-            }else if(getHour(busList.get(i))<getHour(bus)){
+            }else if(getHour(busList.get(i).getTime())<getHour(bus.getTime())){
                     lastBuses.add(busList.get(i));
 
             }else{
-                if(getMinute(busList.get(i))>=getMinute(bus)){
+                if(getMinute(busList.get(i).getTime())>=getMinute(bus.getTime())){
                     nextBuses.add(busList.get(i));
-                }else if(getMinute(busList.get(i))<getMinute(bus)) {
+                }else if(getMinute(busList.get(i).getTime())<getMinute(bus.getTime())) {
                         lastBuses.add(busList.get(i));
                 }
             }
@@ -179,12 +187,25 @@ public class HoursUtils {
         return new Pair<>(countTwoLast,busFinal);
     }
 
-    public static int getHour(Bus bus){
+    /**public static int getHour(Bus bus){
         return Integer.parseInt(bus.getTime().split(":")[0]);
     }
 
     public static int getMinute(Bus bus){
         return Integer.parseInt(bus.getTime().split(":")[1]);
+    }
+     */
+
+    public static int getHour(long time){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public static int getMinute(long time){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        return calendar.get(Calendar.MINUTE);
     }
 
     public static String longTimetoString(long millis){
@@ -195,25 +216,11 @@ public class HoursUtils {
         );
     }
 
-    public static int compareTo(Bus bus,Bus another) {
-
-        int hourThis = Integer.parseInt(bus.getTime().split(":")[0]);
-        int hourAnother = Integer.parseInt(another.getTime().split(":")[0]);
-        int minuteThis = Integer.parseInt(bus.getTime().split(":")[1]);
-        int minuteAnother = Integer.parseInt(another.getTime().split(":")[1]);
-
-        if(hourThis>hourAnother){
-            return 1;
-        }else if(hourThis<hourAnother){
-            return -1;
-        }else{
-            if(minuteThis>minuteAnother){
-                return 1;
-            }else if(minuteThis<minuteAnother){
-                return -1;
-            }else{
-                return 0;
-            }
-        }
+    public static String getFormatTime(Calendar calendar){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        return sdf.format(calendar.getTime());
     }
+
+
+
 }

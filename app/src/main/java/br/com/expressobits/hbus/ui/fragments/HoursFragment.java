@@ -84,13 +84,18 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
             Log.e(TAG,"null references in args!"+arguments.get(ARGS_COUNTRY)+arguments.get(ARGS_CITY)+arguments.get(ARGS_COMPANY)+
                     arguments.get(ARGS_TYPEDAY)+arguments.get(ARGS_ITINERARY));
         }
+        refresh(country, city, company, itinerary, way ,typeday);
         return view;
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
-        refresh(country, city, company, itinerary, way ,typeday);
+
+        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus);
+        adapterUeful.setRecyclerViewOnClickListenerHack(this);
+        recyclerView.setAdapter(adapterUeful);
     }
 
     private void initRecyclerView(View view){
@@ -104,6 +109,7 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
 
 
     protected void refresh(final String country, final String city, final String company, final String itinerary, final String way, final String typeday){
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference busTableRef = database.getReference(FirebaseUtils.BUS_TABLE);
         DatabaseReference countryRef = busTableRef.child(country);
@@ -115,13 +121,13 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
         typedayRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("We're done loading the initial "+dataSnapshot.getChildrenCount()+" items");
+                Log.d(TAG,"We're done loading the initial "+dataSnapshot.getChildrenCount()+" items");
                 if(dataSnapshot.getChildrenCount()>0){
                     typedayRef.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Bus bus = dataSnapshot.getValue(Bus.class);
-                            bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,bus.getTime()));
+                            bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,String.valueOf(bus.getTime())));
                             addBus(bus);
                         }
 

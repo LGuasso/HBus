@@ -19,7 +19,7 @@ public class Alarm {
     private boolean thursday;
     private boolean friday;
     private boolean saturday;
-    private String timeAlarm;
+    private long timeAlarm;
     /**
      * Minute delay,for delay positive is after <b>this alarm time</b> and negative for before
      */
@@ -73,7 +73,7 @@ public class Alarm {
         return name;
     }
 
-    public String getTimeAlarm() {
+    public long getTimeAlarm() {
         return timeAlarm;
     }
 
@@ -125,7 +125,7 @@ public class Alarm {
         this.name = name;
     }
 
-    public void setTimeAlarm(String time) {
+    public void setTimeAlarm(long time) {
         this.timeAlarm = time;
     }
 

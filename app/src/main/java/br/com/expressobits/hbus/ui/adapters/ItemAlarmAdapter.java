@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -18,6 +19,7 @@ import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.utils.DAOUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * @author Rafael Correa
@@ -51,7 +53,9 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
         //holder.itemView.setTag(holder);
         holder.textViewItineraryName.setText(DAOUtils.getNameItinerary(alarm.getId()));
         holder.textViewName.setText(alarm.getName()!=null&alarm.getName().length()>1?alarm.getName():context.getString(R.string.alarm));
-        holder.textViewTime.setText(alarm.getTimeAlarm());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(alarm.getTimeAlarm());
+        holder.textViewTime.setText(HoursUtils.getFormatTime(calendar));
         holder.switchActived.setChecked(alarm.isActived());
         verifyIsActivedAlarm(holder,alarm);
         holder.switchActived.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
