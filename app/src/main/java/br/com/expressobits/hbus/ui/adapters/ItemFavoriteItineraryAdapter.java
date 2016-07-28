@@ -116,6 +116,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                                 String.valueOf(bus.getTime())));
                         buses.add(bus);
                         next.put(way,BusUtils.getNextBusforList(buses));
+                        setLastUpdate(holder,bus.getTime());
                         updateFieldNextBus(holder,itinerary,next);
 
                     }
@@ -145,6 +146,15 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             }
         }
         return next;
+    }
+
+    private void setLastUpdate(HolderFavoriteItinerary holder,long milis){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milis);
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy");
+        String format = sdf.format(calendar.getTime());
+        holder.textViewUpdated.setText(context.getString(R.string.updated_date,format));
+
     }
 
     private void updateFieldNextBus(HolderFavoriteItinerary holder,Itinerary itinerary,HashMap<String,Bus> next){
@@ -180,6 +190,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
 
         public TextView textItineraryName;
         public TextView textViewCompanyName;
+        public TextView textViewUpdated;
         public Button buttonRemove;
         public Button buttonLookHours;
         public LinearLayout linearLayoutInfo;
@@ -190,6 +201,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
 
             textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
             textViewCompanyName = (TextView) itemView.findViewById(R.id.textViewCompanyName);
+            textViewUpdated = (TextView) itemView.findViewById(R.id.textViewLastUpdate);
             linearLayoutInfo = (LinearLayout) itemView.findViewById(R.id.linearlayout_background_info);
             linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
             buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
