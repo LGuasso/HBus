@@ -19,4 +19,9 @@
         <intent android:action="android.settings.SYNC_SETTINGS" />
     </Preference>
 
+    <CheckBoxPreference
+        android:key="no_actived_itens"
+        android:title="@string/pref_title_no_actived_itens"
+        android:defaultValue="false"/>
+
 </PreferenceScreen>

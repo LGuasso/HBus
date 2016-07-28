@@ -56,7 +56,8 @@ public class AlarmHelper {
     protected static Alarm cursorToAlarm(Cursor c){
         Alarm alarm = new Alarm();
         alarm.setId(c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm._ID)));
-        alarm.setTimeAlarm(c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_TIME)));
+        alarm.setTimeAlarm(Long.valueOf(
+                c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_TIME))));
         alarm.setSunday(BooleanConvert.IntegerToBoolean(
                 c.getInt(c.getColumnIndexOrThrow(AlarmContract.Alarm.COLUMN_NAME_DAYS_SUNDAY))));
         alarm.setMonday(BooleanConvert.IntegerToBoolean(

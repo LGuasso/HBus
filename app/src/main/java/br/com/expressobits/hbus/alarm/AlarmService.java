@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.alarm;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.Calendar;
 
@@ -16,6 +17,7 @@ import br.com.expressobits.hbus.utils.HoursUtils;
  */
 public class AlarmService extends IntentService{
     public static final String ALARM_ID_KEY = "br.com.expressobits.hbus.ui.alarm.AlarmService.AlarmIdKey";
+    private static final String TAG = "AlarmService";
 
     public AlarmService() {
         super("AlarmService");
@@ -30,8 +32,19 @@ public class AlarmService extends IntentService{
     }
 
     private void sendNotification(Alarm alarm) {
+        Log.d(TAG,"trying ntification "+alarm.getTimeAlarm());
         Calendar c = Calendar.getInstance();
-        Calendar cAlarm = HoursUtils.getTimeInCalendar(alarm.getTimeAlarm());
+        Calendar cAlarm = Calendar.getInstance();
+
+
+        int hour = HoursUtils.getHour(alarm.getTimeAlarm());
+        int minute = HoursUtils.getMinute(alarm.getTimeAlarm());
+
+
+        Log.d(TAG,"send not. "+hour+":"+minute);
+
+        cAlarm.set(Calendar.HOUR_OF_DAY,hour);
+        cAlarm.set(Calendar.MINUTE,minute);
         cAlarm.add(Calendar.MINUTE,Alarms.MINUTE_OF_VALIDATE_ALARM);
 
         int day = c.get(Calendar.DAY_OF_WEEK);
@@ -62,6 +75,8 @@ public class AlarmService extends IntentService{
 
         if(cAlarm.compareTo(c)>-1 && isDayToday){
             Notifications.notifyBus(this,alarm);
+
+            Log.d(TAG,"notification alarm "+alarm.toString());
         }
 
 

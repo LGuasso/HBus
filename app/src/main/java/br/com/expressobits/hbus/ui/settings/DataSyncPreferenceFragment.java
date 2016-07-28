@@ -30,6 +30,8 @@ public class DataSyncPreferenceFragment extends PreferenceFragment {
         // updated to reflect the new value, per the Android Design
         // guidelines.
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference("no_actived_itens"));
     }
 
     @Override

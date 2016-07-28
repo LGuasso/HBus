@@ -33,11 +33,20 @@
 
             <TextView
                 android:id="@+id/textViewItineraryName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/itinerary_name"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/textViewCompanyName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="@string/itinerary_name"
-                android:textAppearance="@style/AppTheme.TitleItinerary" />
+                android:text="@string/company_use"
+                android:textAppearance="?android:textAppearanceSmall" />
+
 
 
 
@@ -79,14 +88,12 @@
                     <Button
                         android:id="@+id/buttonLookTime"
                         style="@style/AppTheme.Button.Borderless.Colored"
-                        android:textAllCaps="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/look_times"/>
                     <Button
                         android:id="@+id/buttonRemove"
                         style="@style/AppTheme.Button.Borderless.Colored"
-                        android:textAllCaps="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_remove"/>

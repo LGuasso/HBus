@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import br.com.expressobits.hbus.backend.busApi.model.Bus;
+/**import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
 import br.com.expressobits.hbus.backend.codeApi.model.Code;
-import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;
+import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;*/
 import br.com.expressobits.hbus.dao.CodeContract;
 import br.com.expressobits.hbus.utils.TextUtils;
 
@@ -42,7 +42,7 @@ public class ReadFileCloud {
         this.context = context;
     }
 
-    public City toCity(String text){
+    /**public City toCity(String text){
         City city = new City();
         city.setName(text.split(SPLIT_FILE)[0]);
         city.setCountry(text.split(SPLIT_FILE)[1]);
@@ -181,6 +181,6 @@ public class ReadFileCloud {
             }
         }
         return text;
-    }
+    }*/
 
 }

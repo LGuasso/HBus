@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -61,17 +62,18 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     @Override
     public void onBindViewHolder(HolderFavoriteItinerary holder, int position) {
         String name  = "";
+        String companyName = "";
         Itinerary itinerary = itineraryList.get(position);
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(MainActivity.DEBUG,false)){
-            name += itinerary.getId()+" - "+ itinerary.getName();
+            name += itinerary.getId();
         }else{
             name += itinerary.getName();
+            companyName += context.getString(R.string.company_use,FirebaseUtils.getCompany(itinerary.getId()));
         }
         holder.textItineraryName.setText(name);
+        holder.textViewCompanyName.setText(companyName);
         if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemFavoriteItineraryAdapter.PREF_TIME_HOME_SCREEN,true)){
-
             getBusList(holder,itinerary).toString();
-
         }
 
     }
@@ -92,6 +94,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             for (int j = 0; j < itinerary.getWays().size(); j++) {
                 final String way = itinerary.getWays().get(j);
                 final List<Bus> buses = new ArrayList<>();
+                final String typeday = HoursUtils.getTypedayinCalendar(Calendar.getInstance()).toString();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference busTable = database.getReference(FirebaseUtils.BUS_TABLE);
                 DatabaseReference countryRef = busTable.child(FirebaseUtils.getCountry(itinerary.getId()));
@@ -99,11 +102,18 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
                 DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(itinerary.getId()));
                 DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
                 DatabaseReference wayRef = itineraryRef.child(way);
-                DatabaseReference typedayRef = wayRef.child(HoursUtils.getTypedayinCalendar(Calendar.getInstance()).toString());
+                DatabaseReference typedayRef = wayRef.child(typeday);
                 typedayRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Bus bus = dataSnapshot.getValue(Bus.class);
+                        bus.setId(FirebaseUtils.getIdBus(FirebaseUtils.getCountry(itinerary.getId()),
+                                FirebaseUtils.getCityName(itinerary.getId()),
+                                FirebaseUtils.getCompany(itinerary.getId()),
+                                itinerary.getName(),
+                                way,
+                                typeday,
+                                String.valueOf(bus.getTime())));
                         buses.add(bus);
                         next.put(way,BusUtils.getNextBusforList(buses));
                         updateFieldNextBus(holder,itinerary,next);
@@ -146,7 +156,8 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             TextView textViewHour = (TextView) view.findViewById(R.id.textViewHourforNextBus);
             TextView textViewWay = (TextView) view.findViewById(R.id.textViewWayforNextBus);
             TextView textViewCode = (TextView) view.findViewById(R.id.textViewCodeforNextBus);
-            String time = next.get(way).getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            String time = sdf.format(next.get(way).getTime());
             String code = next.get(way).getCode();
             textViewWay.setText(way);
             textViewHour.setText(time);
@@ -168,7 +179,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     public class HolderFavoriteItinerary extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         public TextView textItineraryName;
-        //public TextView textViewItineraryHours;
+        public TextView textViewCompanyName;
         public Button buttonRemove;
         public Button buttonLookHours;
         public LinearLayout linearLayoutInfo;
@@ -178,7 +189,7 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
             super(itemView);
 
             textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
-            //textViewItineraryHours = (TextView) itemView.findViewById(R.id.linear_layout_nextbuses);
+            textViewCompanyName = (TextView) itemView.findViewById(R.id.textViewCompanyName);
             linearLayoutInfo = (LinearLayout) itemView.findViewById(R.id.linearlayout_background_info);
             linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
             buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);

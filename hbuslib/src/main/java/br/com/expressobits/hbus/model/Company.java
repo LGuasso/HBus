@@ -11,7 +11,8 @@ public class Company {
     private String email;
     private String website;
     private String phoneNumber;
-    private String adress;
+    private String address;
+    private boolean actived;
 
     public String getId() {
         return id;
@@ -53,11 +54,19 @@ public class Company {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setActived(boolean actived) {
+        this.actived = actived;
+    }
+
+    public boolean isActived() {
+        return actived;
     }
 }

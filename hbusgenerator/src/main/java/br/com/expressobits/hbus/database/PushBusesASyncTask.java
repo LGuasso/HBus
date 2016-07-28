@@ -7,17 +7,16 @@ import android.util.Pair;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.List;
 
-import br.com.expressobits.hbus.gae.ProgressAsyncTask;
-import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.utils.BusUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * @author Rafael Correa
@@ -27,16 +26,6 @@ public class PushBusesASyncTask extends AsyncTask<Pair<City,Pair<Company,Pair<It
 
     private static final String TAG = PushBusesASyncTask.class.getName();
     FirebaseDatabase database;
-    private ProgressAsyncTask progressAsyncTask;
-    private ResultListenerAsyncTask<Integer> resultListenerAsyncTask;
-    public void setProgressAsyncTask(ProgressAsyncTask progressAsyncTask) {
-        this.progressAsyncTask = progressAsyncTask;
-    }
-
-    public void setResultListenerAsyncTask(ResultListenerAsyncTask<Integer> resultListenerAsyncTask) {
-        this.resultListenerAsyncTask = resultListenerAsyncTask;
-    }
-
     @Override
     protected Itinerary doInBackground(Pair<City,Pair<Company,Pair<Itinerary,List<Bus>>>>... params) {
 
@@ -56,7 +45,7 @@ public class PushBusesASyncTask extends AsyncTask<Pair<City,Pair<Company,Pair<It
                 DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
                 DatabaseReference wayRef = itineraryRef.child(bus.getWay());
                 DatabaseReference typedayRef = wayRef.child(bus.getTypeday());
-                DatabaseReference busRef = typedayRef.child(bus.getTime());
+                DatabaseReference busRef = typedayRef.child(String.valueOf(bus.getTime()));
                 busRef.setValue(bus);
                 publishProgress((int) ((j+1 / buses.size()) * 100));
             }
@@ -69,20 +58,20 @@ public class PushBusesASyncTask extends AsyncTask<Pair<City,Pair<Company,Pair<It
 
     @Override
     protected void onProgressUpdate(Integer... values) {
-        if(progressAsyncTask!=null){
+        /**if(progressAsyncTask!=null){
             progressAsyncTask.setProgressUdate(values[0],Itinerary.class);
         }else{
             Log.w(TAG,"progressAsyncTask is null!");
-        }
+        }*/
     }
 
     @Override
     protected void onPostExecute(Itinerary itinerary) {
-        Log.d(TAG, "SEND OK! \t\t\t"+itinerary.getName());
+       /** Log.d(TAG, "SEND OK! \t\t\t"+itinerary.getName());
         if(resultListenerAsyncTask!=null){
             resultListenerAsyncTask.finished(new ArrayList<Integer>(0));
         }else{
             Log.w(TAG,"resultListenerAsyncTask is null!");
-        }
+        }*/
     }
 }

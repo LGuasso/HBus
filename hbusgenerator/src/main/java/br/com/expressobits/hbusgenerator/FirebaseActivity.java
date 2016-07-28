@@ -13,22 +13,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.database.PushBusesASyncTask;
 import br.com.expressobits.hbus.database.PushCitiesASyncTask;
 import br.com.expressobits.hbus.database.PushCodesASyncTask;
 import br.com.expressobits.hbus.database.PushCompaniesASyncTask;
 import br.com.expressobits.hbus.database.PushItinerariesASyncTask;
 import br.com.expressobits.hbus.file.ReadFile;
-import br.com.expressobits.hbus.gae.ProgressAsyncTask;
-import br.com.expressobits.hbus.gae.ResultListenerAsyncTask;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.DAOUtils;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
-public class FirebaseActivity extends Activity implements ResultListenerAsyncTask<Integer>,ProgressAsyncTask{
+public class FirebaseActivity extends Activity{
 
 
     ReadFile readFile;
@@ -96,15 +96,25 @@ public class FirebaseActivity extends Activity implements ResultListenerAsyncTas
         itineraryRef.removeValue();
     }
 
-    private void removeAllValues(){
+    private void removeAllValues(String table){
         Log.e("FIREBASE","Remove all VALUES!" );
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        database.getReference().removeValue();
+        DatabaseReference tableRef = database.getReference(table);
+
+        tableRef.removeValue();
     }
 
     private void pushData(){
-        removeAllValues();
+        /**removeAllValues(FirebaseUtils.BUS_TABLE);
+        removeAllValues(FirebaseUtils.ITINERARY_TABLE);
+        removeAllValues(FirebaseUtils.CITY_TABLE);
+        removeAllValues(FirebaseUtils.COMPANY_TABLE);
+        removeAllValues(FirebaseUtils.CODE_TABLE);*/
+        pushToFirebase();
+    }
+
+    private void pushToFirebase() {
         for(City city:cities){
             push(city);
             for(Company company:companies.get(city)){
@@ -147,23 +157,17 @@ public class FirebaseActivity extends Activity implements ResultListenerAsyncTas
 
     private void push(City city){
         PushCitiesASyncTask pushCitiesASyncTask = new PushCitiesASyncTask();
-        pushCitiesASyncTask.setProgressAsyncTask(null);
-        pushCitiesASyncTask.setResultListenerAsyncTask(null);
         pushCitiesASyncTask.execute(city);
     }
 
     private void push(City city,Company company){
         PushCompaniesASyncTask pushCompaniesASyncTask = new PushCompaniesASyncTask();
-        pushCompaniesASyncTask.setProgressAsyncTask(null);
-        pushCompaniesASyncTask.setResultListenerAsyncTask(null);
         Pair<City,Company> pair = new Pair<>(city,company);
         pushCompaniesASyncTask.execute(pair);
     }
 
     private void push(City city,Company company,Code code){
         PushCodesASyncTask pushCodesASyncTask = new PushCodesASyncTask();
-        pushCodesASyncTask.setProgressAsyncTask(null);
-        pushCodesASyncTask.setResultListenerAsyncTask(null);
         Pair<Company,Code> pairCompany = new Pair<>(company,code);
         Pair<City,Pair<Company,Code>> pair = new Pair<>(city,pairCompany);
         pushCodesASyncTask.execute(pair);
@@ -171,8 +175,6 @@ public class FirebaseActivity extends Activity implements ResultListenerAsyncTas
 
     private void push(City city,Company company,Itinerary itinerary){
         PushItinerariesASyncTask pushItinerariesASyncTask = new PushItinerariesASyncTask();
-        pushItinerariesASyncTask.setProgressAsyncTask(null);
-        pushItinerariesASyncTask.setResultListenerAsyncTask(null);
         Pair<Company,Itinerary> pairItinerary = new Pair<>(company,itinerary);
         Pair<City,Pair<Company,Itinerary>> pair = new Pair<>(city,pairItinerary);
         pushItinerariesASyncTask.execute(pair);
@@ -180,8 +182,6 @@ public class FirebaseActivity extends Activity implements ResultListenerAsyncTas
 
     private void push(City city,Company company,Itinerary itinerary,List<Bus> buses){
         PushBusesASyncTask pushBusesASyncTask = new PushBusesASyncTask();
-        pushBusesASyncTask.setProgressAsyncTask(null);
-        pushBusesASyncTask.setResultListenerAsyncTask(this);
         Pair<Itinerary,List<Bus>> pairBus = new Pair<>(itinerary,buses);
         Pair<Company,Pair<Itinerary,List<Bus>>> pairItinerary = new Pair<>(company,pairBus);
         Pair<City,Pair<Company,Pair<Itinerary,List<Bus>>>> pair = new Pair<>(city,pairItinerary);
@@ -189,15 +189,4 @@ public class FirebaseActivity extends Activity implements ResultListenerAsyncTas
     }
 
 
-
-    @Override
-    public void finished(List<Integer> integers) {
-        /**count++;
-        porcentTextView.setText((count/itineraries.size())*100);*/
-    }
-
-    @Override
-    public void setProgressUdate(Integer progress, Class c) {
-
-    }
 }

@@ -106,29 +106,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewLines.setLayoutManager(llmUseful);
-
-        /**recyclerViewLines.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            int mLastFirstVisibleItem = 0;
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                final int currentFirstVisibleItem = llmUseful.findFirstVisibleItemPosition();
-
-                if (currentFirstVisibleItem > this.mLastFirstVisibleItem) {
-                    ((MainActivity) getActivity()).getSupportActionBar().hide();
-                } else if (currentFirstVisibleItem < this.mLastFirstVisibleItem) {
-                    ((MainActivity) getActivity()).getSupportActionBar().show();
-                }
-
-                this.mLastFirstVisibleItem = currentFirstVisibleItem;
-            }
-        });*/
-
         updateListViews();
 
     }
@@ -195,8 +172,8 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
 
 
     @Override
-    public void onItemClick(String itineraryId,String way) {
-        mCallback.onSettingsDone(itineraryId,way);
+    public void onItemClick(String company,String itineraryId,String way) {
+        mCallback.onSettingsDone(company,itineraryId,way);
     }
 
     @Override
