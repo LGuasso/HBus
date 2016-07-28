@@ -18,8 +18,8 @@ android {
         applicationId "br.com.expressobits.hbus"
         minSdkVersion 11
         targetSdkVersion 24
-        versionCode 91
-        versionName "0.9.1"
+        versionCode 92
+        versionName "0.9.2"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
