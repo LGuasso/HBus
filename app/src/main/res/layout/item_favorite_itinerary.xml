@@ -50,6 +50,9 @@
 
 
 
+
+
+
             <LinearLayout
                 android:id="@+id/linearLayoutHours"
                 android:layout_width="match_parent"
@@ -57,6 +60,14 @@
                 android:orientation="vertical">
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewLastUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/loading"
+                android:textAppearance="?android:textAppearanceSmall" />
             <!--TextView
                 android:id="@+id/linear_layout_nextbuses"
                 android:layout_width="wrap_content"
