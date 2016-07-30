@@ -95,20 +95,14 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
     }
 
     private void addCompany(Company company){
-        if(company.isActived() || PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("no_actived_itens",false)){
-            if(company.getId()!=null){
-                listCompanies.add(company);
-            }
-            if(listCompanies.size()>0){
-                progressBar.setVisibility(View.INVISIBLE);
-                recyclerViewCompanies.setVisibility(View.VISIBLE);
-            }
-            refreshRecyclerView();
-        }else{
-            Log.d(TAG,"no listed company "+company.getName()+" no actived!");
+        if(company.getId()!=null){
+            listCompanies.add(company);
         }
-
-
+        if(listCompanies.size()>0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerViewCompanies.setVisibility(View.VISIBLE);
+        }
+        refreshRecyclerView();
     }
 
     private void refresh(String country,String city){
@@ -171,29 +165,28 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
         Intent intent;
         Company company = listCompanies.get(position);
         switch (view.getId()){
-            case R.id.text2:
-                intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/html");
-                intent.putExtra(Intent.EXTRA_EMAIL,company.getEmail());
-                intent.putExtra(Intent.EXTRA_SUBJECT,company.getEmail());
-                getActivity().startActivity(Intent.createChooser(intent, "Send Email"));
-                break;
             case R.id.text1:
-                intent = new Intent(getContext(), CompanyDetailsActivity.class);
-                intent.putExtra(TimesActivity.ARGS_COUNTRY,FirebaseUtils.getCountry(company.getId()));
-                intent.putExtra(TimesActivity.ARGS_CITY, FirebaseUtils.getCityName(company.getId()));
-                intent.putExtra(TimesActivity.ARGS_COMPANY, company.getName());
-                startActivity(intent);
-                break;
+                if(company.isActived()){
+                    intent = new Intent(getContext(), CompanyDetailsActivity.class);
+                    intent.putExtra(TimesActivity.ARGS_COUNTRY,FirebaseUtils.getCountry(company.getId()));
+                    intent.putExtra(TimesActivity.ARGS_CITY, FirebaseUtils.getCityName(company.getId()));
+                    intent.putExtra(TimesActivity.ARGS_COMPANY, company.getName());
+                    startActivity(intent);
+                    break;
+                }
+
             case R.id.icon:
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(cityId,company.getName());
-                editor.apply();
-                refreshRecyclerView();
-                ((MainActivity)getActivity()).refresh();
-                break;
+                if(company.isActived()){
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(cityId,company.getName());
+                    editor.apply();
+                    refreshRecyclerView();
+                    ((MainActivity)getActivity()).refresh();
+                    break;
+                }
+
 
         }
     }

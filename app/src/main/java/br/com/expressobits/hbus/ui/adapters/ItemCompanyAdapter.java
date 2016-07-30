@@ -51,7 +51,13 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
     public void onBindViewHolder(CompanyViewHolder holder, int position) {
         Company company = companies.get(position);
         holder.textView1.setText(company.getName());
-        holder.textView2.setText(company.getEmail());
+        if(!company.isActived()){
+            holder.imageView.setEnabled(false);
+            holder.textView1.setEnabled(false);
+        }else {
+            holder.imageView.setEnabled(true);
+            holder.textView1.setEnabled(true);
+        }
         if(company.getName().equals(companySelected)){
             holder.imageView.setSelected(true);
         }
@@ -66,19 +72,16 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
     public class CompanyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView textView1;
-        public TextView textView2;
         public ImageView imageView;
         public LinearLayout linearLayout;
 
         public CompanyViewHolder(View itemView) {
             super(itemView);
             textView1 = (TextView) itemView.findViewById(R.id.text1);
-            textView2 = (TextView) itemView.findViewById(R.id.text2);
             imageView = (ImageView) itemView.findViewById(R.id.icon);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
             imageView.setSelected(false);
             linearLayout.setOnClickListener(this);
-            textView2.setOnClickListener(this);
             imageView.setOnClickListener(this);
             textView1.setOnClickListener(this);
         }

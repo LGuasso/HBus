@@ -1,12 +1,15 @@
 package br.com.expressobits.hbus.ui.adapters;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -49,6 +52,13 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
         String name = listCities.get(position).getName()+" - "+listCities.get(position).getCountry();
         holder.textViewCity.setText(name);
 
+        if(listCities.get(position).isActived() || PreferenceManager.getDefaultSharedPreferences(context).getBoolean("no_actived_itens",false)){
+            holder.textViewComingSoon.setVisibility(View.INVISIBLE);
+            holder.cardView.setOnClickListener(holder);
+        }else {
+            holder.imageViewCity.setColorFilter(context.getResources().getColor(R.color.md_blue_grey_500), PorterDuff.Mode.MULTIPLY);
+        }
+
         name=name.replace(" - ","-");
         name=name.replace(" ","_");
         name=name.toLowerCase();
@@ -77,15 +87,16 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
     public class HolderCity extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         public TextView textViewCity;
+        public TextView textViewComingSoon;
         public ImageView imageViewCity;
         public CardView cardView;
 
         public HolderCity(View itemView,List<City> list) {
             super(itemView);
             textViewCity = (TextView) itemView.findViewById(R.id.textView_city_name);
+            textViewComingSoon = (TextView) itemView.findViewById(R.id.textView_coming_soon);
             imageViewCity = (ImageView) itemView.findViewById(R.id.imageView_city);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
-            cardView.setOnClickListener(this);
         }
 
 

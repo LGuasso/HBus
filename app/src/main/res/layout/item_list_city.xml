@@ -13,10 +13,11 @@
     app:cardCornerRadius="3dp"
     app:cardUseCompatPadding="true">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/card_view_size_city"
         android:orientation="vertical">
+
 
         <ImageView
             android:id="@+id/imageView_city"
@@ -26,20 +27,38 @@
             android:scaleType="centerCrop"
             android:layout_centerInParent="true"/>
 
-        <TextView
-            android:id="@+id/textView_city_name"
+        <LinearLayout
             android:layout_width="fill_parent"
+            android:orientation="vertical"
             android:padding="8dp"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.HeadLine"
             android:background="@color/transparent_card_view_image"
-            android:text="@string/abc_action_bar_home_description"
-            android:textColor="@color/white"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical"/>
+            android:layout_alignParentTop="true">
+            <TextView
+                android:id="@+id/textView_city_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.HeadLine"
+                android:text="@string/abc_action_bar_home_description"
+                android:textColor="@color/white"
+                android:orientation="vertical"/>
+
+            <TextView
+                android:id="@+id/textView_coming_soon"
+                android:layout_width="fill_parent"
+                android:textColor="@color/accent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceButton"
+                android:text="@string/coming_soon"
+                android:orientation="vertical"/>
+        </LinearLayout>
 
 
-    </FrameLayout>
+
+
+
+
+    </RelativeLayout>
 
 
 
