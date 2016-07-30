@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,17 +146,14 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     }
 
     private void addCity(City city){
-        if(city.isActived() || PreferenceManager.getDefaultSharedPreferences(this).getBoolean("no_actived_itens",false)){
 
-            cities.add(city);
-            refreshRecyclerView();
-            if(cities.size()>0){
-                progressBar.setVisibility(View.INVISIBLE);
-                recyclerView.setVisibility(View.VISIBLE);
-            }
-        }else {
-            Log.d(TAG,"no listed city "+city.getName()+" no actived!");
+        cities.add(city);
+        refreshRecyclerView();
+        if(cities.size()>0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
+
 
     }
 
