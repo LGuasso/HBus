@@ -12,7 +12,7 @@ public class TextUtilsTest extends TestCase {
     public void testGetTimeWIthDelayTime() throws Exception {
         String time = "00:05";
         int delay = -15;
-        String result = TextUtils.getTimeWithDelayTime(time, delay);
+        String result = TextUtils.getTimeStringWithDelayTime(time, delay);
         Log.d("Test",result);
         assertEquals("23:50",result);
     }

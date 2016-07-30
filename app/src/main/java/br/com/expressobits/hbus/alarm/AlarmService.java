@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.alarm;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -9,6 +10,7 @@ import java.util.Calendar;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.ui.Notifications;
+import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
@@ -45,7 +47,6 @@ public class AlarmService extends IntentService{
 
         cAlarm.set(Calendar.HOUR_OF_DAY,hour);
         cAlarm.set(Calendar.MINUTE,minute);
-        cAlarm.add(Calendar.MINUTE,Alarms.MINUTE_OF_VALIDATE_ALARM);
 
         int day = c.get(Calendar.DAY_OF_WEEK);
         boolean isDayToday = false;
@@ -73,7 +74,16 @@ public class AlarmService extends IntentService{
                 break;
         }
 
-        if(cAlarm.compareTo(c)>-1 && isDayToday){
+        String minutesToleradosString = PreferenceManager.getDefaultSharedPreferences(this).
+                getString(NotificationPreferenceFragment.PREF_NOTIFICATION_TIME_ALARM_AFTER,"15");
+        int minutesTolerados = Integer.parseInt(minutesToleradosString);
+
+        Log.d(TAG,"minutes tolerados "+minutesTolerados);
+
+        Log.d(TAG,"c\t"+HoursUtils.getFormatTime(c));
+        Log.d(TAG,"cAlarm\t"+HoursUtils.getFormatTime(cAlarm));
+
+        if(HoursUtils.isValidAlarm(c,cAlarm,minutesTolerados) && isDayToday){
             Notifications.notifyBus(this,alarm);
 
             Log.d(TAG,"notification alarm "+alarm.toString());
@@ -81,4 +91,7 @@ public class AlarmService extends IntentService{
 
 
     }
+
+
+
 }
