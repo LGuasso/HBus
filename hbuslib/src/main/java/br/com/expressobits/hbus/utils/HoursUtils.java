@@ -130,7 +130,6 @@ public class HoursUtils {
 
         //Collections.sort(busList);
         Bus bus = new Bus();
-        //bus.setTime(HoursUtils.getNowTimeinString());
         bus.setTime(Calendar.getInstance().getTimeInMillis());
         List<Bus> busFinal = new ArrayList<>();
         ArrayList<Bus> twoLastBuses = new ArrayList<>();
@@ -219,6 +218,26 @@ public class HoursUtils {
     public static String getFormatTime(Calendar calendar){
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         return sdf.format(calendar.getTime());
+    }
+
+    /**
+     * Este metodo valida se o alarme pode ser ativado.
+     * @param c
+     * @param cAlarm
+     * @return
+     */
+    public static boolean isValidAlarm(Calendar c,Calendar cAlarm,int minutesTolerados){
+        if(c.compareTo(cAlarm)>-1){
+            Log.d(TAG,"now calendar is actual to cAlarm!");
+            cAlarm.add(Calendar.MINUTE,minutesTolerados);
+            if(c.compareTo(cAlarm)<1){
+                return true;
+            }else{
+                Log.d(TAG,"now calendar is NOT actual to cAlarm+minutesTolerance!");
+            }
+        }
+        Log.d(TAG,"now calendar not is actual to cAlarm!");
+        return false;
     }
 
 
