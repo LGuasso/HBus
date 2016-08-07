@@ -10,6 +10,8 @@
 
 
 
+
+
     <ImageView
         android:id="@+id/imageViewCity"
         android:layout_width="match_parent"
@@ -22,6 +24,20 @@
         android:layout_height="match_parent"
         android:background="@drawable/nav_header_scrim"
         android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/imageViewUserProfile"/>
+
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@android:string/unknownName"
+        android:layout_centerInParent="true"
+        android:textAppearance="?android:textAppearance"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

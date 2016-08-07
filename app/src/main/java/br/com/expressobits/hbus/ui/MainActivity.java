@@ -27,6 +27,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +49,7 @@ import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
+import br.com.expressobits.hbus.ui.login.LoginActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.DAOUtils;
@@ -188,7 +191,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         /**TODO mostrar empresa selecionada no menu com companies */
         naviView.setOnClickListener(this);
         TextView textViewCityName = (TextView)naviHeader.findViewById(R.id.textViewCityName);
+        TextView textViewUserName = (TextView)naviHeader.findViewById(R.id.textViewUserName);
+        ImageView imageViewUserProfile = (ImageView)naviHeader.findViewById(R.id.imageViewUserProfile);
         textViewCityName.setText(city + " - " + country);
+        textViewUserName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        imageViewUserProfile.setImageURI(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
         ImageView imageViewCity = (ImageView)naviHeader.findViewById(R.id.imageViewCity);
         if(city.equals("Santa Maria")){
             imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.santa_maria_rs));
@@ -455,6 +462,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         startActivity(intent);
     }
 
+    public void logout(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
+
     public void setActionBarTitle(String title){
         pToolbar.setTitle(title);
     }
@@ -498,8 +512,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.side_nav_bar:
-                startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
+                logout();
                 break;
+            /**case R.id.side_nav_bar:
+                startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
+                break;*/
         }
     }
 }

@@ -114,4 +114,7 @@
     <string name="pref_title_no_actived_itens">Procurar empresas e cidades não terminadas</string>
     <string name="updated_date">Última atualização %1$s</string>
     <string name="coming_soon">Em breve!</string>
+    <string name="action_sign_in"></string>
+    <string name="or">Ou</string>
+    <string name="sign_in_anonymously">Continuar sem logar</string>
 </resources>

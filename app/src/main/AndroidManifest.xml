@@ -83,10 +83,12 @@
             android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name=".ui.tour.TourActivity"
+            android:noHistory="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.settings.SelectCityActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_select_city"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -175,7 +177,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
         </activity>
-        <activity android:name=".ui.LoginActivity">
+        <activity android:name=".ui.login.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
     </application>
