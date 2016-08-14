@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteCantOpenDatabaseException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
@@ -27,11 +28,13 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -47,10 +50,11 @@ import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
+import br.com.expressobits.hbus.ui.login.LoginActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
-import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
+import de.hdodenhof.circleimageview.CircleImageView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements OnSettingsListener,
@@ -64,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     //Gerencia a atuacao dos fragments
     FragmentManager fragmentManager = getSupportFragmentManager();
     TextView textViewCompanyUse;
+
+    TextView textViewCityName;
+    ImageView imageViewCity;
+    CircleImageView circleImageViewCityProfile;
 
     private String country;
     private String city;
@@ -131,6 +139,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     public void refresh(){
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        //Picasso.with(this).load(uriImage).into(imageViewCity);
+        //Picasso.with(this).load(uriImage).into(circleImageViewCityProfile);
+        String cityname = FirebaseUtils.getCityName(cityId);
+
+
         textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
     }
 
@@ -141,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         initNavigationDrawer();
         initAdInterstitial();
         textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
+        textViewCityName = (TextView) findViewById(R.id.textViewCityName);
+        circleImageViewCityProfile = (CircleImageView) findViewById(R.id.imageViewCityProfile);
+        imageViewCity = (ImageView) findViewById(R.id.imageViewCity);
     }
 
     private void initAdInterstitial(){
@@ -187,15 +203,22 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         View naviView = naviHeader.findViewById(R.id.side_nav_bar);
         /**TODO mostrar empresa selecionada no menu com companies */
         naviView.setOnClickListener(this);
-        TextView textViewCityName = (TextView)naviHeader.findViewById(R.id.textViewCityName);
-        textViewCityName.setText(city + " - " + country);
-        ImageView imageViewCity = (ImageView)naviHeader.findViewById(R.id.imageViewCity);
+        TextView textViewUserName = (TextView)naviHeader.findViewById(R.id.textViewUserName);
+        TextView textViewUserEmail = (TextView)naviHeader.findViewById(R.id.textViewUserEmail);
+        CircleImageView imageViewUserProfile = (CircleImageView) naviHeader.findViewById(R.id.imageViewUserProfile);
+        //textViewCityName.setText(city + " - " + country);
+        textViewUserName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        textViewUserEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        Uri uriImage = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
+        Log.d(TAG,"Uri image"+uriImage);
+        Picasso.with(this).load(uriImage).into(imageViewUserProfile);
+        /**ImageView imageViewCity = (ImageView)naviHeader.findViewById(R.id.imageViewCity);
         if(city.equals("Santa Maria")){
             imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.santa_maria_rs));
         }
         if(city.equals("Cruz Alta")){
             imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.cruz_alta_rs));
-        }
+        }*/
     }
 
     @Override
@@ -455,6 +478,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         startActivity(intent);
     }
 
+    public void logout(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
+
     public void setActionBarTitle(String title){
         pToolbar.setTitle(title);
     }
@@ -475,7 +505,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_favorites) {
+        if (id == R.id.nav_logout) {
+            logout();
+        }if (id == R.id.nav_favorites) {
             addFragment(FavoritesItineraryFragment.TAG);
         } else if (id == R.id.nav_all_itineraries) {
             addFragment(ItinerariesFragment.TAG);
@@ -498,6 +530,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.side_nav_bar:
+                logout();
+                break;
+            case R.id.imageViewCityProfile:
                 startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
                 break;
         }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.com.expressobits.hbus.ui.login.LoginActivity"
+    tools:showIn="@layout/activity_login">
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/layoutMain"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_splash"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingRight="24dp"
+            android:paddingLeft="24dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:layout_below="@id/imageViewLogo">
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/or"
+                android:textAppearance="?android:textAppearanceSmallInverse"/>
+
+            <TextView
+                android:id="@+id/textViewSignInAnonymously"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/sign_in_anonymously"
+                android:textAppearance="?android:textAppearanceSmallInverse"/>
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>
