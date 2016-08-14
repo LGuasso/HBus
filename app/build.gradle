@@ -51,6 +51,9 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:9.4.0'
     compile 'me.relex:circleindicator:1.1.5@aar'
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    //Lib picasso for loading images online!
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
     testCompile 'junit:junit:4.12'
     // Optional test -- Mockito framework

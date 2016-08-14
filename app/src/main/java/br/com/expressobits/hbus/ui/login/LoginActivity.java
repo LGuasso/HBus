@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        textViewLoading.setText("Loading sign in by Google...");
+        textViewLoading.setText(getString(R.string.loading_sign_google));
     }
 
     @Override
@@ -113,8 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
 
-                Toast.makeText(this,"Google Sign In was successful",Toast.LENGTH_LONG).show();
-                textViewLoading.setText("Google Sign In was successful!\nLoading preferences...");
+                textViewLoading.setText(getString(R.string.google_sign_sucess));
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...

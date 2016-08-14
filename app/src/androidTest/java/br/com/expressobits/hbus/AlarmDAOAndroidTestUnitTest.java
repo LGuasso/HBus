@@ -50,7 +50,7 @@ public class AlarmDAOAndroidTestUnitTest extends ActivityInstrumentationTestCase
         alarmDAO = new AlarmDAO(context);
         alarm1 = new Alarm();
         alarm1.setId("RS/Santa Maria/Cerrito/Centro > Bairro/12:05");
-        alarm1.setTimeAlarm("12:10");
+        //alarm1.setTimeAlarm("12:10");
         alarm1.setMonday(true);
         alarm1.setTuesday(true);
         alarm1.setSaturday(true);
@@ -60,7 +60,7 @@ public class AlarmDAOAndroidTestUnitTest extends ActivityInstrumentationTestCase
 
         alarm2 = new Alarm();
         alarm2.setId("RS/Santa Maria/Cerrito/Centro > Bairro/13:05");
-        alarm2.setTimeAlarm("13:15");
+        //alarm2.setTimeAlarm("13:15");
         alarm2.setWednesday(true);
         alarm1.setTuesday(true);
         alarm1.setSaturday(true);
@@ -68,7 +68,7 @@ public class AlarmDAOAndroidTestUnitTest extends ActivityInstrumentationTestCase
 
         alarm2update = new Alarm();
         alarm2update.setId("RS/Santa Maria/Cerrito/Centro > Bairro/13:05");
-        alarm2update.setTimeAlarm("13:20");
+        //alarm2update.setTimeAlarm("13:20");
         alarm2update.setMinuteDelay(15);
         alarm2update.setName("Alarm 2 update ");
         alarm2update.setActived(true);

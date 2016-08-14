@@ -117,4 +117,7 @@
     <string name="action_sign_in"></string>
     <string name="or">Ou</string>
     <string name="sign_in_anonymously">Continuar sem logar</string>
+    <string name="exit">Sair</string>
+    <string name="loading_sign_google">Carregando dados do Google...</string>
+    <string name="google_sign_sucess">Login pelo Google efetuado com sucesso!</string>
 </resources>

@@ -24,6 +24,7 @@
     <dimen name="size_background_day_of_week">36dp</dimen>
     <dimen name="AlarmEditor.TimeAlarm.TextSize">96sp</dimen>
     <dimen name="loading_text_padding">24dp</dimen>
+    <dimen name="statusBarHeight">24dp</dimen>
 
 
 </resources>
