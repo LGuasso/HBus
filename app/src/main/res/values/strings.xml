@@ -140,4 +140,5 @@
     <string name="exit">Exit</string>
     <string name="google_sign_sucess">Google Sign In was successful!</string>
     <string name="loading_sign_google">Loading data by Google...</string>
+    <string name="anonymous">Anonymous</string>
 </resources>

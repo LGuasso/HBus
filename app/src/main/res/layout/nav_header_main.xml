@@ -44,13 +44,12 @@
                 android:layout_alignParentStart="true"
                 android:src="@drawable/santa_maria_rs"/>
 
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewCityProfile"
                 android:layout_gravity="end"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/santa_maria_rs"
+                android:src="@drawable/ic_checkbox_blank_circle_outline_white_36dp"
                 android:layout_alignParentEnd="true"/>
 
             <TextView
@@ -59,7 +58,8 @@
                 android:id="@+id/textViewCityName"
                 android:text="@string/not_found_city"
                 android:layout_below="@id/imageViewCityProfile"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textStyle="bold"
                 android:textAppearance="?android:textAppearanceSmallInverse"/>
         </RelativeLayout>
 

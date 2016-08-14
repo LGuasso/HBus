@@ -69,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     FragmentManager fragmentManager = getSupportFragmentManager();
     TextView textViewCompanyUse;
 
-    TextView textViewCityName;
     ImageView imageViewCity;
     CircleImageView circleImageViewCityProfile;
+    TextView textViewCityName;
 
     private String country;
     private String city;
@@ -143,6 +143,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         //Picasso.with(this).load(uriImage).into(circleImageViewCityProfile);
         String cityname = FirebaseUtils.getCityName(cityId);
 
+        textViewCityName.setText(FirebaseUtils.getCityName(cityId));
+        if(city.equals("Santa Maria")){
+            imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.santa_maria_rs));
+        }
+        if(city.equals("Cruz Alta")){
+            imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.cruz_alta_rs));
+        }
+        //circleImageViewCityProfile.setImageURI();
 
         textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
     }
@@ -154,9 +162,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         initNavigationDrawer();
         initAdInterstitial();
         textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
-        textViewCityName = (TextView) findViewById(R.id.textViewCityName);
-        circleImageViewCityProfile = (CircleImageView) findViewById(R.id.imageViewCityProfile);
-        imageViewCity = (ImageView) findViewById(R.id.imageViewCity);
     }
 
     private void initAdInterstitial(){
@@ -206,19 +211,27 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         TextView textViewUserName = (TextView)naviHeader.findViewById(R.id.textViewUserName);
         TextView textViewUserEmail = (TextView)naviHeader.findViewById(R.id.textViewUserEmail);
         CircleImageView imageViewUserProfile = (CircleImageView) naviHeader.findViewById(R.id.imageViewUserProfile);
+
+
+        textViewCityName = (TextView) naviHeader.findViewById(R.id.textViewCityName);
+        circleImageViewCityProfile = (CircleImageView) naviHeader.findViewById(R.id.imageViewCityProfile);
+        imageViewCity = (ImageView) naviHeader.findViewById(R.id.imageViewCity);
+        imageViewCity.setOnClickListener(this);
+
+
         //textViewCityName.setText(city + " - " + country);
-        textViewUserName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        textViewUserEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        Uri uriImage = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
-        Log.d(TAG,"Uri image"+uriImage);
-        Picasso.with(this).load(uriImage).into(imageViewUserProfile);
-        /**ImageView imageViewCity = (ImageView)naviHeader.findViewById(R.id.imageViewCity);
-        if(city.equals("Santa Maria")){
-            imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.santa_maria_rs));
+        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        if(userName!=null && !userName.isEmpty()){
+            textViewUserName.setText(userName);
+            Uri uriImage = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
+            Log.d(TAG,"Uri image"+uriImage);
+            Picasso.with(this).load(uriImage).into(imageViewUserProfile);
+        }else {
+            textViewUserName.setText(getString(R.string.anonymous));
+            imageViewUserProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_checkbox_blank_circle_outline_white_48dp));
         }
-        if(city.equals("Cruz Alta")){
-            imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.cruz_alta_rs));
-        }*/
+
+        textViewUserEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
     }
 
     @Override
@@ -529,10 +542,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.side_nav_bar:
-                logout();
-                break;
-            case R.id.imageViewCityProfile:
+            case R.id.imageViewCity:
                 startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
                 break;
         }
