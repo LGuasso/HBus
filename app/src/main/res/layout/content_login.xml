@@ -29,8 +29,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:paddingRight="24dp"
-            android:paddingLeft="24dp"
+            android:paddingRight="48dp"
+            android:paddingLeft="48dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:orientation="vertical"
@@ -45,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
                 android:text="@string/or"
                 android:textAppearance="?android:textAppearanceSmallInverse"/>
 
@@ -53,7 +54,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
                 android:text="@string/sign_in_anonymously"
+                android:linksClickable="true"
                 android:textAppearance="?android:textAppearanceSmallInverse"/>
 
         </LinearLayout>
