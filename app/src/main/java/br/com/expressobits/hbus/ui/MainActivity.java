@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +37,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -144,12 +149,56 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         String cityname = FirebaseUtils.getCityName(cityId);
 
         textViewCityName.setText(FirebaseUtils.getCityName(cityId));
-        if(city.equals("Santa Maria")){
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
+        StorageReference tableRef = storageRef.child(FirebaseUtils.CITY_TABLE);
+        StorageReference countryRef = tableRef.child("BR/"+country);
+        StorageReference cityRef = countryRef.child(city.toLowerCase().replace(" ","_")+FirebaseUtils.EXTENSION_IMAGE);
+
+        StorageReference cityFlagRef = countryRef.child(city.toLowerCase().replace(" ","_")
+                +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
+
+        /**final long ONE_MEGABYTE = 1024 * 1024;
+        cityRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Data for "images/island.jpg" is returns, use this as needed
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });*/
+
+        cityRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Picasso.with(MainActivity.this).load(uri).into(imageViewCity);
+            }
+
+
+        });
+
+        cityFlagRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Picasso.with(MainActivity.this).load(uri).into(circleImageViewCityProfile);
+            }
+        });
+
+
+
+
+        /**if(city.equals("Santa Maria")){
             imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.santa_maria_rs));
         }
         if(city.equals("Cruz Alta")){
             imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.cruz_alta_rs));
-        }
+        }*/
         //circleImageViewCityProfile.setImageURI();
 
         textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));

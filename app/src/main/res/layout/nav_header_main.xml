@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@drawable/santa_maria_rs"
+            android:src="@drawable/default_city"
             android:scaleType="centerCrop"/>
         <View
             android:layout_width="match_parent"
@@ -47,10 +47,11 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewCityProfile"
                 android:layout_gravity="end"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_checkbox_blank_circle_outline_white_36dp"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:layout_width="wrap_content"
