@@ -53,6 +53,7 @@ import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
+import br.com.expressobits.hbus.ui.fragments.NewsFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
@@ -428,6 +429,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             case ItinerariesFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_all_itineraries).setChecked(true);
                 break;
+            case NewsFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_news).setChecked(true);
+                break;
             case CompaniesFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_companies).setChecked(true);
                 break;
@@ -445,6 +449,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         Fragment fragment = new Fragment();
         switch (TAG){
             case FavoritesItineraryFragment.TAG:
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -457,6 +464,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case ItinerariesFragment.TAG:
                 fragment = new ItinerariesFragment();
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -466,6 +476,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case CompaniesFragment.TAG:
                 fragment = new CompaniesFragment();
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -475,7 +488,22 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case AlarmListFragment.TAG:
                 fragment = new AlarmListFragment();
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case NewsFragment.TAG:
+                fragment = new NewsFragment();
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
                 if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
@@ -579,7 +607,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             addFragment(CompaniesFragment.TAG);
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-        } else if (id == R.id.nav_help) {
+        } else if (id == R.id.nav_news){
+            addFragment(NewsFragment.TAG);
+        } else if(id == R.id.nav_help){
             openHelp();
         }
 

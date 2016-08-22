@@ -141,4 +141,6 @@
     <string name="google_sign_sucess">Google Sign In was successful!</string>
     <string name="loading_sign_google">Loading data by Google...</string>
     <string name="anonymous">Anonymous</string>
+    <string name="no_have_news">No have news</string>
+    <string name="last_ago">Last ago %1$s</string>
 </resources>

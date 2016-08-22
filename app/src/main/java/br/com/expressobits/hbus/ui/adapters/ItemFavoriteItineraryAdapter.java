@@ -35,7 +35,8 @@ import br.com.expressobits.hbus.utils.HoursUtils;
  * @author Rafael
  * @since 27/05/2015.
  */
-public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavoriteItineraryAdapter.HolderFavoriteItinerary>  {
+public class ItemFavoriteItineraryAdapter extends
+        RecyclerView.Adapter<ItemFavoriteItineraryAdapter.HolderFavoriteItinerary>  {
 
     private Context context;
     public static String PREF_TIME_HOME_SCREEN = "time_home_screen";
@@ -53,11 +54,8 @@ public class ItemFavoriteItineraryAdapter extends RecyclerView.Adapter<ItemFavor
     public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int j) {
         View viewP = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
         HolderFavoriteItinerary holder = new HolderFavoriteItinerary(viewP);
-
         return holder;
     }
-
-
 
     @Override
     public void onBindViewHolder(HolderFavoriteItinerary holder, int position) {

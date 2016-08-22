@@ -1,4 +1,4 @@
-package br.com.expressobits.hbus.ui;
+package br.com.expressobits.hbus.ui.notification;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -34,10 +34,9 @@ import br.com.expressobits.hbus.utils.HoursUtils;
  * @author Rafael Correa
  * @since 14/04/16;
  */
-public class Notifications {
+public class NotificationsAlarm {
 
     public static void notifyBus(Context context,Alarm alarm){
-
 
         NotificationManager alarmNotificationManager;
         Log.d("AlarmService", "Preparing to send notification...: " + alarm.getId());

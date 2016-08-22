@@ -6,21 +6,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
 import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.AlarmDAO;
-import br.com.expressobits.hbus.ui.Notifications;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
