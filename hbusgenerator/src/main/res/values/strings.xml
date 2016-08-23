@@ -20,4 +20,5 @@
     <string name="push">Push</string>
     <string name="pushAllCodes">Push all codes</string>
     <string name="pushAllItinerary">Push all data of itinerary</string>
+    <string name="news">News</string>
 </resources>

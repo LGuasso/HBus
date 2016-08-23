@@ -14,6 +14,10 @@ public class News {
     private List<String> imagesUrls;
     private long time;
     private String source;
+    private String country;
+    private String city;
+    private String company;
+    private String itinerary;
 
     public String getId() {
         return id;
@@ -61,5 +65,37 @@ public class News {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getItinerary() {
+        return itinerary;
+    }
+
+    public void setItinerary(String itinerary) {
+        this.itinerary = itinerary;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

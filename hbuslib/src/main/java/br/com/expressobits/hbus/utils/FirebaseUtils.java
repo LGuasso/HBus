@@ -18,15 +18,17 @@ public class FirebaseUtils {
 
     public static final String EXTENSION_IMAGE = ".jpg";
     public static final String FLAG_TEXT_FILE = "_flag";
-    public static String BARS = "/";
+    public static final String GENERAL = "general";
+    public static final String BARS = "/";
 
-    public static String CITY_TABLE = "city";
-    public static String COMPANY_TABLE = "company";
-    public static String ITINERARY_TABLE = "itinerary";
-    public static String CODE_TABLE = "code";
-    public static String BUS_TABLE = "bus";
+    public static final String CITY_TABLE = "city";
+    public static final String COMPANY_TABLE = "company";
+    public static final String ITINERARY_TABLE = "itinerary";
+    public static final String CODE_TABLE = "code";
+    public static final String BUS_TABLE = "bus";
 
     public static final String REF_STORAGE_HBUS = "gs://hbus-1206.appspot.com";
+    public static final String NEWS_TABLE = "news";
 
     public static String getIdCity(String country, String cityName){
         return BARS+country+BARS+cityName;
@@ -77,4 +79,6 @@ public class FirebaseUtils {
     public static String getTimeForBus(String id) {
         return id.split(BARS)[7];
     }
+
+
 }
