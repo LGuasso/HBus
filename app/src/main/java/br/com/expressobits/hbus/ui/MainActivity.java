@@ -441,14 +441,30 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         }
     }
 
+    private void updateIndexFragments(){
+        if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+            setActionBarTitle(getString(R.string.news));
+        }else if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+            setActionBarTitle(getString(R.string.itineraries));
+        }else if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+            setActionBarTitle(getString(R.string.alarms));
+        }else if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+            setActionBarTitle(getString(R.string.companies));
+        }else {
+            setActionBarTitle(getString(R.string.app_name));
+        }
+    }
+
     /**
      *
      * @param TAG
      */
     public void addFragment(String TAG) {
         Fragment fragment = new Fragment();
+        setSelectItemNavigation(TAG);
         switch (TAG){
             case FavoritesItineraryFragment.TAG:
+                setActionBarTitle(getString(R.string.app_name));
                 if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -464,6 +480,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case ItinerariesFragment.TAG:
                 fragment = new ItinerariesFragment();
+                setActionBarTitle(getString(R.string.itineraries));
                 if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -476,6 +493,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case CompaniesFragment.TAG:
                 fragment = new CompaniesFragment();
+                setActionBarTitle(getString(R.string.companies));
                 if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -488,6 +506,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case AlarmListFragment.TAG:
                 fragment = new AlarmListFragment();
+                pToolbar.setTitle(getString(R.string.alarms));
                 if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -500,6 +519,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case NewsFragment.TAG:
                 fragment = new NewsFragment();
+                setActionBarTitle(getString(R.string.news));
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -597,7 +617,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         if (id == R.id.nav_logout) {
             logout();
-        }if (id == R.id.nav_favorites) {
+        }else if (id == R.id.nav_favorites) {
             addFragment(FavoritesItineraryFragment.TAG);
         } else if (id == R.id.nav_all_itineraries) {
             addFragment(ItinerariesFragment.TAG);

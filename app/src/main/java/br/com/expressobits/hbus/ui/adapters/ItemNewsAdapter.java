@@ -8,11 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.News;
+import br.com.expressobits.hbus.util.TimeUtils;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
+import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * Classe que implementa cada item do Recycler view de noticias
@@ -46,8 +51,18 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.Holder
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         String time = sdf.format(news.getTime());
         //TODO Imprimir formato do material design para tempo da notícia Ex. 5 min atras....
-        holder.textViewNewsTime.setText(context.getString(R.string.last_ago,time));
-        holder.textViewNewsId.setText(news.getId());
+        if(!news.getImagesUrls().get(0).isEmpty()){
+            Picasso.with(context).load(news.getImagesUrls().get(0)).into(holder.imageViewNewsMain);
+        }
+        holder.textViewNewsTime.setText(TimeUtils.getTimeAgo(news.getTime(),context));
+        String city = FirebaseUtils.getNewsCityName(news.getId());
+        if(city!=null){
+
+            holder.textViewNewsId.setText(city);
+        }else {
+            holder.textViewNewsId.setText("Geral");
+        }
+
         holder.textViewNewsSource.setText(news.getSource());
 
     }

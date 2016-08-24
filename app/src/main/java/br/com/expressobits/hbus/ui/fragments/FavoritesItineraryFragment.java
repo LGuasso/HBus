@@ -65,8 +65,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         super.onResume();
         updateListViews();
         updateEmptyListView();
-        ((MainActivity)getActivity()).setActionBarTitle();
-        ((MainActivity)getActivity()).setSelectItemNavigation(TAG);
     }
 
     private void updateEmptyListView() {

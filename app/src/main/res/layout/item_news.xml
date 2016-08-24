@@ -25,55 +25,70 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewNewsTitle"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/loading"
-                android:textAppearance="?android:textAppearanceLarge" />
+                android:orientation="horizontal">
+                <TextView
+                    android:paddingRight="8dp"
+                    android:id="@+id/textViewNewsSource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading"
+                    android:textStyle="italic"
+                    android:textAppearance="?android:textAppearanceSmall" />
+                <TextView
+                    android:id="@+id/textViewNewsTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading"
+                    android:textStyle="italic"
+                    android:textAppearance="?android:textAppearanceSmall" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textViewNewsTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:text="@string/loading"
+                    android:textAppearance="?android:textAppearanceLarge" />
+
+                <ImageView
+                    android:id="@+id/imageViewNewsMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_newspaper_black_48dp"/>
+            </LinearLayout>
+
+
+
 
             <TextView
                 android:id="@+id/textViewNewsBody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:text="@string/loading"
                 android:textAppearance="?android:textAppearance" />
 
-            <TextView
-                android:id="@+id/textViewNewsTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="@string/loading"
-                android:textAppearance="?android:textAppearanceSmall" />
-
-            <TextView
-                android:id="@+id/textViewNewsSource"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="@string/loading"
-                android:textAppearance="?android:textAppearanceSmall" />
 
             <TextView
                 android:id="@+id/textViewNewsId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:typeface="monospace"
+                android:textStyle="italic|bold"
                 android:text="@string/loading"
-                android:textAppearance="?android:textAppearance" />
+                android:textAppearance="?android:textAppearanceSmall" />
 
-            <ImageView
-                android:id="@+id/imageViewNewsMain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_newspaper_black_48dp"/>
 
 
         </LinearLayout>

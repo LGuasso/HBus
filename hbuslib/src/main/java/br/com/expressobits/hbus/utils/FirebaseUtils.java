@@ -30,6 +30,18 @@ public class FirebaseUtils {
     public static final String REF_STORAGE_HBUS = "gs://hbus-1206.appspot.com";
     public static final String NEWS_TABLE = "news";
 
+    public static String getIdNewsGeneral(String time){
+        return BARS+NEWS_TABLE+BARS+GENERAL+BARS+time;
+    }
+
+    public static String getIdNewsGeneral(String time,String country,String city){
+        return BARS+NEWS_TABLE+BARS+CITY_TABLE+BARS+country+BARS+city+BARS+time;
+    }
+
+    public static String getIdNewsGeneral(String time,String country,String city,String company){
+        return BARS+NEWS_TABLE+BARS+COMPANY_TABLE+BARS+country+BARS+city+BARS+company+BARS+time;
+    }
+
     public static String getIdCity(String country, String cityName){
         return BARS+country+BARS+cityName;
     }
@@ -80,5 +92,20 @@ public class FirebaseUtils {
         return id.split(BARS)[7];
     }
 
+    public static String getNewsCityName(String id){
+        if(id.split(BARS).length>4){
+            return id.split(BARS)[4];
+        }else {
+            return null;
+        }
+    }
+
+    public static String getNewsCompany(String id){
+        if(id.split(BARS).length>5){
+            return id.split(BARS)[5];
+        }else {
+            return null;
+        }
+    }
 
 }

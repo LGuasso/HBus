@@ -1,12 +1,13 @@
 package br.com.expressobits.hbus.model;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * @author Rafael Correa
  * @since 16/08/16
  */
-public class News {
+public class News implements Comparable<News>{
 
     private String id;
     private String body;
@@ -97,5 +98,14 @@ public class News {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public int compareTo(News another) {
+        Calendar  calendarThis = Calendar.getInstance();
+        calendarThis.setTimeInMillis(this.getTime());
+        Calendar  calendarAnother = Calendar.getInstance();
+        calendarAnother.setTimeInMillis(another.getTime());
+        return calendarAnother.compareTo(calendarThis);
     }
 }
