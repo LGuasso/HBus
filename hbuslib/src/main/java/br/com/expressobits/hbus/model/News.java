@@ -13,6 +13,8 @@ public class News implements Comparable<News>{
     private String body;
     private String title;
     private List<String> imagesUrls;
+    private List<String> itineraryIds;
+    private List<String> cityIds;
     private long time;
     private String source;
     private String country;
@@ -50,6 +52,22 @@ public class News implements Comparable<News>{
 
     public void setImagesUrls(List<String> imagesUrls) {
         this.imagesUrls = imagesUrls;
+    }
+
+    public List<String> getItineraryIds() {
+        return itineraryIds;
+    }
+
+    public void setItineraryIds(List<String> itinerariesIds) {
+        this.itineraryIds = itinerariesIds;
+    }
+
+    public List<String> getCityIds() {
+        return cityIds;
+    }
+
+    public void setCityIds(List<String> cityIds) {
+        this.cityIds = cityIds;
     }
 
     public long getTime() {
@@ -107,5 +125,10 @@ public class News implements Comparable<News>{
         Calendar  calendarAnother = Calendar.getInstance();
         calendarAnother.setTimeInMillis(another.getTime());
         return calendarAnother.compareTo(calendarThis);
+    }
+
+    @Override
+    public String toString() {
+        return this.getTitle();
     }
 }

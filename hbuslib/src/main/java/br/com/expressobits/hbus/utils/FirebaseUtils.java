@@ -108,4 +108,12 @@ public class FirebaseUtils {
         }
     }
 
+    public static String getNewsItinerary(String id){
+        if(id.split(BARS).length>6){
+            return id.split(BARS)[6];
+        }else {
+            return null;
+        }
+    }
+
 }

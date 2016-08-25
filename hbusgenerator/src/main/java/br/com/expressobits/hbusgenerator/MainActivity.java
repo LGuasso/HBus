@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(this,FirebaseActivity.class));
         }
         if (id == R.id.action_news_editor) {
-            startActivity(new Intent(this,NewsEditorActivity.class));
+            startActivity(new Intent(this,NewsListActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

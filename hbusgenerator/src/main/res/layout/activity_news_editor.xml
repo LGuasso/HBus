@@ -36,12 +36,6 @@
                 android:hint="Source"/>
 
             <EditText
-                android:id="@+id/editTextId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="ID"/>
-
-            <EditText
                 android:id="@+id/editTextImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,6 +97,17 @@
                     android:src="@android:drawable/ic_menu_rotate"
                     android:hint="Country"/>
             </LinearLayout>
+
+
+
+                <EditText
+                    android:id="@+id/editTextAddedItineraries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+
+
 
             <Button
                 android:id="@+id/buttonSave"
