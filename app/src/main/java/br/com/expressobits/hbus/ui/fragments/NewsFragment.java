@@ -7,9 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +44,7 @@ public class NewsFragment extends Fragment {
     private RecyclerView recyclerViewNews;
     private List<News> newses = new ArrayList<>();
     private LinearLayout linearLayoutEmptyView;
+    private ViewGroup progressBarLayout;
 
 
     public NewsFragment() {
@@ -53,12 +58,16 @@ public class NewsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         initViews(view);
+
+        setHasOptionsMenu(true);
         return view;
     }
 
     private void initViews(View view) {
         initListView(view);
         initEmptyView(view);
+
+        progressBarLayout = (ViewGroup) view.findViewById(R.id.progressBarLayout);
         updateListView();
     }
 
@@ -83,6 +92,7 @@ public class NewsFragment extends Fragment {
 
     private void update(){
         newses = new ArrayList<>();
+        updateListView();
         getGeneralNews();
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
         String country = FirebaseUtils.getCountry(cityId);
@@ -98,8 +108,14 @@ public class NewsFragment extends Fragment {
     private void updateListView() {
         if(newses.size()>0){
             linearLayoutEmptyView.setVisibility(View.INVISIBLE);
+            progressBarLayout.setVisibility(View.INVISIBLE);
+            recyclerViewNews.setVisibility(View.VISIBLE);
+
         }else {
-            linearLayoutEmptyView.setVisibility(View.VISIBLE);
+            linearLayoutEmptyView.setVisibility(View.INVISIBLE);
+            progressBarLayout.setVisibility(View.VISIBLE);
+            recyclerViewNews.setVisibility(View.INVISIBLE);
+            //linearLayoutEmptyView.setVisibility(View.VISIBLE);
         }
         Collections.sort(newses);
         ItemNewsAdapter adapter = new ItemNewsAdapter(getActivity(),newses);
@@ -116,7 +132,10 @@ public class NewsFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 News news = dataSnapshot.getValue(News.class);
                 news.setId(FirebaseUtils.getIdNewsGeneral(String.valueOf(news.getTime())));
-                newses.add(news);
+                if(news.isActived()){
+                    newses.add(news);
+                }
+
                 updateListView();
             }
 
@@ -153,7 +172,9 @@ public class NewsFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 News news = dataSnapshot.getValue(News.class);
                 news.setId(FirebaseUtils.getIdNewsGeneral(String.valueOf(news.getTime()),country,cityName));
-                newses.add(news);
+                if(news.isActived()){
+                    newses.add(news);
+                }
                 updateListView();
             }
 
@@ -191,7 +212,9 @@ public class NewsFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 News news = dataSnapshot.getValue(News.class);
                 news.setId(FirebaseUtils.getIdNewsGeneral(String.valueOf(news.getTime()),country,cityName,company));
-                newses.add(news);
+                if(news.isActived()){
+                    newses.add(news);
+                }
                 updateListView();
             }
 
@@ -216,5 +239,28 @@ public class NewsFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.fragment_itineraries, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+        if (id == R.id.menu_action_refresh) {
+            update();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

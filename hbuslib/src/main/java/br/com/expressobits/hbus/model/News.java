@@ -21,6 +21,7 @@ public class News implements Comparable<News>{
     private String city;
     private String company;
     private String itinerary;
+    private boolean actived;
 
     public String getId() {
         return id;
@@ -116,6 +117,14 @@ public class News implements Comparable<News>{
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public void setActived(boolean actived) {
+        this.actived = actived;
+    }
+
+    public boolean isActived() {
+        return actived;
     }
 
     @Override
