@@ -1,4 +1,4 @@
-package br.com.expressobits.hbus.ui.fragments;
+package br.com.expressobits.hbus.ui.news;
 
 
 import android.os.Bundle;

@@ -1,6 +1,7 @@
 package br.com.expressobits.hbus.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.News;
+import br.com.expressobits.hbus.ui.news.NewsDetailsActivity;
 import br.com.expressobits.hbus.util.TimeUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
@@ -107,6 +109,7 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.Holder
 
         public HolderNews(View itemView){
             super(itemView);
+            itemView.setOnClickListener(this);
             textViewNewsTitle = (TextView) itemView.findViewById(R.id.textViewNewsTitle);
             textViewNewsBody = (TextView) itemView.findViewById(R.id.textViewNewsBody);
             textViewNewsTime = (TextView) itemView.findViewById(R.id.textViewNewsTime);
@@ -117,8 +120,10 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.Holder
         }
 
         @Override
-        public void onClick(View view) {
-
+        public void onClick(View v) {
+            Intent intent = new Intent(context, NewsDetailsActivity.class);
+            intent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,newses.get(getPosition()).getId());
+            context.startActivity(intent);
         }
 
     }
