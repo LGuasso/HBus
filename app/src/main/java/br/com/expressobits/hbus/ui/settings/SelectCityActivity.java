@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,10 +114,13 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onClickListener(View view, final int position) {
+
         pullCompanies(cities.get(position).getCountry(),cities.get(position).getName());
         Log.d(TAG, "Selection city id=" + cities.get(position).getId());
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
+        unsSubscribe(sharedPreferences.getString(TAG,SelectCityActivity.NOT_CITY));
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        subscribe(cities.get(position).getId());
         editor.putString(TAG, cities.get(position).getId());
         editor.putString(cities.get(position).getId(),cities.get(position).getCompanyDefault());
         editor.apply();
@@ -124,6 +128,16 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
             ManagerInit.manager(this);
         }
         finish();
+    }
+
+    private void unsSubscribe(String id){
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(FirebaseUtils.getIdForSubscribeCity(id));
+        Log.d(TAG, "Unsubscribed to news topic");
+    }
+
+    private void subscribe(String id){
+        FirebaseMessaging.getInstance().subscribeToTopic(FirebaseUtils.getIdForSubscribeCity(id));
+        Log.d(TAG, "Subscribe to news topic");
     }
 
     @Override

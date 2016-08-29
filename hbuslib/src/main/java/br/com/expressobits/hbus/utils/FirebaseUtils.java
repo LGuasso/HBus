@@ -116,4 +116,8 @@ public class FirebaseUtils {
         }
     }
 
+    public static String getIdForSubscribeCity(String id){
+        return id.replace(" ","%").replace(FirebaseUtils.BARS,"-");
+    }
+
 }
