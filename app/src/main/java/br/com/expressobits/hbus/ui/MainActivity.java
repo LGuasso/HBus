@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,6 +51,7 @@ import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
+import br.com.expressobits.hbus.ui.news.NewsFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
@@ -428,6 +427,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             case ItinerariesFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_all_itineraries).setChecked(true);
                 break;
+            case NewsFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_news).setChecked(true);
+                break;
             case CompaniesFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_companies).setChecked(true);
                 break;
@@ -437,14 +439,33 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         }
     }
 
+    private void updateIndexFragments(){
+        if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+            setActionBarTitle(getString(R.string.news));
+        }else if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+            setActionBarTitle(getString(R.string.itineraries));
+        }else if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+            setActionBarTitle(getString(R.string.alarms));
+        }else if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+            setActionBarTitle(getString(R.string.companies));
+        }else {
+            setActionBarTitle(getString(R.string.app_name));
+        }
+    }
+
     /**
      *
      * @param TAG
      */
     public void addFragment(String TAG) {
         Fragment fragment = new Fragment();
+        setSelectItemNavigation(TAG);
         switch (TAG){
             case FavoritesItineraryFragment.TAG:
+                setActionBarTitle(getString(R.string.app_name));
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -457,6 +478,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case ItinerariesFragment.TAG:
                 fragment = new ItinerariesFragment();
+                setActionBarTitle(getString(R.string.itineraries));
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -466,6 +491,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case CompaniesFragment.TAG:
                 fragment = new CompaniesFragment();
+                setActionBarTitle(getString(R.string.companies));
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
@@ -475,7 +504,24 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 break;
             case AlarmListFragment.TAG:
                 fragment = new AlarmListFragment();
+                pToolbar.setTitle(getString(R.string.alarms));
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
                 if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case NewsFragment.TAG:
+                fragment = new NewsFragment();
+                setActionBarTitle(getString(R.string.news));
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
                 }
                 if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
@@ -569,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         if (id == R.id.nav_logout) {
             logout();
-        }if (id == R.id.nav_favorites) {
+        }else if (id == R.id.nav_favorites) {
             addFragment(FavoritesItineraryFragment.TAG);
         } else if (id == R.id.nav_all_itineraries) {
             addFragment(ItinerariesFragment.TAG);
@@ -579,7 +625,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             addFragment(CompaniesFragment.TAG);
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-        } else if (id == R.id.nav_help) {
+        } else if (id == R.id.nav_news){
+            addFragment(NewsFragment.TAG);
+        } else if(id == R.id.nav_help){
             openHelp();
         }
 

@@ -22,7 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".DataManagerActivity" />
-        <activity android:name=".FirebaseActivity"></activity>
+        <activity android:name=".FirebaseActivity" />
+        <activity android:name=".NewsEditorActivity" />
+        <activity android:name=".NewsListActivity"></activity>
     </application>
 
 </manifest>

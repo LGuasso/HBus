@@ -120,4 +120,15 @@
     <string name="exit">Sair</string>
     <string name="loading_sign_google">Carregando dados do Google...</string>
     <string name="google_sign_sucess">Login pelo Google efetuado com sucesso!</string>
+    <string name="anonymous">Anônimo</string>
+    <string name="itineraries">Itinerários</string>
+    <string name="last_ago">Há %1$s atrás</string>
+    <string name="no_have_news">Não há notícias</string>
+    <string name="a_minute_ago">um minuto atrás</string>
+    <string name="an_hour_ago">uma hora atrás</string>
+    <string name="days_ago">%1$s dias atrás</string>
+    <string name="hours_ago">%1$s horas atrás</string>
+    <string name="just_now">agora</string>
+    <string name="minute_ago">%1$s minutos atrás</string>
+    <string name="yesterday">ontem</string>
 </resources>

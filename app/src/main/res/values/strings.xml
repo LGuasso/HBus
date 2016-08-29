@@ -141,4 +141,14 @@
     <string name="google_sign_sucess">Google Sign In was successful!</string>
     <string name="loading_sign_google">Loading data by Google...</string>
     <string name="anonymous">Anonymous</string>
+    <string name="no_have_news">No have news</string>
+    <string name="last_ago">Last ago %1$s</string>
+    <string name="itineraries">Itineraries</string>
+    <string name="just_now">just now</string>
+    <string name="a_minute_ago">a minute ago</string>
+    <string name="minute_ago">%1$s minutes ago</string>
+    <string name="an_hour_ago">an hour ago</string>
+    <string name="hours_ago">%1$s hours ago</string>
+    <string name="yesterday">yesterday</string>
+    <string name="days_ago">%1$s days ago</string>
 </resources>

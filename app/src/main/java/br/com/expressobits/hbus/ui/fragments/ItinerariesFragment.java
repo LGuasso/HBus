@@ -69,8 +69,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).setActionBarTitle();
-        ((MainActivity)getActivity()).setSelectItemNavigation(TAG);
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
 
         FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
