@@ -82,7 +82,10 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
             @Override
             public void onSuccess(Uri uri) {
 
-                Picasso.with(ItemCityAdapter.this.context).load(uri).into(holder.imageViewCity);
+                Picasso.with(ItemCityAdapter.this.context).load(uri)
+                        .error(R.drawable.default_city)
+                        .placeholder(R.drawable.default_city)
+                        .into(holder.imageViewCity);
             }
 
 
@@ -92,7 +95,10 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
             @Override
             public void onSuccess(Uri uri) {
 
-                Picasso.with(ItemCityAdapter.this.context).load(uri).into(holder.circleImageView);
+                Picasso.with(ItemCityAdapter.this.context).load(uri)
+                        .error(R.drawable.ic_flag_white_48dp)
+                        .placeholder(R.drawable.ic_flag_white_48dp)
+                        .into(holder.circleImageView);
             }
         });
         //holder.imageViewCity.setImageDrawable(listCities.get(position).getImageDrawable());

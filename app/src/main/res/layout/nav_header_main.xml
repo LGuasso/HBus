@@ -42,14 +42,14 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_alignParentStart="true"
-                android:src="@drawable/santa_maria_rs"/>
+                android:src="@drawable/ic_account_white_48dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewCityProfile"
                 android:layout_gravity="end"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_checkbox_blank_circle_outline_white_36dp"
+                android:src="@drawable/ic_flag_white_48dp"
                 android:layout_alignParentEnd="true"
                 android:scaleType="centerCrop"/>
 

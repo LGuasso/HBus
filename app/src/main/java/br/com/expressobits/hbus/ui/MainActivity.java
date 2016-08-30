@@ -143,9 +143,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     public void refresh(){
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        //Picasso.with(this).load(uriImage).into(imageViewCity);
-        //Picasso.with(this).load(uriImage).into(circleImageViewCityProfile);
-        String cityname = FirebaseUtils.getCityName(cityId);
 
         textViewCityName.setText(FirebaseUtils.getCityName(cityId));
 
@@ -158,24 +155,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         StorageReference cityFlagRef = countryRef.child(city.toLowerCase().replace(" ","_")
                 +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
 
-        /**final long ONE_MEGABYTE = 1024 * 1024;
-        cityRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Data for "images/island.jpg" is returns, use this as needed
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });*/
-
         cityRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
 
-                Picasso.with(MainActivity.this).load(uri).into(imageViewCity);
+                Picasso.with(MainActivity.this).load(uri)
+                        .error(R.drawable.default_city)
+                        .placeholder(R.drawable.default_city)
+                        .into(imageViewCity);
             }
 
 
@@ -185,7 +172,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             @Override
             public void onSuccess(Uri uri) {
 
-                Picasso.with(MainActivity.this).load(uri).into(circleImageViewCityProfile);
+                Picasso.with(MainActivity.this).load(uri)
+                        .placeholder(R.drawable.ic_flag_white_48dp)
+                        .error(R.drawable.ic_alarm_white_48dp)
+                        .into(circleImageViewCityProfile);
             }
         });
 
@@ -273,10 +263,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             textViewUserName.setText(userName);
             Uri uriImage = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
             Log.d(TAG,"Uri image"+uriImage);
-            Picasso.with(this).load(uriImage).into(imageViewUserProfile);
+            Picasso.with(this).load(uriImage)
+                    .placeholder(R.drawable.ic_account_white_48dp)
+                    .error(R.drawable.ic_account_white_48dp)
+                    .into(imageViewUserProfile);
         }else {
             textViewUserName.setText(getString(R.string.anonymous));
-            imageViewUserProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_checkbox_blank_circle_outline_white_48dp));
+            imageViewUserProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_account_outline_white_48dp));
         }
 
         textViewUserEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
