@@ -1,33 +1,20 @@
 package br.com.expressobits.hbus.ui;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Activity;
-import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-
-import java.util.Random;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
-import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import br.com.expressobits.hbus.utils.DAOUtils;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Activity with Fragment
@@ -84,11 +71,6 @@ public class TimesActivity extends AppCompatActivity {
         AdView mAdView = (AdView) findViewById(R.id.ad_view);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

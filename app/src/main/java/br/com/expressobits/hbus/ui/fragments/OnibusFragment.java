@@ -27,7 +27,7 @@ import br.com.expressobits.hbus.utils.HoursUtils;
  * A simple {@link Fragment} subclass.
  * Que exibe as listas de horarios
  */
-public class OnibusFragment extends Fragment implements RecyclerViewOnClickListenerHack{
+public class OnibusFragment extends Fragment{
 
     public static final String TAG = "OnibusFragment";
 
@@ -37,14 +37,6 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
     public static final String ARGS_ITINERARY = "itinerary";
     public static final String ARGS_WAY = "way";
 
-    private String country;
-    private String city;
-    private String company;
-    private String itinerary;
-    private String way;
-
-    private ProgressBar progressBar;
-    private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
 
@@ -59,28 +51,27 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         if(arguments!=null && arguments.getString(ARGS_COUNTRY)!=null &&
                 arguments.getString(ARGS_CITY)!=null && arguments.getString(ARGS_COMPANY)!=null &&
                 arguments.getString(ARGS_ITINERARY)!=null && arguments.getString(ARGS_WAY)!=null){
-            this.country = arguments.getString(ARGS_COUNTRY);
-            this.city = arguments.getString(ARGS_CITY);
-            this.company = arguments.getString(ARGS_COMPANY);
-            this.itinerary = arguments.getString(ARGS_ITINERARY);
-            this.way = arguments.getString(ARGS_WAY);
-            refresh(country,city,company,itinerary,way);
+            String country = arguments.getString(ARGS_COUNTRY);
+            String city = arguments.getString(ARGS_CITY);
+            String company = arguments.getString(ARGS_COMPANY);
+            String itinerary = arguments.getString(ARGS_ITINERARY);
+            String way = arguments.getString(ARGS_WAY);
+            refresh(country, city, company, itinerary, way);
         }
         setHasOptionsMenu(true);
         return view;
-
     }
 
     private void initViews(View view) {
         initTabLayout(view);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        //ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
     }
 
 
 
     private void initTabLayout(View view){
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         Bundle arguments = getArguments();
         setupViewPager(viewPager,arguments.getString(ARGS_COUNTRY),arguments.getString(ARGS_CITY),
                 arguments.getString(ARGS_COMPANY),arguments.getString(ARGS_ITINERARY),arguments.getString(ARGS_WAY));
@@ -134,24 +125,10 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
         viewPager.setAdapter(viewPagerAdapter);
         //TODO implement sunday days in holiday
         int typeday  = HoursUtils.getTipoDeDia(GregorianCalendar.getInstance());
-        Log.d(TAG, "Typday of now " + typeday);
         viewPager.setCurrentItem(typeday);
     }
 
-
-    @Override
-    public void onClickListener(View view, int position) {
-        //TODO para imaplementar clickes em horários
-        //ItemBusAdapter adapter = (ItemBusAdapter) recyclerViewUsefulDays.getAdapter();
-        //adapter.removeListItem(position);
-    }
-
-    @Override
-    public boolean onLongClickListener(View view, int position) {
-        return false;
-    }
-
-    @Override
+    /**@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.fragment_bus, menu);
@@ -170,8 +147,11 @@ public class OnibusFragment extends Fragment implements RecyclerViewOnClickListe
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }*/
+
+    @Override
+    public void onDetach() {
+        Log.d(TAG,"onDetach");
+        super.onDetach();
     }
-
-
-
 }

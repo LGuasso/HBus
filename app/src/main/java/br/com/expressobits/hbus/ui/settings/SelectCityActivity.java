@@ -34,7 +34,6 @@ import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FinishListener{
 
@@ -143,11 +142,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     @Override
     public boolean onLongClickListener(View view, int position) {
         return false;
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

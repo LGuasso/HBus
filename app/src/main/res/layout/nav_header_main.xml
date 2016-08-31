@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@drawable/default_city"
             android:scaleType="centerCrop"/>
         <View
             android:layout_width="match_parent"
@@ -41,7 +40,7 @@
                 android:id="@+id/imageViewUserProfile"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:src="@drawable/ic_account_white_48dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -50,7 +49,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_flag_white_48dp"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:scaleType="centerCrop"/>
 
             <TextView

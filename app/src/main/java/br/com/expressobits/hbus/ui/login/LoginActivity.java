@@ -90,6 +90,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         textViewLoading = (TextView) findViewById(R.id.textViewStatusLoading);
         textViewLoading.setText("");
         textViewSignInAnonymously.setOnClickListener(this);
+        mainLayout.setVisibility(View.VISIBLE);
+        progressBarLayout.setVisibility(View.INVISIBLE);
 
 
 
@@ -213,7 +215,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
         }
-
         progressBarLayout.setVisibility(View.VISIBLE);
         mainLayout.setVisibility(View.INVISIBLE);
     }

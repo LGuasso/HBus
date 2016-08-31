@@ -18,7 +18,6 @@ import java.io.File;
 import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * @author  Rafael
@@ -84,13 +83,6 @@ public class TPCDataBaseInit extends Application{
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
-
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        //.setDefaultFontPath("fonts/Roboto-Regular.ttf")
-                        //.setDefaultFontPath("fonts/proximanova_regular.otf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
-        );
         super.onCreate();
     }
 

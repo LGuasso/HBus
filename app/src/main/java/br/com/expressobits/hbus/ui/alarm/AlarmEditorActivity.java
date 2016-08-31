@@ -2,11 +2,10 @@ package br.com.expressobits.hbus.ui.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,20 +18,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.alarm.AlarmReceiver;
 import br.com.expressobits.hbus.alarm.AlarmService;
 import br.com.expressobits.hbus.alarm.Alarms;
-import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
-import br.com.expressobits.hbus.utils.DAOUtils;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
-import br.com.expressobits.hbus.utils.TextUtils;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class AlarmEditorActivity extends AppCompatActivity {
 
@@ -251,10 +246,4 @@ public class AlarmEditorActivity extends AppCompatActivity {
         }
     }
 
-
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 }

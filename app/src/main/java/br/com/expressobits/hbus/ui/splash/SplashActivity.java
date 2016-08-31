@@ -1,6 +1,5 @@
 package br.com.expressobits.hbus.ui.splash;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +13,6 @@ import com.google.firebase.auth.FirebaseUser;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SplashActivity extends AppCompatActivity{
 
@@ -93,9 +91,5 @@ public class SplashActivity extends AppCompatActivity{
         super.onResume();
 
 
-    }
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

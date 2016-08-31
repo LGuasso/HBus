@@ -21,7 +21,7 @@
         <TextView
             android:id="@+id/textView_coming_soon"
             android:layout_width="fill_parent"
-            android:textColor="@color/accent"
+            android:textColor="@color/colorAccent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceButton"
             android:layout_alignParentBottom="true"
@@ -76,21 +76,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:src="@drawable/default_city"
                 android:scaleType="centerCrop"/>
 
         </LinearLayout>
 
-
-
-
-
-
-
-
-
     </RelativeLayout>
-
-
 
 </android.support.v7.widget.CardView>

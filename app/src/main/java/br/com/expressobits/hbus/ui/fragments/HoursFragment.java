@@ -33,12 +33,12 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HoursFragment extends Fragment implements RecyclerViewOnClickListenerHack{
+public class HoursFragment extends Fragment{
 
     private RecyclerView recyclerView;
     private LinearLayout linearLayoutEmptyState;
     private List<Bus> listBus;
-    private Context context;
+    //private Context context;
     private static final String TAG = "HoursFragment";
     public static final String ARGS_COUNTRY = "country";
     public static final String ARGS_CITY = "city";
@@ -62,7 +62,7 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hours, container, false);
-        this.context = inflater.getContext();
+        //this.context = inflater.getContext();
         initRecyclerView(view);
         linearLayoutEmptyState = (LinearLayout) view.findViewById(R.id.empty_list);
         listBus = new ArrayList<>();
@@ -81,10 +81,8 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
             this.typeday = arguments.getString(ARGS_TYPEDAY);
             //refresh(country, city, company, itinerary, way ,typeday);
         }else{
-            Log.e(TAG,"null references in args!"+arguments.get(ARGS_COUNTRY)+arguments.get(ARGS_CITY)+arguments.get(ARGS_COMPANY)+
-                    arguments.get(ARGS_TYPEDAY)+arguments.get(ARGS_ITINERARY));
+            Log.e(TAG,"null references in args!");
         }
-        refresh(country, city, company, itinerary, way ,typeday);
         return view;
     }
 
@@ -92,10 +90,7 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
     @Override
     public void onResume() {
         super.onResume();
-
-        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus);
-        adapterUeful.setRecyclerViewOnClickListenerHack(this);
-        recyclerView.setAdapter(adapterUeful);
+        refresh(country, city, company, itinerary, way ,typeday);
     }
 
     private void initRecyclerView(View view){
@@ -169,21 +164,13 @@ public class HoursFragment extends Fragment implements RecyclerViewOnClickListen
 
     private void addBus(Bus bus){
         listBus.add(bus);
-        ItemBusAdapter adapterUeful = new ItemBusAdapter(context, listBus);
-        adapterUeful.setRecyclerViewOnClickListenerHack(this);
+        ItemBusAdapter adapterUeful = new ItemBusAdapter(getActivity(), listBus);
         recyclerView.setAdapter(adapterUeful);
     }
 
     @Override
-    public void onClickListener(View view, int position) {
-        switch (view.getId()){
-
-
-        }
-    }
-
-    @Override
-    public boolean onLongClickListener(View view, int position) {
-        return false;
+    public void onStop() {
+        listBus.clear();
+        super.onStop();
     }
 }

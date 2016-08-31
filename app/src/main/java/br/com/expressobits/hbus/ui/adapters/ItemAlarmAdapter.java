@@ -19,6 +19,7 @@ import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.utils.DAOUtils;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
@@ -51,7 +52,7 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
         final Alarm alarm = alarmList.get(position);
         //holder.itemView.setOnClickListener(ItemAlarmAdapter.this);
         //holder.itemView.setTag(holder);
-        holder.textViewItineraryName.setText(DAOUtils.getNameItinerary(alarm.getId()));
+        holder.textViewItineraryName.setText(FirebaseUtils.getItinerary(alarm.getId()));
         holder.textViewName.setText(alarm.getName()!=null&alarm.getName().length()>1?alarm.getName():context.getString(R.string.alarm));
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(alarm.getTimeAlarm());
@@ -68,11 +69,6 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
                 String name = alarm.getName();
                 if(name==null){
                     name = context.getString(R.string.alarm);
-                }
-                if(isChecked){
-                    Toast.makeText(context,context.getString(R.string.alarm_enable,name),Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(context,context.getString(R.string.alarm_disable,name),Toast.LENGTH_SHORT).show();
                 }
                 verifyIsActivedAlarm(holder,alarm);
             }
@@ -129,19 +125,6 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
 
     @Override
     public void onClick(View v) {
-        /**ItineraryViewHolder holder = (ItineraryViewHolder) v.getTag();
-        String theString = alarmList.get(holder.getLocalization()).getTimeAlarm();
-        // Check for an expanded view, collapse if you find one
-        if (expandedPosition >= 0) {
-            int prev = expandedPosition;
-            notifyItemChanged(prev);
-        }
-        // Set the current position to "expanded"
-        expandedPosition = holder.getLocalization();
-        notifyItemChanged(expandedPosition);
-
-
-        Toast.makeText(context, "Clicked: "+theString, Toast.LENGTH_SHORT).show();*/
     }
 
 

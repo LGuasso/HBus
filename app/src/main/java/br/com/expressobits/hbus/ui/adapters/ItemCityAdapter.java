@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +23,6 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author Rafael Correa
@@ -64,7 +62,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
             holder.textViewComingSoon.setVisibility(View.INVISIBLE);
             holder.cardView.setOnClickListener(holder);
         }else {
-            holder.imageViewCity.setColorFilter(context.getResources().getColor(R.color.md_blue_grey_500), PorterDuff.Mode.MULTIPLY);
+            holder.imageViewCity.setColorFilter(context.getResources().getColor(R.color.md_blue_gray_500), PorterDuff.Mode.MULTIPLY);
         }
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -83,8 +81,6 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
             public void onSuccess(Uri uri) {
 
                 Picasso.with(ItemCityAdapter.this.context).load(uri)
-                        .error(R.drawable.default_city)
-                        .placeholder(R.drawable.default_city)
                         .into(holder.imageViewCity);
             }
 
@@ -98,14 +94,11 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
                 Picasso.with(ItemCityAdapter.this.context).load(uri)
                         .error(R.drawable.ic_flag_white_48dp)
                         .placeholder(R.drawable.ic_flag_white_48dp)
-                        .into(holder.circleImageView);
+                        .into(holder.imageViewPhoto);
             }
         });
-        //holder.imageViewCity.setImageDrawable(listCities.get(position).getImageDrawable());
 
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -122,7 +115,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
         public TextView textViewComingSoon;
         public ImageView imageViewCity;
         public CardView cardView;
-        public CircleImageView circleImageView;
+        public ImageView imageViewPhoto;
 
         public HolderCity(View itemView,List<City> list) {
             super(itemView);
@@ -130,7 +123,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
             textViewComingSoon = (TextView) itemView.findViewById(R.id.textView_coming_soon);
             imageViewCity = (ImageView) itemView.findViewById(R.id.imageView_city);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
-            circleImageView = (CircleImageView) itemView.findViewById(R.id.circleImageViewCityFlag);
+            imageViewPhoto = (ImageView) itemView.findViewById(R.id.circleImageViewCityFlag);
         }
 
 

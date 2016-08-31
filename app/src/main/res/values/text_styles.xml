@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Splash screen titulo -->
-    <style name="AppTheme.TitleSplash" parent="TextAppearance.AppCompat.Headline">
-        <item name="fontPath">fonts/UbuntuTitling-B.ttf</item>
-        <item name="android:textColor">@color/md_white_1000</item>
-    </style>
-
-    <style name="AppTheme.TitleItinerary" parent="AppTheme.TextAppearance.AppCompat.HeadLine">
-        <!-- Itinerario titulo -->
-    </style>
-
-    <style name="AppTheme.SubTitleItinerary" parent="TextAppearance.AppCompat.Body1">
-        <!-- Splash screen titulo -->
-    </style>
 
     <style name="AppTheme.SubTitleItineraryNextBus" parent="TextAppearance.AppCompat.Body2">
         <!-- Splash screen titulo -->
@@ -25,42 +12,19 @@
         <item name="android:textSize">16dp</item>
     </style>
 
-    <style name="AppTheme.TextAppearance.Time" parent="AppTheme.TextAppearance.Display2.Mono">
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <!-- Splash screen titulo -->
-    </style>
-
-    <style name="AppTheme.TextAppearance.Time.ExtraLarge" parent="AppTheme.TextAppearance.Display4.Mono">
-        <item name="android:textColor">@color/white</item>
-        <!-- Splash screen titulo -->
-    </style>
-
-    <style name="AppTheme.TextAppearance.Code" parent="AppTheme.TextAppearance.AppCompat.Subhead">
-        <!-- Splash screen titulo -->
-    </style>
-    <style name="AppTheme.TextAppearance.DescritionCode" parent="AppTheme.TextAppearance.AppCompat.Caption">
-        <!-- Descricao do onibus -->
-        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
-    </style>
-
     <!--BASE -->
     <style name="AppTheme.TextAppearance.AppCompat.HeadLine" parent="@style/Base.TextAppearance.AppCompat.Headline">
-        <item name="fontPath">fonts/Roboto-Thin.ttf</item>
     </style>
 
     <style name="AppTheme.TextAppearance.AppCompat.AlarmHours" parent="@style/Base.TextAppearance.AppCompat.Headline">
-        <item name="fontPath">fonts/Ubuntu-L.ttf</item>
     </style>
 
     <style name="AppTheme.TextAppearance.AppCompat.Subhead" parent="@style/Base.TextAppearance.AppCompat.Subhead">
-        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
     </style>
 
     <style name="AppTheme.TextAppearance.AppCompat.Caption" parent="@style/Base.TextAppearance.AppCompat.Caption">
-        <item name="fontPath">fonts/Roboto-Thin.ttf</item>
     </style>
     <style name="AppTheme.TextAppearance.AppCompat.Display1" parent="@style/Base.TextAppearance.AppCompat.Display1">
-        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
     </style>
 
     <style name="AppTheme.TextAppearance.AppCompat" parent="TextAppearance.AppCompat">
@@ -71,7 +35,6 @@
 
     <style name="TextStyle.Large" parent="TextAppearance.AppCompat.Large">
         <item name="android:textColor">@color/text_color</item>
-        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
     </style>
     <style name="TextStyle.Medium" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">@color/black</item>
@@ -91,25 +54,52 @@
     <style name="AppTheme.TextAppearance.Display3.Mono" parent="TextAppearance.AppCompat.Display3">
         <item name="android:textColor">@color/white</item>
         <!--item name="android:textSize">@dimen/horario_textsize</item-->
-        <item name="fontPath">fonts/Roboto-Thin.ttf</item>
     </style>
 
     <style name="AppTheme.TextAppearance.Display2.Mono" parent="TextAppearance.AppCompat.Display2">
         <item name="android:textColor">@color/white</item>
         <!--item name="android:textSize">@dimen/horario_textsize</item-->
         <item name="android:typeface">monospace</item>
-        <item name="fontPath">fonts/Roboto-Thin.ttf</item>
     </style>
 
     <style name="AppTheme.TextAppearance.Display4.Mono" parent="TextAppearance.AppCompat.Display4">
         <item name="android:textColor">@color/white</item>
         <!--item name="android:textSize">@dimen/horario_textsize</item-->
         <item name="android:typeface">monospace</item>
-        <item name="fontPath">fonts/Roboto-Thin.ttf</item>
     </style>
 
     <style name="TextStyle.Button" parent="TextAppearance.AppCompat.Button">
         <item name="android:textStyle">bold</item>
     </style>
+
+
+    <!-- Respect styles -->
+    <style name="ItemBusTime">
+        <item name="android:textAppearance">?android:textAppearanceLarge</item>
+        <item name="android:textSize">32dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="ItemBusCodeDescription">
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:focusable">false</item>
+        <item name="android:fadingEdgeLength">20dp</item>
+        <item name="android:fadingEdge">horizontal</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textColorHighlight">#FFFFFF</item>
+    </style>
+
+    <style name="ItemBusCode">
+        <item name="android:textAppearance">?android:textAppearanceButton</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
 
 </resources>

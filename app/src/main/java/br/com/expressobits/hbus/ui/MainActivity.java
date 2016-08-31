@@ -58,8 +58,6 @@ import br.com.expressobits.hbus.ui.login.LoginActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import de.hdodenhof.circleimageview.CircleImageView;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements OnSettingsListener,
         ChooseWayDialogListener,NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
@@ -74,9 +72,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     TextView textViewCompanyUse;
 
     ImageView imageViewCity;
-    CircleImageView circleImageViewCityProfile;
+    ImageView circleImageViewCityProfile;
     TextView textViewCityName;
-
     private String country;
     private String city;
     private String company;
@@ -137,13 +134,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         super.onResume();
         loadParams();
         refresh();
-        //TODO "resumir" os views sem ter carregar novamente
         initNavigationDrawer();
+
     }
 
     public void refresh(){
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-
         textViewCityName.setText(FirebaseUtils.getCityName(cityId));
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -160,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             public void onSuccess(Uri uri) {
 
                 Picasso.with(MainActivity.this).load(uri)
-                        .error(R.drawable.default_city)
-                        .placeholder(R.drawable.default_city)
                         .into(imageViewCity);
             }
 
@@ -174,22 +168,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
                 Picasso.with(MainActivity.this).load(uri)
                         .placeholder(R.drawable.ic_flag_white_48dp)
-                        .error(R.drawable.ic_alarm_white_48dp)
+                        .error(R.drawable.ic_flag_white_48dp)
                         .into(circleImageViewCityProfile);
             }
         });
-
-
-
-
-        /**if(city.equals("Santa Maria")){
-            imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.santa_maria_rs));
-        }
-        if(city.equals("Cruz Alta")){
-            imageViewCity.setImageDrawable(getResources().getDrawable(R.drawable.cruz_alta_rs));
-        }*/
-        //circleImageViewCityProfile.setImageURI();
-
         textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
     }
 
@@ -248,11 +230,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         naviView.setOnClickListener(this);
         TextView textViewUserName = (TextView)naviHeader.findViewById(R.id.textViewUserName);
         TextView textViewUserEmail = (TextView)naviHeader.findViewById(R.id.textViewUserEmail);
-        CircleImageView imageViewUserProfile = (CircleImageView) naviHeader.findViewById(R.id.imageViewUserProfile);
+        ImageView imageViewUserProfile = (ImageView) naviHeader.findViewById(R.id.imageViewUserProfile);
 
 
         textViewCityName = (TextView) naviHeader.findViewById(R.id.textViewCityName);
-        circleImageViewCityProfile = (CircleImageView) naviHeader.findViewById(R.id.imageViewCityProfile);
+        circleImageViewCityProfile = (ImageView) naviHeader.findViewById(R.id.imageViewCityProfile);
         imageViewCity = (ImageView) naviHeader.findViewById(R.id.imageViewCity);
         imageViewCity.setOnClickListener(this);
 
@@ -337,11 +319,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     private void openTimes(String country, String city, String company, String itinerary, String way) {
         registerEvent(itinerary, way);
         if (isDualPane) {
-            pToolbar.setTitle(itinerary);
+            /*pToolbar.setTitle(itinerary);
             pToolbar.setSubtitle(way);
             FragmentTransaction ft = fragmentManager.beginTransaction();
-            /** Se for acessodado de um smartphone o espaco main existir */
-            /** Adiciona o fragment com o novo conteudo no unico espaco */
+            *//** Se for acessodado de um smartphone o espaco main existir *//*
+            *//** Adiciona o fragment com o novo conteudo no unico espaco *//*
             OnibusFragment onibusFragment = (OnibusFragment) fragmentManager.findFragmentByTag("onibusFragment");
 
             if (findViewById(R.id.framelayout_main) != null) {
@@ -379,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                     ft.replace(R.id.framelayout_content, onibusFragment, OnibusFragment.TAG);
                 }
             }
-            ft.commit();
+            ft.commit();*/
         } else {
             Intent intent = new Intent(this, TimesActivity.class);
             intent.putExtra(TimesActivity.ARGS_COUNTRY, country);
@@ -429,20 +411,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             case AlarmListFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_alarms).setChecked(true);
                 break;
-        }
-    }
-
-    private void updateIndexFragments(){
-        if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
-            setActionBarTitle(getString(R.string.news));
-        }else if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
-            setActionBarTitle(getString(R.string.itineraries));
-        }else if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
-            setActionBarTitle(getString(R.string.alarms));
-        }else if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
-            setActionBarTitle(getString(R.string.companies));
-        }else {
-            setActionBarTitle(getString(R.string.app_name));
         }
     }
 
@@ -590,10 +558,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         pToolbar.setTitle(title);
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override
     public void onItemClick(String company,String itinerary, String way) {
