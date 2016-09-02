@@ -31,7 +31,7 @@ public class ReadFile {
     private static final String SPLIT_FILE = ";";
     private static final String SPLIT_FILE_SECONDARY = ",";
     private static final String SPLIT_FILE_TIMES = "\t-\t";
-    private static final String CITIES_FILE = "cities.dat";
+    private static final String CITIES_FILE = "BR/cities.dat";
     private static final String ITINERARIES_FILE = "itineraries.dat";
     private static final String COMPANIES_FILE = "companies.dat";
     private static final String CODES_FILE = "codes.dat";

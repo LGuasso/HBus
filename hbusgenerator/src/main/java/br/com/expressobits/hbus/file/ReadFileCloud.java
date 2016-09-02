@@ -1,23 +1,12 @@
 package br.com.expressobits.hbus.file;
 
 import android.content.Context;
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 /**import br.com.expressobits.hbus.backend.busApi.model.Bus;
 import br.com.expressobits.hbus.backend.cityApi.model.City;
 import br.com.expressobits.hbus.backend.cityApi.model.GeoPt;
 import br.com.expressobits.hbus.backend.codeApi.model.Code;
 import br.com.expressobits.hbus.backend.itineraryApi.model.Itinerary;*/
-import br.com.expressobits.hbus.dao.CodeContract;
-import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
  * @deprecated
@@ -30,7 +19,7 @@ public class ReadFileCloud {
     private static final String SPLIT_FILE = ";";
     private static final String SPLIT_FILE_SECONDARY = ",";
     private static final String SPLIT_FILE_TIMES = "\t-\t";
-    private static final String CITIES_FILE = "cities.dat";
+    private static final String CITIES_FILE = "BR/cities.dat";
     private static final String ITINERARIES_FILE = "itineraries.dat";
     private static final String CODES_FILE = "codes.dat";
     private static final String TAG = "FILEGENERATOR";
