@@ -31,13 +31,14 @@ public class ReadFile {
     private static final String SPLIT_FILE = ";";
     private static final String SPLIT_FILE_SECONDARY = ",";
     private static final String SPLIT_FILE_TIMES = "\t-\t";
-    private static final String CITIES_FILE = "BR/cities.dat";
+    private static final String CITIES_FILE = "cities.dat";
     private static final String ITINERARIES_FILE = "itineraries.dat";
     private static final String COMPANIES_FILE = "companies.dat";
     private static final String CODES_FILE = "codes.dat";
     private static final String TAG = "FILEGENERATOR";
     private static final String FORMAT = ".dat";
     Context context;
+    private String country;
 
 
     public ReadFile(Context context){
@@ -48,18 +49,17 @@ public class ReadFile {
         City city = new City();
         city.setActived(text.split(SPLIT_FILE)[0].equals("1"));
         city.setName(text.split(SPLIT_FILE)[1]);
-        city.setCountry(text.split(SPLIT_FILE)[2]);
-        city.setCompanyDefault(text.split(SPLIT_FILE)[3]);
+        city.setCountry(country);
+        city.setCompanyDefault(text.split(SPLIT_FILE)[2]);
         HashMap<String,Double> hashMap = new HashMap<>();
-        hashMap.put(CityContract.City.COLUMN_NAME_LATITUDE,Double.parseDouble(text.split(SPLIT_FILE)[4].split(SPLIT_FILE_SECONDARY)[0]));
-        hashMap.put(CityContract.City.COLUMN_NAME_LONGITUDE,Double.parseDouble(text.split(SPLIT_FILE)[4].split(SPLIT_FILE_SECONDARY)[1]));
+        hashMap.put(CityContract.City.COLUMN_NAME_LATITUDE,Double.parseDouble(text.split(SPLIT_FILE)[3].split(SPLIT_FILE_SECONDARY)[0]));
+        hashMap.put(CityContract.City.COLUMN_NAME_LONGITUDE,Double.parseDouble(text.split(SPLIT_FILE)[3].split(SPLIT_FILE_SECONDARY)[1]));
         city.setLocalization(hashMap);
         return city;
     }
 
     public Company toCompany(String text){
         Company company = new Company();
-
         company.setActived(text.split(SPLIT_FILE)[0].equals("1"));
         company.setName(text.split(SPLIT_FILE)[1]);
         company.setEmail(text.split(SPLIT_FILE)[2]);
@@ -100,9 +100,9 @@ public class ReadFile {
         return bus;
     }
 
-    public List<City> getCities(){
+    public List<City> getCities(String country){
         List<City> cities = new ArrayList<>();
-        for(String text:readFile(CITIES_FILE)){
+        for(String text:readFile(country+BARS+CITIES_FILE)){
             cities.add(toCity(text));
         }
         return cities;
@@ -130,20 +130,6 @@ public class ReadFile {
             codes.add(toCode(text));
         }
         return codes;
-    }
-
-    public List<Bus> getBuses(City city,Company company,Itinerary itinerary,String way,String typeday){
-
-
-        List<Bus> buses = new ArrayList<>();
-        for(String text:readFile(city.getCountry()+BARS+
-                        city.getName()+BARS+company.getName()+BARS+
-                        TextUtils.toSimpleNameFile(itinerary.getName())+BARS+
-                        TextUtils.toSimpleNameWay(way)+"_"+typeday+FORMAT
-        )){
-            buses.add(toBus(text));
-        }
-        return buses;
     }
 
     public HashMap<Itinerary,List<Bus>> getBuses(City city,Company company,List<Itinerary> itineraries){
@@ -204,4 +190,7 @@ public class ReadFile {
         return text;
     }
 
+    public void setCountry(String country) {
+        this.country = country;
+    }
 }

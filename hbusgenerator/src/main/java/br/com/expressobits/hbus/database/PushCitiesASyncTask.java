@@ -28,6 +28,7 @@ public class PushCitiesASyncTask extends AsyncTask<City,Integer,City> {
         for (int i=0;i<params.length;i++) {
             City city = params[i];
             DatabaseReference citiesTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
+
             DatabaseReference countryRef = citiesTableRef.child(city.getCountry());
             DatabaseReference cityRef = countryRef.child(city.getName());
             cityRef.setValue(city);
