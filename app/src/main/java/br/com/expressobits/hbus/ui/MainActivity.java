@@ -43,6 +43,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AppManager;
+import br.com.expressobits.hbus.dao.ItineraryContract;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
@@ -383,9 +384,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         FirebaseAnalytics mFirebaseAnalytics;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.DESTINATION, way);
-        bundle.putString(FirebaseAnalytics.Param.FLIGHT_NUMBER, itinerary);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, way);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, itinerary);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, ItineraryContract.Itinerary.TABLE_NAME);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
 
