@@ -40,7 +40,7 @@ public class TPCDataBaseInit extends Application{
             e.printStackTrace();
         }
 
-        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(94> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             clearApplicationData(this);
         }
         if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){

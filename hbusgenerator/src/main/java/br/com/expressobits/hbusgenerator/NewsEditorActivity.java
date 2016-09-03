@@ -1,8 +1,11 @@
 package br.com.expressobits.hbusgenerator;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -56,12 +59,13 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
         edit = idEdit!=null;
         if(edit){
             id = idEdit;
-            Toast.makeText(this,"EDIT",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"EDIT "+id,Toast.LENGTH_LONG).show();
         }else {
             //id = String.valueOf(System.currentTimeMillis());
             Toast.makeText(this,"NEW",Toast.LENGTH_LONG).show();
         }
 
+        news = new News();
         initViews();
 
 
@@ -70,6 +74,7 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
         }else {
             news.setTime(System.currentTimeMillis());
         }
+        setTitle(news.getTime()+"");
     }
 
     private void initViews() {
@@ -89,7 +94,6 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
         imageButtonCompanies.setOnClickListener(this);
         buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(this);
-        news = new News();
     }
 
     @Override
@@ -99,19 +103,51 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_news_editor, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_save_news) {
+            save();
+        }
+        if (id == R.id.action_delete_news) {
+            delete();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void delete() {
+        removeToFirebase(news);
+    }
+
+    private void save() {
+        news.setTitle(editTextTitle.getText().toString());
+        news.setBody(editTextBody.getText().toString());
+        news.setSource(editTextSource.getText().toString());
+        ArrayList<String> images = new ArrayList<>();
+        images.add(editTextImage.getText().toString());
+        news.setImagesUrls(images);
+        ArrayList<String> iti = new ArrayList<String>(Arrays.asList(editTextAddedItineraries.getText().toString().split(",")));
+        news.setItineraryIds(iti);
+        pushToFirebase(news);
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.buttonSave:
-                news.setTitle(editTextTitle.getText().toString());
-                news.setBody(editTextBody.getText().toString());
-                news.setSource(editTextSource.getText().toString());
-                //news.setTime(System.currentTimeMillis());
-                ArrayList<String> images = new ArrayList<>();
-                images.add(editTextImage.getText().toString());
-                news.setImagesUrls(images);
-                ArrayList<String> iti = new ArrayList<String>(Arrays.asList(editTextAddedItineraries.getText().toString().split(",")));
-                news.setItineraryIds(iti);
-                pushToFirebase(news);
+
                 break;
             case R.id.imageButtonLoadCountrys:
                 loadCountrys();
@@ -128,8 +164,7 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
 
     public void loadNews(final String id){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Log.e("TESTE",database.getReference(id).toString());
-        database.getReference(id).addValueEventListener(new ValueEventListener() {
+        database.getReference(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 News news = dataSnapshot.getValue(News.class);
@@ -140,8 +175,8 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
                     editTextImage.setText(news.getImagesUrls().get(0));
                 }
                 editTextSource.setText(news.getSource());
-
-
+                NewsEditorActivity.this.news.setTime(news.getTime());
+                setTitle(news.getTime()+"");
             }
 
             @Override
@@ -155,7 +190,7 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         database.getReference().child(FirebaseUtils.CITY_TABLE);
         ArrayList<String> countrys = new ArrayList<>();
-        countrys.add("RS");
+        countrys.add("BR/RS");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,countrys);
         spinnerCountrys.setAdapter(arrayAdapter);
     }
@@ -236,7 +271,7 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void pushToFirebase(News news) {
-       FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference(FirebaseUtils.NEWS_TABLE);
         DatabaseReference databaseResult;
         if(spinnerCompanies.getSelectedItem()!=null){
@@ -251,7 +286,27 @@ public class NewsEditorActivity extends AppCompatActivity implements View.OnClic
         }else {
             databaseResult = databaseReference.child(FirebaseUtils.GENERAL);
         }
-        databaseResult.child(String.valueOf(news.getTime())).setValue(news);
+        databaseResult.child(news.getTime()+"").setValue(news);
+        finish();
+    }
+
+    private void removeToFirebase(News news) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference(FirebaseUtils.NEWS_TABLE);
+        DatabaseReference databaseResult;
+        if(spinnerCompanies.getSelectedItem()!=null){
+            databaseResult = databaseReference.child(FirebaseUtils.COMPANY_TABLE)
+                    .child(spinnerCountrys.getSelectedItem().toString())
+                    .child(spinnerCities.getSelectedItem().toString())
+                    .child(spinnerCompanies.getSelectedItem().toString());
+        }else if(spinnerCities.getSelectedItem()!=null){
+            databaseResult = databaseReference.child(FirebaseUtils.CITY_TABLE)
+                    .child(spinnerCountrys.getSelectedItem().toString())
+                    .child(spinnerCities.getSelectedItem().toString());
+        }else {
+            databaseResult = databaseReference.child(FirebaseUtils.GENERAL);
+        }
+        databaseResult.child(news.getTime()+"").removeValue();
         finish();
     }
 }

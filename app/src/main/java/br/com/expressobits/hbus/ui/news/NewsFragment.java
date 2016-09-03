@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,14 +24,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.News;
 import br.com.expressobits.hbus.ui.adapters.ItemNewsAdapter;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import br.com.expressobits.hbus.util.NewsUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
@@ -171,7 +170,7 @@ public class NewsFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 News news = dataSnapshot.getValue(News.class);
-                news.setId(FirebaseUtils.getIdNewsGeneral(String.valueOf(news.getTime()),country,cityName));
+                news.setId(FirebaseUtils.getIdNewsCity(String.valueOf(news.getTime()),country,cityName));
                 if(news.isActived()){
                     newses.add(news);
                 }
@@ -211,7 +210,7 @@ public class NewsFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 News news = dataSnapshot.getValue(News.class);
-                news.setId(FirebaseUtils.getIdNewsGeneral(String.valueOf(news.getTime()),country,cityName,company));
+                news.setId(FirebaseUtils.getIdNewsCompany(String.valueOf(news.getTime()),country,cityName,company));
                 if(news.isActived()){
                     newses.add(news);
                 }
