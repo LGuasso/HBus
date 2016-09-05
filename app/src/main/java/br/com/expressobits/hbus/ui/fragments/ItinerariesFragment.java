@@ -56,6 +56,9 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     private RecyclerView recyclerViewItineraries;
     private ProgressBar progressBar;
     public int lastPositionItinerary;
+    private String city;
+    private String country;
+    private String company;
 
     @Nullable
     @Override
@@ -82,9 +85,9 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         }else {
 
         }
-        String country = FirebaseUtils.getCountry(cityId);
-        String city = FirebaseUtils.getCityName(cityId);
-        String company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"SIMSM");
+        country = FirebaseUtils.getCountry(cityId);
+        city = FirebaseUtils.getCityName(cityId);
+        company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"SIMSM");
         refresh(country,city,company);
     }
 
@@ -270,23 +273,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
         int id = item.getItemId();
         if (id == R.id.menu_action_refresh) {
-            String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-            FirebaseDatabase database= FirebaseDatabase.getInstance();
-            DatabaseReference citiesTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
-            DatabaseReference countryRef = citiesTableRef.child(DAOUtils.getNameCountry(cityId));
-            DatabaseReference cityRef = countryRef.child(DAOUtils.getNameCity(cityId));
-            cityRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    City city = dataSnapshot.getValue(City.class);
-                    refresh(city.getCountry(),city.getName(),city.getCompanyDefault());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            this.refresh(country,city,company);
 
             return true;
         }

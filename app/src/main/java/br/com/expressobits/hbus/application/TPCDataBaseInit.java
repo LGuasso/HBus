@@ -40,26 +40,9 @@ public class TPCDataBaseInit extends Application{
             e.printStackTrace();
         }
 
-        if(92> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(93> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0) && 0<PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            Log.d(TAG,"NAO DEVE APARECER ISSO!");
             clearApplicationData(this);
-        }
-        if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
-            this.deleteDatabase("santa_maria_rs_bus_data.db");
-        }
-        if(83> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
-            this.deleteDatabase("bus_database.db");
-            Log.e(TAG, "DELETE bus_database");
-        }
-        if(86> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
-            this.deleteDatabase("bus_data.db");
-            Log.e(TAG, "DELETE BUS DATA");
-        }
-        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(SelectCityActivity.TAG);
-            editor.apply();
-
         }
         if (pInfo != null) {
             if(pInfo.versionCode > PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
@@ -79,9 +62,7 @@ public class TPCDataBaseInit extends Application{
             tracker.enableAdvertisingIdCollection(true);
             tracker.enableAutoActivityTracking(true);
         }
-
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
         MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
         super.onCreate();
     }
