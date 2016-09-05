@@ -52,4 +52,8 @@ public class Itinerary {
         this.codes = codes;
     }
 
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }
