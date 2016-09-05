@@ -7,14 +7,14 @@
         android:orderInCategory="100"
         android:icon="@android:drawable/stat_notify_sync"
         android:title="@string/data_manager"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_news_editor"
         android:orderInCategory="100"
         android:icon="@android:drawable/ic_dialog_alert"
         android:title="@string/news"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

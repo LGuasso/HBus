@@ -46,7 +46,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private boolean starter = false;
     public static final String NOT_CITY = "not_city";
     public static final String STARTER_MODE = "starter";
-    public static final String DEFAULT_COUNTRY = "RS";
+    public static final String DEFAULT_COUNTRY = "BR/RS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

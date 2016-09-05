@@ -68,7 +68,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
         StorageReference tableRef = storageRef.child(FirebaseUtils.CITY_TABLE);
-        StorageReference countryRef = tableRef.child("BR/"+listCities.get(position).getCountry());
+        StorageReference countryRef = tableRef.child(listCities.get(position).getCountry());
         StorageReference cityRef = countryRef.child(listCities.get(position).getName().toLowerCase().replace(" ","_")+FirebaseUtils.EXTENSION_IMAGE);
 
         StorageReference cityFlagRef = countryRef.child(listCities.get(position).getName().toLowerCase().replace(" ","_")

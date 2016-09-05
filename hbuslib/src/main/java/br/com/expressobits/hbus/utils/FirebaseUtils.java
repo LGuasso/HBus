@@ -34,11 +34,11 @@ public class FirebaseUtils {
         return BARS+NEWS_TABLE+BARS+GENERAL+BARS+time;
     }
 
-    public static String getIdNewsGeneral(String time,String country,String city){
+    public static String getIdNewsCity(String time, String country, String city){
         return BARS+NEWS_TABLE+BARS+CITY_TABLE+BARS+country+BARS+city+BARS+time;
     }
 
-    public static String getIdNewsGeneral(String time,String country,String city,String company){
+    public static String getIdNewsCompany(String time, String country, String city, String company){
         return BARS+NEWS_TABLE+BARS+COMPANY_TABLE+BARS+country+BARS+city+BARS+company+BARS+time;
     }
 
@@ -69,32 +69,32 @@ public class FirebaseUtils {
 
 
     public static String getCountry(String id){
-        return id.split(BARS)[1];
+        return id.split(BARS)[1]+BARS+id.split(BARS)[2];
     }
 
     public static String getCityName(String id){
-        return id.split(BARS)[2];
-    }
-
-    public static String getCompany(String id){
         return id.split(BARS)[3];
     }
 
-    public static String getItinerary(String id){
+    public static String getCompany(String id){
         return id.split(BARS)[4];
     }
 
-    public static String getWay(String id){
+    public static String getItinerary(String id){
         return id.split(BARS)[5];
     }
 
+    public static String getWay(String id){
+        return id.split(BARS)[6];
+    }
+
     public static String getTimeForBus(String id) {
-        return id.split(BARS)[7];
+        return id.split(BARS)[8];
     }
 
     public static String getNewsCityName(String id){
-        if(id.split(BARS).length>4){
-            return id.split(BARS)[4];
+        if(id.split(BARS).length>5){
+            return id.split(BARS)[5];
         }else {
             return null;
         }
@@ -109,8 +109,8 @@ public class FirebaseUtils {
     }
 
     public static String getNewsItinerary(String id){
-        if(id.split(BARS).length>6){
-            return id.split(BARS)[6];
+        if(id.split(BARS).length>7){
+            return id.split(BARS)[7];
         }else {
             return null;
         }

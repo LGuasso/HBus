@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         city = FirebaseUtils.getCityName(cityId);
         country = FirebaseUtils.getCountry(cityId);
+        Log.e(TAG,country);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference cityTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
         DatabaseReference countryRef = cityTableRef.child(country);
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
         StorageReference tableRef = storageRef.child(FirebaseUtils.CITY_TABLE);
-        StorageReference countryRef = tableRef.child("BR/"+country);
+        StorageReference countryRef = tableRef.child(country);
         StorageReference cityRef = countryRef.child(city.toLowerCase().replace(" ","_")+FirebaseUtils.EXTENSION_IMAGE);
 
         StorageReference cityFlagRef = countryRef.child(city.toLowerCase().replace(" ","_")
