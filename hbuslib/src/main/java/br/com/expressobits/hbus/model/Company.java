@@ -69,4 +69,9 @@ public class Company {
     public boolean isActived() {
         return actived;
     }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

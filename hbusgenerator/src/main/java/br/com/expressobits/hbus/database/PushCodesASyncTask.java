@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
 
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -29,13 +30,18 @@ public class PushCodesASyncTask extends AsyncTask<Pair<City,Pair<Company,Code>>,
         for (int i=0;i<params.length;i++) {
             City city = params[i].first;
             Company company =  params[i].second.first;
-            Code code = params[i].second.second;
+            final Code code = params[i].second.second;
             DatabaseReference citiesTableRef = database.getReference(FirebaseUtils.CODE_TABLE);
             DatabaseReference countryRef = citiesTableRef.child(city.getCountry());
             DatabaseReference cityRef = countryRef.child(city.getName());
-            DatabaseReference companyRef = cityRef.child(company.getName());
-            DatabaseReference itineraryRef = companyRef.child(code.getName());
-            itineraryRef.setValue(code);
+            final DatabaseReference companyRef = cityRef.child(company.getName());
+            companyRef.removeValue(new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    DatabaseReference codeRef = companyRef.child(code.getName());
+                    codeRef.setValue(code);
+                }
+            });
 
             Log.d(TAG,code.getName());
             publishProgress((int) ((i+1 / params.length) * 100));
