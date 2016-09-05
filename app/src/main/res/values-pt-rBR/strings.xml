@@ -63,7 +63,6 @@
     <string name="lines_load_with_sucess"></string>
     <string name="bus_codes_loaded_with_sucess"></string>
     <string name="itineraries_loaded_with_sucess">Os itinerários foram sincronizados</string>
-    <string-array name="feedback_list">
     <string name="all_itinerary">Todos itinerários</string>
     <string name="see_all_itinerary">Ver todos itinerários</string>
     <string name="load_online_buses_with_sucess"></string>
