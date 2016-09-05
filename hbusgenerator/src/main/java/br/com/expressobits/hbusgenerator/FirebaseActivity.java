@@ -61,7 +61,6 @@ public class FirebaseActivity extends AppCompatActivity implements
     HashMap<City, HashMap<Company, List<Itinerary>>> itineraries = new HashMap<>();
     HashMap<City, HashMap<Company, HashMap<Itinerary, List<Bus>>>> buses = new HashMap<>();
 
-    TextView porcentTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
