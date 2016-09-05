@@ -12,6 +12,7 @@ public class News implements Comparable<News>{
     private String id;
     private String body;
     private String title;
+    private String subtitle;
     private List<String> imagesUrls;
     private List<String> itineraryIds;
     private List<String> cityIds;
@@ -45,6 +46,14 @@ public class News implements Comparable<News>{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
     public List<String> getImagesUrls() {

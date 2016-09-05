@@ -21,6 +21,7 @@ public class FirebaseUtils {
     public static final String GENERAL = "general";
     public static final String BARS = "/";
 
+
     public static final String CITY_TABLE = "city";
     public static final String COMPANY_TABLE = "company";
     public static final String ITINERARY_TABLE = "itinerary";
@@ -29,6 +30,8 @@ public class FirebaseUtils {
 
     public static final String REF_STORAGE_HBUS = "gs://hbus-1206.appspot.com";
     public static final String NEWS_TABLE = "news";
+
+    public static final String NEWS_BODY_IMAGE_TAG = "imagehbus";
 
     public static String getIdNewsGeneral(String time){
         return BARS+NEWS_TABLE+BARS+GENERAL+BARS+time;

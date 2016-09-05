@@ -76,13 +76,20 @@
 
         </LinearLayout>
 
-
         <TextView
-            android:id="@+id/textViewNewsBody"
+            android:id="@+id/textViewNewsSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/loading"
             android:textAppearance="?android:textAppearanceSmall" />
+
+
+        <!--TextView
+            android:id="@+id/textViewNewsBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loading"
+            android:textAppearance="?android:textAppearanceSmall" /-->
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -92,7 +99,8 @@
                 android:id="@+id/linearLayoutNewsChips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal"
+                android:layout_gravity="end"/>
         </HorizontalScrollView>
 
 

@@ -1,5 +1,7 @@
 package br.com.expressobits.hbus.ui.news;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -34,6 +37,8 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private TextView textViewSource;
     private TextView textViewTime;
     private TextView textViewTitle;
+    private TextView textViewSubtitle;
+    private LinearLayout linearLayoutImages;
     private LinearLayout linearLayoutNewsChips;
 
     @Override
@@ -51,10 +56,12 @@ public class NewsDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imageView = (ImageView) findViewById(R.id.imageView);
         textViewTitle = (TextView) findViewById(R.id.textViewNewsTitle);
+        textViewSubtitle = (TextView) findViewById(R.id.textViewNewsSubtitle);
         textViewBody = (TextView) findViewById(R.id.textViewNewsBody);
         textViewTime = (TextView) findViewById(R.id.textViewNewsTime);
         textViewSource = (TextView) findViewById(R.id.textViewNewsSource);
         linearLayoutNewsChips = (LinearLayout) findViewById(R.id.linearLayoutNewsChips);
+        linearLayoutImages = (LinearLayout) findViewById(R.id.linearLayoutImages);
     }
 
     /**
@@ -88,13 +95,45 @@ public class NewsDetailsActivity extends AppCompatActivity {
      * @param news
      */
     private void loadNews(News news) {
+
+        List<String> urlsActivedImages = new ArrayList<>();
         toolbar.setTitle(getString(R.string.news));
         Picasso.with(this).load(news.getImagesUrls().get(0)).into(imageView);
         textViewTitle.setText(news.getTitle());
-        textViewBody.setText(news.getBody());
+
+        String body = news.getBody();
+        for(int i=0;i<news.getImagesUrls().size();i++){
+            String url = news.getImagesUrls().get(i);
+            if(news.getBody().contains("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--")){
+                urlsActivedImages.add(url);
+                body = news.getBody().replace("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--","");
+            }
+        }
+        textViewBody.setText(body);
         textViewSource.setText(news.getSource());
         textViewTime.setText(TimeUtils.getTimeAgo(news.getTime(),this));
+        textViewSubtitle.setText(news.getSubtitle());
+        getImageList(urlsActivedImages);
         updateNewsChips(news);
+    }
+
+    private void getImageList(List<String> urlsActivedImages) {
+
+        View view = getLayoutInflater().inflate(R.layout.item_news_image, linearLayoutImages, false);
+        for(final String url:urlsActivedImages){
+            ImageView imageView = (ImageView) view.findViewById(R.id.imageViewImage);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+            linearLayoutImages.addView(imageView);
+            Picasso.with(this).load(url).into(imageView);
+        }
+
     }
 
     private void updateNewsChips(News news){
