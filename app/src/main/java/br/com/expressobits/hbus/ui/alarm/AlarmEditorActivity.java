@@ -215,7 +215,7 @@ public class AlarmEditorActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this,
                         android.R.layout.simple_list_item_1,
-                        getResources().getStringArray(R.array.list_delay_type));
+                        getResources().getStringArray(R.array.list_delay));
         spinnerDelayType.setAdapter(adapter);
     }
 
