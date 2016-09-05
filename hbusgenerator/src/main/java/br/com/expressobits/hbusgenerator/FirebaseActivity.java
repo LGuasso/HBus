@@ -1,5 +1,6 @@
 package br.com.expressobits.hbusgenerator;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.database.PushBusesASyncTask;
 import br.com.expressobits.hbus.database.PushCitiesASyncTask;
 import br.com.expressobits.hbus.database.PushCodesASyncTask;
@@ -34,6 +36,7 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 public class FirebaseActivity extends AppCompatActivity implements
@@ -57,6 +60,8 @@ public class FirebaseActivity extends AppCompatActivity implements
     HashMap<City, HashMap<Company, List<Code>>> codes = new HashMap<>();
     HashMap<City, HashMap<Company, List<Itinerary>>> itineraries = new HashMap<>();
     HashMap<City, HashMap<Company, HashMap<Itinerary, List<Bus>>>> buses = new HashMap<>();
+
+    TextView porcentTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
