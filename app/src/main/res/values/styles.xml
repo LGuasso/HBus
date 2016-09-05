@@ -12,7 +12,6 @@
         <!-- Support library compatibility -->
         <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
         <!--item name="buttonStyle">@style/ButtonAppTheme</item-->
-        <item name="android:windowBackground">@color/md_grey_100</item>
 
     </style>
 
