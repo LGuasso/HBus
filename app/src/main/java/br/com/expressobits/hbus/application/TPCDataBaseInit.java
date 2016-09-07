@@ -44,6 +44,24 @@ public class TPCDataBaseInit extends Application{
             Log.d(TAG,"NAO DEVE APARECER ISSO!");
             clearApplicationData(this);
         }
+        if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            this.deleteDatabase("santa_maria_rs_bus_data.db");
+        }
+        if(83> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            this.deleteDatabase("bus_database.db");
+            Log.e(TAG, "DELETE bus_database");
+        }
+        if(86> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            this.deleteDatabase("bus_data.db");
+            Log.e(TAG, "DELETE BUS DATA");
+        }
+        if(94> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(SelectCityActivity.TAG);
+            editor.apply();
+
+        }
         if (pInfo != null) {
             if(pInfo.versionCode > PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

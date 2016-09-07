@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.net.Uri;
 import android.os.Bundle;
@@ -110,25 +111,36 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     private void loadParams() {
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        city = FirebaseUtils.getCityName(cityId);
-        country = FirebaseUtils.getCountry(cityId);
-        Log.e(TAG,country);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference cityTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
-        DatabaseReference countryRef = cityTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        cityRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                City city = dataSnapshot.getValue(City.class);
-                company = city.getCompanyDefault();
-            }
+        try {
+            city = FirebaseUtils.getCityName(cityId);
+            country = FirebaseUtils.getCountry(cityId);
+            Log.e(TAG,country);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference cityTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
+            DatabaseReference countryRef = cityTableRef.child(country);
+            DatabaseReference cityRef = countryRef.child(city);
+            cityRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    City city = dataSnapshot.getValue(City.class);
+                    company = city.getCompanyDefault();
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }catch (Exception e){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(SelectCityActivity.TAG);
+            editor.apply();
+
+            Toast.makeText(this,getString(R.string.error_load_city),Toast.LENGTH_LONG).show();
+            startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
+        }
+
     }
 
     @Override
