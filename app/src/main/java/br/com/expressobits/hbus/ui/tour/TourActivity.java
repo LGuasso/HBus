@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui.tour;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -118,30 +119,37 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         //TODO para resources este dados
-        fragments.add(
-                PagerFragment.newInstance(
-                        getResources().getColor(R.color.tour_color_palm),
-                        0,
-                        getString(R.string.tour_title_palm),
-                        getString(R.string.tour_subtitle_palm),
-                        R.drawable.ic_bus_white_48dp)
-        );
-        fragments.add(
-                PagerFragment.newInstance(
-                        getResources().getColor(R.color.tour_color_update),
-                        1,
-                        getString(R.string.tour_title_update),
-                        getString(R.string.tour_subtitle_update),
-                        R.drawable.ic_refresh_white_48dp)
-        );
-        fragments.add(
-                PagerFragment.newInstance(
-                        getResources().getColor(R.color.tour_color_feedback),
-                        2,
-                        getString(R.string.tour_title_feedback),
-                        getString(R.string.tour_subtitle_feedback),
-                        R.drawable.ic_information_white_48dp)
-        );
+        try{
+            fragments.add(
+                    PagerFragment.newInstance(
+                            getResources().getColor(R.color.tour_color_palm),
+                            0,
+                            getString(R.string.tour_title_palm),
+                            getString(R.string.tour_subtitle_palm),
+                            R.drawable.ic_bus_white_48dp)
+            );
+            fragments.add(
+                    PagerFragment.newInstance(
+                            getResources().getColor(R.color.tour_color_update),
+                            1,
+                            getString(R.string.tour_title_update),
+                            getString(R.string.tour_subtitle_update),
+                            R.drawable.ic_refresh_white_48dp)
+            );
+            fragments.add(
+                    PagerFragment.newInstance(
+                            getResources().getColor(R.color.tour_color_feedback),
+                            2,
+                            getString(R.string.tour_title_feedback),
+                            getString(R.string.tour_subtitle_feedback),
+                            R.drawable.ic_information_white_48dp)
+            );
+        }catch (Resources.NotFoundException ex){
+            //TODO remove este try cacth quando erradicar este bug
+            //https://play.google.com/apps/publish/?dev_acc=07647321672896290368#ErrorClusterDetailsPlace:p=br.com.expressobits.hbus&et=CRASH&lr=LAST_7_DAYS&ecn=android.content.res.Resources$NotFoundException&tf=Resources.java&tc=android.content.res.Resources&tm=getText&nid&an&c&s=new_status_desc&ed=0
+            finishTour();
+        }
+
         //fragments.add(PagerFragment.newInstance(1, 0,"HBus", "A hora nas suas mãos!\nEncontre a linha urbana favorita!", R.drawable.modelo));
         //fragments.add(PagerFragment.newInstance(1, 0, "Fácil de usar!", "Com poucos toques utilize o máximo!\nCom favoritos que exibem já os próximos horários!", R.mipmap.ic_launcher));
         //fragments.add(PagerFragment.newInstance(1, 0, "Ajude-nos!", "Ainda em fase de testes, este aplicativo vai crescer com sua ajuda e feedback!", R.mipmap.ic_launcher));
