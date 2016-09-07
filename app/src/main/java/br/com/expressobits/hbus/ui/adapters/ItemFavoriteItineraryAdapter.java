@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Bus;
@@ -164,13 +165,19 @@ public class ItemFavoriteItineraryAdapter extends
             TextView textViewHour = (TextView) view.findViewById(R.id.textViewHourforNextBus);
             TextView textViewWay = (TextView) view.findViewById(R.id.textViewWayforNextBus);
             TextView textViewCode = (TextView) view.findViewById(R.id.textViewCodeforNextBus);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            String time = sdf.format(next.get(way).getTime());
-            String code = next.get(way).getCode();
-            textViewWay.setText(way);
-            textViewHour.setText(time);
-            textViewCode.setText(code);
-            holder.linearLayoutHours.addView(view, i);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            String time = "";
+            try{
+                time = sdf.format(next.get(way).getTime());
+                String code = next.get(way).getCode();
+                textViewWay.setText(way);
+                textViewHour.setText(time);
+                textViewCode.setText(code);
+                holder.linearLayoutHours.addView(view, i);
+            }catch (NullPointerException ex){
+            }
+
+
         }
     }
 
