@@ -11,8 +11,8 @@
     <!-- Intersticial de testes -->
     <string name="intersticial_ad_developer_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
 
-    <string name="intersticial_ad_unit_id" translatable="false">@string/intersticial_ad_developer_unit_id</string>
-    <string name="banner_ad_unit_id" translatable="false">@string/banner_ad_developer_unit_id</string>
+    <string name="intersticial_ad_unit_id" translatable="false">@string/intersticial_ad_product_unit_id</string>
+    <string name="banner_ad_unit_id" translatable="false">@string/banner_ad_product_unit_id</string>
 
     <!-- id client web O ID de cliente de tipo do aplicativo da Web é seu ID de cliente OAuth 2.0 do servidor de backend-->
     <string name="web_client_id" translatable="false">36454287226-4jrfk9i6pud4jn0uqlg08tf5idh58o5b.apps.googleusercontent.com</string>
