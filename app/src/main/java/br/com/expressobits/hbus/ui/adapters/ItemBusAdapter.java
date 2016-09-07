@@ -225,9 +225,6 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         return listBus.size();
     }
 
-    public void setRecyclerViewOnClickListenerHack(RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack) {
-        this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
-    }
 
     public void addListItem(Bus bus,int position){
         listBus.add(bus);
@@ -250,7 +247,6 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         public TextView txtViewHorario;
         public TextView txtViewCode;
         public TextView txtViewDescrition;
-        public RelativeLayout relativeLayout;
         public AppCompatImageView imageViewAlarm;
         public View itemView;
 
@@ -260,7 +256,6 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
 
             this.itemView = itemView;
 
-            relativeLayout = (RelativeLayout) itemView.findViewById(R.id.linear_layout_list_bus_square);
             txtViewHorario = (TextView) itemView.findViewById(R.id.item_list_textview_horario);
             txtViewCode = (TextView) itemView.findViewById(R.id.item_list_textview_codigo);
             txtViewDescrition = (TextView) itemView.findViewById(R.id.item_list_textview_descricao_do_codigo);
@@ -273,19 +268,17 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
 
         @Override
         public void onClick(View v) {
-            if(recyclerViewOnClickListenerHack != null){
-                switch (v.getId()) {
-                    case R.id.item_list_imageview:
-                        Intent intent = new Intent(context, AlarmEditorActivity.class);
-                        String busId = listBus.get(getPosition()).getId();
-                        String code = listBus.get(getPosition()).getCode();
-                        intent.putExtra(AlarmEditorActivity.ARGS_ALARM_ID, busId);
-                        intent.putExtra(AlarmEditorActivity.ARGS_ALARM_CODE, code);
-                        context.startActivity(intent);
-                        break;
-                }
-                recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
+            switch (v.getId()) {
+                case R.id.item_list_imageview:
+                    Intent intent = new Intent(context, AlarmEditorActivity.class);
+                    String busId = listBus.get(getPosition()).getId();
+                    String code = listBus.get(getPosition()).getCode();
+                    intent.putExtra(AlarmEditorActivity.ARGS_ALARM_ID, busId);
+                    intent.putExtra(AlarmEditorActivity.ARGS_ALARM_CODE, code);
+                    context.startActivity(intent);
+                    break;
             }
+
         }
     }
 }

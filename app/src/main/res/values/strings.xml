@@ -5,36 +5,25 @@
     <string name="action_delete">Delete</string>
     <string name="action_jump">Jump</string>
     <string name="action_next">Next</string>
-    <string name="choose_the_line">Choose the line</string>
-    <string name="choose_the_local">Choose the local</string>
-    <string name="look_line">Look line</string>
     <string name="title_activity_list_line">Online hours</string>
     <string name="hello_world">Hello world!</string>
     <string name="saturday">Saturday</string>
-    <string name="useful">Useful days</string>
     <string name="sunday">Sunday</string>
     <string name="code_of_bus">Code of bus</string>
-    <string name="no_have_bus">No have bus</string>
-    <string name="choose_the_way">Choose the way</string>
+    <string name="no_have_bus">No have bus this day</string>
     <string name="next_bus">Next bus</string>
     <string name="all_lines">All lines</string>
-    <string name="favorites">Favorites</string>
-    <string name="add_favorite">Add favorite</string>
-    <string name="added_favorite_itinerary_with_sucess">Added favorite itinerary with sucess</string>
     <string name="itinerary_name">Itinerary Name</string>
-    <string name="delete_itinerary_with_sucess">Deleted itinerary %1$s with sucess!</string>
+    <string name="delete_itinerary_with_sucess">Delete itinerary %1$s with sucess!</string>
     <string name="title_activity_load">Splash screen</string>
     <string name="finish">Finish</string>
-    <string name="title_activity_select_city">Select city</string>
     <string name="not_found">Not found</string>
     <string name="title_activity_splash" translatable="false">SplashActivity</string>
     <string name="about">About</string>
     <string name="no_have_itinerary">No have favorite itinerary</string>
-    <string name="look_times">Look times</string>
     <string name="not_found_city">Not found city</string>
     <string name="number_of_itineraries">%1$s itineraries</string>
     <string name="dialog_alert_title_confirm_remove">Remove favorite itinerary?</string>
-    <string name="confirm_donwload_data_for_city">Download data for city %1$s?</string>
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="title_activity_help" translatable="false">@string/action_help</string>
     <string name="action_help">Help and feedback</string>
@@ -54,17 +43,12 @@
     <string name="action_refresh_cities_list">Refresh cities list</string>
     <string name="title_activity_times" translatable="false">TimesActivity</string>
     <string name="action_refresh">Refresh</string>
-    <string name="last_recently_bus">Bus recently</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="city">City</string>
     <string name="click_here_to_change">Click here to change</string>
     <string name="add_itinerary">Add itinerary</string>
-    <string name="all_itinerary">All itineraries</string>
     <string name="see_all_itinerary">See all itinerary</string>
-    <string name="load_online_itineraries_with_sucess">Load online itineraries with sucess</string>
-    <string name="load_online_codes_with_sucess" translatable="false">Load online codes with sucess</string>
-    <string name="load_online_buses_with_sucess" translatable="false">Load online bus with sucess</string>
     <string name="select_the_type_of_feedback">Select the type of feedback</string>
     <string name="developer">Developer</string>
     <string name="help_warning">    Este aplicativo tem função de facilitar o acesso aos horários disponíveis no site da SIM(Sistema Integrado Municipal)  http://www.simsm.com.br/ ,ou seja, a Expresso Bits não se responsabiliza pelos horários!</string>
@@ -122,17 +106,44 @@
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
     <string name="updated_date">Update %1$s</string>
     <string name="coming_soon">Coming soon!</string>
+    <string name="or">Or</string>
+    <string name="sign_in_anonymously">Continue without login</string>
+    <string name="exit">Exit</string>
+    <string name="google_sign_sucess">Google Sign In was successful!</string>
+    <string name="loading_sign_google">Loading data by Google...</string>
+    <string name="anonymous">Anonymous</string>
+    <string name="no_have_news">No have news</string>
+    <string name="last_ago">Last ago %1$s</string>
+    <string name="itineraries">Itineraries</string>
+    <string name="just_now">just now</string>
+    <string name="a_minute_ago">a minute ago</string>
+    <string name="minute_ago">%1$s minutes ago</string>
+    <string name="an_hour_ago">an hour ago</string>
+    <string name="hours_ago">%1$s hours ago</string>
+    <string name="yesterday">yesterday</string>
+    <string name="days_ago">%1$s days ago</string>
+    <string name="error_load_city">error on loading city.</string>
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="added_bookmark_itinerary_with_sucess">Added bookmark itinerary with sucess</string>
+    <string name="all_itineraries">All itineraries</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="bus_code">Bus code</string>
+    <string name="business_days">Business days</string>
+    <string name="city_not_found">Not found city</string>
+    <string name="feedback_was_sent_with_sucess">Feedback was sent with sucess!</string>
+    <string name="no_bookmarked_itinerary">No bookmarked itineraries</string>
+    <string name="no_bus"></string>
+    <string name="title_activity_choose_city">Choose city</string>
+    <string name="view_all_itineraries">View all itineraries</string>
+    <string name="view_line_timetable">View line timetable</string>
+    <string name="view_timetable">View timetable</string>
+    <string name="recent_buses">Recent bus</string>
+    <string name="pref_title_no_actived_itens">Search agency and city not actived</string>
 </resources>

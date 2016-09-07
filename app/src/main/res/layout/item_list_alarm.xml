@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/textViewTime"
-                android:textAppearance="@style/AppTheme.TextAppearance.Time"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textSize="32dp"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center_vertical" />
 

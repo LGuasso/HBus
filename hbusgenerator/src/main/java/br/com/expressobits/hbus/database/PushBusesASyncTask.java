@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
 
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,24 +32,33 @@ public class PushBusesASyncTask extends AsyncTask<Pair<City,Pair<Company,Pair<It
 
         database = FirebaseDatabase.getInstance();
 
+
         for (int i=0;i<params.length;i++) {
-            City city = params[i].first;
-            Company company = params[i].second.first;
-            Itinerary itinerary = params[i].second.second.first;
-            List<Bus> buses = params[i].second.second.second;
-            for(int j=0;j<buses.size();j++){
-                Bus bus = buses.get(j);
-                DatabaseReference citiesTableRef = database.getReference(FirebaseUtils.BUS_TABLE);
-                DatabaseReference countryRef = citiesTableRef.child(city.getCountry());
-                DatabaseReference cityRef = countryRef.child(city.getName());
-                DatabaseReference companyRef = cityRef.child(company.getName());
-                DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
-                DatabaseReference wayRef = itineraryRef.child(bus.getWay());
-                DatabaseReference typedayRef = wayRef.child(bus.getTypeday());
-                DatabaseReference busRef = typedayRef.child(String.valueOf(bus.getTime()));
-                busRef.setValue(bus);
-                publishProgress((int) ((j+1 / buses.size()) * 100));
-            }
+            final City city = params[i].first;
+            final Company company = params[i].second.first;
+            final Itinerary itinerary = params[i].second.second.first;
+            final List<Bus> buses = params[i].second.second.second;
+            Log.e("FIREBASE", "Remove " + FirebaseUtils.BUS_TABLE);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference tableRef = database.getReference(FirebaseUtils.BUS_TABLE);
+            DatabaseReference countryRef = tableRef.child(city.getCountry());
+            DatabaseReference cityRef = countryRef.child(city.getName());
+            DatabaseReference companyRef = cityRef.child(company.getName());
+            final DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
+            itineraryRef.removeValue(new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                    for(int j=0;j<buses.size();j++){
+                        Bus bus = buses.get(j);
+                        DatabaseReference wayRef = itineraryRef.child(bus.getWay());
+                        DatabaseReference typedayRef = wayRef.child(bus.getTypeday());
+                        DatabaseReference busRef = typedayRef.child(String.valueOf(bus.getTime()));
+                        busRef.setValue(bus);
+                        publishProgress((int) ((j+1 / buses.size()) * 100));
+                    }
+                }
+            });
             return itinerary;
 
         }

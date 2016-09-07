@@ -18,48 +18,68 @@
         android:layout_height="@dimen/card_view_size_city"
         android:orientation="vertical">
 
-
-        <ImageView
-            android:id="@+id/imageView_city"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView_coming_soon"
+            android:layout_width="fill_parent"
+            android:textColor="@color/colorAccent"
             android:layout_height="wrap_content"
-            android:src="@drawable/default_city"
-            android:scaleType="centerCrop"
-            android:layout_centerInParent="true"/>
+            android:textAppearance="?android:textAppearanceButton"
+            android:layout_alignParentBottom="true"
+            android:text="@string/coming_soon"
+            android:orientation="vertical"/>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:orientation="vertical"
-            android:padding="8dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/transparent_card_view_image"
-            android:layout_alignParentTop="true">
-            <TextView
-                android:id="@+id/textView_city_name"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.HeadLine"
-                android:text="@string/abc_action_bar_home_description"
-                android:textColor="@color/white"
-                android:orientation="vertical"/>
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView_coming_soon"
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:textColor="@color/accent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceButton"
-                android:text="@string/coming_soon"
-                android:orientation="vertical"/>
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageViewCityFlag"
+                    android:paddingRight="8dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:src="@drawable/ic_checkbox_blank_circle_outline_white_48dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/textView_city_name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:textAppearance"
+                        android:text="@string/abc_action_bar_home_description"
+                        android:orientation="vertical"/>
+
+                    <TextView
+                        android:id="@+id/textView_city_country"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:text="Rio Grande do Sul"
+                        android:orientation="vertical"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView_city"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"/>
+
         </LinearLayout>
 
-
-
-
-
-
     </RelativeLayout>
-
-
 
 </android.support.v7.widget.CardView>

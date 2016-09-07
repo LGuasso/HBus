@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,14 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * @author Rafael Correa
@@ -46,7 +52,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
 
 
     @Override
-    public void onBindViewHolder(HolderCity holder, final int position) {
+    public void onBindViewHolder(final HolderCity holder, final int position) {
         //TODO implementar imagem da cidade
 
         String name = listCities.get(position).getName()+" - "+listCities.get(position).getCountry();
@@ -56,24 +62,43 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
             holder.textViewComingSoon.setVisibility(View.INVISIBLE);
             holder.cardView.setOnClickListener(holder);
         }else {
-            holder.imageViewCity.setColorFilter(context.getResources().getColor(R.color.md_blue_grey_500), PorterDuff.Mode.MULTIPLY);
+            holder.imageViewCity.setColorFilter(context.getResources().getColor(R.color.md_blue_gray_500), PorterDuff.Mode.MULTIPLY);
         }
 
-        name=name.replace(" - ","-");
-        name=name.replace(" ","_");
-        name=name.toLowerCase();
-        if(name.equals("santa_maria-rs")){
-            holder.imageViewCity.setImageDrawable(context.getResources().getDrawable(R.drawable.santa_maria_rs));
-        }else if(name.equals("cruz_alta-rs")){
-            holder.imageViewCity.setImageDrawable(context.getResources().getDrawable(R.drawable.cruz_alta_rs));
-        }else {
-            holder.imageViewCity.setImageDrawable(context.getResources().getDrawable(R.drawable.default_city));
-        }
-        //holder.imageViewCity.setImageDrawable(listCities.get(position).getImageDrawable());
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
+        StorageReference tableRef = storageRef.child(FirebaseUtils.CITY_TABLE);
+        StorageReference countryRef = tableRef.child(listCities.get(position).getCountry());
+        StorageReference cityRef = countryRef.child(listCities.get(position).getName().toLowerCase().replace(" ","_")+FirebaseUtils.EXTENSION_IMAGE);
+
+        StorageReference cityFlagRef = countryRef.child(listCities.get(position).getName().toLowerCase().replace(" ","_")
+                +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
+
+
+
+        cityRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Picasso.with(ItemCityAdapter.this.context).load(uri)
+                        .into(holder.imageViewCity);
+            }
+
+
+        });
+
+        cityFlagRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Picasso.with(ItemCityAdapter.this.context).load(uri)
+                        .error(R.drawable.ic_flag_white_48dp)
+                        .placeholder(R.drawable.ic_flag_white_48dp)
+                        .into(holder.imageViewPhoto);
+            }
+        });
 
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -90,6 +115,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
         public TextView textViewComingSoon;
         public ImageView imageViewCity;
         public CardView cardView;
+        public ImageView imageViewPhoto;
 
         public HolderCity(View itemView,List<City> list) {
             super(itemView);
@@ -97,6 +123,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
             textViewComingSoon = (TextView) itemView.findViewById(R.id.textView_coming_soon);
             imageViewCity = (ImageView) itemView.findViewById(R.id.imageView_city);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
+            imageViewPhoto = (ImageView) itemView.findViewById(R.id.circleImageViewCityFlag);
         }
 
 

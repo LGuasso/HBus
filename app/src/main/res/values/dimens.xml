@@ -5,7 +5,7 @@
     <dimen name="horario_textsize">26sp</dimen>
     <dimen name="textsize">16sp</dimen>
 
-    <dimen name="card_view_size_city">128dp</dimen>
+    <dimen name="card_view_size_city">192dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
@@ -23,6 +23,9 @@
     <dimen name="margin_buttons_day_week_list">3dp</dimen>
     <dimen name="size_background_day_of_week">36dp</dimen>
     <dimen name="AlarmEditor.TimeAlarm.TextSize">96sp</dimen>
+    <dimen name="loading_text_padding">24dp</dimen>
+    <dimen name="statusBarHeight">24dp</dimen>
+    <dimen name="padding_item_bus">4dp</dimen>
 
 
 </resources>

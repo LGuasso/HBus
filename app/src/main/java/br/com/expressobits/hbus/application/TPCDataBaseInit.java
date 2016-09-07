@@ -6,23 +6,18 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
 import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.AlarmDAO;
-import br.com.expressobits.hbus.ui.Notifications;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * @author  Rafael
@@ -45,7 +40,8 @@ public class TPCDataBaseInit extends Application{
             e.printStackTrace();
         }
 
-        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(93> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0) && 0<PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+            Log.d(TAG,"NAO DEVE APARECER ISSO!");
             clearApplicationData(this);
         }
         if(59> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
@@ -59,7 +55,7 @@ public class TPCDataBaseInit extends Application{
             this.deleteDatabase("bus_data.db");
             Log.e(TAG, "DELETE BUS DATA");
         }
-        if(76> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(94> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove(SelectCityActivity.TAG);
@@ -84,17 +80,8 @@ public class TPCDataBaseInit extends Application{
             tracker.enableAdvertisingIdCollection(true);
             tracker.enableAutoActivityTracking(true);
         }
-
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
         MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
-
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        //.setDefaultFontPath("fonts/Roboto-Regular.ttf")
-                        //.setDefaultFontPath("fonts/proximanova_regular.otf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
-        );
         super.onCreate();
     }
 

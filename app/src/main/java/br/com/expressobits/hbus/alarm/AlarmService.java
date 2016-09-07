@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
-import br.com.expressobits.hbus.ui.Notifications;
+import br.com.expressobits.hbus.ui.notification.NotificationsAlarm;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
@@ -84,7 +84,7 @@ public class AlarmService extends IntentService{
         Log.d(TAG,"cAlarm\t"+HoursUtils.getFormatTime(cAlarm));
 
         if(HoursUtils.isValidAlarm(c,cAlarm,minutesTolerados) && isDayToday){
-            Notifications.notifyBus(this,alarm);
+            NotificationsAlarm.notifyBus(this,alarm);
 
             Log.d(TAG,"notification alarm "+alarm.toString());
         }

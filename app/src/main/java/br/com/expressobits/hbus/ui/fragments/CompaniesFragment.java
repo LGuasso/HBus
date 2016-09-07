@@ -62,8 +62,6 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).setSelectItemNavigation(TAG);
-        ((MainActivity)getActivity()).setActionBarTitle();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
 

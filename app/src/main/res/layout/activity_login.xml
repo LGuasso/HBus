@@ -3,7 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.expressobits.hbus.ui.LoginActivity"
+    tools:context="br.com.expressobits.hbus.ui.login.LoginActivity"
     android:background="@color/colorPrimary">
+
+    <include layout="@layout/content_loading" />
+
+    <include layout="@layout/content_login" />
 
 </RelativeLayout>

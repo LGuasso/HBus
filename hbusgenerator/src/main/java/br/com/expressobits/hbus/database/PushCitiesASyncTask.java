@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.database;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,11 +27,18 @@ public class PushCitiesASyncTask extends AsyncTask<City,Integer,City> {
         database = FirebaseDatabase.getInstance();
 
         for (int i=0;i<params.length;i++) {
-            City city = params[i];
+            final City city = params[i];
             DatabaseReference citiesTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
-            DatabaseReference countryRef = citiesTableRef.child(city.getCountry());
-            DatabaseReference cityRef = countryRef.child(city.getName());
-            cityRef.setValue(city);
+
+            final DatabaseReference countryRef = citiesTableRef.child(city.getCountry());
+            countryRef.removeValue(new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                    DatabaseReference cityRef = countryRef.child(city.getName());
+                    cityRef.setValue(city);
+                }
+            });
 
             Log.d(TAG,city.getName());
             //publishProgress((int) ((i+1 / params.length) * 100));

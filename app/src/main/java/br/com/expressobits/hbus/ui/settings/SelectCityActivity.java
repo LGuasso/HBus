@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,6 @@ import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FinishListener{
 
@@ -46,7 +46,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private boolean starter = false;
     public static final String NOT_CITY = "not_city";
     public static final String STARTER_MODE = "starter";
-    public static final String DEFAULT_COUNTRY = "RS";
+    public static final String DEFAULT_COUNTRY = "BR/RS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +113,13 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onClickListener(View view, final int position) {
+
         pullCompanies(cities.get(position).getCountry(),cities.get(position).getName());
         Log.d(TAG, "Selection city id=" + cities.get(position).getId());
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
+        unsSubscribe(sharedPreferences.getString(TAG,SelectCityActivity.NOT_CITY));
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        subscribe(cities.get(position).getId());
         editor.putString(TAG, cities.get(position).getId());
         editor.putString(cities.get(position).getId(),cities.get(position).getCompanyDefault());
         editor.apply();
@@ -126,14 +129,19 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         finish();
     }
 
-    @Override
-    public boolean onLongClickListener(View view, int position) {
-        return false;
+    private void unsSubscribe(String id){
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(FirebaseUtils.getIdForSubscribeCity(id));
+        Log.d(TAG, "Unsubscribed to news topic");
+    }
+
+    private void subscribe(String id){
+        FirebaseMessaging.getInstance().subscribeToTopic(FirebaseUtils.getIdForSubscribeCity(id));
+        Log.d(TAG, "Subscribe to news topic");
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    public boolean onLongClickListener(View view, int position) {
+        return false;
     }
 
     @Override

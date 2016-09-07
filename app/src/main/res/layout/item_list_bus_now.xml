@@ -5,7 +5,7 @@
     android:background="@color/colorPrimary"
     android:baselineAligned="true"
     android:orientation="vertical"
-    android:padding="4dp">
+    android:padding="@dimen/padding_item_bus">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,8 +16,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/next_bus"
-            android:textAllCaps="true"
-            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.HeadLine"
+            android:textAppearance="?android:textAppearanceButton"
             android:textColor="@color/white" />
 
     </RelativeLayout>
@@ -28,23 +27,19 @@
         android:orientation="horizontal">
 
         <!-- Primeiro layout com quadrado que tem as horas-->
-        <RelativeLayout
-            android:id="@+id/linear_layout_list_bus_square"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
             <!-- Texto que exibe horário do ônibus -->
             <TextView
                 android:id="@+id/item_list_textview_horario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/example_hours"
                 android:textColor="@color/white"
-                android:textAppearance="@style/AppTheme.TextAppearance.Display2.Mono" />
+                style="@style/ItemBusTime" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <!-- Segundo Layout com o resto de informações -->
         <LinearLayout
@@ -53,29 +48,17 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingLeft="10dp">
+            android:paddingLeft="16dp">
 
             <TextView
                 android:id="@+id/item_list_textview_codigo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/example_codigo_da_linha"
-                android:textAppearance="@style/AppTheme.TextAppearance.Code"
+                style="@style/ItemBusCode"
                 android:textColor="@color/colorAccent" />
 
             <TextView
                 android:id="@+id/item_list_textview_descricao_do_codigo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:fadingEdge="horizontal"
-                android:fadingEdgeLength="20dp"
-                android:focusable="false"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:singleLine="true"
-                android:textAppearance="@style/AppTheme.TextAppearance.DescritionCode"
-                android:textColor="@color/md_white_1000"
-                android:textColorHighlight="#FFFFFF" />
+                style="@style/ItemBusCodeDescription"
+                android:textColor="@color/md_white_1000" />
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatImageView
