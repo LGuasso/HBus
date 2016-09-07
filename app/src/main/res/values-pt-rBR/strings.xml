@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HBus</string>
-    <string name="choose_line">Escolha a linha</string>
-    <string name="choose_local">Escolha o local</string>
     <string name="action_settings">Configurações</string>
     <string name="view_line_timetable">Olhar horários da linha</string>
     <string name="title_activity_list_line">Horários da linha</string>
@@ -11,23 +9,18 @@
     <string name="sunday">Domingo</string>
     <string name="business_days">Dias úteis</string>
     <string name="bus_code">Código do ônibus</string>
-    <string name="no_bus">Não existe ônibus neste dia!</string>
-    <string name="choose_the_way">Escolha o sentido</string>
     <string name="next_bus">Próximo ônibus</string>
     <string name="all_lines">Todos itinerários</string>
     <string name="bookmarks">Favoritos</string>
     <string name="add_bookmark">Adicionar favorito</string>
     <string name="added_bookmark_itinerary_with_sucess">Adicionado itinerário favorito com sucesso!</string>
-    <string name="deleted_itinerary_with_sucess">Deletado itinerário %1$s com sucesso!</string>
     <string name="action_delete">Deletar</string>
     <string name="itinerary_name">Nome do itinerário</string>
-    <string name="action_skip">Pular</string>
     <string name="action_next">Próximo</string>
     <string name="title_activity_load">Tela inicial</string>
     <string name="finish">Finalizar</string>
     <string name="title_activity_choose_city">Selecione cidade</string>
     <string name="title_activity_splash"></string>
-    <string name="line_not_found">Não encontrado</string>
     <string name="no_bookmarked_itinerary">Não há itinerários favoritos</string>
     <string name="pref_title_active_debug_mode">Ativar o modo de depuração</string>
     <string name="action_remove">Remover</string>
@@ -36,12 +29,8 @@
     <string name="city_not_found">Não há cidade</string>
     <string name="about">Sobre</string>
     <string name="dialog_alert_title_confirm_remove">Remover itinerário favorito?</string>
-    <string name="confirm_city_data_download">Baixar informações para cidade %1$s?</string>
     <string name="action_help">Ajuda e feedback</string>
-    <string name="action_version_information">Informações sobre a versão</string>
     <string name="action_send_feedback">Enviar feedback</string>
-    <string name="company">2016 Expresso Bits</string>
-    <string name="see_it_on_play_store">Ver na Play Store</string>
     <string name="send_feedback">Enviar feedback</string>
     <string name="title_activity_feedback">Feedback</string>
     <string name="version">Versão</string>
@@ -50,7 +39,6 @@
     <string name="downloading_data">Baixando dados para cidade de %1$s</string>
     <string name="include_system_information">Incluir informações sobre o sistema</string>
     <string name="wait_a_few_minutes">Aguarde alguns minutos</string>
-    <string name="recent_buses">Ônibus recentes</string>
     <string name="action_refresh">Atualizar</string>
     <string name="action_refresh_cities_list">Atualizar lista de cidades</string>
     <string name="city">Cidade</string>
@@ -60,15 +48,9 @@
     <string name="add_itinerary">Adicionar itinerário</string>
     <string name="all_itineraries">Todos itinerários</string>
     <string name="view_all_itineraries">Ver todos ititnerários</string>
-    <string name="lines_load_with_sucess"></string>
-    <string name="bus_codes_loaded_with_sucess"></string>
     <string name="itineraries_loaded_with_sucess">Os itinerários foram sincronizados</string>
-    <string name="all_itinerary">Todos itinerários</string>
     <string name="see_all_itinerary">Ver todos itinerários</string>
-    <string name="load_online_buses_with_sucess"></string>
-    <string name="load_online_codes_with_sucess"></string>
-    <string name="load_online_itineraries_with_sucess">Os itinerários foram sincronizados</string>
-    <string-array name="feedback_list">
+    <string-array name="list_feedbacks">
         <item>Dica</item>
         <item>Erro</item>
         <item>Atualização</item>
@@ -83,13 +65,10 @@
     <string name="saturdayFirstChar">S</string>
     <string name="fridayFirstChar">S</string>
     <string name="mondayFirstChar">S</string>
-    <string name="alarm_disabled">%1$s desativado!</string>
-    <string name="alarm_enabled">%1$s ativado!</string>
     <string name="alarm">Alarme</string>
     <string name="alarm_added">Alarme adicionado</string>
     <string name="alarm_removed">Alarme desativado</string>
     <string name="action_save">Salvar</string>
-    <string name="new_alarm_was_added_with_sucess">Adicionado novo alarme com sucesso!</string>
     <string name="alarm_name">Nome do alarme</string>
     <string name="new_alarm">Novo alarme</string>
     <string name="name">Nome</string>
@@ -119,7 +98,7 @@
     <string name="pref_title_no_actived_itens">Procurar empresas e cidades não terminadas</string>
     <string name="updated_date">Última atualização %1$s</string>
     <string name="coming_soon">Em breve!</string>
-    <string name="action_sign_in"></string>
+    <string name="action_sign_in">Logar ou registrar</string>
     <string name="or">Ou</string>
     <string name="sign_in_anonymously">Continuar sem logar</string>
     <string name="exit">Sair</string>
@@ -139,4 +118,24 @@
     <string name="alarm_notification_title">%1$s parte às %2$s</string>
     <string name="alarm_notification_body">Sentido %1$s</string>
     <string name="notifications_about_a_bus">Notificações dos alarmes de itinerários</string>
+    <string name="action_informations_of_version">Informações sobre a versão</string>
+    <string name="action_jump">Pular</string>
+    <string name="action_sign_in_short">Logar</string>
+    <string name="add_new_alarm_with_sucess">Adicionado novo alarme com sucesso!</string>
+    <string name="after_10_minutes">10 minutos depois</string>
+    <string name="after_5_minutes">5 minutos depois</string>
+    <string name="alarm_disable">%1$s desativado!</string>
+    <string name="alarm_enable">%1$s ativado!</string>
+    <string name="before_10_minutes">10 minutos depois</string>
+    <string name="before_5_minutes">5 minutos depois</string>
+    <string name="code_of_bus">Código do ônibus</string>
+    <string name="company_market">2016 Expresso Bits</string>
+    <string name="delete_itinerary_with_sucess">Deletado itinerário %1$s com sucesso!</string>
+    <string name="error_load_city">Erro ao carregar cidade.</string>
+    <string name="no_have_bus">Não existe ônibus neste dia!</string>
+    <string name="recent_buses">Ônibus recentes</string>
+    <string name="see_on_play_store">Ver na Play Store</string>
+    <string name="send_feedback_with_sucess">Enviado feedback com sucesso!</string>
+    <string name="title_activity_login">Logar</string>
+    <string name="updated_alarm_with_sucess">Atualizado alarme com sucesso!</string>
 </resources>

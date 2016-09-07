@@ -104,7 +104,6 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewLines.setLayoutManager(llmUseful);
-        updateListViews();
 
     }
 
@@ -145,7 +144,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                         dao.removeFavorite(itinerary);
                         FavoritesItineraryFragment.this.initListViews(FavoritesItineraryFragment.this.view);
                         updateEmptyListView();
-                        String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
+                        String result = getActivity().getResources().getString(R.string.delete_itinerary_with_sucess,itinerary.getName());
                         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
                             Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
                         }

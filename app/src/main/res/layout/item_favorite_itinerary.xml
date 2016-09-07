@@ -101,7 +101,7 @@
                         style="@style/AppTheme.Button.Borderless.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/look_times"/>
+                        android:text="@string/view_timetable"/>
                     <Button
                         android:id="@+id/buttonRemove"
                         style="@style/AppTheme.Button.Borderless.Colored"

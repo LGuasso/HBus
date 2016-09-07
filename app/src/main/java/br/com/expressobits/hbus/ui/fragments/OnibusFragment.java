@@ -112,7 +112,7 @@ public class OnibusFragment extends Fragment{
         hoursFragmentSunday.setArguments(argsSunday);
 
         viewPagerAdapter.addFragment(hoursFragmentUseful,
-                getString(R.string.useful));
+                getString(R.string.business_days));
         viewPagerAdapter.addFragment(hoursFragmentSaturday,
                 getString(R.string.saturday));
         viewPagerAdapter.addFragment(hoursFragmentSunday,

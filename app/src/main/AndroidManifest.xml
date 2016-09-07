@@ -88,7 +88,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.settings.SelectCityActivity"
-            android:label="@string/title_activity_select_city"
+            android:label="@string/title_activity_choose_city"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

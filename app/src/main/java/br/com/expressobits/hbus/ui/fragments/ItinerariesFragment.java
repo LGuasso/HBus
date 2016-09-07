@@ -227,7 +227,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
                     Snackbar.make(
                             view,
-                            getResources().getString(R.string.added_favorite_itinerary_with_sucess),
+                            getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
                             Snackbar.LENGTH_LONG).show();
                 }
 
