@@ -11,10 +11,12 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import br.com.expressobits.hbus.model.Alarm;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.Code;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,13 +24,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
@@ -56,7 +57,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
 
     public ItemBusAdapter(Context context, List<Bus> listBus){
         this.context = context;
-        Pair<Integer,List<Bus>> pair = HoursUtils.sortByTimeBus(listBus);
+        Pair<Integer,List<Bus>> pair = sortByTimeBus(listBus);
         //Pair<Integer,List<Bus>> pair = new Pair<>(0,listBus);
         this.listBus = pair.second;
         this.countLastBus = pair.first;
@@ -280,5 +281,65 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
             }
 
         }
+    }
+
+    public static Pair<Integer,List<Bus>> sortByTimeBus(List<Bus> busList){
+
+        //Collections.sort(busList);
+        Bus bus = new Bus();
+        bus.setTime(Calendar.getInstance().getTimeInMillis());
+        List<Bus> busFinal = new ArrayList<>();
+        ArrayList<Bus> twoLastBuses = new ArrayList<>();
+        ArrayList<Bus> lastBuses = new ArrayList<>();
+        ArrayList<Bus> nextBuses = new ArrayList<>();
+
+        int countTwoLast;
+
+        for (int i=0;i<busList.size();i++){
+            if(HoursUtils.getHour(busList.get(i).getTime())>HoursUtils.getHour(bus.getTime())){
+                nextBuses.add(busList.get(i));
+            }else if(HoursUtils.getHour(busList.get(i).getTime())<HoursUtils.getHour(bus.getTime())){
+                lastBuses.add(busList.get(i));
+
+            }else{
+                if(HoursUtils.getMinute(busList.get(i).getTime())>=HoursUtils.getMinute(bus.getTime())){
+                    nextBuses.add(busList.get(i));
+                }else if(HoursUtils.getMinute(busList.get(i).getTime())<HoursUtils.getMinute(bus.getTime())) {
+                    lastBuses.add(busList.get(i));
+                }
+            }
+        }
+
+        if(lastBuses.size()>1){
+            Bus bus2 = lastBuses.get(lastBuses.size() - 2);
+            Bus bus1 = lastBuses.get(lastBuses.size() - 1);
+            twoLastBuses.add(bus2);
+            lastBuses.remove(bus2);
+            //Tem que ser invertido para aparecer embaixo o mais recente
+            twoLastBuses.add(bus1);
+            lastBuses.remove(bus1);
+
+        }else if(lastBuses.size()>0){
+            Bus bus1 = lastBuses.get(lastBuses.size() - 1);
+            twoLastBuses.add(bus1);
+            lastBuses.remove(bus1);
+        }
+
+        countTwoLast = twoLastBuses.size();
+
+
+        for(Bus bus1 : twoLastBuses){
+            busFinal.add(bus1);
+        }
+
+        for(Bus bus1 : nextBuses){
+            busFinal.add(bus1);
+        }
+
+        for(Bus bus1 : lastBuses){
+            busFinal.add(bus1);
+        }
+
+        return new Pair<>(countTwoLast,busFinal);
     }
 }

@@ -13,11 +13,11 @@ import java.util.List;
 
 import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.dao.CodeContract;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.model.Itinerary;
+import hbus.model.Bus;
+import hbus.model.City;
+import hbus.model.Code;
+import hbus.model.Company;
+import hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.HoursUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.model.News;
-import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
  * Created by rafael on 21/08/16.

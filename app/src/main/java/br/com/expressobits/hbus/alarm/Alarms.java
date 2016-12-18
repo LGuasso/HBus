@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import br.com.expressobits.hbus.model.Alarm;
-import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * @author Rafael Correa
@@ -20,7 +19,7 @@ public class Alarms {
     /* TODO colocar isto como setttings */
     public static final int MINUTE_OF_VALIDATE_ALARM = 30;
 
-    public static void saveAlarmInManager(Alarm alarm,Context context){
+    public static void saveAlarmInManager(Alarm alarm, Context context){
         Intent alarmIntent = new Intent(context,AlarmReceiver.class);
         alarmIntent.setData(Uri.parse("custom://" + alarm.getId()));
         alarmIntent.setAction(String.valueOf(alarm.getId()));

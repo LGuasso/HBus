@@ -1,9 +1,7 @@
 package br.com.expressobits.hbusgenerator;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,9 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.model.News;
+import hbus.model.City;
+import hbus.model.Company;
+import hbus.model.News;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 public class NewsEditorActivity extends AppCompatActivity implements View.OnClickListener {

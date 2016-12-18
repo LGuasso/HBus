@@ -21,8 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.News;
+import hbus.model.City;
+import hbus.model.News;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 public class NewsListActivity extends AppCompatActivity  implements View.OnClickListener,

@@ -1,15 +1,5 @@
 package br.com.expressobits.hbus.utils;
 
-import android.util.Log;
-
-import br.com.expressobits.hbus.dao.CityContract;
-import br.com.expressobits.hbus.dao.CodeContract;
-import br.com.expressobits.hbus.dao.ItineraryContract;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.model.Itinerary;
-
 /**
  * @author Rafael
  * @since 19/01/16
@@ -63,10 +53,6 @@ public class FirebaseUtils {
 
     public static String getIdBus(String country,String city,String company,String itinerary,String way,String typeday,String time){
         return BARS+country+BARS+city+BARS+company+BARS+itinerary+BARS+way+BARS+typeday+BARS+time;
-    }
-
-    public static String getIdCityforItinerary(City city){
-        return BARS+ CityContract.City.TABLE_NAME+BARS+city.getCountry()+BARS+city.getName();
     }
 
 

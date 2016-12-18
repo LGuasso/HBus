@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import java.util.List;
 
 import br.com.expressobits.hbus.file.ReadFileCloud;
-import br.com.expressobits.hbus.model.City;
+import hbus.model.City;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{

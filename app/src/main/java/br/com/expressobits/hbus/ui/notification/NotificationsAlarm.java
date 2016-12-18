@@ -26,7 +26,6 @@ import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
-import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
