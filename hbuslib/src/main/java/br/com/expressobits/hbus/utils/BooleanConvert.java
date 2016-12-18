@@ -1,11 +1,11 @@
 package br.com.expressobits.hbus.utils;
 
-import android.util.Log;
 
 /**
  * @author Rafael Correa
  * @since 03/04/16
  */
+/* TODO REMOVER ESSA CLASSE E ENCAPSULAR O METODO NO PROJETO */
 public class BooleanConvert {
 
     public static boolean IntegerToBoolean(Integer i){
@@ -14,7 +14,6 @@ public class BooleanConvert {
         }else if(i==0){
             return false;
         }else {
-            Log.e("BooleanType","ALGO DE ERRADO!!!!  "+(i));
             return false;
         }
     }

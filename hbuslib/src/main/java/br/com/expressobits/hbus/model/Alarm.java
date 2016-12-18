@@ -1,7 +1,5 @@
 package br.com.expressobits.hbus.model;
 
-import java.util.List;
-
 /**
  * @author Rafael
  * @since 29/03/16

@@ -20,7 +20,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import br.com.expressobits.hbus.R;

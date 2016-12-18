@@ -8,8 +8,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Company;
+import hbus.model.City;
+import hbus.model.Company;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**

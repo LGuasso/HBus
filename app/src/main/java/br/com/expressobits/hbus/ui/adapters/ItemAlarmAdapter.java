@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -18,7 +17,6 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.HoursUtils;
 

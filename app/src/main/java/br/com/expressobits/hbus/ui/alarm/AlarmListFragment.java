@@ -18,7 +18,6 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.adapters.ItemAlarmAdapter;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
-import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;

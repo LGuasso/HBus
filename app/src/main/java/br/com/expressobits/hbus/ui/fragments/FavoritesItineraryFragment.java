@@ -25,7 +25,6 @@ import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemFavoriteItineraryAdapter;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
-import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
