@@ -2,11 +2,9 @@ package br.com.expressobits.hbusgenerator;
 
 import android.content.Context;
 
-import java.util.List;
-
 import br.com.expressobits.hbus.dao.BusDAOGenerator;
 import br.com.expressobits.hbus.file.ReadFileCloud;
-import br.com.expressobits.hbus.model.City;
+import hbus.model.City;
 
 /**
  * @author Rafael

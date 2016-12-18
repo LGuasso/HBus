@@ -1,7 +1,6 @@
 package br.com.expressobits.hbus.model;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author Rafael Correa

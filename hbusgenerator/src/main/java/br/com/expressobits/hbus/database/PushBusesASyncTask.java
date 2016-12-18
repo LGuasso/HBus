@@ -8,16 +8,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
 import java.util.List;
 
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.utils.BusUtils;
+import hbus.model.Bus;
+import hbus.model.City;
+import hbus.model.Company;
+import hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**
  * @author Rafael Correa

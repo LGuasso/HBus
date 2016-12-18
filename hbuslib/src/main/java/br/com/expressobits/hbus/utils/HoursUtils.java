@@ -1,21 +1,11 @@
 package br.com.expressobits.hbus.utils;
 
-import android.util.Log;
-import android.util.Pair;
-
-import org.jetbrains.annotations.Contract;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.TypeDay;
 
 /**
@@ -103,7 +93,6 @@ public class HoursUtils {
         String  time;
         time = cal.get(Calendar.HOUR_OF_DAY)+":";
         time+=cal.get(Calendar.MINUTE);
-        Log.d(TAG,"Criado texto com atual hora "+time);
         return time;
     }
 
@@ -117,7 +106,6 @@ public class HoursUtils {
             cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.split(":")[0]));
             cal.set(Calendar.MINUTE,Integer.parseInt(time.split(":")[1]));
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            Log.d(TAG,"Criado calendar com atual hora "+time+" = "+sdf.format(cal.getTime()));
             return cal;
         }else{
             return null;
@@ -126,65 +114,7 @@ public class HoursUtils {
     }
 
 
-    public static Pair<Integer,List<Bus>> sortByTimeBus(List<Bus> busList){
 
-        //Collections.sort(busList);
-        Bus bus = new Bus();
-        bus.setTime(Calendar.getInstance().getTimeInMillis());
-        List<Bus> busFinal = new ArrayList<>();
-        ArrayList<Bus> twoLastBuses = new ArrayList<>();
-        ArrayList<Bus> lastBuses = new ArrayList<>();
-        ArrayList<Bus> nextBuses = new ArrayList<>();
-
-        int countTwoLast;
-
-        for (int i=0;i<busList.size();i++){
-            if(getHour(busList.get(i).getTime())>getHour(bus.getTime())){
-                nextBuses.add(busList.get(i));
-            }else if(getHour(busList.get(i).getTime())<getHour(bus.getTime())){
-                    lastBuses.add(busList.get(i));
-
-            }else{
-                if(getMinute(busList.get(i).getTime())>=getMinute(bus.getTime())){
-                    nextBuses.add(busList.get(i));
-                }else if(getMinute(busList.get(i).getTime())<getMinute(bus.getTime())) {
-                        lastBuses.add(busList.get(i));
-                }
-            }
-        }
-
-        if(lastBuses.size()>1){
-            Bus bus2 = lastBuses.get(lastBuses.size() - 2);
-            Bus bus1 = lastBuses.get(lastBuses.size() - 1);
-            twoLastBuses.add(bus2);
-            lastBuses.remove(bus2);
-            //Tem que ser invertido para aparecer embaixo o mais recente
-            twoLastBuses.add(bus1);
-            lastBuses.remove(bus1);
-
-        }else if(lastBuses.size()>0){
-            Bus bus1 = lastBuses.get(lastBuses.size() - 1);
-            twoLastBuses.add(bus1);
-            lastBuses.remove(bus1);
-        }
-
-        countTwoLast = twoLastBuses.size();
-
-
-        for(Bus bus1 : twoLastBuses){
-            busFinal.add(bus1);
-        }
-
-        for(Bus bus1 : nextBuses){
-            busFinal.add(bus1);
-        }
-
-        for(Bus bus1 : lastBuses){
-            busFinal.add(bus1);
-        }
-
-        return new Pair<>(countTwoLast,busFinal);
-    }
 
     /**public static int getHour(Bus bus){
         return Integer.parseInt(bus.getTime().split(":")[0]);
@@ -228,15 +158,12 @@ public class HoursUtils {
      */
     public static boolean isValidAlarm(Calendar c,Calendar cAlarm,int minutesTolerados){
         if(c.compareTo(cAlarm)>-1){
-            Log.d(TAG,"now calendar is actual to cAlarm!");
             cAlarm.add(Calendar.MINUTE,minutesTolerados);
             if(c.compareTo(cAlarm)<1){
                 return true;
             }else{
-                Log.d(TAG,"now calendar is NOT actual to cAlarm+minutesTolerance!");
             }
         }
-        Log.d(TAG,"now calendar not is actual to cAlarm!");
         return false;
     }
 

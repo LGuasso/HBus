@@ -6,7 +6,8 @@ import java.util.List;
 import br.com.expressobits.hbus.model.Bus;
 
 /**
- * Created by rafael on 07/06/16.
+ * @author Rafael Correa
+ * @since 07/06/16
  */
 public class BusUtils {
 

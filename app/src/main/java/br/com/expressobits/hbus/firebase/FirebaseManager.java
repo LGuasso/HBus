@@ -2,7 +2,6 @@ package br.com.expressobits.hbus.firebase;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.util.Pair;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -11,9 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;

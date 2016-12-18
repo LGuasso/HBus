@@ -1,6 +1,5 @@
 package br.com.expressobits.hbusgenerator;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,20 +22,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.database.PushBusesASyncTask;
 import br.com.expressobits.hbus.database.PushCitiesASyncTask;
 import br.com.expressobits.hbus.database.PushCodesASyncTask;
 import br.com.expressobits.hbus.database.PushCompaniesASyncTask;
 import br.com.expressobits.hbus.database.PushItinerariesASyncTask;
 import br.com.expressobits.hbus.file.ReadFile;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.utils.DAOUtils;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
+import hbus.model.Bus;
+import hbus.model.City;
+import hbus.model.Code;
+import hbus.model.Company;
+import hbus.model.Itinerary;
 
 public class FirebaseActivity extends AppCompatActivity implements
         View.OnClickListener,CompoundButton.OnCheckedChangeListener{
@@ -197,17 +192,8 @@ public class FirebaseActivity extends AppCompatActivity implements
         }
     }
 
-    private void pushItinerary(City city, Company company, Itinerary itinerary) {
-        push(city, company, itinerary);
-        HashMap<Itinerary, List<Bus>> busList = buses.get(city).get(company);
-        List<Bus> busLited = busList.get(itinerary);
-        if (busLited == null) {
-            Log.e("FIREBASE", "\t\t\tbusLited null!" + itinerary.getName());
-        } else {
-            push(city, company, itinerary, busLited);
-            Log.d("FIREBASE", "\t\t\tbusLited size!" + busLited.size());
-        }
-    }
+
+
 
     private void push(City city) {
         PushCitiesASyncTask pushCitiesASyncTask = new PushCitiesASyncTask();

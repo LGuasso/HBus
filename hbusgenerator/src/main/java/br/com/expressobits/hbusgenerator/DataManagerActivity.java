@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import br.com.expressobits.hbus.file.ReadFileCloud;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Itinerary;
+import hbus.model.Bus;
+import hbus.model.City;
+import hbus.model.Code;
+import hbus.model.Itinerary;
 
 /**
  * @deprecated

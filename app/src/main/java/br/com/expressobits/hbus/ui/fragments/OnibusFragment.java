@@ -6,21 +6,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.TypeDay;
-import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.utils.HoursUtils;
 
 /**

@@ -22,7 +22,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +36,10 @@ import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemItineraryAdapter;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import br.com.expressobits.hbus.utils.DAOUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
- * Fragmento que exibe todos {@link br.com.expressobits.hbus.model.Itinerary}
+ * Fragmento que exibe todos {@link hbus.model.Itinerary}
  *
  * <p>Tem comportamento de Callback do fragmento com Activity {@link br.com.expressobits.hbus.ui.MainActivity}</p>
  *
