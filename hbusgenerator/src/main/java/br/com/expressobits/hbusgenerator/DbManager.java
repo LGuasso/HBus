@@ -4,7 +4,6 @@ import android.content.Context;
 
 import br.com.expressobits.hbus.dao.BusDAOGenerator;
 import br.com.expressobits.hbus.file.ReadFileCloud;
-import hbus.model.City;
 
 /**
  * @author Rafael
