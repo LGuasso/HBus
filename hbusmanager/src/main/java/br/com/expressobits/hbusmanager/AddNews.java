@@ -26,6 +26,7 @@ public class AddNews extends JFrame {
 
     private String country = "BR/RS";
     private ArrayList<String> imagesUrls = new ArrayList<>();
+    private News news;
 
     private JPanel panelMain;
     private JTextField textFieldTitle;
@@ -44,24 +45,61 @@ public class AddNews extends JFrame {
 
 
     public AddNews() {
+        this(null);
+    }
+
+    public AddNews(News news) {
+        this(null, null, news);
+
+    }
+
+    /**
+     * Construtor que abre edição de notícia da cidade.
+     *
+     * @param city
+     * @param country
+     * @param news
+     */
+    public AddNews(String country, City city, News news) {
+        this.news = news;
+        if (this.news != null) {
+            textFieldTitle.setText(news.getTitle());
+            textFieldSubtitle.setText(news.getSubtitle());
+            textFieldSource.setText(news.getSource());
+            textAreaBody.setText(news.getBody());
+            checkBoxActived.setSelected(news.isActived());
+        } else {
+
+            news = new News();
+            news.setTime(System.currentTimeMillis());
+        }
+
+        if (city != null && country != null) {
+            checkBoxCity.setSelected(true);
+            loadCities(country, city);
+        }
+
         this.setTitle("Add News");
-        this.setSize(400, 400);
+        this.setSize(800, 600);
         this.setContentPane(panelMain);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
         //this.pack();
         this.setVisible(true);
+
+
+        JLabelTime.setText(String.valueOf(news.getTime()));
         buttonSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 saveNews();
             }
         });
-        JLabelTime.setText(String.valueOf(System.currentTimeMillis()));
         checkBoxCity.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent itemEvent) {
                 if (checkBoxCity.isSelected()) {
-                    loadCities();
+                    //loadCities();
                 }
 
                 spinnerCity.setEnabled(checkBoxCity.isSelected());
@@ -87,6 +125,7 @@ public class AddNews extends JFrame {
         });
     }
 
+
     private void saveNews() {
         News news = new News();
         news.setTime(Long.parseLong(JLabelTime.getText()));
@@ -104,10 +143,9 @@ public class AddNews extends JFrame {
             //General news
             SendNewsToFirebase.sendToFirebase(news);
         }
-
     }
 
-    private void loadCities() {
+    private void loadCities(String country, City city) {
         ArrayList<City> cities = new ArrayList<>();
         CountryFromFirebase.getDatabaseReference(country).addValueEventListener(new ValueEventListener() {
             @Override
@@ -117,7 +155,7 @@ public class AddNews extends JFrame {
                     cities.add(city);
                     System.out.println(city.getName());
                 }
-                updateSpinner(cities);
+                updateSpinner(city, cities);
 
             }
 
@@ -128,9 +166,11 @@ public class AddNews extends JFrame {
         });
     }
 
-    private void updateSpinner(ArrayList<City> cities) {
+    private void updateSpinner(City city, ArrayList<City> cities) {
         SpinnerListModel citiesModel = new SpinnerListModel(cities);
         spinnerCity.setModel(citiesModel);
+        //spinnerCity.s
+
     }
 
 

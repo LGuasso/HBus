@@ -66,6 +66,6 @@ public class City {
 
     @Override
     public String toString() {
-        return getName()+" - "+getCountry();
+        return getName();
     }
 }

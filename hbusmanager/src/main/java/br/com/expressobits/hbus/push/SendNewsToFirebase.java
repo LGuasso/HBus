@@ -27,8 +27,7 @@ public class SendNewsToFirebase {
 
     public static void sendToFirebase(News news){
         DatabaseReference topRef = getDatabaseReference();
-        DatabaseReference generalTableRef = topRef.child(FirebaseUtils.GENERAL);
-        DatabaseReference newsRef = generalTableRef.child(String.valueOf(news.getTime()));
+        DatabaseReference newsRef = topRef.child(String.valueOf(news.getTime()));
         newsRef.setValue(news, (DatabaseError de, DatabaseReference dr) -> {
             System.out.println("PUSH "+TABLE_NAME+" "+news.getTime());
         });
@@ -49,8 +48,11 @@ public class SendNewsToFirebase {
         DatabaseReference ref = FirebaseDatabase
                 .getInstance()
                 .getReference(TABLE_NAME);
-        return ref;
+
+        DatabaseReference generalTableRef = ref.child(FirebaseUtils.GENERAL);
+        return generalTableRef;
     }
+
 
     /**public static void removeAllValues(City city){
         DatabaseReference cityRef = getDatabaseReference(city);
