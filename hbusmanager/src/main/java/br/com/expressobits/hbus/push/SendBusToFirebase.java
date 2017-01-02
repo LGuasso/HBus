@@ -48,11 +48,14 @@ public class SendBusToFirebase {
         return cityRef;
     }
 
-    public static void removeAllValues(City city){
+    public static void removeAllValues(City city,RemoveListener removeListener){
         DatabaseReference cityRef = getDatabaseReference(city);
         cityRef.removeValue(new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError de, DatabaseReference dr) {
+                if(removeListener!=null){
+                    removeListener.removeSucess("Remove all "+TABLE_NAME+" values of "+city.getName());
+                }
                 System.out.println("REMOVED ALL VALUES");
             }
         });

@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/hbuslib/hbuslib.iml" filepath="$PROJECT_DIR$/hbuslib/hbuslib.iml" />
       <module fileurl="file://$PROJECT_DIR$/hbusmanager/hbusmanager.iml" filepath="$PROJECT_DIR$/hbusmanager/hbusmanager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/hbuslib/model.iml" filepath="$PROJECT_DIR$/hbuslib/model.iml" />
     </modules>
   </component>
 </project>

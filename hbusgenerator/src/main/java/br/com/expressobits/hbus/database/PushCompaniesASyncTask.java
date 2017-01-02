@@ -8,9 +8,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 import hbus.model.City;
 import hbus.model.Company;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * @author Rafael Correa

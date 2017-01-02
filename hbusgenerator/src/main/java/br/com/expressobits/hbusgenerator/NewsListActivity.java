@@ -1,8 +1,8 @@
 package br.com.expressobits.hbusgenerator;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 import hbus.model.City;
 import hbus.model.News;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 public class NewsListActivity extends AppCompatActivity  implements View.OnClickListener,
         AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener{

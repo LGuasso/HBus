@@ -27,7 +27,7 @@ public class MainTest {
         City city = sendData.readData("BR/RS","Cruz Alta");
         sendData.pushCity(city);
         JOptionPane.showMessageDialog(null,"Aguarde!");*/
-        NewsManager newsManager = new NewsManager();
+        HBusManager hBusManager = new HBusManager();
 
 
     }
