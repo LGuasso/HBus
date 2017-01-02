@@ -17,7 +17,7 @@ public class SendCompanyToFirebase {
 
     public static final String TABLE_NAME = FirebaseUtils.COMPANY_TABLE;
 
-    public static void sendToFirebase(City city,Company company){
+    public static void sendToFirebase(City city, Company company){
         DatabaseReference cityRef = getDatabaseReference(city);
         DatabaseReference companyRef = cityRef.child(company.getName());
         companyRef.setValue(company, (DatabaseError de, DatabaseReference dr) -> {
@@ -35,11 +35,14 @@ public class SendCompanyToFirebase {
         return cityRef;
     }
 
-    public static void removeAllValues(City city){
+    public static void removeAllValues(City city,RemoveListener removeListener){
         DatabaseReference cityRef = getDatabaseReference(city);
         cityRef.removeValue(new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError de, DatabaseReference dr) {
+                if(removeListener!=null){
+                    removeListener.removeSucess("Remove all Companies values of "+city.getName());
+                }
                 System.out.println("REMOVED ALL VALUES");
             }
         });
