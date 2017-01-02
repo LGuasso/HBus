@@ -80,6 +80,7 @@ public class ReadFile {
     public Bus toBus(String text){
         Bus bus = new Bus();
         bus.setTime(HoursUtils.getTimeInCalendar(text.split(SPLIT_FILE_TIMES)[0]).getTimeInMillis());
+
         try{
             bus.setCode(text.split(SPLIT_FILE_TIMES)[1]);
         }catch (Exception e){
@@ -138,10 +139,17 @@ public class ReadFile {
                             TextUtils.toSimpleNameFile(itinerary.getName()) + BARS +
                             TextUtils.toSimpleNameWay(way) + "_" + TextUtils.getTypeDayInt(i) + FORMAT
                     )){
-                        Bus bus = toBus(text);
-                        bus.setWay(way);
-                        bus.setTypeday(TextUtils.getTypeDayInt(i));
-                        buses1.add(bus);
+                        try{
+                            Bus bus = toBus(text);
+                            bus.setWay(way);
+                            bus.setTypeday(TextUtils.getTypeDayInt(i));
+                            buses1.add(bus);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            System.out.println("Erro ao transformar bus "+itinerary.getName()+" "+way+" "+TextUtils.getTypeDayInt(i));
+                            System.exit(1);
+                        }
+
                     }
                 }
             }
