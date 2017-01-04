@@ -5,14 +5,14 @@
 105;Vila Rancho x Bairro Brum I
 106;Polivalente x Vila Izel
 107;Vila Militar x Vila Toríbio Veríssimo
-108;Vila Izabel  x Polivalente
-109;Bairro São Jorge  x Bairro Educacional
+108;Vila Izabel x Polivalente
+109;Bairro São Jorge x Bairro Educacional
 110;Bairro Fátima x Praça da Cátedral
 111;São Vicente x Bairro Fátima
 112;Bairro de Fátima x Hospital São Vicente
 113;Santa Tereza II x Abegay
-114;Abegay  x  Sta Tereza II
-115;Penha  x  Bairro Brum II
+114;Abegay x Sta Tereza II
+115;Penha x Bairro Brum II
 116;Vila Progresso x Bairro São Miguel
 118;Vila Santa Rita x Bairro Educacional
 119;Rodoviária x Hospital São Vicente
@@ -20,3 +20,4 @@
 121;Linha Campus
 123;Acelino Flores x Bairro Fátima
 102F;Sai das Flores - Vila Rancho x Vila Militar
+109F;
