@@ -93,10 +93,13 @@ public class HBusManager extends JFrame implements RemoveListener {
         buttonRemoveCompanies.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                int result = JOptionPane.showConfirmDialog(null, "Confirme a remoção?",
+                System.out.println("remove company");
+                int result = JOptionPane.showConfirmDialog(HBusManager.this, "Confirme a remoção?",
                         "Remover?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
                     SendCompanyToFirebase.removeAllValues(sendData.getCities().get(comboBoxCities.getSelectedIndex()), HBusManager.this);
+                } else {
+                    System.out.println("Result fail " + result);
                 }
             }
         });

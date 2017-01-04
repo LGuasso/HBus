@@ -26,7 +26,7 @@ public class ReadFile {
     private static final String BARS = "/";
     private static final String SPLIT_FILE = ";";
     private static final String SPLIT_FILE_SECONDARY = ",";
-    private static final String SPLIT_FILE_TIMES = "\t-\t";
+    private static final String SPLIT_FILE_TIMES = ",";
     private static final String CITIES_FILE = "cities.dat";
     private static final String ITINERARIES_FILE = "itineraries.dat";
     private static final String COMPANIES_FILE = "companies.dat";
@@ -54,7 +54,8 @@ public class ReadFile {
         company.setName(text.split(SPLIT_FILE)[1]);
         company.setEmail(text.split(SPLIT_FILE)[2]);
         company.setWebsite(text.split(SPLIT_FILE)[3]);
-        company.setPhoneNumber(text.split(SPLIT_FILE)[3]);
+        company.setPhoneNumber(text.split(SPLIT_FILE)[4]);
+        company.setAddress(text.split(SPLIT_FILE).length<6?"":text.split(SPLIT_FILE)[5]);
         return company;
     }
 
@@ -103,7 +104,13 @@ public class ReadFile {
     public List<Company> getCompanies(City city){
         List<Company> companies = new ArrayList<>();
         for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+COMPANIES_FILE)){
-            companies.add(toCompany(text));
+            try{
+                companies.add(toCompany(text));
+            }catch (Exception e){
+                System.err.println("Erro ao converter compania "+text);
+                e.printStackTrace();
+            }
+
         }
         return companies;
     }
@@ -133,25 +140,30 @@ public class ReadFile {
 
             List<Bus> buses1 = new ArrayList<>();
             for(String way:itinerary.getWays()){
-                for(int i=0;i<3;i++){
-                    for(String text:readFile(city.getCountry() + BARS +
-                            city.getName() + BARS +company.getName()+BARS+
-                            TextUtils.toSimpleNameFile(itinerary.getName()) + BARS +
-                            TextUtils.toSimpleNameWay(way) + "_" + TextUtils.getTypeDayInt(i) + FORMAT
-                    )){
-                        try{
-                            Bus bus = toBus(text);
-                            bus.setWay(way);
-                            bus.setTypeday(TextUtils.getTypeDayInt(i));
-                            buses1.add(bus);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            System.out.println("Erro ao transformar bus "+itinerary.getName()+" "+way+" "+TextUtils.getTypeDayInt(i));
-                            System.exit(1);
-                        }
+                if(itinerary.getWays().size()==1&&way.equals("")){
+                    System.err.println(">>>"+itinerary.getName().toUpperCase()+" NAO EXISTE WAYS!");
+                }else{
+                    for(int i=0;i<3;i++){
+                        for(String text:readFile(city.getCountry() + BARS +
+                                city.getName() + BARS +company.getName()+BARS+
+                                TextUtils.toSimpleNameFile(itinerary.getName()) + BARS +
+                                TextUtils.toSimpleNameWay(way) + "_" + TextUtils.getTypeDayInt(i) + FORMAT
+                        )){
+                            try{
+                                Bus bus = toBus(text);
+                                bus.setWay(way);
+                                bus.setTypeday(TextUtils.getTypeDayInt(i));
+                                buses1.add(bus);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                System.out.println("Erro ao transformar bus "+itinerary.getName()+" "+way+" "+TextUtils.getTypeDayInt(i));
+                                System.exit(1);
+                            }
 
+                        }
                     }
                 }
+
             }
             buses.put(itinerary, buses1);
 
