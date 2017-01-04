@@ -55,7 +55,7 @@ public class ReadFile {
         company.setEmail(text.split(SPLIT_FILE)[2]);
         company.setWebsite(text.split(SPLIT_FILE)[3]);
         company.setPhoneNumber(text.split(SPLIT_FILE)[4]);
-        company.setAddress(text.split(SPLIT_FILE)[5]);
+        company.setAddress(text.split(SPLIT_FILE).length<6?"":text.split(SPLIT_FILE)[5]);
         return company;
     }
 
@@ -104,7 +104,13 @@ public class ReadFile {
     public List<Company> getCompanies(City city){
         List<Company> companies = new ArrayList<>();
         for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+COMPANIES_FILE)){
-            companies.add(toCompany(text));
+            try{
+                companies.add(toCompany(text));
+            }catch (Exception e){
+                System.err.println("Erro ao converter compania "+text);
+                e.printStackTrace();
+            }
+
         }
         return companies;
     }
