@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import br.com.expressobits.hbus.model.TypeDay;
@@ -89,10 +90,10 @@ public class HoursUtils {
      * @return String do horario atual em HH:mm
      */
     public static String getNowTimeinString(){
-        Calendar cal = GregorianCalendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         String  time;
-        time = cal.get(Calendar.HOUR_OF_DAY)+":";
-        time+=cal.get(Calendar.MINUTE);
+        time = calendar.get(Calendar.HOUR_OF_DAY)+":";
+        time+=calendar.get(Calendar.MINUTE);
         return time;
     }
 
@@ -102,11 +103,10 @@ public class HoursUtils {
      */
     public static Calendar getTimeInCalendar(String time){
         if(time.contains(":")){
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.split(":")[0]));
-            cal.set(Calendar.MINUTE,Integer.parseInt(time.split(":")[1]));
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            return cal;
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.split(":")[0]));
+            calendar.set(Calendar.MINUTE,Integer.parseInt(time.split(":")[1]));
+            return calendar;
         }else{
             return null;
         }
@@ -126,13 +126,13 @@ public class HoursUtils {
      */
 
     public static int getHour(long time){
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.setTimeInMillis(time);
         return calendar.get(Calendar.HOUR_OF_DAY);
     }
 
     public static int getMinute(long time){
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.setTimeInMillis(time);
         return calendar.get(Calendar.MINUTE);
     }
