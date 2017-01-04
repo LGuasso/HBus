@@ -64,7 +64,9 @@ public class TextUtils {
             ok = ok.replace(" > ","-");
             ok = ok.replace(" < ","-");
             ok = ok.replace(",", "_");
-            ok = ok.replace(" ","-");
+            ok = ok.replace(" ","_");
+            ok = ok.replace("ç","c");
+            ok = ok.replace("ã","a");
             ok = ok.toLowerCase();
             return ok;
         }
@@ -77,6 +79,8 @@ public class TextUtils {
             String ok = name;
             ok = ok.replace(" - ","_");
             ok = ok.replace(" ","_");
+            ok = ok.replace("ç","c");
+            ok = ok.replace("ã","a");
             ok = ok.toLowerCase();
             return ok;
         }
