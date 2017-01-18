@@ -2,7 +2,6 @@ package br.com.expressobits.hbus.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +15,7 @@ import br.com.expressobits.hbus.model.TypeDay;
 public class HoursUtils {
 
     public static final String TAG = "TimeUtils";
+    public static final long TIME_CHANGE_TIMEZONE_TO_UTC = 1464750000000l;
 
     /**
      * Converte o horario no formato {@link Calendar} em {@link String}
@@ -148,6 +148,22 @@ public class HoursUtils {
     public static String getFormatTime(Calendar calendar){
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         return sdf.format(calendar.getTime());
+    }
+
+    public static String getFormatTime(long time){
+        //TODO bug #032 corrigir todos horários para UTC até 01/03/2017
+        //
+        Calendar calendar;
+        if(time>TIME_CHANGE_TIMEZONE_TO_UTC){
+            calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        }else{
+            calendar = Calendar.getInstance();
+        }
+        calendar.setTimeInMillis(time);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        sdf.setTimeZone(calendar.getTimeZone());
+        return sdf.format(calendar.getTimeInMillis());
     }
 
     /**
