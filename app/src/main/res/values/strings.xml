@@ -146,4 +146,5 @@
     <string name="view_timetable">View timetable</string>
     <string name="recent_buses">Recent bus</string>
     <string name="pref_title_no_actived_itens">Search agency and city not actived</string>
+    <string name="error_loading_description">Error on load description</string>
 </resources>

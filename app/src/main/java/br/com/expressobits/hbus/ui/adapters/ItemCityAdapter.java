@@ -53,8 +53,6 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
 
     @Override
     public void onBindViewHolder(final HolderCity holder, final int position) {
-        //TODO implementar imagem da cidade
-
         String name = listCities.get(position).getName()+" - "+listCities.get(position).getCountry();
         holder.textViewCity.setText(name);
 

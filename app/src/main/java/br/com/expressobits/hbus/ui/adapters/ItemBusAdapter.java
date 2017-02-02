@@ -14,26 +14,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import br.com.expressobits.hbus.model.Alarm;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.Code;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.AlarmDAO;
+import br.com.expressobits.hbus.model.Alarm;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
@@ -58,19 +57,12 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     public ItemBusAdapter(Context context, List<Bus> listBus){
         this.context = context;
         Pair<Integer,List<Bus>> pair = sortByTimeBus(listBus);
-        //Pair<Integer,List<Bus>> pair = new Pair<>(0,listBus);
         this.listBus = pair.second;
         this.countLastBus = pair.first;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.alarmDAO = new AlarmDAO(context);
 
     }
-
-    public ItemBusAdapter(Context context, List<Bus> listBus,int countLastBus){
-        this(context, listBus);
-        this.countLastBus = countLastBus;
-    }
-
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int type) {
@@ -133,8 +125,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int i) {
         final Bus bus = listBus.get(i);
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        myViewHolder.txtViewHorario.setText(sdf.format(bus.getTime()));
+        myViewHolder.txtViewHorario.setText(TimeUtils.getFormatTime(bus.getTime()));
         /**Code code = db.getCode(cityId,listBus.get(i).getCode());
         if(code!=null) {
             myViewHolder.txtViewCode.setText(code.getName());
@@ -144,7 +135,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         db.close();*/
         Log.e("TESTE",bus.getId());
         myViewHolder.txtViewCode.setText(bus.getCode());
-        myViewHolder.txtViewDescrition.setText("Carregando...");
+        myViewHolder.txtViewDescrition.setText(context.getString(R.string.loading));
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference codeTableRef  = database.getReference(FirebaseUtils.CODE_TABLE);
         DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(bus.getId()));
@@ -161,7 +152,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
                 if(code!=null){
                     myViewHolder.txtViewDescrition.setText(code.getDescrition());
                 }else {
-                    myViewHolder.txtViewDescrition.setText("Erro ao carregar detalhes!");
+                    myViewHolder.txtViewDescrition.setText(context.getString(R.string.error_loading_description));
                 }
 
             }
@@ -208,7 +199,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
                     alarm.setSaturday(true);
                     alarm.setActived(true);
                     alarm.setMinuteDelay(-5);
-                    alarm.setTimeAlarm(TextUtils.getTimeWithDelayTime(new SimpleDateFormat("HH:mm").format(bus.getTime()), alarm.getMinuteDelay()));
+                    alarm.setTimeAlarm(TextUtils.getTimeWithDelayTime(TimeUtils.getFormatTime(bus.getTime()), alarm.getMinuteDelay()));
                     alarmDAO.insert(alarm);
                     Toast.makeText(context,
                             context.getString(R.string.alarm_added), Toast.LENGTH_SHORT).show();
@@ -296,15 +287,15 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         int countTwoLast;
 
         for (int i=0;i<busList.size();i++){
-            if(HoursUtils.getHour(busList.get(i).getTime())>HoursUtils.getHour(bus.getTime())){
+            if(TimeUtils.getHour(busList.get(i).getTime())> TimeUtils.getHour(bus.getTime())){
                 nextBuses.add(busList.get(i));
-            }else if(HoursUtils.getHour(busList.get(i).getTime())<HoursUtils.getHour(bus.getTime())){
+            }else if(TimeUtils.getHour(busList.get(i).getTime())< TimeUtils.getHour(bus.getTime())){
                 lastBuses.add(busList.get(i));
 
             }else{
-                if(HoursUtils.getMinute(busList.get(i).getTime())>=HoursUtils.getMinute(bus.getTime())){
+                if(TimeUtils.getMinute(busList.get(i).getTime())>= TimeUtils.getMinute(bus.getTime())){
                     nextBuses.add(busList.get(i));
-                }else if(HoursUtils.getMinute(busList.get(i).getTime())<HoursUtils.getMinute(bus.getTime())) {
+                }else if(TimeUtils.getMinute(busList.get(i).getTime())< TimeUtils.getMinute(bus.getTime())) {
                     lastBuses.add(busList.get(i));
                 }
             }

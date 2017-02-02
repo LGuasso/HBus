@@ -27,7 +27,7 @@ import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * @author Rafael Correa
@@ -113,7 +113,7 @@ public class NotificationsAlarm {
                 //        R.drawable.ic_close_white_24dp,getResources().getString(R.string.remove),
                 //        PendingIntent.getBroadcast(this,0,new Intent(this, HelpActivity.class),0)))
                 .setContentTitle(context.getString(R.string.notification_alarm_title_text,
-                        FirebaseUtils.getItinerary(alarm.getId()), HoursUtils.getFormatTime(calendar)))
+                        FirebaseUtils.getItinerary(alarm.getId()), TimeUtils.getFormatTime(calendar)))
                 .setContentText(context.getString(R.string.notification_alarm_text,
                         FirebaseUtils.getWay(alarm.getId())))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

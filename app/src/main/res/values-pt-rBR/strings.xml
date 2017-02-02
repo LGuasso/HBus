@@ -138,4 +138,5 @@
     <string name="send_feedback_with_sucess">Enviado feedback com sucesso!</string>
     <string name="title_activity_login">Logar</string>
     <string name="updated_alarm_with_sucess">Atualizado alarme com sucesso!</string>
+    <string name="error_loading_description">Erro ao carregar os detalhes</string>
 </resources>

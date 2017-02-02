@@ -2,9 +2,8 @@ package br.com.expressobits.hbus.utils;
 
 import org.junit.Test;
 
-import java.util.Calendar;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * @author Rafael Correa
@@ -13,13 +12,27 @@ import static org.junit.Assert.*;
 public class HoursUtilsTest {
     @Test
     public void getTimeInCalendar() throws Exception {
-        System.out.println(HoursUtils.getTimeInCalendar("12:00").getTimeInMillis());
+        System.out.println(TimeUtils.getTimeInCalendar("12:00").getTimeInMillis());
     }
 
     @Test
     public void testGetHour() throws Exception {
-        long time  =  HoursUtils.getTimeInCalendar("12:00").getTimeInMillis();
-        System.out.println(HoursUtils.getHour(time));
+        long time  =  TimeUtils.getTimeInCalendar("12:00").getTimeInMillis();
+        System.out.println(TimeUtils.getHour(time));
+    }
+
+    @Test
+    public void testGetFormatHour() throws Exception {
+        String hour = "12:00";
+        long time  =  TimeUtils.getTimeInCalendar(hour).getTimeInMillis();
+        if(time> TimeUtils.TIME_CHANGE_TIMEZONE_TO_UTC){
+            assertNotEquals(hour, TimeUtils.getFormatTime(time));
+        }else {
+            assertEquals(hour, TimeUtils.getFormatTime(time));
+        }
+
+
+
     }
 
 

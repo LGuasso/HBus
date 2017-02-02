@@ -9,9 +9,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.expressobits.hbus.utils.HoursUtils;
-import br.com.expressobits.hbus.utils.TextUtils;
-
 /**
  * @author Rafael
  * @since 27/12/15.
