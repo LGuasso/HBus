@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Bus;
@@ -30,7 +29,7 @@ import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.utils.BusUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * @author Rafael
@@ -93,7 +92,7 @@ public class ItemFavoriteItineraryAdapter extends
             for (int j = 0; j < itinerary.getWays().size(); j++) {
                 final String way = itinerary.getWays().get(j);
                 final List<Bus> buses = new ArrayList<>();
-                final String typeday = HoursUtils.getTypedayinCalendar(Calendar.getInstance()).toString();
+                final String typeday = TimeUtils.getTypedayinCalendar(Calendar.getInstance()).toString();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference busTable = database.getReference(FirebaseUtils.BUS_TABLE);
                 DatabaseReference countryRef = busTable.child(FirebaseUtils.getCountry(itinerary.getId()));
@@ -165,10 +164,9 @@ public class ItemFavoriteItineraryAdapter extends
             TextView textViewHour = (TextView) view.findViewById(R.id.textViewHourforNextBus);
             TextView textViewWay = (TextView) view.findViewById(R.id.textViewWayforNextBus);
             TextView textViewCode = (TextView) view.findViewById(R.id.textViewCodeforNextBus);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
             String time = "";
             try{
-                time = sdf.format(next.get(way).getTime());
+                time = TimeUtils.getFormatTime(next.get(way).getTime());
                 String code = next.get(way).getCode();
                 textViewWay.setText(way);
                 textViewHour.setText(time);

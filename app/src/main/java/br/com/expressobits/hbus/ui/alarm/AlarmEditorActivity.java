@@ -27,7 +27,7 @@ import br.com.expressobits.hbus.alarm.Alarms;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 public class AlarmEditorActivity extends AppCompatActivity {
 
@@ -143,7 +143,7 @@ public class AlarmEditorActivity extends AppCompatActivity {
         editTextName.setText(alarm.getName());
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
-        textViewTime.setText(HoursUtils.getFormatTime(calendar));
+        textViewTime.setText(TimeUtils.getFormatTime(calendar));
         resumeWeekDays();
         alarm.setCode(code);
         return editing;

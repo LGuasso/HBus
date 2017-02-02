@@ -18,7 +18,7 @@ import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * @author Rafael Correa
@@ -54,7 +54,7 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
         holder.textViewName.setText(alarm.getName()!=null&alarm.getName().length()>1?alarm.getName():context.getString(R.string.alarm));
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(alarm.getTimeAlarm());
-        holder.textViewTime.setText(HoursUtils.getFormatTime(calendar));
+        holder.textViewTime.setText(TimeUtils.getFormatTime(calendar));
         holder.switchActived.setChecked(alarm.isActived());
         verifyIsActivedAlarm(holder,alarm);
         holder.switchActived.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

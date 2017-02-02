@@ -13,7 +13,7 @@ import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
@@ -80,7 +80,7 @@ public class ReadFile {
 
     public Bus toBus(String text){
         Bus bus = new Bus();
-        bus.setTime(HoursUtils.getTimeInCalendar(text.split(SPLIT_FILE_TIMES)[0]).getTimeInMillis());
+        bus.setTime(TimeUtils.getTimeInCalendar(text.split(SPLIT_FILE_TIMES)[0]).getTimeInMillis());
 
         try{
             bus.setCode(text.split(SPLIT_FILE_TIMES)[1]);

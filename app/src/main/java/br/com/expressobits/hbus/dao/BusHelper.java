@@ -18,7 +18,7 @@ import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.BusUtils;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 import br.com.expressobits.hbus.utils.TextUtils;
 
 /**
@@ -471,7 +471,7 @@ public class BusHelper {
                                 city,
                                 itinerary,
                                 itinerary.getWays().get(j),
-                                HoursUtils.getTypedayinCalendar(Calendar.getInstance()))));
+                                TimeUtils.getTypedayinCalendar(Calendar.getInstance()))));
             }
         }
 

@@ -16,8 +16,6 @@ import br.com.expressobits.hbus.model.Alarm;
 public class Alarms {
 
     public static final String TAG = "AlarmsManager";
-    /* TODO colocar isto como setttings */
-    public static final int MINUTE_OF_VALIDATE_ALARM = 30;
 
     public static void saveAlarmInManager(Alarm alarm, Context context){
         Intent alarmIntent = new Intent(context,AlarmReceiver.class);

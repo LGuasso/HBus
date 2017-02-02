@@ -141,7 +141,6 @@ public class AlarmHelper {
 
     public static List<Alarm> getAlarms(SQLiteDatabase db, City city, String time){
         ArrayList<Alarm> alarms = new ArrayList<Alarm>();
-        //TODO DELAY implementar
         String where = AlarmContract.Alarm._ID+" LIKE ? AND "+ AlarmContract.Alarm.COLUMN_NAME_TIME+" = ?";
         String arguments[] = {BusHelper.BARS+city.getCountry()+BusHelper.BARS+city.getName()+"%",time};
         Cursor c;

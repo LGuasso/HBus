@@ -11,7 +11,7 @@ import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.ui.notification.NotificationsAlarm;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * @author Rafael
@@ -39,8 +39,8 @@ public class AlarmService extends IntentService{
         Calendar cAlarm = Calendar.getInstance();
 
 
-        int hour = HoursUtils.getHour(alarm.getTimeAlarm());
-        int minute = HoursUtils.getMinute(alarm.getTimeAlarm());
+        int hour = TimeUtils.getHour(alarm.getTimeAlarm());
+        int minute = TimeUtils.getMinute(alarm.getTimeAlarm());
 
 
         Log.d(TAG,"send not. "+hour+":"+minute);
@@ -80,10 +80,10 @@ public class AlarmService extends IntentService{
 
         Log.d(TAG,"minutes tolerados "+minutesTolerados);
 
-        Log.d(TAG,"c\t"+HoursUtils.getFormatTime(c));
-        Log.d(TAG,"cAlarm\t"+HoursUtils.getFormatTime(cAlarm));
+        Log.d(TAG,"c\t"+ TimeUtils.getFormatTime(c));
+        Log.d(TAG,"cAlarm\t"+ TimeUtils.getFormatTime(cAlarm));
 
-        if(HoursUtils.isValidAlarm(c,cAlarm,minutesTolerados) && isDayToday){
+        if(TimeUtils.isValidAlarm(c,cAlarm,minutesTolerados) && isDayToday){
             NotificationsAlarm.notifyBus(this,alarm);
 
             Log.d(TAG,"notification alarm "+alarm.toString());
