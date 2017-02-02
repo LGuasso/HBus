@@ -10,11 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.GregorianCalendar;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.TypeDay;
-import br.com.expressobits.hbus.utils.HoursUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,7 +118,7 @@ public class OnibusFragment extends Fragment{
         viewPagerAdapter.refresh(country,city,company,itinerary,way);
         viewPager.setAdapter(viewPagerAdapter);
         //TODO implement sunday days in holiday
-        int typeday  = HoursUtils.getTipoDeDia(GregorianCalendar.getInstance());
+        int typeday  = TimeUtils.getTypedayinCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC"))).toInt();
         viewPager.setCurrentItem(typeday);
     }
 
