@@ -41,7 +41,13 @@ public class TimeUtils {
      */
     public static Calendar getTimeInCalendar(String time){
         if(time.contains(":")){
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+            Calendar calendar;
+            if(System.currentTimeMillis()<TIME_CHANGE_TIMEZONE_TO_UTC){
+                calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            }else{
+                calendar = Calendar.getInstance();
+            }
             calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.split(":")[0]));
             calendar.set(Calendar.MINUTE,Integer.parseInt(time.split(":")[1]));
             return calendar;
