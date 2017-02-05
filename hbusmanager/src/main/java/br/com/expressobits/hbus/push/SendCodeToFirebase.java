@@ -37,9 +37,10 @@ public class SendCodeToFirebase {
         return cityRef;
     }
 
-    public static void removeAllValues(City city,RemoveListener removeListener){
+    public static void removeAllValues(City city,Company company,RemoveListener removeListener){
         DatabaseReference cityRef = getDatabaseReference(city);
-        cityRef.removeValue(new DatabaseReference.CompletionListener() {
+        DatabaseReference companyRef = cityRef.child(company.getName());
+        companyRef.removeValue(new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError de, DatabaseReference dr) {
                 if(removeListener!=null){

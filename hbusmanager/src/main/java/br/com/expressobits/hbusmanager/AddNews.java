@@ -1,22 +1,36 @@
 package br.com.expressobits.hbusmanager;
 
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.News;
-import br.com.expressobits.hbus.push.CountryFromFirebase;
-import br.com.expressobits.hbus.push.SendNewsToFirebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpinnerListModel;
+
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.News;
+import br.com.expressobits.hbus.push.CountryFromFirebase;
+import br.com.expressobits.hbus.push.SendNewsToFirebase;
 
 /**
  * @author Rafael Correa
@@ -76,7 +90,7 @@ public class AddNews extends JFrame {
 
         if (city != null && country != null) {
             checkBoxCity.setSelected(true);
-            loadCities(country, city);
+            loadCities(country);
         }
 
         this.setTitle("Add News");
@@ -99,7 +113,7 @@ public class AddNews extends JFrame {
             @Override
             public void itemStateChanged(ItemEvent itemEvent) {
                 if (checkBoxCity.isSelected()) {
-                    //loadCities();
+                    loadCities(AddNews.this.country);
                 }
 
                 spinnerCity.setEnabled(checkBoxCity.isSelected());
@@ -145,7 +159,8 @@ public class AddNews extends JFrame {
         }
     }
 
-    private void loadCities(String country, City city) {
+    private void loadCities(String country) {
+        System.out.println("loading cities...");
         ArrayList<City> cities = new ArrayList<>();
         CountryFromFirebase.getDatabaseReference(country).addValueEventListener(new ValueEventListener() {
             @Override
@@ -155,7 +170,7 @@ public class AddNews extends JFrame {
                     cities.add(city);
                     System.out.println(city.getName());
                 }
-                updateSpinner(city, cities);
+                updateSpinner(cities);
 
             }
 
@@ -166,7 +181,7 @@ public class AddNews extends JFrame {
         });
     }
 
-    private void updateSpinner(City city, ArrayList<City> cities) {
+    private void updateSpinner(ArrayList<City> cities) {
         SpinnerListModel citiesModel = new SpinnerListModel(cities);
         spinnerCity.setModel(citiesModel);
         //spinnerCity.s

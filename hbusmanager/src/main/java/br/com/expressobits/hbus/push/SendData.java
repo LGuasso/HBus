@@ -130,7 +130,7 @@ public class SendData {
 
     }
 
-    public void removeAllValuesFromCity(String country,String cityName){
+    /**public void removeAllValuesFromCity(String country,String cityName){
         cities = readFile.getCities(country);
         for(City city:cities){
             if(city.getName().equals(cityName)){
@@ -145,23 +145,16 @@ public class SendData {
         SendCodeToFirebase.removeAllValues(city,null);
         SendItineraryToFirebase.removeAllValues(city,null);
         SendBusToFirebase.removeAllValues(city,null);
-    }
+    }*/
 
 
-    private void pushAllCities(){
-        for(City city:cities){
-            pushCity(city);
-        }
-    }
-
-    public void pushCity(City city) {
+    public void pushCity(City city,Company company) {
         if(isCitySend){
             push(city);
         }
 
-        for (Company company : companies.get(city)) {
-            pushCompany(city, company);
-        }
+        pushCompany(city,company);
+
     }
 
     private void pushCompany(City city, Company company) {
