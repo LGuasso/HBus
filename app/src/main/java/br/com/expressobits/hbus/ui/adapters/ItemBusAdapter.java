@@ -134,36 +134,39 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         myViewHolder.txtViewDescrition.setSelected(true);
         db.close();*/
         Log.e("TESTE",bus.getId());
-        myViewHolder.txtViewCode.setText(bus.getCode());
-        myViewHolder.txtViewDescrition.setText(context.getString(R.string.loading));
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference codeTableRef  = database.getReference(FirebaseUtils.CODE_TABLE);
-        DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(bus.getId()));
-        DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(bus.getId()));
-        Log.e("TESTE",FirebaseUtils.getCompany(bus.getId()));
-        DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(bus.getId()));
-        DatabaseReference codeRef = companyRef.child(bus.getCode());
+        if(bus.getCode().length()>Bus.CODE_LENGTH_TO_DESCRIPTION){
+            myViewHolder.txtViewDescrition.setText(bus.getCode());
+        }else {
+            myViewHolder.txtViewCode.setText(bus.getCode());
+            myViewHolder.txtViewDescrition.setText(context.getString(R.string.loading));
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference codeTableRef = database.getReference(FirebaseUtils.CODE_TABLE);
+            DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(bus.getId()));
+            DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(bus.getId()));
+            Log.e("TESTE", FirebaseUtils.getCompany(bus.getId()));
+            DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(bus.getId()));
+            DatabaseReference codeRef = companyRef.child(bus.getCode());
 
-        Log.e("TESTE",codeRef.toString());
-        codeRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Code code = dataSnapshot.getValue(Code.class);
-                if(code!=null){
-                    myViewHolder.txtViewDescrition.setText(code.getDescrition());
-                }else {
-                    myViewHolder.txtViewDescrition.setText(context.getString(R.string.error_loading_description));
+            Log.e("TESTE", codeRef.toString());
+            codeRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Code code = dataSnapshot.getValue(Code.class);
+                    if (code != null) {
+                        myViewHolder.txtViewDescrition.setText(code.getDescrition());
+                    } else {
+                        myViewHolder.txtViewDescrition.setText(context.getString(R.string.error_loading_description));
+                    }
+
                 }
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                myViewHolder.txtViewDescrition.setText("Erro "+"Code "+databaseError.getCode() +" - Details "+databaseError.getDetails()+ " "+
-                databaseError.getMessage());
-            }
-        });
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    myViewHolder.txtViewDescrition.setText("Erro " + "Code " + databaseError.getCode() + " - Details " + databaseError.getDetails() + " " +
+                            databaseError.getMessage());
+                }
+            });
+        }
 
         final Alarm alarm = alarmDAO.getAlarm(bus.getId());
         if(myViewHolder.getItemViewType()==LASTBUS){

@@ -12,6 +12,7 @@ public class Bus implements Comparable<Bus>{
 
 
     public static final String TAG="Bus";
+    public static final int CODE_LENGTH_TO_DESCRIPTION = 6;
 
     private String id;
 

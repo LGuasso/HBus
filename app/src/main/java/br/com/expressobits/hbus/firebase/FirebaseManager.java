@@ -58,7 +58,9 @@ public class FirebaseManager {
                                 code.setName(bus.getCode());
                                 if(codes.containsKey(code.getName())){
                                     Log.e("CODE","Contains "+code.toString());
-                                }else{
+                                }else if(code.getName().length()>Bus.CODE_LENGTH_TO_DESCRIPTION) {
+
+                                }else {
                                     codes.put(code.getName(),code);
                                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     DatabaseReference codeTable = database.getReference(FirebaseUtils.CODE_TABLE);
