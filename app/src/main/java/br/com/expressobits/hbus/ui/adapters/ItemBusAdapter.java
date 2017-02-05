@@ -212,6 +212,8 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
                 return true;
             }
         });
+        //Para o marquee forever funcionar
+        myViewHolder.txtViewDescrition.setSelected(true);
 
         }
 
