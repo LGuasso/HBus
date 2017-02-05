@@ -65,7 +65,9 @@ public class HBusManager extends JFrame implements RemoveListener {
             public void actionPerformed(ActionEvent actionEvent) {
 
                 setSenders();
-                sendData.pushCity(sendData.getCities().get(comboBoxCities.getSelectedIndex()));
+                City city = sendData.getCities().get(comboBoxCities.getSelectedIndex());
+                Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
+                sendData.pushCity(city, company);
 
             }
         });
@@ -109,7 +111,9 @@ public class HBusManager extends JFrame implements RemoveListener {
                 int result = JOptionPane.showConfirmDialog(null, "Confirme a remoção?",
                         "Remover?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
-                    SendItineraryToFirebase.removeAllValues(sendData.getCities().get(comboBoxCities.getSelectedIndex()), HBusManager.this);
+                    City city = sendData.getCities().get(comboBoxCities.getSelectedIndex());
+                    Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
+                    SendItineraryToFirebase.removeAllValues(city, company, HBusManager.this);
                 }
             }
         });
@@ -119,7 +123,9 @@ public class HBusManager extends JFrame implements RemoveListener {
                 int result = JOptionPane.showConfirmDialog(null, "Confirme a remoção?",
                         "Remover?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
-                    SendCodeToFirebase.removeAllValues(sendData.getCities().get(comboBoxCities.getSelectedIndex()), HBusManager.this);
+                    City city = sendData.getCities().get(comboBoxCities.getSelectedIndex());
+                    Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
+                    SendCodeToFirebase.removeAllValues(city, company, HBusManager.this);
                 }
             }
         });
@@ -129,7 +135,9 @@ public class HBusManager extends JFrame implements RemoveListener {
                 int result = JOptionPane.showConfirmDialog(null, "Confirme a remoção?",
                         "Remover?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
-                    SendBusToFirebase.removeAllValues(sendData.getCities().get(comboBoxCities.getSelectedIndex()), HBusManager.this);
+                    City city = sendData.getCities().get(comboBoxCities.getSelectedIndex());
+                    Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
+                    SendBusToFirebase.removeAllValues(city, company, HBusManager.this);
                 }
             }
         });
