@@ -319,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     @Override
     public void onSettingsDone(String company,String itinerary, String way) {
+        this.company = company;
         this.itinerary = itinerary;
         this.way = way;
         if(showAdIntersticial()){
@@ -552,7 +553,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 onSettingsDone(company,itinerary.getName(), ways.get(0));
             }
         }catch (SQLiteCantOpenDatabaseException exception){
-            Toast.makeText(this,"aguarde alguns segundos...",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Ocorreu um erro no servidor,tente novamente...",Toast.LENGTH_LONG).show();
         }
     }
 
