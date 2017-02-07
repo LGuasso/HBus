@@ -26,7 +26,6 @@ public class ReadFile {
     private static final String BARS = "/";
     private static final String SPLIT_FILE = ";";
     private static final String SPLIT_FILE_SECONDARY = ",";
-    private static final String SPLIT_FILE_TIMES = ",";
     private static final String CITIES_FILE = "cities.dat";
     private static final String ITINERARIES_FILE = "itineraries.dat";
     private static final String COMPANIES_FILE = "companies.dat";
@@ -80,10 +79,10 @@ public class ReadFile {
 
     public Bus toBus(String text){
         Bus bus = new Bus();
-        bus.setTime(TimeUtils.getTimeInCalendar(text.split(SPLIT_FILE_TIMES)[0]).getTimeInMillis());
+        bus.setTime(TimeUtils.getTimeInCalendar(text.split(SPLIT_FILE)[0]).getTimeInMillis());
 
         try{
-            bus.setCode(text.split(SPLIT_FILE_TIMES)[1]);
+            bus.setCode(text.split(SPLIT_FILE)[1]);
         }catch (Exception e){
             System.out.println(" "+"TEXTO("+text+")");
             bus.setCode("NOT CODE");
