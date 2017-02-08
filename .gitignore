@@ -6,3 +6,6 @@
 /build
 HBus.iml
 /.idea/
+/host/.firebaserc
+/host/database.rules.json
+/host/firebase.json
