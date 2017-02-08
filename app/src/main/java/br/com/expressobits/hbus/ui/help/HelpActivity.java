@@ -10,11 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import java.net.URI;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.dialog.VersionInfoDialogFragment;
@@ -72,6 +68,10 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
             startSendFeedback();
         }
 
+        if(id == R.id.menu_action_privacy_policy){
+            openPrivacyPolicy();
+        }
+
         if(id == R.id.menu_action_see_on_play_store){
             final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
             try {
@@ -100,6 +100,10 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
     private void starHelpContent() {
         Intent intent = new Intent(this,HelpContentActivity.class);
         startActivity(intent);
+    }
+    public void openPrivacyPolicy() {
+        Intent privacyPolicyIntent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(privacyPolicyIntent);
     }
 
     @Override

@@ -100,7 +100,7 @@
     <string name="coming_soon">Em breve!</string>
     <string name="action_sign_in">Logar ou registrar</string>
     <string name="or">Ou</string>
-    <string name="sign_in_anonymously">Continuar sem logar</string>
+    <string name="sign_in_anonymously"><a href="">Continuar sem logar</a></string>
     <string name="exit">Sair</string>
     <string name="loading_sign_google">Carregando dados do Google...</string>
     <string name="google_sign_sucess">Login pelo Google efetuado com sucesso!</string>
@@ -139,4 +139,7 @@
     <string name="title_activity_login">Logar</string>
     <string name="updated_alarm_with_sucess">Atualizado alarme com sucesso!</string>
     <string name="error_loading_description">Erro ao carregar os detalhes</string>
+    <string name="login_agreeing_privacy_policy">Ao efetuar o login de sua conta você está concordando com nossa</string>
+    <string name="login_privacy_policy"><a href="https://expressobits.com.br/privacy_policy.html">Política de Privacidade</a></string>
+    <string name="title_activity_privacy_policy">Política de privacidade</string>
 </resources>
