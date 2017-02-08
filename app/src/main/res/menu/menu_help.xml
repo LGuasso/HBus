@@ -12,6 +12,11 @@
         app:showAsAction="never"
         android:orderInCategory="3"/>
 
+    <item android:id="@+id/menu_action_privacy_policy"
+        android:title="@string/action_privacy_policy"
+        app:showAsAction="never"
+        android:orderInCategory="4"/>
+
     <item android:id="@+id/menu_action_see_on_play_store"
         android:title="@string/see_on_play_store"
         app:showAsAction="never"
