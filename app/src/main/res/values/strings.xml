@@ -150,6 +150,6 @@
     <string name="title_activity_privacy_policy">Privacy Policy</string>
     <string name="login_agreeing_privacy_policy">By logging in to your account you are agreeing to our</string>
     <string name="login_privacy_policy"><a href="https://expressobits.com.br/privacy_policy.html">Privacy Policy</a></string>
-    <string name="site_privacy_policy" translatable="false">https://expressobits.com.br/privacy_policy.html</string>
+    <string name="site_privacy_policy" translatable="false">https://hbus-1206.firebaseapp.com/privacy_policy.html</string>
     <string name="action_privacy_policy">Privacy policy</string>
 </resources>
