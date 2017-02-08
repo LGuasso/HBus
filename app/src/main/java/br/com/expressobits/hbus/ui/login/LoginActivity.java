@@ -1,14 +1,12 @@
 package br.com.expressobits.hbus.ui.login;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +27,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.ManagerInit;
+import br.com.expressobits.hbus.ui.help.PrivacyPolicyActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
 
@@ -37,9 +36,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private TextView textViewSignInAnonymously;
+    private TextView textViewPrivacyPolicy;
     private TextView textViewLoading;
     private RelativeLayout progressBarLayout;
-    private RelativeLayout mainLayout;
+    private ViewGroup mainLayout;
 
     GoogleApiClient mGoogleApiClient;
 
@@ -85,15 +85,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         textViewSignInAnonymously = (TextView) findViewById(R.id.textViewSignInAnonymously);
-        mainLayout = (RelativeLayout) findViewById(R.id.layoutMain);
+        mainLayout = (ViewGroup) findViewById(R.id.layoutMain);
         progressBarLayout = (RelativeLayout) findViewById(R.id.progressBarLayout);
         textViewLoading = (TextView) findViewById(R.id.textViewStatusLoading);
+        textViewPrivacyPolicy = (TextView) findViewById(R.id.textViewPrivacyPolicy);
         textViewLoading.setText("");
         textViewSignInAnonymously.setOnClickListener(this);
+        textViewPrivacyPolicy.setOnClickListener(this);
         mainLayout.setVisibility(View.VISIBLE);
         progressBarLayout.setVisibility(View.INVISIBLE);
-
-
 
     }
 
@@ -213,6 +213,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.textViewSignInAnonymously:
                 signInAnonymously();
                 break;
+            case R.id.textViewPrivacyPolicy:
+                openPrivacyPolicy();
+                break;
 
         }
         progressBarLayout.setVisibility(View.VISIBLE);
@@ -222,5 +225,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    public void openPrivacyPolicy() {
+        Intent privacyPolicyIntent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(privacyPolicyIntent);
     }
 }

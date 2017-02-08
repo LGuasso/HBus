@@ -114,7 +114,7 @@
     <string name="updated_date">Update %1$s</string>
     <string name="coming_soon">Coming soon!</string>
     <string name="or">Or</string>
-    <string name="sign_in_anonymously">Continue without login</string>
+    <string name="sign_in_anonymously"><a href="">Continue without login</a></string>
     <string name="exit">Exit</string>
     <string name="google_sign_sucess">Google Sign In was successful!</string>
     <string name="loading_sign_google">Loading data by Google...</string>
@@ -147,4 +147,9 @@
     <string name="recent_buses">Recent bus</string>
     <string name="pref_title_no_actived_itens">Search agency and city not actived</string>
     <string name="error_loading_description">Error on load description</string>
+    <string name="title_activity_privacy_policy">Privacy Policy</string>
+    <string name="login_agreeing_privacy_policy">By logging in to your account you are agreeing to our</string>
+    <string name="login_privacy_policy"><a href="https://expressobits.com.br/privacy_policy.html">Privacy Policy</a></string>
+    <string name="site_privacy_policy" translatable="false">https://expressobits.com.br/privacy_policy.html</string>
+    <string name="action_privacy_policy">Privacy policy</string>
 </resources>
