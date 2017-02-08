@@ -3,16 +3,15 @@
     package="br.com.expressobits.hbus">
 
     <!-- Permissão para ler memória externa -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" / -->
     <!-- Permissão para ler memória externa -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" / -->
     <!-- Permissão para acesso á internet -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Permissão para saber o estatus da rede -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <!-- WARNING use to load alarms after boot restarted -->
@@ -27,9 +26,10 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!-- uses-permission android:name="android.permission.READ_PROFILE" / -->
+    <!-- uses-permission android:name="android.permission.READ_CONTACTS" / -->
+    <!-- uses-permission android:name="android.permission.GET_ACCOUNTS" / -->
     <application
         android:name=".application.TPCDataBaseInit"
         android:allowBackup="true"
@@ -190,9 +190,17 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.news.NewsDetailsActivity"
+        <activity
+            android:name=".ui.news.NewsDetailsActivity"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".ui.help.PrivacyPolicyActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.login.LoginActivity"
+            android:label="@string/title_activity_privacy_policy">
+
+        </activity>
     </application>
 
 </manifest>

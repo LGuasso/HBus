@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:id="@+id/layoutMain"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/activity_horizontal_margin"
     tools:context="br.com.expressobits.hbus.ui.login.LoginActivity"
     tools:showIn="@layout/activity_login">
 
-
-
-
-
     <RelativeLayout
-        android:id="@+id/layoutMain"
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <ImageView
             android:id="@+id/imageViewLogo"
             android:layout_centerInParent="true"
@@ -26,6 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_splash"/>
+    </RelativeLayout>
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,6 +36,24 @@
             android:orientation="vertical"
             android:layout_below="@id/imageViewLogo">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/login_agreeing_privacy_policy"
+                android:textAppearance="?android:textAppearanceSmallInverse"/>
+
+            <TextView
+                android:id="@+id/textViewPrivacyPolicy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:autoLink="web"
+                android:text="@string/login_privacy_policy"
+                android:linksClickable="true"
+                android:textAppearance="?android:textAppearanceSmallInverse"/>
+
+
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
@@ -44,7 +62,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:textAlignment="center"
                 android:text="@string/or"
                 android:textAppearance="?android:textAppearanceSmallInverse"/>
@@ -53,9 +71,10 @@
                 android:id="@+id/textViewSignInAnonymously"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:textAlignment="center"
                 android:text="@string/sign_in_anonymously"
+                android:autoLink="web"
                 android:linksClickable="true"
                 android:textAppearance="?android:textAppearanceSmallInverse"/>
 
@@ -63,10 +82,8 @@
 
 
 
-    </RelativeLayout>
 
 
 
 
-
-</RelativeLayout>
+</LinearLayout>
