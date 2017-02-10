@@ -134,7 +134,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         myViewHolder.txtViewDescrition.setSelected(true);
         db.close();*/
         Log.e("TESTE",bus.getId());
-        if(bus.getCode().length()>Bus.CODE_LENGTH_TO_DESCRIPTION){
+        if(bus.getCode().length()>Code.CODE_LENGTH_TO_DESCRIPTION){
             myViewHolder.txtViewDescrition.setText(bus.getCode());
         }else {
             myViewHolder.txtViewCode.setText(bus.getCode());

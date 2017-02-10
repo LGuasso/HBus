@@ -125,7 +125,13 @@ public class ReadFile {
     public List<Code> getCodes(City city,Company company){
         List<Code> codes = new ArrayList<>();
         for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+CODES_FILE)){
-            codes.add(toCode(text));
+            Code code = toCode(text);
+            if(codes.contains(code)){
+                System.err.println("CODE EXISTS CODE:"+code.getName());
+            }else {
+                codes.add(code);
+            }
+
         }
         return codes;
     }
