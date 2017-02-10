@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
@@ -43,6 +45,7 @@ public class ItemFavoriteItineraryAdapter extends
     private List<Itinerary> itineraryList;
     private LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
+    private HashMap<String,HashMap<String,Code>> codes = new HashMap<>();
 
     public ItemFavoriteItineraryAdapter(Context context, List<Itinerary> lista){
         this.context = context;
@@ -88,6 +91,9 @@ public class ItemFavoriteItineraryAdapter extends
     private HashMap<String,Bus> getBusList(final HolderFavoriteItinerary holder, final Itinerary itinerary){
 
         final HashMap<String,Bus> next = new HashMap<>();
+        String country = FirebaseUtils.getCountry(itinerary.getId());
+        String city = FirebaseUtils.getCityName(itinerary.getId());
+        String company = FirebaseUtils.getCompany(itinerary.getId());
         if(itinerary.getWays()!=null) {
             for (int j = 0; j < itinerary.getWays().size(); j++) {
                 final String way = itinerary.getWays().get(j);
@@ -95,9 +101,9 @@ public class ItemFavoriteItineraryAdapter extends
                 final String typeday = TimeUtils.getTypedayinCalendar(Calendar.getInstance()).toString();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference busTable = database.getReference(FirebaseUtils.BUS_TABLE);
-                DatabaseReference countryRef = busTable.child(FirebaseUtils.getCountry(itinerary.getId()));
-                DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(itinerary.getId()));
-                DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(itinerary.getId()));
+                DatabaseReference countryRef = busTable.child(country);
+                DatabaseReference cityRef = countryRef.child(city);
+                DatabaseReference companyRef = cityRef.child(company);
                 DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
                 DatabaseReference wayRef = itineraryRef.child(way);
                 DatabaseReference typedayRef = wayRef.child(typeday);
@@ -164,6 +170,7 @@ public class ItemFavoriteItineraryAdapter extends
             TextView textViewHour = (TextView) view.findViewById(R.id.textViewHourforNextBus);
             TextView textViewWay = (TextView) view.findViewById(R.id.textViewWayforNextBus);
             TextView textViewCode = (TextView) view.findViewById(R.id.textViewCodeforNextBus);
+
             String time = "";
             try{
                 time = TimeUtils.getFormatTime(next.get(way).getTime());
@@ -171,8 +178,15 @@ public class ItemFavoriteItineraryAdapter extends
                 textViewWay.setText(way);
                 textViewHour.setText(time);
                 textViewCode.setText(code);
+                if(code.length()<= Code.CODE_LENGTH_TO_DESCRIPTION){
+                    loadCode(textViewCode,code,FirebaseUtils.getCompany(itinerary.getId()),
+                            FirebaseUtils.getCountry(itinerary.getId()),FirebaseUtils.getCityName(itinerary.getId()));
+                }
+
+                textViewCode.setSelected(true);
                 holder.linearLayoutHours.addView(view, i);
             }catch (NullPointerException ex){
+
             }
 
 
@@ -229,4 +243,52 @@ public class ItemFavoriteItineraryAdapter extends
             return recyclerViewOnClickListenerHack != null && recyclerViewOnClickListenerHack.onLongClickListener(v, getPosition());
         }
     }
+
+    private void loadCode(TextView textView,String codeName,String company,String country,String cityName){
+
+        if(!codes.containsKey(codeName)){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference busTable = database.getReference(FirebaseUtils.CODE_TABLE);
+            DatabaseReference countryRef = busTable.child(country);
+            DatabaseReference cityRef = countryRef.child(cityName);
+            DatabaseReference companyRef = cityRef.child(company);
+            DatabaseReference codeRef = companyRef.child(codeName);
+            codeRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Code code = dataSnapshot.getValue(Code.class);
+                    addCode(textView,company,codeName,code);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }else{
+            addCode(textView,company,codeName);
+        }
+
+    }
+
+
+    private void addCode(TextView textView,String company,String codeName,Code code){
+        if(codes.get(company)==null){
+            codes.put(company,new HashMap<>());
+        }
+        codes.get(company).put(codeName,code);
+        updateCodeViews(textView,code);
+    }
+
+    private void addCode(TextView textView,String company,String codeName){
+        updateCodeViews(textView,codes.get(company).get(codeName));
+    }
+
+    private void updateCodeViews(TextView textView,Code code){
+        textView.setText(code.getDescrition());
+        textView.setSelected(true);
+
+    }
+
+
 }

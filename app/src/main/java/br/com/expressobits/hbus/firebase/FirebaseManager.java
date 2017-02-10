@@ -58,7 +58,7 @@ public class FirebaseManager {
                                 code.setName(bus.getCode());
                                 if(codes.containsKey(code.getName())){
                                     Log.e("CODE","Contains "+code.toString());
-                                }else if(code.getName().length()>Bus.CODE_LENGTH_TO_DESCRIPTION) {
+                                }else if(code.getName().length()>Code.CODE_LENGTH_TO_DESCRIPTION) {
 
                                 }else {
                                     codes.put(code.getName(),code);

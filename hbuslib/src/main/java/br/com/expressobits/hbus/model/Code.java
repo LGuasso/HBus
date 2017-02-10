@@ -6,6 +6,7 @@ package br.com.expressobits.hbus.model;
  */
 public class Code {
 
+    public static final int CODE_LENGTH_TO_DESCRIPTION = 6;
     private String id;
     /**
      * Identificacao do codigo.
@@ -62,7 +63,7 @@ public class Code {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof Code && this.getName().equals(((Code) o).getName());
+        return o instanceof Code && this.getName().toLowerCase().equals(((Code) o).getName().toLowerCase());
     }
 
     @Override
