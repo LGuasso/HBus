@@ -142,4 +142,5 @@
     <string name="login_agreeing_privacy_policy">Ao efetuar o login de sua conta você está concordando com nossa</string>
     <string name="login_privacy_policy"><a href="https://expressobits.com.br/privacy_policy.html">Política de Privacidade</a></string>
     <string name="title_activity_privacy_policy">Política de privacidade</string>
+    <string name="action_privacy_policy">Política de privacidade</string>
 </resources>
