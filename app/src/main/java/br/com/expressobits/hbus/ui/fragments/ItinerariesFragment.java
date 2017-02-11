@@ -22,24 +22,26 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.firebase.FirebaseManager;
-import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemItineraryAdapter;
-import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
- * Fragmento que exibe todos {@link hbus.model.Itinerary}
+ * Fragmento que exibe todos {@link Itinerary}
  *
  * <p>Tem comportamento de Callback do fragmento com Activity {@link br.com.expressobits.hbus.ui.MainActivity}</p>
  *
@@ -118,8 +120,33 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         listItineraries.clear();
         progressBar.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
-        loadItinerariesFromFirebase(country, city, company);
-        loadCodesFromFirebase(country, city, company);
+        loadCompaniesFromFirebase(country,city);
+
+    }
+
+    private void loadCompaniesFromFirebase(final String country,final String city){
+        //loadCodesFromFirebase(country, city, company);
+        //loadItinerariesFromFirebase(country, city, company);
+        FirebaseDatabase database= FirebaseDatabase.getInstance();
+        DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.COMPANY_TABLE);
+        DatabaseReference countryRef = itinerariesTableRef.child(country);
+        DatabaseReference cityRef = countryRef.child(city);
+        cityRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                    Company company = dataSnapshot1.getValue(Company.class);
+                    loadItinerariesFromFirebase(country, city, company.getName());
+                    loadCodesFromFirebase(country, city, company.getName());
+                    Log.d(TAG,company.getName());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void loadItinerariesFromFirebase(final String country, final String city, final String company) {
@@ -247,6 +274,8 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     }
 
     public void refreshRecyclerView(){
+
+        Collections.sort(listItineraries);
 
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),true,listItineraries,favoriteItineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);

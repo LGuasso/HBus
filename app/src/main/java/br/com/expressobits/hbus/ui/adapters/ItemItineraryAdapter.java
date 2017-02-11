@@ -16,6 +16,7 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * Adapter usado para exibir {@link Itinerary}
@@ -60,7 +61,8 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
     @Override
     public void onBindViewHolder(ItineraryViewHolder holder, int position) {
 
-        if(dao.getItinerary(listItineraries.get(position).getId())!=null){
+        Itinerary itinerary = listItineraries.get(position);
+        if(dao.getItinerary(itinerary.getId())!=null){
             holder.imageViewStar.setSelected(true);
            //holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
 
@@ -68,8 +70,8 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
             holder.imageViewStar.setSelected(false);
             //holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_outline_accent_24dp));
         }
-
-        holder.textViewName.setText(listItineraries.get(position).getName());
+        holder.textViewCompanyName.setText(FirebaseUtils.getCompany(itinerary.getId()));
+        holder.textViewName.setText(itinerary.getName());
     }
 
     @Override
@@ -81,17 +83,19 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
     }
 
-    public class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public LinearLayout linearLayout;
-        public TextView textViewName;
-        public ImageView imageViewStar;
+        LinearLayout linearLayout;
+        TextView textViewName;
+        TextView textViewCompanyName;
+        ImageView imageViewStar;
 
 
         public ItineraryViewHolder(View itemView) {
             super(itemView);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
             textViewName = (TextView) itemView.findViewById(R.id.text1);
+            textViewCompanyName = (TextView) itemView.findViewById(R.id.textViewCompanyName);
             imageViewStar = (ImageView) itemView.findViewById(R.id.icon);
             linearLayout.setOnClickListener(this);
             imageViewStar.setOnClickListener(this);
