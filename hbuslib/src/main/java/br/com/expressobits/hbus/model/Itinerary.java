@@ -7,7 +7,7 @@ import java.util.List;
  * @author Rafael Correa.
  * @since 18/06/2015.
  */
-public class Itinerary {
+public class Itinerary implements Comparable<Itinerary>{
 
 
     private String id;
@@ -55,5 +55,10 @@ public class Itinerary {
     @Override
     public String toString() {
         return this.getName();
+    }
+
+    @Override
+    public int compareTo(Itinerary itinerary) {
+        return this.getName().compareTo(itinerary.getName());
     }
 }
