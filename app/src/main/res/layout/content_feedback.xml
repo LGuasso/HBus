@@ -10,12 +10,91 @@
     tools:showIn="@layout/activity_feedback"
     android:background="@color/white">
 
-    <android.support.v7.widget.CardView
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_the_type_of_feedback"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/line_divider"/>
+            </LinearLayout>
+
+
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner_feedback"
+                android:padding="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/list_feedbacks"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/line_divider"/>
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_text_email_feedback"
+                android:lines="1"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="@string/email_here"/>
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_text_feedback"
+                android:lines="@integer/max_lines_feedback"
+                android:maxLines="@integer/max_lines_feedback"
+                android:maxLength="@integer/max_length_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/write_your_feedback_here"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/checkbox_feedback_includes_system_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/include_system_information"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/colorPrimary"
         app:cardElevation="4dp">
 
         <LinearLayout
@@ -39,58 +118,10 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textAlignment="center"
+                android:gravity="center_horizontal"
                 android:text="@string/send_your_feedback_to_expressobits"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
-
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/select_the_type_of_feedback"/>
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spinner_feedback"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Spinner.DropDown"
-                android:entries="@array/list_feedbacks"/>
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/edit_text_feedback"
-                android:lines="@integer/max_lines_feedback"
-                android:maxLines="@integer/max_lines_feedback"
-                android:singleLine="false"
-                android:maxLength="@integer/max_length_feedback"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/write_your_feedback_here"/>
-
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/checkbox_feedback_includes_system_information"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/include_system_information"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
 
 
 
