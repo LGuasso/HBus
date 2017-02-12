@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
+                .addTestDevice(getString(R.string.tablet_test_device_id))
                 .build();
         mInterstitialAd.loadAd(adRequest);
     }

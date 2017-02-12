@@ -14,11 +14,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
@@ -27,9 +27,9 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.ui.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.ui.ManagerInit;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
@@ -178,38 +178,23 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.COMPANY_TABLE);
         DatabaseReference countryRef = itinerariesTableRef.child(country);
         DatabaseReference cityRef = countryRef.child(city);
-        cityRef.addChildEventListener(new ChildEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Company company = dataSnapshot.getValue(Company.class);
-                company.setId(FirebaseUtils.getIdCompany(country,city,company.getName()));
-                addCompany(company);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshotCompany : dataSnapshot.getChildren()) {
+                    Company company = dataSnapshotCompany.getValue(Company.class);
+                    company.setId(FirebaseUtils.getIdCompany(country, city, company.getName()));
+                    addCompany(company);
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        cityRef.addListenerForSingleValueEvent(valueEventListener);
     }
-
-
-
 
     public void refresh(final String country){
         cities.clear();
@@ -218,35 +203,23 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         FirebaseDatabase database= FirebaseDatabase.getInstance();
         DatabaseReference citiesTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
         DatabaseReference countryRef = citiesTableRef.child(country);
-        countryRef.addChildEventListener(new ChildEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d("FIREBASE","onChildAdded");
-                City city = dataSnapshot.getValue(City.class);
-                city.setId(FirebaseUtils.getIdCity(country,city.getName()));
-                addCity(city);
-                Log.d("FIREBASE",city.getId());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d("FIREBASE","onChildChanged");
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d("FIREBASE","onChildRemoved");
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.d("FIREBASE","onChildMoved");
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshotCity : dataSnapshot.getChildren()) {
+                    City city = dataSnapshotCity.getValue(City.class);
+                    city.setId(FirebaseUtils.getIdCity(country, city.getName()));
+                    addCity(city);
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("FIREBASE","onCancelled");
+
             }
-        });
+        };
+        countryRef.addListenerForSingleValueEvent(valueEventListener);
+
     }
+
 }

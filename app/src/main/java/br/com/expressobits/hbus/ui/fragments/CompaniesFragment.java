@@ -8,16 +8,17 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,27 +115,19 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
         DatabaseReference companiesTable = firebaseDatabase.getReference(FirebaseUtils.COMPANY_TABLE);
         DatabaseReference countryReference = companiesTable.child(country);
         DatabaseReference cityReference = countryReference.child(city);
-        cityReference.addChildEventListener(new ChildEventListener() {
+        cityReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Company company = dataSnapshot.getValue(Company.class);
-                company.setId(FirebaseUtils.getIdCompany(country,city,company.getName()));
-                addCompany(company);
-            }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshotCompany:dataSnapshot.getChildren()){
+                    if(CompaniesFragment.this.isVisible()){
+                        Company company = dataSnapshotCompany.getValue(Company.class);
+                        company.setId(FirebaseUtils.getIdCompany(country,city,company.getName()));
+                        addCompany(company);
+                    }else{
+                        Log.i(TAG,"Cancel load company Cause:Fragment not visible");
+                    }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                }
             }
 
             @Override
@@ -142,8 +135,6 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
             }
         });
-
-
     }
 
     public void refreshRecyclerView(){

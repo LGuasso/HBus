@@ -69,7 +69,10 @@ public class TimesActivity extends AppCompatActivity {
 
     public void initAdView(){
         AdView mAdView = (AdView) findViewById(R.id.ad_view);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().
+        addTestDevice(getString(R.string.tablet_test_device_id)).
+                build();
+
         mAdView.loadAd(adRequest);
     }
 

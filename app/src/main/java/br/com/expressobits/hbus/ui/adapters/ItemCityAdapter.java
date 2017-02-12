@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
     private List<City> listCities;
     private LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
+    private static final String TAG = "ItemCityAdapter";
 
     public ItemCityAdapter(Context context, List<City> lista){
         this.context = context;
@@ -93,6 +95,7 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
                         .error(R.drawable.ic_flag_white_48dp)
                         .placeholder(R.drawable.ic_flag_white_48dp)
                         .into(holder.imageViewPhoto);
+                Log.i(TAG,"Load image "+uri.getPath());
             }
         });
 

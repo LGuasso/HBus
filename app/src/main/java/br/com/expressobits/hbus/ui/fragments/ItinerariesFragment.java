@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -99,7 +98,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
         recyclerViewItineraries.setHasFixedSize(true);
-
     }
 
 
@@ -121,24 +119,24 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         progressBar.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
         loadCompaniesFromFirebase(country,city);
-
     }
 
     private void loadCompaniesFromFirebase(final String country,final String city){
-        //loadCodesFromFirebase(country, city, company);
-        //loadItinerariesFromFirebase(country, city, company);
         FirebaseDatabase database= FirebaseDatabase.getInstance();
         DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.COMPANY_TABLE);
         DatabaseReference countryRef = itinerariesTableRef.child(country);
         DatabaseReference cityRef = countryRef.child(city);
-        cityRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Company company = dataSnapshot1.getValue(Company.class);
-                    loadItinerariesFromFirebase(country, city, company.getName());
-                    loadCodesFromFirebase(country, city, company.getName());
-                    Log.d(TAG,company.getName());
+                    if(ItinerariesFragment.this.isVisible()){
+                        loadItinerariesFromFirebase(country, city, company.getName());
+                        loadCodesFromFirebase(country, city, company.getName());
+                    }
+
+                    Log.d(TAG, company.getName());
                 }
             }
 
@@ -146,7 +144,8 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        cityRef.addListenerForSingleValueEvent(valueEventListener);
     }
 
     private void loadItinerariesFromFirebase(final String country, final String city, final String company) {
@@ -155,35 +154,28 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         DatabaseReference countryRef = itinerariesTableRef.child(country);
         DatabaseReference cityRef = countryRef.child(city);
         DatabaseReference companyRef = cityRef.child(company);
-        companyRef.addChildEventListener(new ChildEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshotItinerary : dataSnapshot.getChildren()) {
+                    if(ItinerariesFragment.this.isVisible()){
+                        Itinerary itinerary = dataSnapshotItinerary.getValue(Itinerary.class);
+                        itinerary.setId(FirebaseUtils.getIdItinerary(country, city, company, itinerary.getName()));
+                        addItinerary(itinerary);
+                    }else {
+                        Log.i(TAG,"Cancel load itinerary (FRAGMENT) no visible");
+                    }
 
-                Itinerary itinerary = dataSnapshot.getValue(Itinerary.class);
-                itinerary.setId(FirebaseUtils.getIdItinerary(country,city,company,itinerary.getName()));
-                addItinerary(itinerary);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        companyRef.addListenerForSingleValueEvent(valueEventListener);
+
     }
 
     private void loadCodesFromFirebase(final String country, final String city, final String company) {
@@ -192,35 +184,25 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         DatabaseReference countryRef = codesTableRef.child(country);
         DatabaseReference cityRef = countryRef.child(city);
         DatabaseReference companyRef = cityRef.child(company);
-        companyRef.addChildEventListener(new ChildEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshotCode : dataSnapshot.getChildren()) {
+                    if(ItinerariesFragment.this.isVisible()){
+                        Code code = dataSnapshotCode.getValue(Code.class);
+                        code.setId(FirebaseUtils.getIdCode(country, city, company, code.getName()));
+                        Log.d("CODE LOAD FORM FIREBASE", "Code " + code.getName());
+                    }
 
-                Code code = dataSnapshot.getValue(Code.class);
-                code.setId(FirebaseUtils.getIdCode(country,city,company,code.getName()));
-                Log.d("CODE LOAD FORM FIREBASE","Code "+code.getName());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        companyRef.addListenerForSingleValueEvent(valueEventListener);
     }
 
     @Override
