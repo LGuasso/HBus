@@ -157,6 +157,8 @@ public class SendData {
 
     }
 
+
+
     private void pushCompany(City city, Company company) {
         if(isCompanySend){
             push(city, company);
@@ -186,7 +188,7 @@ public class SendData {
         }
     }
 
-    private void pushItinerary(City city, Company company, Itinerary itinerary) {
+    public void pushItinerary(City city, Company company, Itinerary itinerary) {
         if(isItinerarySend) {
             push(city, company, itinerary);
         }

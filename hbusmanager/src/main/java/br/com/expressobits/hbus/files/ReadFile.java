@@ -197,6 +197,7 @@ public class ReadFile {
                 System.out.println(mLine);
             }
         } catch (IOException e) {
+            System.err.println("ERRO AO LER ARQUIVO!");
             e.printStackTrace();
         } finally {
             try {
