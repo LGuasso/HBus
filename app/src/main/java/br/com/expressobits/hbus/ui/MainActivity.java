@@ -50,7 +50,7 @@ import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
-import br.com.expressobits.hbus.ui.fragments.FavoritesItineraryFragment;
+import br.com.expressobits.hbus.ui.fragments.BookmarkItineraryFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.news.NewsFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
@@ -91,14 +91,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         loadParams();
         if (savedInstanceState == null) {
-            Fragment fragment = new FavoritesItineraryFragment();
+            Fragment fragment = new BookmarkItineraryFragment();
             if (findViewById(R.id.framelayout_main) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_main, fragment,FavoritesItineraryFragment.TAG);
+                ft.add(R.id.framelayout_main, fragment, BookmarkItineraryFragment.TAG);
                 ft.commit();
             } else if (findViewById(R.id.framelayout_content) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_menu, fragment,FavoritesItineraryFragment.TAG);
+                ft.add(R.id.framelayout_menu, fragment, BookmarkItineraryFragment.TAG);
                 ft.add(R.id.framelayout_content, new OnibusFragment(),OnibusFragment.TAG);
                 ft.commit();
                 //Define se tela é para dois framgnetos
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
      */
     public void setSelectItemNavigation(String TAG){
         switch (TAG){
-            case FavoritesItineraryFragment.TAG:
+            case BookmarkItineraryFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_favorites).setChecked(true);
                 break;
             case ItinerariesFragment.TAG:
@@ -437,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         Fragment fragment = new Fragment();
         setSelectItemNavigation(TAG);
         switch (TAG){
-            case FavoritesItineraryFragment.TAG:
+            case BookmarkItineraryFragment.TAG:
                 setActionBarTitle(getString(R.string.app_name));
                 if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
@@ -588,7 +588,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         if (id == R.id.nav_logout) {
             logout();
         }else if (id == R.id.nav_favorites) {
-            addFragment(FavoritesItineraryFragment.TAG);
+            addFragment(BookmarkItineraryFragment.TAG);
         } else if (id == R.id.nav_all_itineraries) {
             addFragment(ItinerariesFragment.TAG);
         }else if (id == R.id.nav_alarms) {
