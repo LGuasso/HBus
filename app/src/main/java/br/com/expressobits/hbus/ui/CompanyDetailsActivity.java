@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.ui;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -83,9 +84,12 @@ public class CompanyDetailsActivity extends AppCompatActivity {
 
     private void refreshCompany(Company company){
         this.company = company;
-        textViewEmail.setText(company.getEmail());
-        textViewAddress.setText(company.getAddress());
-        textViewPhoneNumber.setText(company.getPhoneNumber());
-        textViewWebsite.setText(company.getWebsite());
+        if(textViewAddress.getVisibility()==View.VISIBLE){
+            textViewEmail.setText(company.getEmail());
+            textViewAddress.setText(company.getAddress());
+            textViewPhoneNumber.setText(company.getPhoneNumber());
+            textViewWebsite.setText(company.getWebsite());
+        }
+
     }
 }
