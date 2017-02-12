@@ -36,8 +36,8 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  * @author Rafael
  * @since 27/05/2015.
  */
-public class ItemFavoriteItineraryAdapter extends
-        RecyclerView.Adapter<ItemFavoriteItineraryAdapter.HolderFavoriteItinerary>  {
+public class ItemBookmarkItineraryAdapter extends
+        RecyclerView.Adapter<ItemBookmarkItineraryAdapter.HolderFavoriteItinerary>  {
 
     private Context context;
     public static String PREF_TIME_HOME_SCREEN = "time_home_screen";
@@ -46,7 +46,7 @@ public class ItemFavoriteItineraryAdapter extends
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
     private HashMap<String,HashMap<String,Code>> codes = new HashMap<>();
 
-    public ItemFavoriteItineraryAdapter(Context context, List<Itinerary> lista){
+    public ItemBookmarkItineraryAdapter(Context context, List<Itinerary> lista){
         this.context = context;
         this.itineraryList = lista;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -72,7 +72,7 @@ public class ItemFavoriteItineraryAdapter extends
         }
         holder.textItineraryName.setText(name);
         holder.textViewCompanyName.setText(companyName);
-        if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemFavoriteItineraryAdapter.PREF_TIME_HOME_SCREEN,true)){
+        if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemBookmarkItineraryAdapter.PREF_TIME_HOME_SCREEN,true)){
             getBusList(holder,itinerary).toString();
         }
 

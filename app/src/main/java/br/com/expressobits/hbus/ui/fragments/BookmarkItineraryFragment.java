@@ -1,8 +1,7 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
-import android.app.Activity;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -21,10 +20,10 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.FavoriteDAO;
 import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.ui.adapters.ItemFavoriteItineraryAdapter;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
+import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.adapters.ItemBookmarkItineraryAdapter;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
@@ -33,7 +32,7 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
  * @author Rafael Correa
  * @since 06/07/2015
  */
-public class FavoritesItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack,
+public class BookmarkItineraryFragment extends Fragment implements RecyclerViewOnClickListenerHack,
         ChooseWayDialogListener,View.OnClickListener{
 
     public static final String TAG = "FavoritesItineraryFragment";
@@ -46,17 +45,14 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
     View view;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // Este c�digo serve para nos certificarmos que a Activity que cont�m o Fragment
-        // implementa a interface do callback. Se n�o, lan�a uma exce��o
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mCallback = (OnSettingsListener) activity;
+            mCallback = (OnSettingsListener) this.getActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(this.getActivity().toString()
                     + " precisa implementar OnSettingsListener");
         }
-
     }
 
     @Override
@@ -110,7 +106,7 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
         FavoriteDAO dao  = new FavoriteDAO(getActivity());
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         itineraries = dao.getItineraries(cityId);
-        ItemFavoriteItineraryAdapter adapter = new ItemFavoriteItineraryAdapter(this.getActivity(), itineraries);
+        ItemBookmarkItineraryAdapter adapter = new ItemBookmarkItineraryAdapter(this.getActivity(), itineraries);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewLines.setAdapter(adapter);
         dao.close();
@@ -135,21 +131,19 @@ public class FavoritesItineraryFragment extends Fragment implements RecyclerView
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.dialog_alert_title_confirm_remove);
                 builder.setNegativeButton(android.R.string.no, null);
-                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FavoriteDAO dao = new FavoriteDAO(getActivity());
-                        Itinerary itinerary = dao.getItinerary(selectedItem);
-                        dao.removeFavorite(itinerary);
-                        FavoritesItineraryFragment.this.initListViews(FavoritesItineraryFragment.this.view);
-                        updateEmptyListView();
-                        String result = getActivity().getResources().getString(R.string.delete_itinerary_with_sucess,itinerary.getName());
-                        if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
-                            Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
-                        }
-                        Snackbar.make(FavoritesItineraryFragment.this.view,result, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                        dao.close();
+                builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    FavoriteDAO dao = new FavoriteDAO(getActivity());
+                    Itinerary itinerary1 = dao.getItinerary(selectedItem);
+                    dao.removeFavorite(itinerary1);
+                    BookmarkItineraryFragment.this.initListViews(BookmarkItineraryFragment.this.view);
+                    updateListViews();
+                    updateEmptyListView();
+                    String result = getActivity().getResources().getString(R.string.delete_itinerary_with_sucess, itinerary1.getName());
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
+                        Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
                     }
+                    Snackbar.make(BookmarkItineraryFragment.this.view,result, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                    dao.close();
                 });
                 builder.show();
 
