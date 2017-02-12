@@ -1,15 +1,11 @@
 package br.com.expressobits.hbus.ui.help;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Feedback;
@@ -31,6 +26,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     public static final String KEY_VERSION_INFO="VERSION_INFO";
     private String versionInfo;
     private EditText editTextFeedback;
+    private EditText editTextEmail;
     private CheckBox checkBoxFeedback;
     private Spinner spinnerFeedback;
     private LinearLayout linearLayoutSendFeedback;
@@ -74,6 +70,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         editTextFeedback = (EditText) findViewById(R.id.edit_text_feedback);
         checkBoxFeedback = (CheckBox) findViewById(R.id.checkbox_feedback_includes_system_information);
         spinnerFeedback = (Spinner) findViewById(R.id.spinner_feedback);
+        editTextEmail = (EditText) findViewById(R.id.edit_text_email_feedback);
         linearLayoutSendFeedback.setOnClickListener(this);
     }
 
@@ -81,7 +78,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         Feedback feedback = new Feedback();
         feedback.setMessage(editTextFeedback.getText().toString());
         feedback.setType(spinnerFeedback.getSelectedItemPosition());
-        feedback.setEmail(getEmail(this));
+        feedback.setEmail(editTextEmail.getText().toString());
         if(checkBoxFeedback.isChecked()){
             ArrayList<String> informations = new ArrayList<>();
             VersionInfoDialogFragment versionInfoDialogFragment = new VersionInfoDialogFragment();
@@ -106,16 +103,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private String getEmail(Context context){
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-        Account[] accounts = AccountManager.get(context).getAccounts();
-        for (Account account : accounts) {
-            if (emailPattern.matcher(account.name).matches()) {
-                return account.name;
-            }
-        }
-        return null;
-    }
+
 
     @Override
     public void onClick(View v) {
