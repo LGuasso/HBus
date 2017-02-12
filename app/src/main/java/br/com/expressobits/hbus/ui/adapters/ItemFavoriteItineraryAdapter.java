@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -107,46 +106,31 @@ public class ItemFavoriteItineraryAdapter extends
                 DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
                 DatabaseReference wayRef = itineraryRef.child(way);
                 DatabaseReference typedayRef = wayRef.child(typeday);
-                typedayRef.addChildEventListener(new ChildEventListener() {
+                typedayRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Bus bus = dataSnapshot.getValue(Bus.class);
-                        bus.setId(FirebaseUtils.getIdBus(FirebaseUtils.getCountry(itinerary.getId()),
-                                FirebaseUtils.getCityName(itinerary.getId()),
-                                FirebaseUtils.getCompany(itinerary.getId()),
-                                itinerary.getName(),
-                                way,
-                                typeday,
-                                String.valueOf(bus.getTime())));
-                        buses.add(bus);
-                        next.put(way,BusUtils.getNextBusforList(buses));
-                        setLastUpdate(holder,bus.getTime());
-                        updateFieldNextBus(holder,itinerary,next);
-
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot dataSnapshotBus : dataSnapshot.getChildren()) {
+                            Bus bus = dataSnapshotBus.getValue(Bus.class);
+                            bus.setId(FirebaseUtils.getIdBus(FirebaseUtils.getCountry(itinerary.getId()),
+                                    FirebaseUtils.getCityName(itinerary.getId()),
+                                    FirebaseUtils.getCompany(itinerary.getId()),
+                                    itinerary.getName(),
+                                    way,
+                                    typeday,
+                                    String.valueOf(bus.getTime())));
+                            buses.add(bus);
+                            next.put(way, BusUtils.getNextBusforList(buses));
+                            setLastUpdate(holder, bus.getTime());
+                            updateFieldNextBus(holder, itinerary, next);
+                        }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
+
                 });
-
-
             }
         }
         return next;
@@ -186,7 +170,8 @@ public class ItemFavoriteItineraryAdapter extends
                 textViewCode.setSelected(true);
                 holder.linearLayoutHours.addView(view, i);
             }catch (NullPointerException ex){
-
+                System.err.println("NullPointerException in load codes context!");
+                ex.printStackTrace();
             }
 
 

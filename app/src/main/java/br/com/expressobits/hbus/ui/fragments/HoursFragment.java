@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -101,7 +100,6 @@ public class HoursFragment extends Fragment{
 
 
     protected void refresh(final String country, final String city, final String company, final String itinerary, final String way, final String typeday){
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference busTableRef = database.getReference(FirebaseUtils.BUS_TABLE);
         DatabaseReference countryRef = busTableRef.child(country);
@@ -115,35 +113,17 @@ public class HoursFragment extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG,"We're done loading the initial "+dataSnapshot.getChildrenCount()+" items");
                 if(dataSnapshot.getChildrenCount()>0){
-                    typedayRef.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Bus bus = dataSnapshot.getValue(Bus.class);
+                    for(DataSnapshot dataSnapshotBus:dataSnapshot.getChildren()){
+                        if(HoursFragment.this.isVisible()){
+                            Bus bus = dataSnapshotBus.getValue(Bus.class);
                             bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,String.valueOf(bus.getTime())));
                             addBus(bus);
+                        }else{
+                            Log.i(TAG,"Cancel load bus (FRAGMENT) visible!");
                         }
 
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(getActivity(),"Erro "+databaseError.getCode(),Toast.LENGTH_LONG).show();
-                            Log.e(TAG,databaseError.getDetails()+" message:"+databaseError.getMessage());
-                        }
-                    });
+                    }
                 }else{
                     recyclerView.setVisibility(View.INVISIBLE);
                     linearLayoutEmptyState.setVisibility(View.VISIBLE);
@@ -153,7 +133,8 @@ public class HoursFragment extends Fragment{
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getActivity(),"Erro "+databaseError.getCode(),Toast.LENGTH_LONG).show();
+                Log.e(TAG,databaseError.getDetails()+" message:"+databaseError.getMessage());
             }
         });
 
