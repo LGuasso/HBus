@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.TypeDay;
@@ -118,7 +117,7 @@ public class OnibusFragment extends Fragment{
         viewPagerAdapter.refresh(country,city,company,itinerary,way);
         viewPager.setAdapter(viewPagerAdapter);
         //TODO implement sunday days in holiday
-        int typeday  = TimeUtils.getTypedayinCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC"))).toInt();
+        int typeday  = TimeUtils.getTypedayinCalendar(Calendar.getInstance()).toInt();
         viewPager.setCurrentItem(typeday);
     }
 
