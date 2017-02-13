@@ -98,8 +98,8 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void starHelpContent() {
-        Intent intent = new Intent(this,HelpContentActivity.class);
-        startActivity(intent);
+        /*Intent intent = new Intent(this,HelpContentActivity.class);
+        startActivity(intent);*/
     }
     public void openPrivacyPolicy() {
         Intent privacyPolicyIntent = new Intent(this, PrivacyPolicyActivity.class);
