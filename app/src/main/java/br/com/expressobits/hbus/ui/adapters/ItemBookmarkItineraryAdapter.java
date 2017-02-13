@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Bus;
@@ -40,7 +41,7 @@ public class ItemBookmarkItineraryAdapter extends
         RecyclerView.Adapter<ItemBookmarkItineraryAdapter.HolderFavoriteItinerary>  {
 
     private Context context;
-    public static String PREF_TIME_HOME_SCREEN = "time_home_screen";
+    private static String PREF_TIME_HOME_SCREEN = "time_home_screen";
     private List<Itinerary> itineraryList;
     private LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
@@ -55,8 +56,7 @@ public class ItemBookmarkItineraryAdapter extends
     @Override
     public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int j) {
         View viewP = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
-        HolderFavoriteItinerary holder = new HolderFavoriteItinerary(viewP);
-        return holder;
+        return new HolderFavoriteItinerary(viewP);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ItemBookmarkItineraryAdapter extends
         holder.textItineraryName.setText(name);
         holder.textViewCompanyName.setText(companyName);
         if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemBookmarkItineraryAdapter.PREF_TIME_HOME_SCREEN,true)){
-            getBusList(holder,itinerary).toString();
+            getBusList(holder,itinerary);
         }
 
     }
@@ -83,9 +83,9 @@ public class ItemBookmarkItineraryAdapter extends
      *
      * Método que identifica quais serão os próximos ônibus para
      *
-     * @param holder
-     * @param itinerary
-     * @return
+     * @param holder Holder view
+     * @param itinerary Itinerary
+     * @return Mapa com chave e ônibus
      */
     private HashMap<String,Bus> getBusList(final HolderFavoriteItinerary holder, final Itinerary itinerary){
 
@@ -139,7 +139,7 @@ public class ItemBookmarkItineraryAdapter extends
     private void setLastUpdate(HolderFavoriteItinerary holder,long milis){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milis);
-        SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy", Locale.getDefault());
         String format = sdf.format(calendar.getTime());
         holder.textViewUpdated.setText(context.getString(R.string.updated_date,format));
 
@@ -155,9 +155,8 @@ public class ItemBookmarkItineraryAdapter extends
             TextView textViewWay = (TextView) view.findViewById(R.id.textViewWayforNextBus);
             TextView textViewCode = (TextView) view.findViewById(R.id.textViewCodeforNextBus);
 
-            String time = "";
             try{
-                time = TimeUtils.getFormatTime(next.get(way).getTime());
+                String time = TimeUtils.getFormatTime(next.get(way).getTime());
                 String code = next.get(way).getCode();
                 textViewWay.setText(way);
                 textViewHour.setText(time);
@@ -188,23 +187,21 @@ public class ItemBookmarkItineraryAdapter extends
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
     }
 
-    public class HolderFavoriteItinerary extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
+    class HolderFavoriteItinerary extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
-        public TextView textItineraryName;
-        public TextView textViewCompanyName;
-        public TextView textViewUpdated;
-        public Button buttonRemove;
-        public Button buttonLookHours;
-        public LinearLayout linearLayoutInfo;
-        public LinearLayout linearLayoutHours;
+        private TextView textItineraryName;
+        private TextView textViewCompanyName;
+        private TextView textViewUpdated;
+        private Button buttonRemove;
+        private Button buttonLookHours;
+        private LinearLayout linearLayoutHours;
 
-        public HolderFavoriteItinerary(View itemView) {
+        private HolderFavoriteItinerary(View itemView) {
             super(itemView);
 
             textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
             textViewCompanyName = (TextView) itemView.findViewById(R.id.textViewCompanyName);
             textViewUpdated = (TextView) itemView.findViewById(R.id.textViewLastUpdate);
-            linearLayoutInfo = (LinearLayout) itemView.findViewById(R.id.linearlayout_background_info);
             linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
             buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
             buttonLookHours = (Button) itemView.findViewById(R.id.buttonLookTime);
@@ -218,14 +215,14 @@ public class ItemBookmarkItineraryAdapter extends
         @Override
         public void onClick(View v) {
             if(recyclerViewOnClickListenerHack != null){
-                recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
+                recyclerViewOnClickListenerHack.onClickListener(v,this.getAdapterPosition());
             }
         }
 
 
         @Override
         public boolean onLongClick(View v) {
-            return recyclerViewOnClickListenerHack != null && recyclerViewOnClickListenerHack.onLongClickListener(v, getPosition());
+            return recyclerViewOnClickListenerHack != null && recyclerViewOnClickListenerHack.onLongClickListener(v,getAdapterPosition());
         }
     }
 
@@ -258,7 +255,7 @@ public class ItemBookmarkItineraryAdapter extends
 
 
     private void addCode(TextView textView,String company,String codeName,Code code){
-        if(codes.get(company)==null){
+        if(!codes.containsKey(company)){
             codes.put(company,new HashMap<>());
         }
         codes.get(company).put(codeName,code);
