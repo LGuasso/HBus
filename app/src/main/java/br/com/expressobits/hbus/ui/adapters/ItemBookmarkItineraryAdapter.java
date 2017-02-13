@@ -267,7 +267,9 @@ public class ItemBookmarkItineraryAdapter extends
     }
 
     private void updateCodeViews(TextView textView,Code code){
-        textView.setText(code.getDescrition());
+        if(code.getDescrition()!=null){
+            textView.setText(code.getDescrition());
+        }
         textView.setSelected(true);
 
     }
