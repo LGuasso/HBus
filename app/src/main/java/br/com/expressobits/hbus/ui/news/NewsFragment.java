@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -164,7 +165,9 @@ public class NewsFragment extends Fragment {
         DatabaseReference cityTableRef = newsTableRef.child(FirebaseUtils.CITY_TABLE);
         DatabaseReference countryRef = cityTableRef.child(country);
         DatabaseReference cityRef = countryRef.child(cityName);
-        cityRef.addChildEventListener(new ChildEventListener() {
+        //TODO criar configuração com número de notícias exibido
+        Query recentNewsQuery = cityRef.limitToLast(6);
+        recentNewsQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 News news = dataSnapshot.getValue(News.class);
