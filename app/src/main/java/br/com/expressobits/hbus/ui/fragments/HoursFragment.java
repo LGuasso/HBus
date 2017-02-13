@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +34,7 @@ public class HoursFragment extends Fragment{
 
     private RecyclerView recyclerView;
     private LinearLayout linearLayoutEmptyState;
+    private ProgressBar progressBar;
     private List<Bus> listBus;
     //private Context context;
     private static final String TAG = "HoursFragment";
@@ -61,6 +63,7 @@ public class HoursFragment extends Fragment{
         //this.context = inflater.getContext();
         initRecyclerView(view);
         linearLayoutEmptyState = (LinearLayout) view.findViewById(R.id.empty_list);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         listBus = new ArrayList<>();
         Bundle arguments = getArguments();
         if(arguments!=null && arguments.getString(ARGS_COUNTRY)!=null &&
@@ -100,6 +103,9 @@ public class HoursFragment extends Fragment{
 
 
     protected void refresh(final String country, final String city, final String company, final String itinerary, final String way, final String typeday){
+        recyclerView.setVisibility(View.INVISIBLE);
+        linearLayoutEmptyState.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference busTableRef = database.getReference(FirebaseUtils.BUS_TABLE);
         DatabaseReference countryRef = busTableRef.child(country);
@@ -113,6 +119,7 @@ public class HoursFragment extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG,"We're done loading the initial "+dataSnapshot.getChildrenCount()+" items");
                 if(dataSnapshot.getChildrenCount()>0){
+
                     for(DataSnapshot dataSnapshotBus:dataSnapshot.getChildren()){
                         if(HoursFragment.this.isVisible()){
                             Bus bus = dataSnapshotBus.getValue(Bus.class);
@@ -124,9 +131,13 @@ public class HoursFragment extends Fragment{
 
 
                     }
+                    recyclerView.setVisibility(View.VISIBLE);
+                    linearLayoutEmptyState.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }else{
                     recyclerView.setVisibility(View.INVISIBLE);
                     linearLayoutEmptyState.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
 
             }
