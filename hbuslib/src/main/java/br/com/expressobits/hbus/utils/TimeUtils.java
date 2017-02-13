@@ -16,6 +16,7 @@ public class TimeUtils {
     public static final String TAG = "TimeUtils";
     /**
      * Constante que contém a data de troca dos tempos do servidor UTC
+     * Wed Jun 01 2016 03:00:00
      */
     public static final long TIME_CHANGE_TIMEZONE_TO_UTC = 1464750000000l;
 
