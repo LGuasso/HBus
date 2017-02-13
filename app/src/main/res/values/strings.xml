@@ -51,7 +51,7 @@
     <string name="see_all_itinerary">See all itinerary</string>
     <string name="select_the_type_of_feedback">Select the type of feedback</string>
     <string name="developer">Developer</string>
-    <string name="help_warning">    Este aplicativo tem função de facilitar o acesso aos horários disponíveis no site da SIM(Sistema Integrado Municipal)  http://www.simsm.com.br/ ,ou seja, a Expresso Bits não se responsabiliza pelos horários!</string>
+    <string name="help_warning">    Este aplicativo tem função de facilitar o acesso aos horários disponíveis nas agências de transporte da sua cidade.A Expresso Bits não se responsabiliza pelos horários!</string>
     <string-array name="list_feedbacks">
         <item>Tip</item>
         <item>Error</item>
