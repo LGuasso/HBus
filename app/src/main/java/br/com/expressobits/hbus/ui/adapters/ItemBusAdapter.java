@@ -125,6 +125,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int i) {
         final Bus bus = listBus.get(i);
+        bus.setCode(bus.getCode().replace(" ",""));
         myViewHolder.txtViewHorario.setText(TimeUtils.getFormatTime(bus.getTime()));
         /**Code code = db.getCode(cityId,listBus.get(i).getCode());
         if(code!=null) {

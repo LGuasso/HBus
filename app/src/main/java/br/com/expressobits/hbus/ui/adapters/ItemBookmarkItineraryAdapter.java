@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.ui.adapters;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,6 +161,7 @@ public class ItemBookmarkItineraryAdapter extends
                 String code = next.get(way).getCode();
                 textViewWay.setText(way);
                 textViewHour.setText(time);
+                code=code.replace(" ","");
                 textViewCode.setText(code);
                 if(code.length()<= Code.CODE_LENGTH_TO_DESCRIPTION){
                     loadCode(textViewCode,code,FirebaseUtils.getCompany(itinerary.getId()),
@@ -227,7 +229,6 @@ public class ItemBookmarkItineraryAdapter extends
     }
 
     private void loadCode(TextView textView,String codeName,String company,String country,String cityName){
-
         if(!codes.containsKey(codeName)){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference busTable = database.getReference(FirebaseUtils.CODE_TABLE);
@@ -239,7 +240,12 @@ public class ItemBookmarkItineraryAdapter extends
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Code code = dataSnapshot.getValue(Code.class);
-                    addCode(textView,company,codeName,code);
+                    if(code!=null){
+                        addCode(textView,company,codeName,code);
+                    }else{
+                        Log.d("NATHY","ERRO ENCONTRADO CODE"+codeName );
+                    }
+
                 }
 
                 @Override
