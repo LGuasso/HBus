@@ -43,7 +43,8 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_alarm_list, container, false);
+        View view;
+        view = inflater.inflate(R.layout.fragment_alarm_list, container, false);
         initViews(view);
         return view;
     }
@@ -55,13 +56,10 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     private void updateListAlarms(Context context){
         AlarmDAO alarmDAO = new AlarmDAO(context);
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-        String companyId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,SelectCityActivity.DEFAULT_COUNTRY);
         City city= new City();
         city.setName(FirebaseUtils.getCityName(cityId));
         city.setCountry(FirebaseUtils.getCountry(cityId));
-        if(city!=null){
-            alarmList = alarmDAO.getAlarms(city);
-        }
+        alarmList = alarmDAO.getAlarms(city);
         alarmDAO.close();
     }
 
@@ -74,7 +72,7 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         recyclerViewAlarms.setLayoutManager(llmUseful);
     }
 
-    private void udpateRecyclerViewAlarms(Context context){
+    private void updateRecyclerViewAlarms(Context context){
         ItemAlarmAdapter adapter =
                 new ItemAlarmAdapter(context,alarmList);
         adapter.setRecyclerViewOnClickListenerHack(this);
@@ -84,7 +82,7 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     @Override
     public void onResume() {
         updateListAlarms(getActivity());
-        udpateRecyclerViewAlarms(getActivity());
+        updateRecyclerViewAlarms(getActivity());
         super.onResume();
     }
 

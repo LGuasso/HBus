@@ -1,12 +1,12 @@
 package br.com.expressobits.hbus.ui.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,8 +14,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
@@ -24,12 +24,12 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  * @author Rafael Correa
  * @since 01/04/16
  */
-public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyViewHolder> implements View.OnClickListener{
+public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyViewHolder>{
 
-    private List<Alarm> alarmList;
-    private LayoutInflater layoutInflater;
+    private final List<Alarm> alarmList;
+    private final LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
-    private Context context;
+    private final Context context;
     //http://stackoverflow.com/questions/27203817/recyclerview-expand-collapse-items
     //private int expandedPosition = -1;
 
@@ -57,40 +57,29 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
         holder.textViewTime.setText(TimeUtils.getFormatTime(calendar));
         holder.switchActived.setChecked(alarm.isActived());
         verifyIsActivedAlarm(holder,alarm);
-        holder.switchActived.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        holder.switchActived.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                AlarmDAO alarmDAO = new AlarmDAO(context);
-                alarm.setActived(isChecked);
-                alarmDAO.insert(alarm);
-                String name = alarm.getName();
-                if(name==null){
-                    name = context.getString(R.string.alarm);
-                }
-                verifyIsActivedAlarm(holder,alarm);
+            AlarmDAO alarmDAO = new AlarmDAO(context);
+            alarm.setActived(isChecked);
+            alarmDAO.insert(alarm);
+            String name = alarm.getName();
+            if(name==null){
+                name = context.getString(R.string.alarm);
             }
+            verifyIsActivedAlarm(holder,alarm);
         });
-        /**if (position == expandedPosition) {
-            holder.llExpandArea.setVisibility(View.VISIBLE);
-        } else {
-            holder.llExpandArea.setVisibility(View.GONE);
-        }*/
-        //holder.textViewDays.setText(alarm.getDaysOfWeek().toString());
 
 
     }
 
     /**
-     * Forma ao UI se está ativado e responde esses comandos ao item view
-     * @param alarm
-     * @param holder
+     *  Form to UI if enabled and responds to the view item
      */
     private void verifyIsActivedAlarm(MyViewHolder holder,Alarm alarm){
         if(alarm.isActived()){
-            holder.textViewTime.setTextColor(context.getResources().getColor(R.color.colorPrimary));
-            holder.textViewName.setTextColor(context.getResources().getColor(R.color.subtext_color));
-            holder.textViewItineraryName.setTextColor(context.getResources().getColor(R.color.subtext_color));
+            holder.textViewTime.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+            holder.textViewName.setTextColor(ContextCompat.getColor(context,R.color.subtext_color));
+            holder.textViewItineraryName.setTextColor(ContextCompat.getColor(context,R.color.subtext_color));
             holder.textViewSunday.setEnabled(alarm.isSunday());
             holder.textViewMonday.setEnabled(alarm.isMonday());
             holder.textViewTuesday.setEnabled(alarm.isTuesday());
@@ -99,9 +88,9 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
             holder.textViewFriday.setEnabled(alarm.isFriday());
             holder.textViewSaturday.setEnabled(alarm.isSaturday());
         }else {
-            holder.textViewTime.setTextColor(context.getResources().getColor(android.R.color.secondary_text_dark_nodisable));
-            holder.textViewName.setTextColor(context.getResources().getColor(android.R.color.secondary_text_dark_nodisable));
-            holder.textViewItineraryName.setTextColor(context.getResources().getColor(android.R.color.secondary_text_dark_nodisable));
+            holder.textViewTime.setTextColor(ContextCompat.getColor(context,android.R.color.secondary_text_dark_nodisable));
+            holder.textViewName.setTextColor(ContextCompat.getColor(context,android.R.color.secondary_text_dark_nodisable));
+            holder.textViewItineraryName.setTextColor(ContextCompat.getColor(context,android.R.color.secondary_text_dark_nodisable));
             holder.textViewSunday.setEnabled(false);
             holder.textViewMonday.setEnabled(false);
             holder.textViewTuesday.setEnabled(false);
@@ -121,28 +110,23 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
     }
 
-    @Override
-    public void onClick(View v) {
-    }
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        final TextView textViewName;
+        final TextView textViewSunday;
+        final TextView textViewMonday;
+        final TextView textViewTuesday;
+        final TextView textViewWednesday;
+        final TextView textViewThursday;
+        final TextView textViewFriday;
+        final TextView textViewSaturday;
+        final TextView textViewTime;
+        final SwitchCompat switchActived;
+        final LinearLayout relativeLayout;
+        final TextView textViewItineraryName;
+        final View itemView;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
-        public TextView textViewName;
-        public TextView textViewSunday;
-        public TextView textViewMonday;
-        public TextView textViewTuesday;
-        public TextView textViewWednesday;
-        public TextView textViewThursday;
-        public TextView textViewFriday;
-        public TextView textViewSaturday;
-        public TextView textViewTime;
-        public SwitchCompat switchActived;
-        public LinearLayout relativeLayout;
-        public TextView textViewItineraryName;
-        public View itemView;
-
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             relativeLayout = (LinearLayout) itemView.findViewById(R.id.relativeLayoutItemListAlarm);
@@ -163,7 +147,7 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
         @Override
         public void onClick(View v) {
             if(recyclerViewOnClickListenerHack != null){
-                recyclerViewOnClickListenerHack.onClickListener(v, getPosition());
+                recyclerViewOnClickListenerHack.onClickListener(v, getAdapterPosition());
             }
         }
     }

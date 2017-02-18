@@ -33,10 +33,10 @@ public class AlarmEditorActivity extends AppCompatActivity {
 
     public static final String ARGS_ALARM_ID = "br.com.expressobits.hbus.ui.AlarmIdKey";
     public static final String ARGS_ALARM_CODE = "br.com.expressobits.hbus.ui.AlarmCodeKey";
+    public static final String ARGS_ALARM_TYPE_DAY = "br.com.expressobits.hbus.ui.AlarmTypeDay";
     private static final String TAG = "AlarmEditor";
     private Alarm alarm;
     private boolean editing;
-    private Toolbar toolbar;
     private TextView textViewTime;
     private SwitchCompat switchActived;
     private Spinner spinnerDelayType;
@@ -63,7 +63,10 @@ public class AlarmEditorActivity extends AppCompatActivity {
 
         Toolbar pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
     }
 
     @Override
@@ -112,34 +115,28 @@ public class AlarmEditorActivity extends AppCompatActivity {
             alarm = new Alarm();
             alarm.setId(alarmId);
             switchActived.setChecked(true);
-            /**TODO fazer seletor de typday para aparecer no novo alarme ja os dias*/
+            int typeday = getIntent().getIntExtra(ARGS_ALARM_TYPE_DAY,0);
+            switch (typeday){
+                case 0:
+                    alarm.setMonday(true);
+                    alarm.setTuesday(true);
+                    alarm.setWednesday(true);
+                    alarm.setThursday(true);
+                    alarm.setFriday(true);
+                    break;
+                case 1:
+                    alarm.setSaturday(true);
+                    break;
+                case 2:
+                    alarm.setSunday(true);
+                    break;
+            }
 
         }else {
             switchActived.setChecked(alarm.isActived());
         }
         int delay = alarm.getMinuteDelay();
-
-
         spinnerDelayType.setSelection((10+delay)/5);
-
-
-        /**switch (delay){
-            case -10:
-                spinnerDelayType.setSelection(0);
-                break;
-            case -5:
-                spinnerDelayType.setSelection(1);
-                break;
-            case 0:
-                spinnerDelayType.setSelection(2);
-                break;
-            case 5:
-                spinnerDelayType.setSelection(3);
-                break;
-            case 10:
-                spinnerDelayType.setSelection(4);
-                break;
-        }*/
         editTextName.setText(alarm.getName());
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
@@ -160,35 +157,11 @@ public class AlarmEditorActivity extends AppCompatActivity {
         alarm.setFriday(checkBoxFriday.isChecked());
         alarm.setSaturday(checkBoxSaturday.isChecked());
         alarm.setMinuteDelay(-10+(5*spinnerDelayType.getSelectedItemPosition()));
-        /*switch (spinnerDelayType.getSelectedItemPosition()){
-            case 0:
-                alarm.setMinuteDelay(-10);
-                break;
-            case 1:
-                alarm.setMinuteDelay(-5);
-                break;
-            case 2:
-            case 3:
-            case 4:
-                alarm.setMinuteDelay(numberPickerDelayMinutes.getValue());
-                break;
-
-        }*/
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
         calendar.add(Calendar.MINUTE,alarm.getMinuteDelay());
         Log.d(TAG,"minute delay "+alarm.getMinuteDelay());
         alarm.setTimeAlarm(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
-        /**AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-         Intent intent = new Intent(this, AlarmReceiver.class);
-         intent.putExtra(AlarmService.ALARM_ID_KEY,alarm.getId());
-         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-         // With setInexactRepeating(), you have to use one of the AlarmManager interval
-         // constants--in this case, AlarmManager.INTERVAL_DAY.
-         alarmManager.setRepeating(AlarmManager.RTC,
-         HoursUtils.getTimeInCalendar(alarm.getTimeAlarm()).getTimeInMillis(),
-         AlarmManager.INTERVAL_DAY,
-         pendingIntent);*/
         Alarms.saveAlarmInManager(alarm,this);
     }
 
@@ -213,14 +186,14 @@ public class AlarmEditorActivity extends AppCompatActivity {
         numberPickerDelayMinutes.setMinValue(0);*/
         spinnerDelayType  = (Spinner) findViewById(R.id.spinnerDelayType);
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this,
+                new ArrayAdapter<>(this,
                         android.R.layout.simple_list_item_1,
                         getResources().getStringArray(R.array.list_delay));
         spinnerDelayType.setAdapter(adapter);
     }
 
     private void initToolbar(){
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
@@ -235,15 +208,13 @@ public class AlarmEditorActivity extends AppCompatActivity {
     }
 
     private void resumeWeekDays(){
-        if(editing){
-            checkBoxSunday.setChecked(alarm.isSunday());
-            checkBoxMonday.setChecked(alarm.isMonday());
-            checkBoxTuesday.setChecked(alarm.isTuesday());
-            checkBoxWednesday.setChecked(alarm.isWednesday());
-            checkBoxThursday.setChecked(alarm.isThursday());
-            checkBoxFriday.setChecked(alarm.isFriday());
-            checkBoxSaturday.setChecked(alarm.isSaturday());
-        }
+        checkBoxSunday.setChecked(alarm.isSunday());
+        checkBoxMonday.setChecked(alarm.isMonday());
+        checkBoxTuesday.setChecked(alarm.isTuesday());
+        checkBoxWednesday.setChecked(alarm.isWednesday());
+        checkBoxThursday.setChecked(alarm.isThursday());
+        checkBoxFriday.setChecked(alarm.isFriday());
+        checkBoxSaturday.setChecked(alarm.isSaturday());
     }
 
 }

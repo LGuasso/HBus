@@ -3,7 +3,7 @@ package br.com.expressobits.hbus.dao;
 import android.provider.BaseColumns;
 
 /**
- * Seguindo regras especificadas no treino de android
+ * Following specified rules in android training
  * http://developer.android.com/intl/pt-br/training/basics/data-storage/databases.html
  *
  * @author Rafael Correa
@@ -11,11 +11,7 @@ import android.provider.BaseColumns;
  */
 public final class CityContract {
 
-    // To prevent someone from accidentally instantiating the contract class,
-    // give it an empty constructor.
-    public CityContract(){}
-
-    public static final String[] COLS= {
+    static final String[] COLS= {
             City._ID,
             City.COLUMN_NAME_NAME,
             City.COLUMN_NAME_COUNTRY,
@@ -23,18 +19,15 @@ public final class CityContract {
             City.COLUMN_NAME_LONGITUDE
     };
 
-    private static final String SQL_DELETE_CITIES =
-            "DROP TABLE IF EXISTS " + CityContract.City.TABLE_NAME;
-
-    public static final String SQL_DELETE_ALL =
+    static final String SQL_DELETE_ALL =
             "DELETE FROM " + City.TABLE_NAME;
 
     /* Inner class that defines the table contents */
     public static abstract class City implements BaseColumns {
         public static final String TABLE_NAME = "city";
-        public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_COUNTRY= "country";
-        public static final String COLUMN_NAME_LATITUDE= "latitude";
-        public static final String COLUMN_NAME_LONGITUDE= "longitude";
+        static final String COLUMN_NAME_NAME = "name";
+        static final String COLUMN_NAME_COUNTRY= "country";
+        static final String COLUMN_NAME_LATITUDE= "latitude";
+        static final String COLUMN_NAME_LONGITUDE= "longitude";
     }
 }

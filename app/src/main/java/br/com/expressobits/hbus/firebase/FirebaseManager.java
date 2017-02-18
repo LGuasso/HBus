@@ -24,8 +24,6 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
  */
 public class FirebaseManager {
 
-    private static final String TAG = "FirebaseManager";
-
     public static void loadBusesForItinerary(Itinerary itinerary){
         new AsyncTask<Itinerary,Void,Void>(){
 
@@ -58,9 +56,7 @@ public class FirebaseManager {
                                 code.setName(bus.getCode());
                                 if(codes.containsKey(code.getName())){
                                     Log.e("CODE","Contains "+code.toString());
-                                }else if(code.getName().length()>Code.CODE_LENGTH_TO_DESCRIPTION) {
-
-                                }else {
+                                }else if(code.getName().length()<=Code.CODE_LENGTH_TO_DESCRIPTION){
                                     codes.put(code.getName(),code);
                                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     DatabaseReference codeTable = database.getReference(FirebaseUtils.CODE_TABLE);

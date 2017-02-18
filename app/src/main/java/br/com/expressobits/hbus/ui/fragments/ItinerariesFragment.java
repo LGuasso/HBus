@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.FavoriteDAO;
+import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
 import br.com.expressobits.hbus.firebase.FirebaseManager;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Company;
@@ -73,9 +73,9 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         super.onResume();
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
 
-        FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
+        BookmarkItineraryDAO bookmarkItineraryDAO = new BookmarkItineraryDAO(getActivity());
 
-        favoriteItineraries = favoriteDAO.getItineraries(cityId);
+        favoriteItineraries = bookmarkItineraryDAO.getItineraries(cityId);
 
         if(listItineraries.size()>0){
             recyclerViewItineraries.setVisibility(View.VISIBLE);
@@ -211,7 +211,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         Itinerary itinerary = listItineraries.get(position);
         switch (view.getId()){
             case R.id.icon:
-                FavoriteDAO dao = new FavoriteDAO(getActivity());
+                BookmarkItineraryDAO dao = new BookmarkItineraryDAO(getActivity());
                 if(dao.getItinerary(itinerary.getId())!=null){
                     dao.removeFavorite(itinerary);
                     dao.close();

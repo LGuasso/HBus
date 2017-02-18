@@ -11,20 +11,17 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
- * Classe que determina database para {@link br.com.expressobits.hbus.model.Itinerary} favoritos,
- * aqui e armazenado da mesma forma que dados , mas somente a classe Itineray
+ *  Class that determines database for {@link br.com.expressobits.hbus.model.Itinerary} favorites,
+ * Here and stored in the same way as data, but only the class Itinerary
  * @author Rafael Correa
  * @since 28/11/15.
  */
-public class FavoriteDAO extends SQLiteOpenHelper{
+public class BookmarkItineraryDAO extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "itineraries_favorites.db";
-    private  Context context;
-    public FavoriteDAO(Context context){
-
+    public BookmarkItineraryDAO(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
     }
 
     @Override

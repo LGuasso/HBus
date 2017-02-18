@@ -269,10 +269,12 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
             switch (v.getId()) {
                 case R.id.item_list_imageview:
                     Intent intent = new Intent(context, AlarmEditorActivity.class);
-                    String busId = listBus.get(getPosition()).getId();
-                    String code = listBus.get(getPosition()).getCode();
+                    Bus bus = listBus.get(getAdapterPosition());
+                    String busId = bus.getId();
+                    String code = bus.getCode();
                     intent.putExtra(AlarmEditorActivity.ARGS_ALARM_ID, busId);
                     intent.putExtra(AlarmEditorActivity.ARGS_ALARM_CODE, code);
+                    intent.putExtra(AlarmEditorActivity.ARGS_ALARM_TYPE_DAY,StringUtils.getTypeDayInt(bus.getTypeday()));
                     context.startActivity(intent);
                     break;
             }

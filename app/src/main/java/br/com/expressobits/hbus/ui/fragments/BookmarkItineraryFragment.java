@@ -18,7 +18,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.FavoriteDAO;
+import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.OnSettingsListener;
@@ -103,7 +103,7 @@ public class BookmarkItineraryFragment extends Fragment implements RecyclerViewO
     }
 
     private void updateListViews() {
-        FavoriteDAO dao  = new FavoriteDAO(getActivity());
+        BookmarkItineraryDAO dao  = new BookmarkItineraryDAO(getActivity());
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         itineraries = dao.getItineraries(cityId);
         ItemBookmarkItineraryAdapter adapter = new ItemBookmarkItineraryAdapter(this.getActivity(), itineraries);
@@ -132,7 +132,7 @@ public class BookmarkItineraryFragment extends Fragment implements RecyclerViewO
                 builder.setTitle(R.string.dialog_alert_title_confirm_remove);
                 builder.setNegativeButton(android.R.string.no, null);
                 builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    FavoriteDAO dao = new FavoriteDAO(getActivity());
+                    BookmarkItineraryDAO dao = new BookmarkItineraryDAO(getActivity());
                     Itinerary itinerary1 = dao.getItinerary(selectedItem);
                     dao.removeFavorite(itinerary1);
                     BookmarkItineraryFragment.this.initListViews(BookmarkItineraryFragment.this.view);

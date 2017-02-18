@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.FavoriteDAO;
+import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
@@ -32,7 +32,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
     private boolean selectAll;
     int resource;
-    FavoriteDAO dao;
+    BookmarkItineraryDAO dao;
 
     public ItemItineraryAdapter(Context context,boolean selectAll,List<Itinerary> listItineraries,List<Itinerary> favoriteItineraries) {
         this.context = context;
@@ -40,7 +40,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         this.favoriteItineraries = favoriteItineraries;
         this.selectAll = selectAll;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        dao = new FavoriteDAO(context);
+        dao = new BookmarkItineraryDAO(context);
     }
 
     public ItemItineraryAdapter(Context context,boolean selectAll,List<Itinerary> listItineraries) {

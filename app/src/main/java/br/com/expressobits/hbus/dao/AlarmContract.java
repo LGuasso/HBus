@@ -3,16 +3,13 @@ package br.com.expressobits.hbus.dao;
 import android.provider.BaseColumns;
 
 /**
- * Contains informaçãoes sobre constantes de data alarm
+ * Contains information about constants of data alarm
  * @author Rafael Correa
  * @since 30/03/16
  */
-public class AlarmContract {
-    // To prevent someone from accidentally instantiating the contract class,
-    // give it an empty constructor.
-    public AlarmContract(){}
+class AlarmContract {
 
-    protected static final String SQL_CREATE_TABLE =
+    static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + Alarm.TABLE_NAME + " (" +
                     Alarm._ID + BusHelper.TEXT_PRIMARY_KEY + BusHelper.COMMA_SEP +
                     Alarm.COLUMN_NAME_TIME + BusHelper.TEXT_TYPE + BusHelper.COMMA_SEP +
@@ -29,7 +26,7 @@ public class AlarmContract {
                     Alarm.COLUMN_NAME_CODE + BusHelper.TEXT_TYPE +
                     BusHelper.PARENTES+BusHelper.POINTCOMMA;
 
-    public static final String[] COLS = {
+    static final String[] COLS = {
             Alarm._ID,
             Alarm.COLUMN_NAME_TIME,
             Alarm.COLUMN_NAME_DAYS_SUNDAY,
@@ -46,22 +43,19 @@ public class AlarmContract {
 
     };
 
-    public static final String SQL_DELETE_ALL =
-            "DELETE FROM " + Alarm.TABLE_NAME;
-
     public static abstract class Alarm implements BaseColumns {
         public static final String TABLE_NAME = "alarm";
-        public static final String COLUMN_NAME_TIME = "time";
-        public static final String COLUMN_NAME_DAYS_SUNDAY = "sunday";
-        public static final String COLUMN_NAME_DAYS_MONDAY = "monday";
-        public static final String COLUMN_NAME_DAYS_TUESDAY = "tuesday";
-        public static final String COLUMN_NAME_DAYS_WEDNESDAY = "wednesday";
-        public static final String COLUMN_NAME_DAYS_THURSDAY = "thursday";
-        public static final String COLUMN_NAME_DAYS_FRIDAY = "friday";
-        public static final String COLUMN_NAME_DAYS_SATURDAY = "saturday";
-        public static final String COLUMN_NAME_TIME_DELAY = "timedelay";
-        public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_ACTIVED = "actived";
-        public static final String COLUMN_NAME_CODE = "code";
+        static final String COLUMN_NAME_TIME = "time";
+        static final String COLUMN_NAME_DAYS_SUNDAY = "sunday";
+        static final String COLUMN_NAME_DAYS_MONDAY = "monday";
+        static final String COLUMN_NAME_DAYS_TUESDAY = "tuesday";
+        static final String COLUMN_NAME_DAYS_WEDNESDAY = "wednesday";
+        static final String COLUMN_NAME_DAYS_THURSDAY = "thursday";
+        static final String COLUMN_NAME_DAYS_FRIDAY = "friday";
+        static final String COLUMN_NAME_DAYS_SATURDAY = "saturday";
+        static final String COLUMN_NAME_TIME_DELAY = "timedelay";
+        static final String COLUMN_NAME_NAME = "name";
+        static final String COLUMN_NAME_ACTIVED = "actived";
+        static final String COLUMN_NAME_CODE = "code";
     }
 }
