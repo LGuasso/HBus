@@ -19,7 +19,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.BusUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
-import br.com.expressobits.hbus.utils.TextUtils;
+import br.com.expressobits.hbus.utils.StringUtils;
 
 /**
  * @author Rafael
@@ -67,7 +67,7 @@ public class BusHelper {
         ContentValues values = new ContentValues();
         values.put(ItineraryContract.Itinerary._ID,itinerary.getId());
         values.put(ItineraryContract.Itinerary.COLUMN_NAME_NAME,itinerary.getName());
-        values.put(ItineraryContract.Itinerary.COLUMN_NAME_WAYS, TextUtils.getSentidosinString(itinerary.getWays()));
+        values.put(ItineraryContract.Itinerary.COLUMN_NAME_WAYS, StringUtils.getSentidosinString(itinerary.getWays()));
         return values;
     }
 

@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.ui.settings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -87,7 +88,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         recyclerView.setHasFixedSize(true);
         recyclerView.setSelected(true);
         recyclerView.setClickable(true);
-
         LinearLayoutManager llmUseful = new LinearLayoutManager(this);
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
@@ -96,11 +96,15 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         if(cities.size()>0){
             recyclerView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
+            imageViewNetworkError.setVisibility(View.INVISIBLE);
         }else{
             refresh(DEFAULT_COUNTRY);
         }
     }
 
+    /**
+     * Update recyclerview with arraylist city
+     */
     private void refreshRecyclerView() {
         ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this, cities);
         itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
@@ -113,22 +117,27 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onClickListener(View view, final int position) {
-
         City city = cities.get(position);
         pullCompanies(city.getCountry(), city.getName());
         Log.d(TAG, "Selection city id=" + city.getId());
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
+        SharedPreferences sharedPreferences = saveCityPreference(city);
         unsSubscribe(sharedPreferences.getString(TAG,SelectCityActivity.NOT_CITY));
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         subscribe(city.getId());
-        editor.putString(TAG, city.getId());
-        editor.putString(city.getId(), city.getCompanyDefault());
-        editor.apply();
         registerEventCity(city.getCountry(),city.getName());
         if(starter){
             ManagerInit.manager(this);
         }
         finish();
+    }
+
+    @NonNull
+    private SharedPreferences saveCityPreference(City city) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(TAG, city.getId());
+        editor.putString(city.getId(), city.getCompanyDefault());
+        editor.apply();
+        return sharedPreferences;
     }
 
     private void unsSubscribe(String id){
@@ -148,6 +157,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onFinish() {
+        //Verify if first open app
         if (initial) {
             ManagerInit.manager(SelectCityActivity.this);
         } else {
@@ -155,16 +165,19 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         }
     }
 
+    /**
+     * Add city in recycler view adapter
+     * @param city city object from database
+     */
     private void addCity(City city){
-
-        cities.add(city);
-        refreshRecyclerView();
-        if(cities.size()>0){
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
+        if(!cities.contains(city)){
+            cities.add(city);
+            refreshRecyclerView();
+            if(cities.size()>0){
+                progressBar.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
         }
-
-
     }
 
     private void addCompany(Company company){
@@ -172,8 +185,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         //TODO implementar adiçao de empresa
     }
 
-    /*
-     * https://support.google.com/firebase/answer/6317508?hl=en&ref_topic=6317484
+    /**
+     * Register select content type event with params country and itinerary
+     * @param country Region with country
+     * @param city  Name of city
      */
     private void registerEventCity(String country, String city) {
         // Obtain the FirebaseAnalytics instance.
@@ -186,11 +201,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
-
-    /**
-     * @param country
-     * @param city
-     */
     private void pullCompanies(final String country, final String city){
         FirebaseDatabase database= FirebaseDatabase.getInstance();
         DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.COMPANY_TABLE);
@@ -214,6 +224,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         cityRef.addListenerForSingleValueEvent(valueEventListener);
     }
 
+    /**
+     * Update cities of recyclerview with data from firebase realtime database
+     * @param country Region with country
+     */
     public void refresh(final String country){
         cities.clear();
         progressBar.setVisibility(View.VISIBLE);
@@ -233,7 +247,9 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                imageViewNetworkError.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
             }
         };
         countryRef.addListenerForSingleValueEvent(valueEventListener);

@@ -1,6 +1,5 @@
 package br.com.expressobits.hbus.utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +10,11 @@ import br.com.expressobits.hbus.model.TypeDay;
  * @author Rafael Correa
  * @since 20/10/15
  */
-public class TextUtils {
+public class StringUtils {
+
+    public static String getPreferenceNameCity(String city){
+        return FirebaseUtils.getCityName(city)+" - "+FirebaseUtils.getCountry(city);
+    }
 
     public static String getDaysinString(List<String> days){
         String result = "";

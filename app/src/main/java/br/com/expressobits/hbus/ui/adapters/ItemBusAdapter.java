@@ -33,7 +33,7 @@ import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
-import br.com.expressobits.hbus.utils.TextUtils;
+import br.com.expressobits.hbus.utils.StringUtils;
 
 /**
  *
@@ -203,7 +203,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
                     alarm.setSaturday(true);
                     alarm.setActived(true);
                     alarm.setMinuteDelay(-5);
-                    alarm.setTimeAlarm(TextUtils.getTimeWithDelayTime(TimeUtils.getFormatTime(bus.getTime()), alarm.getMinuteDelay()));
+                    alarm.setTimeAlarm(StringUtils.getTimeWithDelayTime(TimeUtils.getFormatTime(bus.getTime()), alarm.getMinuteDelay()));
                     alarmDAO.insert(alarm);
                     Toast.makeText(context,
                             context.getString(R.string.alarm_added), Toast.LENGTH_SHORT).show();

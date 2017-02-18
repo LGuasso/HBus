@@ -14,7 +14,7 @@ import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.utils.TimeUtils;
-import br.com.expressobits.hbus.utils.TextUtils;
+import br.com.expressobits.hbus.utils.StringUtils;
 
 /**
  * @author Rafael Correa
@@ -151,17 +151,17 @@ public class ReadFile {
                     for(int i=0;i<3;i++){
                         for(String text:readFile(city.getCountry() + BARS +
                                 city.getName() + BARS +company.getName()+BARS+
-                                TextUtils.toSimpleNameFile(itinerary.getName()) + BARS +
-                                TextUtils.toSimpleNameWay(way) + "_" + TextUtils.getTypeDayInt(i) + FORMAT
+                                StringUtils.toSimpleNameFile(itinerary.getName()) + BARS +
+                                StringUtils.toSimpleNameWay(way) + "_" + StringUtils.getTypeDayInt(i) + FORMAT
                         )){
                             try{
                                 Bus bus = toBus(text);
                                 bus.setWay(way);
-                                bus.setTypeday(TextUtils.getTypeDayInt(i));
+                                bus.setTypeday(StringUtils.getTypeDayInt(i));
                                 buses1.add(bus);
                             }catch (Exception e){
                                 e.printStackTrace();
-                                System.out.println("Erro ao transformar bus "+itinerary.getName()+" "+way+" "+TextUtils.getTypeDayInt(i));
+                                System.out.println("Erro ao transformar bus "+itinerary.getName()+" "+way+" "+ StringUtils.getTypeDayInt(i));
                                 System.exit(1);
                             }
 
