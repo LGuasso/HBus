@@ -2,13 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.expressobits.hbus">
 
-    <!-- Permissão para ler memória externa -->
-    <!-- uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" / -->
-    <!-- Permissão para ler memória externa -->
-    <!-- uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" / -->
-    <!-- Permissão para acesso á internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Permissão para saber o estatus da rede -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -25,14 +19,18 @@
         android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
+    <permission
+        android:name="br.com.expressobits.hbus.permission.HBUS_PERMISSION"
+        android:protectionLevel="normal" />
 
-    <!-- uses-permission android:name="android.permission.READ_PROFILE" / -->
-    <!-- uses-permission android:name="android.permission.READ_CONTACTS" / -->
-    <!-- uses-permission android:name="android.permission.GET_ACCOUNTS" / -->
+    <uses-permission android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
+    <uses-permission
+        android:name="br.com.expressobits.hbus.permission.HBUS_PERMISSION" />
+
     <application
         android:name=".application.TPCDataBaseInit"
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:fullBackupContent="@xml/hbus_backup_files"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -42,13 +40,25 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_bus_white_24dp" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
         <!--
          Optionally, register AnalyticsReceiver and AnalyticsService to support background
          dispatching on non-Google Play devices
         -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:permission="br.com.expressobits.hbus.permission.HBUS_PERMISSION">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
@@ -65,7 +75,8 @@
         -->
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
-            android:exported="true">
+            android:exported="true"
+            android:permission="br.com.expressobits.hbus.permission.HBUS_PERMISSION">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -74,9 +85,22 @@
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name="br.com.expressobits.hbus.ui.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- ATTENTION: This intent was auto-generated. Follow instructions at
+            https://g.co/AppIndexing/AndroidStudio to publish your URLs. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- ATTENTION: This data URL was auto-generated. We recommend that you use the HTTP scheme. -->
+                <data
+                    android:host="hbus-1206.firebaseapp.com"
+                    android:pathPrefix="/hbus"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
@@ -105,7 +129,6 @@
         <activity
             android:name=".ui.help.HelpActivity"
             android:label="@string/title_activity_help"
-            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -114,7 +137,6 @@
         <activity
             android:name=".ui.help.FeedbackActivity"
             android:label="@string/title_activity_feedback"
-            android:parentActivityName=".ui.help.HelpActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -123,7 +145,6 @@
         <activity
             android:name=".ui.TimesActivity"
             android:label="@string/title_activity_times"
-            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -131,8 +152,7 @@
         </activity>
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.MainActivity">
+            android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
@@ -144,7 +164,6 @@
         <activity
             android:name=".ui.alarm.AlarmEditorActivity"
             android:label="@string/title_activity_help_content"
-            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -171,7 +190,6 @@
 
         <activity
             android:name=".ui.CompanyDetailsActivity"
-            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -192,12 +210,10 @@
 
         <activity
             android:name=".ui.news.NewsDetailsActivity"
-            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".ui.help.PrivacyPolicyActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".ui.login.LoginActivity"
             android:label="@string/title_activity_privacy_policy">
 
         </activity>
