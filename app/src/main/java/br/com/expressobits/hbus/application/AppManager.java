@@ -10,7 +10,7 @@ import br.com.expressobits.hbus.R;
  * Gerenciador do aplicativo.
  */
 public class AppManager {
-    public static int countCloseTimesActivity = 0;
+    private static int countCloseTimesActivity = 0;
 
     public static boolean countTimesActivity(Context context){
         if(countCloseTimesActivity>=context.getResources().getInteger(R.integer.counts_close_times_activity)){

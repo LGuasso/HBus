@@ -23,14 +23,11 @@ public class BootService extends IntentService{
     }
 
     private void setAlarmsFromDatabase() {
-
         AlarmDAO alarmDAO = new AlarmDAO(this);
         List<Alarm> alarms = alarmDAO.getAlarms();
         for(Alarm alarm:alarms){
             Alarms.saveAlarmInManager(alarm,this);
         }
-
-        // Set your alarms from database here
     }
 
     @Override
