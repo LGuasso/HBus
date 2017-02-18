@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +32,7 @@ import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * @author Rafael Correa
- * @since 14/04/16;
+ * @since 14/04/16
  */
 public class NotificationsAlarm {
 
@@ -65,10 +66,10 @@ public class NotificationsAlarm {
             alarmNotificationManager = (NotificationManager) context
                     .getSystemService(Context.NOTIFICATION_SERVICE);
             if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(NotificationPreferenceFragment.PREF_NOTIFICATION_ALERT_BUS_VIBRATE,true)){
-                alamNotificationBuilder.setVibrate(getVibrate(context));
+                alamNotificationBuilder.setVibrate(getVibrate());
             }
 
-            setCodeToNotification(context, alarm, alamNotificationBuilder);
+            setCodeToNotification(alarm, alamNotificationBuilder);
 
             Notification notification = alamNotificationBuilder.build();
             alarmNotificationManager.notify(alarm.getId(), 1,notification);
@@ -77,9 +78,8 @@ public class NotificationsAlarm {
 
     }
 
-    private static void setCodeToNotification(Context context, Alarm alarm, final NotificationCompat.Builder alamNotificationBuilder) {
+    private static void setCodeToNotification(Alarm alarm, final NotificationCompat.Builder alamNotificationBuilder) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //TODO implementar COMPANY
         DatabaseReference codeTableRef  = database.getReference(FirebaseUtils.CODE_TABLE);
         DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(alarm.getId()));
         DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(alarm.getId()));
@@ -122,23 +122,22 @@ public class NotificationsAlarm {
                 .setTicker(context.getString(R.string.notification_alarm_ticker, FirebaseUtils.getItinerary(alarm.getId())))
                 .setSound(getUriRingtone(context))
                 .setWhen(System.currentTimeMillis())
-                .setColor(context.getResources().getColor(R.color.colorAccent))
+                .setColor(ContextCompat.getColor(context,R.color.colorAccent))
                 .setContentInfo(alarm.getCode())
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                         R.mipmap.ic_launcher))
                 ;
     }
 
-    public static Uri getUriRingtone(Context context) {
+    private static Uri getUriRingtone(Context context) {
         String ringtoneUri =
                 PreferenceManager.getDefaultSharedPreferences(context).getString(
                         NotificationPreferenceFragment.PREF_NOTIFICATION_ALERT_BUS_RINGTONE, Settings.System.DEFAULT_NOTIFICATION_URI.getPath());
         Log.d("testSettingRingtone",ringtoneUri);
-        Uri uri = Uri.parse(ringtoneUri);
-        return uri;
+        return Uri.parse(ringtoneUri);
     }
 
-    public static long[] getVibrate(Context context) {
+    private static long[] getVibrate() {
         return (new long[]{ 1000, 0,1000,0});
     }
 }

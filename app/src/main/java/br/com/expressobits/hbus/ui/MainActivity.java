@@ -44,18 +44,19 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.ItineraryContract;
+import br.com.expressobits.hbus.messaging.ClickActionHelper;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
-import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.BookmarkItineraryFragment;
+import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
-import br.com.expressobits.hbus.ui.news.NewsFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
+import br.com.expressobits.hbus.ui.news.NewsFragment;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        checkIntent(getIntent());
         setContentView(R.layout.activity_main);
 
         loadParams();
@@ -115,6 +117,18 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
             }
         }
         initViews();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkIntent(intent);
+    }
+
+    public void checkIntent(Intent intent) {
+        if (intent.hasExtra("click_action")) {
+            ClickActionHelper.startActivity(intent.getStringExtra("click_action"), intent.getExtras(), this);
+        }
     }
 
     private void loadParams() {

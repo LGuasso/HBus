@@ -12,6 +12,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.File;
 
@@ -79,6 +80,9 @@ public class TPCDataBaseInit extends Application{
             tracker.enableExceptionReporting(true);
             tracker.enableAdvertisingIdCollection(true);
             tracker.enableAutoActivityTracking(true);
+        }else{
+            FirebaseMessaging.getInstance().subscribeToTopic("test");
+            Log.d(TAG, "Subscribe to test topic");
         }
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
