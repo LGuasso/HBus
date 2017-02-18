@@ -124,7 +124,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 progressBarLayout.setVisibility(View.INVISIBLE);
                 mainLayout.setVisibility(View.VISIBLE);
                 Toast.makeText(this,"Google Sign In failed",Toast.LENGTH_LONG).show();
-                Log.d(TAG,"Google Sign In failed " +result.getStatus().getStatusMessage());
+                Log.w(TAG,"Google Sign In failed " +result.getStatus().getStatusMessage());
+                Log.w(TAG,"Google Sign In failed " +result.getStatus().toString());
             }
         }
     }

@@ -60,6 +60,22 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
+/* *************************************************************************************************
+~ Juramento do Programador no desenvolvimento de Código Limpo:
+~
+~  Antes de codificar, me colocarei na posição dos outros colaboradores desenvolvedores,
+~  buscando me expressar de maneira simples, logo:
+~
+~  - Nomearei as entidades como classes, métodos e variáveis com nomes significativos, pronunciáveis
+~  e pesquisável, que revelem a sua verdadeira e atual intenção;
+~
+~  - Farei com que cada método e cada deve ter apenas uma única responsabilidade, caso contrário,
+~  deve ser refatorados em métodos unitários;
+~
+~  - Ao comentar sobre uma entidade, deixarei claro qual é o seu papel atual e sugerirei  melhorias
+~  futuras, se for o caso; Atualizar comentários sempre quando atualizar código;
+~ **************************************************************************************************/
+
 public class MainActivity extends AppCompatActivity implements OnSettingsListener,
         ChooseWayDialogListener,NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
@@ -96,13 +112,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 FragmentTransaction ft = fragmentManager.beginTransaction();
                 ft.add(R.id.framelayout_main, fragment, BookmarkItineraryFragment.TAG);
                 ft.commit();
-            } else if (findViewById(R.id.framelayout_content) != null) {
-                FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_menu, fragment, BookmarkItineraryFragment.TAG);
-                ft.add(R.id.framelayout_content, new OnibusFragment(),OnibusFragment.TAG);
-                ft.commit();
-                //Define se tela é para dois framgnetos
-                isDualPane = true;
             }
         }
         initViews();
@@ -214,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(getString(R.string.tablet_test_device_id))
+                .addTestDevice(getString(R.string.cel_motorola_xt_1089_test_device_id))
                 .build();
         mInterstitialAd.loadAd(adRequest);
     }
@@ -239,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         View naviHeader = navigationView.getHeaderView(0);
         View naviView = naviHeader.findViewById(R.id.side_nav_bar);
-        /**TODO mostrar empresa selecionada no menu com companies */
+        /* TODO mostrar empresa selecionada no menu com companies */
         naviView.setOnClickListener(this);
         TextView textViewUserName = (TextView)naviHeader.findViewById(R.id.textViewUserName);
         TextView textViewUserEmail = (TextView)naviHeader.findViewById(R.id.textViewUserEmail);
@@ -331,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     }
 
     private void openTimes(String country, String city, String company, String itinerary, String way) {
-        registerEvent(itinerary, way);
+        registerEventItinerary(country,city,company,itinerary);
         if (isDualPane) {
             /*pToolbar.setTitle(itinerary);
             pToolbar.setSubtitle(way);
@@ -387,19 +397,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         }
     }
 
-    /**
+    /*
      * https://support.google.com/firebase/answer/6317508?hl=en&ref_topic=6317484
-     * @param itinerary
-     * @param way
      */
-    private void registerEvent(String itinerary, String way) {
+    private void registerEventItinerary(String country, String city, String company, String itinerary) {
         // Obtain the FirebaseAnalytics instance.
         FirebaseAnalytics mFirebaseAnalytics;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, way);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, itinerary);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, ItineraryContract.Itinerary.TABLE_NAME);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, country+"_"+city+"_"+company+"_"+itinerary);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, ItineraryContract.Itinerary.TABLE_NAME);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
@@ -512,10 +519,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 // e adiciona a transa��o novamente na pilha de navegacao
                 fragmentTransaction.replace(R.id.framelayout_main, fragment,TAG);
                 fragmentTransaction.addToBackStack(STACK);
-            } else if (findViewById(R.id.framelayout_content) != null) {
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transa��o novamente na pilha de navegacaoo
-                fragmentTransaction.replace(R.id.framelayout_content, fragment,TAG);
             }
             // Finaliza a transacao com sucesso
             fragmentTransaction.commit();

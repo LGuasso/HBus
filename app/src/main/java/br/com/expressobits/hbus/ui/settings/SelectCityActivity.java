@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.ui.ManagerInit;
@@ -112,15 +114,17 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     @Override
     public void onClickListener(View view, final int position) {
 
-        pullCompanies(cities.get(position).getCountry(),cities.get(position).getName());
-        Log.d(TAG, "Selection city id=" + cities.get(position).getId());
+        City city = cities.get(position);
+        pullCompanies(city.getCountry(), city.getName());
+        Log.d(TAG, "Selection city id=" + city.getId());
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
         unsSubscribe(sharedPreferences.getString(TAG,SelectCityActivity.NOT_CITY));
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        subscribe(cities.get(position).getId());
-        editor.putString(TAG, cities.get(position).getId());
-        editor.putString(cities.get(position).getId(),cities.get(position).getCompanyDefault());
+        subscribe(city.getId());
+        editor.putString(TAG, city.getId());
+        editor.putString(city.getId(), city.getCompanyDefault());
         editor.apply();
+        registerEventCity(city.getCountry(),city.getName());
         if(starter){
             ManagerInit.manager(this);
         }
@@ -166,6 +170,20 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private void addCompany(Company company){
         Log.d(TAG,"add company "+company.getName());
         //TODO implementar adiçao de empresa
+    }
+
+    /*
+     * https://support.google.com/firebase/answer/6317508?hl=en&ref_topic=6317484
+     */
+    private void registerEventCity(String country, String city) {
+        // Obtain the FirebaseAnalytics instance.
+        FirebaseAnalytics mFirebaseAnalytics;
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, country+"_"+city);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, city);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, CityContract.City.TABLE_NAME);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
 

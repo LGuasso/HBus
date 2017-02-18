@@ -1,20 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ *************************************************************************************************
-  ~ Juramento do Programador no desenvolvimento de Código Limpo:
-  ~
-  ~  Antes de codificar, me colocarei na posição dos outros colaboradores desenvolvedores,
-  ~  buscando me expressar de maneira simples, logo:
-  ~
-  ~  - Nomearei as entidades como classes, métodos e variáveis com nomes significativos, pronunciáveis
-  ~  e pesquisável, que revelem a sua verdadeira e atual intenção;
-  ~
-  ~  - Farei com que cada método e cada deve ter apenas uma única responsabilidade, caso contrário,
-  ~  deve ser refatorados em métodos unitários;
-  ~
-  ~  - Ao comentar sobre uma entidade, deixarei claro qual é o seu papel atual e sugerirei  melhorias
-  ~  futuras, se for o caso; Atualizar comentários sempre quando atualizar código;
-  ~ *************************************************************************************************
-  -->
+<?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"

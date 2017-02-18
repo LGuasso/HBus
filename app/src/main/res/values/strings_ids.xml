@@ -14,8 +14,8 @@
     <string name="intersticial_ad_unit_id" translatable="false">@string/intersticial_ad_product_unit_id</string>
     <string name="banner_ad_unit_id" translatable="false">@string/banner_ad_product_unit_id</string>
     <string name="tablet_test_device_id" translatable="false">3E88AD8D5EA62034F57CE574FB859947</string>
-
+    <string name="cel_motorola_xt_1089_test_device_id" translatable="false">E46409385AFFDA970FCE38B4E886458D</string>
     <!-- id client web O ID de cliente de tipo do aplicativo da Web é seu ID de cliente OAuth 2.0 do servidor de backend-->
     <string name="web_client_id" translatable="false">36454287226-4jrfk9i6pud4jn0uqlg08tf5idh58o5b.apps.googleusercontent.com</string>
-
+    <string name="android_client_id" translatable="false">36454287226-243dkcl409mo9e2hioks0scden7lnkqq.apps.googleusercontent.com</string>
 </resources>

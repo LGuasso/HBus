@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "36454287226-243dkcl409mo9e2hioks0scden7lnkqq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.expressobits.hbus",
+            "certificate_hash": "F4D3E8AFB8DCD288A5AD92C4B68AAAB3D4FF57BE"
+          }
+        },
+        {
           "client_id": "36454287226-r5afd4jkm1f25m5n799qkb2blpl6ag8q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

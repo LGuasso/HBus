@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="tour_title_welcome">Welcome!</string>
-    <string name="tour_title_feedback">Help!</string>
+    <string name="tour_title_palm">See times always in your hand</string>
+    <string name="tour_title_feedback">Help the application and its users</string>
+    <string name="tour_title_update">Keep always updated</string>
 
-    <string name="tour_subtitle_welcome"></string>
-    <string name="tour_subtitle_feedback"></string>
+    <string name="tour_subtitle_palm">They will always be available with or without internet</string>
+    <string name="tour_subtitle_feedback">Send feedback with any suggestions or criticism</string>
+    <string name="tour_subtitle_update">From times to news about your favorite itinerary</string>
 
 </resources>
