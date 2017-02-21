@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,10 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.CityContract;
+import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.ui.ManagerInit;
+import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
@@ -123,7 +122,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         SharedPreferences sharedPreferences = saveCityPreference(city);
         unsSubscribe(sharedPreferences.getString(TAG,SelectCityActivity.NOT_CITY));
         subscribe(city.getId());
-        registerEventCity(city.getCountry(),city.getName());
+        FirebaseAnalyticsManager.registerEventCity(this,city.getCountry(),city.getName());
         if(starter){
             ManagerInit.manager(this);
         }
@@ -185,21 +184,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         //TODO implementar adiçao de empresa
     }
 
-    /**
-     * Register select content type event with params country and itinerary
-     * @param country Region with country
-     * @param city  Name of city
-     */
-    private void registerEventCity(String country, String city) {
-        // Obtain the FirebaseAnalytics instance.
-        FirebaseAnalytics mFirebaseAnalytics;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, country+"_"+city);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, city);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, CityContract.City.TABLE_NAME);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-    }
+
 
     private void pullCompanies(final String country, final String city){
         FirebaseDatabase database= FirebaseDatabase.getInstance();

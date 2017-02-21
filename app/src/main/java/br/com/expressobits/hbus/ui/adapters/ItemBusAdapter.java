@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,26 +29,24 @@ import br.com.expressobits.hbus.dao.AlarmDAO;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
-import br.com.expressobits.hbus.utils.TimeUtils;
 import br.com.expressobits.hbus.utils.StringUtils;
+import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  *
- * @author Rafael
+ * @author Rafael Correa
  * @since 24/06/2015
  */
 public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHolder> implements View.OnClickListener {
 
 
-    private List<Bus> listBus;
-    private LayoutInflater layoutInflater;
-    private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
-    private Context context;
-    private AlarmDAO alarmDAO;
-    private int countLastBus;
+    private final List<Bus> listBus;
+    private final LayoutInflater layoutInflater;
+    private final Context context;
+    private final AlarmDAO alarmDAO;
+    private final int countLastBus;
     private static final int LASTRECENTLYBUSTITLE = 0;
     private static final int LASTRECENTLYBUS = 1;
     private static final int NOWBUS = 2;
@@ -88,7 +86,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
 
     @Override
     public int getItemViewType(int position) {
-        //Tip: codepath site in about type of viewholder
+        //Tip: code path site in about type of view holder
         if(countLastBus==2){
             switch (position){
                 case 0:
@@ -126,44 +124,33 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int i) {
         final Bus bus = listBus.get(i);
         bus.setCode(bus.getCode().replace(" ",""));
-        myViewHolder.txtViewHorario.setText(TimeUtils.getFormatTime(bus.getTime()));
-        /**Code code = db.getCode(cityId,listBus.get(i).getCode());
-        if(code!=null) {
-            myViewHolder.txtViewCode.setText(code.getName());
-            myViewHolder.txtViewDescrition.setText(code.getDescrition());
-        }
-        myViewHolder.txtViewDescrition.setSelected(true);
-        db.close();*/
-        Log.e("TESTE",bus.getId());
+        myViewHolder.txtViewSchedule.setText(TimeUtils.getFormatTime(bus.getTime()));
         if(bus.getCode().length()>Code.CODE_LENGTH_TO_DESCRIPTION){
-            myViewHolder.txtViewDescrition.setText(bus.getCode());
+            myViewHolder.txtViewDescription.setText(bus.getCode());
         }else {
             myViewHolder.txtViewCode.setText(bus.getCode());
-            myViewHolder.txtViewDescrition.setText(context.getString(R.string.loading));
+            myViewHolder.txtViewDescription.setText(context.getString(R.string.loading));
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference codeTableRef = database.getReference(FirebaseUtils.CODE_TABLE);
             DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(bus.getId()));
             DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(bus.getId()));
-            Log.e("TESTE", FirebaseUtils.getCompany(bus.getId()));
             DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(bus.getId()));
             DatabaseReference codeRef = companyRef.child(bus.getCode());
-
-            Log.e("TESTE", codeRef.toString());
             codeRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Code code = dataSnapshot.getValue(Code.class);
                     if (code != null) {
-                        myViewHolder.txtViewDescrition.setText(code.getDescrition());
+                        myViewHolder.txtViewDescription.setText(code.getDescrition());
                     } else {
-                        myViewHolder.txtViewDescrition.setText(context.getString(R.string.error_loading_description));
+                        myViewHolder.txtViewDescription.setText(context.getString(R.string.error_loading_description));
                     }
 
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    myViewHolder.txtViewDescrition.setText("Erro " + "Code " + databaseError.getCode() + " - Details " + databaseError.getDetails() + " " +
+                    myViewHolder.txtViewDescription.setText("Error " + "Code " + databaseError.getCode() + " - Details " + databaseError.getDetails() + " " +
                             databaseError.getMessage());
                 }
             });
@@ -172,66 +159,51 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         final Alarm alarm = alarmDAO.getAlarm(bus.getId());
         if(myViewHolder.getItemViewType()==LASTBUS){
             myViewHolder.imageViewAlarm.setColorFilter(new
-                    PorterDuffColorFilter(context.getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY));
+                    PorterDuffColorFilter(ContextCompat.getColor(context,R.color.colorPrimary), PorterDuff.Mode.MULTIPLY));
         }
         if(alarm!=null){
-            myViewHolder.imageViewAlarm.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_alarm_white_24dp));
+            myViewHolder.imageViewAlarm.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_alarm_white_24dp));
             myViewHolder.imageViewAlarm.setAlpha(1f);
         }else {
-            myViewHolder.imageViewAlarm.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_alarm_plus_white_24dp));
+            myViewHolder.imageViewAlarm.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_alarm_plus_white_24dp));
             myViewHolder.imageViewAlarm.setAlpha(0.5f);
         }
-        myViewHolder.imageViewAlarm.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Alarm alarm1 = alarmDAO.getAlarm(bus.getId());
-                if (alarm1 != null) {
-                    alarmDAO.delete(bus.getId());
-                    Toast.makeText(context,
-                            context.getString(R.string.alarm_removed), Toast.LENGTH_SHORT).show();
-                    ((AppCompatImageView) v).setImageDrawable(context.getResources().getDrawable(R.drawable.ic_alarm_plus_white_24dp));
-                    v.setAlpha(0.5f);
-                } else {
-                    Alarm alarm = new Alarm();
-                    alarm.setId(bus.getId());
-                    alarm.setSunday(true);
-                    alarm.setMonday(true);
-                    alarm.setTuesday(true);
-                    alarm.setWednesday(true);
-                    alarm.setThursday(true);
-                    alarm.setFriday(true);
-                    alarm.setSaturday(true);
-                    alarm.setActived(true);
-                    alarm.setMinuteDelay(-5);
-                    alarm.setTimeAlarm(StringUtils.getTimeWithDelayTime(TimeUtils.getFormatTime(bus.getTime()), alarm.getMinuteDelay()));
-                    alarmDAO.insert(alarm);
-                    Toast.makeText(context,
-                            context.getString(R.string.alarm_added), Toast.LENGTH_SHORT).show();
-                    ((AppCompatImageView) v).setImageDrawable(context.getResources().getDrawable(R.drawable.ic_alarm_white_24dp));
-                    v.setAlpha(1f);
-                }
-                return true;
+        myViewHolder.imageViewAlarm.setOnLongClickListener(v -> {
+            Alarm alarm1 = alarmDAO.getAlarm(bus.getId());
+            if (alarm1 != null) {
+                alarmDAO.delete(bus.getId());
+                Toast.makeText(context,
+                        context.getString(R.string.alarm_removed), Toast.LENGTH_SHORT).show();
+                ((AppCompatImageView) v).setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_alarm_plus_white_24dp));
+                v.setAlpha(0.5f);
+            } else {
+                Alarm alarm2 = new Alarm();
+                alarm2.setId(bus.getId());
+                alarm2.setSunday(true);
+                alarm2.setMonday(true);
+                alarm2.setTuesday(true);
+                alarm2.setWednesday(true);
+                alarm2.setThursday(true);
+                alarm2.setFriday(true);
+                alarm2.setSaturday(true);
+                alarm2.setActived(true);
+                alarm2.setMinuteDelay(-5);
+                alarm2.setTimeAlarm(StringUtils.getTimeWithDelayTime(TimeUtils.getFormatTime(bus.getTime()), alarm2.getMinuteDelay()));
+                alarmDAO.insert(alarm2);
+                Toast.makeText(context,
+                        context.getString(R.string.alarm_added), Toast.LENGTH_SHORT).show();
+                ((AppCompatImageView) v).setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_alarm_white_24dp));
+                v.setAlpha(1f);
             }
+            return true;
         });
-        //Para o marquee forever funcionar
-        myViewHolder.txtViewDescrition.setSelected(true);
+        myViewHolder.txtViewDescription.setSelected(true);
 
-        }
+    }
 
     @Override
     public int getItemCount() {
         return listBus.size();
-    }
-
-
-    public void addListItem(Bus bus,int position){
-        listBus.add(bus);
-        notifyItemInserted(position);
-    }
-
-    public void removeListItem(int position){
-        listBus.remove(position);
-        notifyItemRemoved(position);
     }
 
     @Override
@@ -240,23 +212,20 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public TextView txtViewHorario;
-        public TextView txtViewCode;
-        public TextView txtViewDescrition;
-        public AppCompatImageView imageViewAlarm;
-        public View itemView;
+        final TextView txtViewSchedule;
+        final TextView txtViewCode;
+        final TextView txtViewDescription;
+        final AppCompatImageView imageViewAlarm;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
 
             super(itemView);
 
-            this.itemView = itemView;
-
-            txtViewHorario = (TextView) itemView.findViewById(R.id.item_list_textview_horario);
+            txtViewSchedule = (TextView) itemView.findViewById(R.id.item_list_textview_horario);
             txtViewCode = (TextView) itemView.findViewById(R.id.item_list_textview_codigo);
-            txtViewDescrition = (TextView) itemView.findViewById(R.id.item_list_textview_descricao_do_codigo);
+            txtViewDescription = (TextView) itemView.findViewById(R.id.item_list_textview_descricao_do_codigo);
             imageViewAlarm = (AppCompatImageView) itemView.findViewById(R.id.item_list_imageview);
             imageViewAlarm.setOnClickListener(this);
 
@@ -282,9 +251,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         }
     }
 
-    public static Pair<Integer,List<Bus>> sortByTimeBus(List<Bus> busList){
-
-        //Collections.sort(busList);
+    private static Pair<Integer,List<Bus>> sortByTimeBus(List<Bus> busList){
         Bus bus = new Bus();
         bus.setTime(Calendar.getInstance().getTimeInMillis());
         List<Bus> busFinal = new ArrayList<>();
@@ -314,7 +281,7 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
             Bus bus1 = lastBuses.get(lastBuses.size() - 1);
             twoLastBuses.add(bus2);
             lastBuses.remove(bus2);
-            //Tem que ser invertido para aparecer embaixo o mais recente
+            //It has to be inverted to appear underneath the latest
             twoLastBuses.add(bus1);
             lastBuses.remove(bus1);
 
@@ -327,17 +294,11 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         countTwoLast = twoLastBuses.size();
 
 
-        for(Bus bus1 : twoLastBuses){
-            busFinal.add(bus1);
-        }
+        busFinal.addAll(twoLastBuses);
 
-        for(Bus bus1 : nextBuses){
-            busFinal.add(bus1);
-        }
+        busFinal.addAll(nextBuses);
 
-        for(Bus bus1 : lastBuses){
-            busFinal.add(bus1);
-        }
+        busFinal.addAll(lastBuses);
 
         return new Pair<>(countTwoLast,busFinal);
     }

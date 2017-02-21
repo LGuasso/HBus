@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     private static final String TAG = "MainActivity";
     private static final String STACK = "stack";
+    public static final String DEBUG = "debug";
     private Toolbar pToolbar;
     private NavigationView navigationView;
     //Gerencia a atuacao dos fragments

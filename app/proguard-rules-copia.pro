@@ -15,6 +15,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+#debug
+#disable optimize option
 -dontoptimize
 
 -repackageclasses ''

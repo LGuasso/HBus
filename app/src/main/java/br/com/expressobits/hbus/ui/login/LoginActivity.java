@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.ui.ManagerInit;
+import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.ui.help.PrivacyPolicyActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {

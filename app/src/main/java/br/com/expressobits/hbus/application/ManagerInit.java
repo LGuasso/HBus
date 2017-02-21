@@ -1,16 +1,11 @@
-package br.com.expressobits.hbus.ui;
+package br.com.expressobits.hbus.application;
 
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import br.com.expressobits.hbus.ui.login.LoginActivity;
+import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.tour.TourActivity;
 
@@ -19,12 +14,6 @@ import br.com.expressobits.hbus.ui.tour.TourActivity;
  * @since 02/11/15.
  */
 public class ManagerInit {
-
-
-    private static final String TAG = "Init";
-
-    private static FirebaseAuth mAuth;
-    private static FirebaseAuth.AuthStateListener mAuthListener;
 
     public static void manager(final Context context){
 

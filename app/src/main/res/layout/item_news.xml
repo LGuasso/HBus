@@ -72,7 +72,7 @@
                 android:id="@+id/imageViewNewsMain"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/white_radius" />
+                android:src="@drawable/circleindicator_black_radius" />
 
         </LinearLayout>
 

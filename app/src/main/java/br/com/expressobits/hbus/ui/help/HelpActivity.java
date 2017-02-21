@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,8 +24,20 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_help);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+
+
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+            getSupportActionBar().setElevation(10);
+        }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (findViewById(R.id.appBar) != null) {
+                (findViewById(R.id.appBar)).setElevation(10);
+            }
+        }
 
         View linearLayoutHelpContent = findViewById(R.id.linearLayoutHelpContent);
         linearLayoutHelpContent.setOnClickListener(this);

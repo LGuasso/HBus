@@ -21,7 +21,7 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 
 /**
- * @author  Rafael
+ * @author  Rafael Correa
  * @since  15/09/15.
  * Classe que gerencia processos inicias do sistema
  */

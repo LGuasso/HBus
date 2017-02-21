@@ -259,7 +259,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
         Collections.sort(listItineraries);
 
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),true,listItineraries,favoriteItineraries);
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(), listItineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());

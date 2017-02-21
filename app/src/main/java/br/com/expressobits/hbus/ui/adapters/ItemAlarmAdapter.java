@@ -7,7 +7,6 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -33,7 +32,7 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
     //http://stackoverflow.com/questions/27203817/recyclerview-expand-collapse-items
     //private int expandedPosition = -1;
 
-    public ItemAlarmAdapter(Context context,List<Alarm> alarmList){
+    public ItemAlarmAdapter(Context context, List<Alarm> alarmList){
         this.context = context;
         this.alarmList = alarmList;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -41,15 +40,16 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_list_alarm,viewGroup,false);
+        View view;
+        view = layoutInflater.inflate(R.layout.item_list_alarm,viewGroup,false);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Alarm alarm = alarmList.get(position);
-        //holder.itemView.setOnClickListener(ItemAlarmAdapter.this);
-        //holder.itemView.setTag(holder);
+        //holder.view.setOnClickListener(ItemAlarmAdapter.this);
+        //holder.view.setTag(holder);
         holder.textViewItineraryName.setText(FirebaseUtils.getItinerary(alarm.getId()));
         holder.textViewName.setText(alarm.getName()!=null&alarm.getName().length()>1?alarm.getName():context.getString(R.string.alarm));
         Calendar calendar = Calendar.getInstance();
@@ -122,14 +122,10 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
         final TextView textViewSaturday;
         final TextView textViewTime;
         final SwitchCompat switchActived;
-        final LinearLayout relativeLayout;
         final TextView textViewItineraryName;
-        final View itemView;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            this.itemView = itemView;
-            relativeLayout = (LinearLayout) itemView.findViewById(R.id.relativeLayoutItemListAlarm);
             textViewName = (TextView) itemView.findViewById(R.id.textViewName);
             textViewSunday = (TextView) itemView.findViewById(R.id.textViewDaysSunday);
             textViewMonday = (TextView) itemView.findViewById(R.id.textViewDaysMonday);

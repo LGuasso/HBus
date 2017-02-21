@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.ui.tour;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -12,13 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import java.util.ArrayList;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.ui.ManagerInit;
-import me.relex.circleindicator.CircleIndicator;
+import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
+import br.com.expressobits.hbus.application.ManagerInit;
 
 /**
  * Tela de tour(intro)
@@ -43,29 +42,13 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         starter = getIntent().getBooleanExtra(STARTER_MODE,false);
         if(starter){
-            registerEventTutorialBegin();
+            FirebaseAnalyticsManager.registerEventTutorialBegin(this);
         }
         setContentView(R.layout.activity_tour);
         referencesLayoutXML();
         showCircleIndicatorDefault();
         setSupportActionBar(mToolbarBottom);
         setupToolbarBottom();
-    }
-
-    private void registerEventTutorialBegin() {
-        // Obtain the FirebaseAnalytics instance.
-        FirebaseAnalytics mFirebaseAnalytics;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        Bundle bundle = new Bundle();
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN,bundle);
-    }
-
-    private void registerEventTutorialComplete() {
-        // Obtain the FirebaseAnalytics instance.
-        FirebaseAnalytics mFirebaseAnalytics;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        Bundle bundle = new Bundle();
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_COMPLETE,bundle);
     }
 
     @Override
@@ -91,7 +74,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
             if(defaultViewpager.getCurrentItem() + 2 == defaultPagerAdapter.getCount()){
                 nextButton.setText(getResources().getText(R.string.finish));
                 if(starter){
-                    registerEventTutorialComplete();
+                    FirebaseAnalyticsManager.registerEventTutorialComplete(this);
                 }
             }else{
                 nextButton.setText(getResources().getText(R.string.action_next));
@@ -116,7 +99,8 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
     private void showCircleIndicatorDefault() {
         defaultViewpager = (ViewPager) findViewById(R.id.viewpager_default);
         defaultViewpager.setOffscreenPageLimit(2);
-        CircleIndicator defaultIndicator = (CircleIndicator) findViewById(R.id.indicator_default);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDots);
+        tabLayout.setupWithViewPager(defaultViewpager, true);
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(
                 PagerFragment.newInstance(
@@ -145,7 +129,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
         defaultPagerAdapter = new ContentPagerAdapter(getSupportFragmentManager(), fragments);
         defaultViewpager.setAdapter(defaultPagerAdapter);
         defaultViewpager.setAdapter(new ContentPagerAdapter(getSupportFragmentManager(), fragments));
-        defaultIndicator.setViewPager(defaultViewpager);
+        //tabLayout.setViewPager(defaultViewpager);
         defaultViewpager.addOnPageChangeListener(this);
     }
 

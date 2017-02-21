@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -121,15 +122,9 @@ public class HoursFragment extends Fragment{
                 if(dataSnapshot.getChildrenCount()>0){
 
                     for(DataSnapshot dataSnapshotBus:dataSnapshot.getChildren()){
-                        if(HoursFragment.this.isVisible()){
-                            Bus bus = dataSnapshotBus.getValue(Bus.class);
-                            bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,String.valueOf(bus.getTime())));
-                            addBus(bus);
-                        }else{
-                            Log.i(TAG,"Cancel load bus (FRAGMENT) visible!");
-                        }
-
-
+                        Bus bus = dataSnapshotBus.getValue(Bus.class);
+                        bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,String.valueOf(bus.getTime())));
+                        addBus(bus,(int)dataSnapshot.getChildrenCount());
                     }
                     recyclerView.setVisibility(View.VISIBLE);
                     linearLayoutEmptyState.setVisibility(View.INVISIBLE);
@@ -151,10 +146,14 @@ public class HoursFragment extends Fragment{
 
     }
 
-    private void addBus(Bus bus){
+    private void addBus(Bus bus,int busCount){
         listBus.add(bus);
-        ItemBusAdapter adapterUeful = new ItemBusAdapter(getActivity(), listBus);
-        recyclerView.setAdapter(adapterUeful);
+        if(listBus.size()==busCount){
+            Collections.sort(listBus);
+            ItemBusAdapter adapterUeful = new ItemBusAdapter(getActivity(), listBus);
+            recyclerView.setAdapter(adapterUeful);
+        }
+
     }
 
     @Override

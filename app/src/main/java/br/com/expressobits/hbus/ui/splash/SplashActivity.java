@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.ui.ManagerInit;
+import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity{

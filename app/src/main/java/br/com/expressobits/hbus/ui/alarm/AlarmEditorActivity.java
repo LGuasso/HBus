@@ -36,7 +36,6 @@ public class AlarmEditorActivity extends AppCompatActivity {
     public static final String ARGS_ALARM_TYPE_DAY = "br.com.expressobits.hbus.ui.AlarmTypeDay";
     private static final String TAG = "AlarmEditor";
     private Alarm alarm;
-    private boolean editing;
     private TextView textViewTime;
     private SwitchCompat switchActived;
     private Spinner spinnerDelayType;
@@ -110,7 +109,7 @@ public class AlarmEditorActivity extends AppCompatActivity {
         String alarmId = getIntent().getStringExtra(ARGS_ALARM_ID);
         String code = getIntent().getStringExtra(ARGS_ALARM_CODE);
         alarm = alarmDAO.getAlarm(alarmId);
-        editing = alarm!=null;
+        boolean editing = alarm != null;
         if(!editing){
             alarm = new Alarm();
             alarm.setId(alarmId);

@@ -3,7 +3,6 @@ package br.com.expressobits.hbus.ui.adapters;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,22 +40,23 @@ import br.com.expressobits.hbus.utils.TimeUtils;
 public class ItemBookmarkItineraryAdapter extends
         RecyclerView.Adapter<ItemBookmarkItineraryAdapter.HolderFavoriteItinerary>  {
 
-    private Context context;
-    private static String PREF_TIME_HOME_SCREEN = "time_home_screen";
-    private List<Itinerary> itineraryList;
-    private LayoutInflater layoutInflater;
+    private final Context context;
+    private static final String PREF_TIME_HOME_SCREEN = "time_home_screen";
+    private final List<Itinerary> itineraryList;
+    private final LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
-    private HashMap<String,HashMap<String,Code>> codes = new HashMap<>();
+    private final HashMap<String,HashMap<String,Code>> codes = new HashMap<>();
 
-    public ItemBookmarkItineraryAdapter(Context context, List<Itinerary> lista){
+    public ItemBookmarkItineraryAdapter(Context context, List<Itinerary> list){
         this.context = context;
-        this.itineraryList = lista;
+        this.itineraryList = list;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int j) {
-        View viewP = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
+        View viewP;
+        viewP = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
         return new HolderFavoriteItinerary(viewP);
     }
 
@@ -80,15 +80,14 @@ public class ItemBookmarkItineraryAdapter extends
     }
 
     /**
-     * TODO identificar forma possivel de diminuir a lentidão de processo deste método
+     * TODO identify possible way to decrease the process slowness of this method
      *
-     * Método que identifica quais serão os próximos ônibus para
+     * Method that identifies the next buses
      *
      * @param holder Holder view
      * @param itinerary Itinerary
-     * @return Mapa com chave e ônibus
      */
-    private HashMap<String,Bus> getBusList(final HolderFavoriteItinerary holder, final Itinerary itinerary){
+    private void getBusList(final HolderFavoriteItinerary holder, final Itinerary itinerary){
 
         final HashMap<String,Bus> next = new HashMap<>();
         String country = FirebaseUtils.getCountry(itinerary.getId());
@@ -134,12 +133,11 @@ public class ItemBookmarkItineraryAdapter extends
                 });
             }
         }
-        return next;
     }
 
-    private void setLastUpdate(HolderFavoriteItinerary holder,long milis){
+    private void setLastUpdate(HolderFavoriteItinerary holder,long time){
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(milis);
+        calendar.setTimeInMillis(time);
         SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy", Locale.getDefault());
         String format = sdf.format(calendar.getTime());
         holder.textViewUpdated.setText(context.getString(R.string.updated_date,format));
@@ -151,7 +149,8 @@ public class ItemBookmarkItineraryAdapter extends
         holder.linearLayoutHours.removeAllViews();
         for(int i=0;i<next.size();i++) {
             String way = itinerary.getWays().get(i);
-            View view = layoutInflater.inflate(R.layout.item_next_bus, holder.linearLayoutHours, false);
+            View view;
+            view = layoutInflater.inflate(R.layout.item_next_bus, holder.linearLayoutHours, false);
             TextView textViewHour = (TextView) view.findViewById(R.id.textViewHourforNextBus);
             TextView textViewWay = (TextView) view.findViewById(R.id.textViewWayforNextBus);
             TextView textViewCode = (TextView) view.findViewById(R.id.textViewCodeforNextBus);
@@ -191,12 +190,12 @@ public class ItemBookmarkItineraryAdapter extends
 
     class HolderFavoriteItinerary extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
-        private TextView textItineraryName;
-        private TextView textViewCompanyName;
-        private TextView textViewUpdated;
-        private Button buttonRemove;
-        private Button buttonLookHours;
-        private LinearLayout linearLayoutHours;
+        private final TextView textItineraryName;
+        private final TextView textViewCompanyName;
+        private final TextView textViewUpdated;
+        private final Button buttonRemove;
+        private final Button buttonLookHours;
+        private final LinearLayout linearLayoutHours;
 
         private HolderFavoriteItinerary(View itemView) {
             super(itemView);
@@ -242,8 +241,6 @@ public class ItemBookmarkItineraryAdapter extends
                     Code code = dataSnapshot.getValue(Code.class);
                     if(code!=null){
                         addCode(textView,company,codeName,code);
-                    }else{
-                        Log.d("NATHY","ERRO ENCONTRADO CODE"+codeName );
                     }
 
                 }

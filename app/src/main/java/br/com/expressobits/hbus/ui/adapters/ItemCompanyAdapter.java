@@ -23,25 +23,23 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
  */
 public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.CompanyViewHolder>{
 
-    private List<Company> companies;
-    private Context context;
-    private LayoutInflater layoutInflater;
-    private String cityId;
-    private String companySelected;
+    private final List<Company> companies;
+    private final LayoutInflater layoutInflater;
+    private final String companySelected;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
 
     public ItemCompanyAdapter(Context context,List<Company> companies){
-        this.context = context;
         layoutInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.companies = companies;
-        cityId = PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
+        String cityId = PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         companySelected = PreferenceManager.getDefaultSharedPreferences(context).getString(cityId,"SIMSM");
     }
 
     @Override
     public CompanyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_list_company,viewGroup,false);
+        View view;
+        view = layoutInflater.inflate(R.layout.item_list_company,viewGroup,false);
         return new CompanyViewHolder(view);
     }
 
@@ -67,13 +65,13 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
         return companies.size();
     }
 
-    public class CompanyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class CompanyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public TextView textView1;
-        public ImageView imageView;
-        public LinearLayout linearLayout;
+        final TextView textView1;
+        final ImageView imageView;
+        final LinearLayout linearLayout;
 
-        public CompanyViewHolder(View itemView) {
+        CompanyViewHolder(View itemView) {
             super(itemView);
             textView1 = (TextView) itemView.findViewById(R.id.text1);
             imageView = (ImageView) itemView.findViewById(R.id.icon);
