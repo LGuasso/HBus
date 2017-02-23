@@ -51,7 +51,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
-import br.com.expressobits.hbus.ui.fragments.BookmarkItineraryFragment;
+import br.com.expressobits.hbus.ui.fragments.HomeFragment;
 import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
 import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         loadParams();
         if (savedInstanceState == null) {
-            Fragment fragment = new BookmarkItineraryFragment();
+            Fragment fragment = new HomeFragment();
             if (findViewById(R.id.framelayout_main) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_main, fragment, BookmarkItineraryFragment.TAG);
+                ft.add(R.id.framelayout_main, fragment, HomeFragment.TAG);
                 ft.commit();
             }
         }
@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
      */
     private void setSelectItemNavigation(String TAG){
         switch (TAG){
-            case BookmarkItineraryFragment.TAG:
+            case HomeFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_favorites).setChecked(true);
                 break;
             case ItinerariesFragment.TAG:
@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         Fragment fragment = new Fragment();
         setSelectItemNavigation(TAG);
         switch (TAG){
-            case BookmarkItineraryFragment.TAG:
+            case HomeFragment.TAG:
                 setActionBarTitle(getString(R.string.app_name));
                 if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         if (id == R.id.nav_logout) {
             logout();
         }else if (id == R.id.nav_favorites) {
-            addFragment(BookmarkItineraryFragment.TAG);
+            addFragment(HomeFragment.TAG);
         } else if (id == R.id.nav_all_itineraries) {
             addFragment(ItinerariesFragment.TAG);
         }else if (id == R.id.nav_alarms) {

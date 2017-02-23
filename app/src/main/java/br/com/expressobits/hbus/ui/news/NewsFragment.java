@@ -34,9 +34,11 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment{
 
     public static final String TAG = "NewsFragment";
+
+    public static final int LIMIT_TIME_TO_NEWS = 60*60*24*90;
 
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerViewNews;
@@ -261,6 +263,4 @@ public class NewsFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

@@ -30,8 +30,9 @@
     <style name="AppTheme.TextAppearance.AppCompat" parent="TextAppearance.AppCompat">
     </style>
 
-,
-
+    <style name="HbusTheme.TextAppearance.AppCompat.SubHeader" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
 
     <style name="TextStyle.Large" parent="TextAppearance.AppCompat.Large">
         <item name="android:textColor">@color/text_color</item>
@@ -100,6 +101,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
     </style>
+
+
+
 
 
 </resources>

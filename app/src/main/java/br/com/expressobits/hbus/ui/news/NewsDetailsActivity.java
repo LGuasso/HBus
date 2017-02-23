@@ -2,10 +2,11 @@ package br.com.expressobits.hbus.ui.news;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,10 +29,8 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
-    private static final String TAG = "NewsDetails";
     public static final String ARGS_NEWS_ID = "br.com.expressobits.hbus.ui.news.NewsIdKey";
     private Toolbar toolbar;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
     private TextView textViewBody;
     private ImageView imageView;
     private TextView textViewSource;
@@ -50,10 +49,12 @@ public class NewsDetailsActivity extends AppCompatActivity {
         pullNews(id);
     }
 
-    private void initViews(){
+    private void initViews() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         imageView = (ImageView) findViewById(R.id.imageView);
         textViewTitle = (TextView) findViewById(R.id.textViewNewsTitle);
         textViewSubtitle = (TextView) findViewById(R.id.textViewNewsSubtitle);
@@ -64,21 +65,32 @@ public class NewsDetailsActivity extends AppCompatActivity {
         linearLayoutImages = (LinearLayout) findViewById(R.id.linearLayoutImages);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
     /**
      * Puxa do firebase os dados para retornar a notícia online!
+     *
      * @param id ex;
      */
-    private void pullNews(final String id){
+    private void pullNews(final String id) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference(id);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 News news = dataSnapshot.getValue(News.class);
-                news.setId(id);
-                if(news!=null){
+                if (news != null) {
+                    news.setId(id);
                     loadNews(news);
-                }else {
+                } else {
                     finish();
                 }
             }
@@ -92,7 +104,8 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     /**
      * Carrega uma notícia aos views
-     * @param news
+     *
+     * @param news News of activity
      */
     private void loadNews(News news) {
 
@@ -102,16 +115,16 @@ public class NewsDetailsActivity extends AppCompatActivity {
         textViewTitle.setText(news.getTitle());
 
         String body = news.getBody();
-        for(int i=0;i<news.getImagesUrls().size();i++){
+        for (int i = 0; i < news.getImagesUrls().size(); i++) {
             String url = news.getImagesUrls().get(i);
-            if(news.getBody().contains("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--")){
+            if (news.getBody().contains("--" + FirebaseUtils.NEWS_BODY_IMAGE_TAG + i + "--")) {
                 urlsActivedImages.add(url);
-                body = news.getBody().replace("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--","");
+                body = news.getBody().replace("--" + FirebaseUtils.NEWS_BODY_IMAGE_TAG + i + "--", "");
             }
         }
         textViewBody.setText(body);
         textViewSource.setText(news.getSource());
-        textViewTime.setText(TimeUtils.getTimeAgo(news.getTime(),this));
+        textViewTime.setText(TimeUtils.getTimeAgo(news.getTime(), this));
         textViewSubtitle.setText(news.getSubtitle());
         getImageList(urlsActivedImages);
         updateNewsChips(news);
@@ -119,16 +132,14 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     private void getImageList(List<String> urlsActivedImages) {
 
-        View view = getLayoutInflater().inflate(R.layout.item_news_image, linearLayoutImages, false);
-        for(final String url:urlsActivedImages){
+        View view;
+        view = getLayoutInflater().inflate(R.layout.item_news_image, linearLayoutImages, false);
+        for (final String url : urlsActivedImages) {
             ImageView imageView = (ImageView) view.findViewById(R.id.imageViewImage);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                }
+            imageView.setOnClickListener(view1 -> {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             });
             linearLayoutImages.addView(imageView);
             Picasso.with(this).load(url).into(imageView);
@@ -136,33 +147,33 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void updateNewsChips(News news){
+    private void updateNewsChips(News news) {
         linearLayoutNewsChips.removeAllViews();
-        View viewCity = getLayoutInflater().inflate(R.layout.item_news_chips,linearLayoutNewsChips,false);
+        View viewCity;
+        viewCity = getLayoutInflater().inflate(R.layout.item_news_chips, linearLayoutNewsChips, false);
         TextView textViewCity = (TextView) viewCity.findViewById(R.id.textViewNewsChip);
         String city = FirebaseUtils.getNewsCityName(news.getId());
-        if(city!=null){
+        if (city != null) {
 
             textViewCity.setText(city);
-        }else {
+        } else {
             textViewCity.setText(this.getString(R.string.pref_header_general));
         }
         linearLayoutNewsChips.addView(viewCity);
         List<String> itinerariesIDs = news.getItineraryIds();
-        if(itinerariesIDs!=null){
-            for (String itineraryId:itinerariesIDs){
-                View view = getLayoutInflater().inflate(R.layout.item_news_chips,linearLayoutNewsChips,false);
+        if (itinerariesIDs != null) {
+            for (String itineraryId : itinerariesIDs) {
+                View view;
+                view = getLayoutInflater().inflate(R.layout.item_news_chips, linearLayoutNewsChips, false);
                 TextView textView = (TextView) view.findViewById(R.id.textViewNewsChip);
                 String itineraryName = FirebaseUtils.getNewsItinerary(itineraryId);
-                if(city!=null){
+                if (city != null) {
 
 
                     textView.setText(itineraryName);
                     textView.setSelected(true);
                     linearLayoutNewsChips.addView(view);
 
-                }else {
-                    //textView.setText(context.getString(R.string.pref_header_general));
                 }
 
             }

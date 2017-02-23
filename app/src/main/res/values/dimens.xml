@@ -26,6 +26,8 @@
     <dimen name="loading_text_padding">24dp</dimen>
     <dimen name="statusBarHeight">24dp</dimen>
     <dimen name="padding_item_bus">4dp</dimen>
+    <dimen name="padding_item_header">16dp</dimen>
+    <dimen name="padding_left_item_subheader">16dp</dimen>
 
 
 </resources>

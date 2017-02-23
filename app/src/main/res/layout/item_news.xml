@@ -70,8 +70,8 @@
 
             <ImageView
                 android:id="@+id/imageViewNewsMain"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:src="@drawable/circleindicator_black_radius" />
 
         </LinearLayout>
@@ -84,12 +84,13 @@
             android:textAppearance="?android:textAppearanceSmall" />
 
 
-        <!--TextView
+        <TextView
             android:id="@+id/textViewNewsBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="3"
             android:text="@string/loading"
-            android:textAppearance="?android:textAppearanceSmall" /-->
+            android:textAppearance="?android:textAppearanceSmall"/>
 
         <HorizontalScrollView
             android:layout_width="match_parent"

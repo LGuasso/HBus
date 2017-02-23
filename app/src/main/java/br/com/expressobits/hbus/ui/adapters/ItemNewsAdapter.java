@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -16,6 +14,8 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.News;
+import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.adapters.viewholder.NewsViewHolder;
 import br.com.expressobits.hbus.ui.news.NewsDetailsActivity;
 import br.com.expressobits.hbus.util.TimeUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
@@ -25,7 +25,7 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
  * @author Rafael Correa
  * @since 21/08/16
  */
-public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.HolderNews>{
+public class ItemNewsAdapter extends RecyclerView.Adapter<NewsViewHolder> implements RecyclerViewOnClickListenerHack{
 
     private final Context context;
     private final List<News> newses;
@@ -38,36 +38,32 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.Holder
     }
 
     @Override
-    public HolderNews onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         view = layoutInflater.inflate(R.layout.item_news,parent,false);
-        return new HolderNews(view);
+        return new NewsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(HolderNews holder, int position) {
-        //List<String> urlsActivedImages = new ArrayList<>();
+    public void onBindViewHolder(NewsViewHolder holder, int position) {
         News news = newses.get(position);
-        //String body = news.getBody();
+        String body = news.getBody();
         holder.textViewNewsTitle.setText(news.getTitle());
         holder.textViewNewsSubtitle.setText(news.getSubtitle());
+        holder.setRecyclerViewOnClickListenerHack(this);
         if(!news.getImagesUrls().get(0).isEmpty()){
             Picasso.with(context).load(news.getImagesUrls().get(0)).into(holder.imageViewNewsMain);
         }
         holder.textViewNewsTime.setText(TimeUtils.getTimeAgo(news.getTime(),context));
         holder.textViewNewsSource.setText(news.getSource());
 
-        /**for(int i=0;i<news.getImagesUrls().size();i++){
-            String url = news.getImagesUrls().get(i);
+        for(int i=0;i<news.getImagesUrls().size();i++){
             if(news.getBody().contains("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--")){
-                urlsActivedImages.add(url);
-                //body = news.getBody().replace("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--","");
+                body = news.getBody().replace("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--","");
             }
-        }*/
-        //holder.textViewNewsBody.setText(body);
-        //getImageList(holder,urlsActivedImages);
-        updateNewsChips(holder,news);
-
+        }
+        holder.textViewNewsBody.setText(body);
+        updateNewsChips(layoutInflater,holder,news);
     }
 
     @Override
@@ -75,7 +71,7 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.Holder
         return newses.size();
     }
 
-    private void updateNewsChips(HolderNews holderNews, News news){
+    public static void updateNewsChips(LayoutInflater layoutInflater,NewsViewHolder holderNews, News news){
         holderNews.linearLayoutNewsChips.removeAllViews();
         View viewCity;
         viewCity = layoutInflater.inflate(R.layout.item_news_chips,holderNews.linearLayoutNewsChips,false);
@@ -85,7 +81,7 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.Holder
 
             textViewCity.setText(city);
         }else {
-            textViewCity.setText(context.getString(R.string.pref_header_general));
+            textViewCity.setText(layoutInflater.getContext().getString(R.string.pref_header_general));
         }
         holderNews.linearLayoutNewsChips.addView(viewCity);
         List<String> itinerariesIDs = news.getItineraryIds();
@@ -108,33 +104,18 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<ItemNewsAdapter.Holder
 
     }
 
-    class HolderNews extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        final TextView textViewNewsTitle;
-        final TextView textViewNewsSubtitle;
-        final TextView textViewNewsTime;
-        final TextView textViewNewsSource;
-        final ImageView imageViewNewsMain;
-        final LinearLayout linearLayoutNewsChips;
-
-        HolderNews(View itemView){
-            super(itemView);
-            itemView.setOnClickListener(this);
-            textViewNewsTitle = (TextView) itemView.findViewById(R.id.textViewNewsTitle);
-            textViewNewsSubtitle = (TextView) itemView.findViewById(R.id.textViewNewsSubtitle);
-            textViewNewsTime = (TextView) itemView.findViewById(R.id.textViewNewsTime);
-            textViewNewsSource = (TextView) itemView.findViewById(R.id.textViewNewsSource);
-            imageViewNewsMain = (ImageView) itemView.findViewById(R.id.imageViewNewsMain);
-            linearLayoutNewsChips = (LinearLayout) itemView.findViewById(R.id.linearLayoutNewsChips);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(context, NewsDetailsActivity.class);
-            intent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,newses.get(getAdapterPosition()).getId());
-            context.startActivity(intent);
-        }
-
+    @Override
+    public void onClickListener(View view, int position) {
+        News news = newses.get(position);
+        Intent intent = new Intent(context, NewsDetailsActivity.class);
+        intent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,news.getId());
+        context.startActivity(intent);
     }
+
+    @Override
+    public boolean onLongClickListener(View view, int position) {
+        return false;
+    }
+
 }

@@ -33,7 +33,7 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (findViewById(R.id.appBar) != null) {
-                (findViewById(R.id.appBar)).setElevation(10);
+                (findViewById(R.id.appBar)).setElevation(4);
             }
         }
 
@@ -88,7 +88,6 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
             } catch (android.content.ActivityNotFoundException anfe) {
-                //TODO ERROR imlementar erro
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
             }
         }

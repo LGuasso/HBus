@@ -1,6 +1,7 @@
 package br.com.expressobits.hbus.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,8 +29,13 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.model.News;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.adapters.viewholder.HeaderViewHolder;
+import br.com.expressobits.hbus.ui.adapters.viewholder.NewsViewHolder;
+import br.com.expressobits.hbus.ui.model.Header;
+import br.com.expressobits.hbus.ui.news.NewsDetailsActivity;
 import br.com.expressobits.hbus.utils.BusUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
@@ -37,46 +44,129 @@ import br.com.expressobits.hbus.utils.TimeUtils;
  * @author Rafael
  * @since 27/05/2015.
  */
-public class ItemBookmarkItineraryAdapter extends
-        RecyclerView.Adapter<ItemBookmarkItineraryAdapter.HolderFavoriteItinerary>  {
+public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements RecyclerViewOnClickListenerHack {
 
     private final Context context;
     private static final String PREF_TIME_HOME_SCREEN = "time_home_screen";
-    private final List<Itinerary> itineraryList;
+    private final List<Object> items;
     private final LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
     private final HashMap<String,HashMap<String,Code>> codes = new HashMap<>();
 
-    public ItemBookmarkItineraryAdapter(Context context, List<Itinerary> list){
+    private final int HEADER = 0;
+    private final int NEWS = 1;
+    private final int ITINERARY = 2;
+
+    public ItemHomeAdapter(Context context, List<Object> list){
         this.context = context;
-        this.itineraryList = list;
+        this.items = list;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public HolderFavoriteItinerary onCreateViewHolder(ViewGroup viewGroup, int j) {
-        View viewP;
-        viewP = layoutInflater.inflate(R.layout.item_favorite_itinerary,viewGroup,false);
-        return new HolderFavoriteItinerary(viewP);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        RecyclerView.ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+        switch (viewType){
+            case HEADER:
+                View viewHeader = inflater.inflate(R.layout.item_header, viewGroup, false);
+                viewHolder = new HeaderViewHolder(viewHeader);
+                break;
+            case NEWS:
+                View viewNews = inflater.inflate(R.layout.item_news, viewGroup, false);
+                viewHolder = new NewsViewHolder(viewNews);
+                break;
+            case ITINERARY:
+                View viewItinerary = inflater.inflate(R.layout.item_bookmarked_itinerary, viewGroup, false);
+                viewHolder = new BookmarkedItineraryViewHolder(viewItinerary);
+                break;
+            default:
+                View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
+                viewHolder = new BookmarkedItineraryViewHolder(v);
+                break;
+        }
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(HolderFavoriteItinerary holder, int position) {
+    public int getItemViewType(int position) {
+        if (items.get(position) instanceof Header) {
+            return HEADER;
+        }else if (items.get(position) instanceof News) {
+            return NEWS;
+        }else if (items.get(position) instanceof Itinerary) {
+            return ITINERARY;
+        }
+        return -1;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+
+        switch (viewHolder.getItemViewType()) {
+            case HEADER:
+                HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
+                configureHeaderViewHolder(headerViewHolder, position);
+                break;
+            case NEWS:
+                NewsViewHolder newsViewHolder = (NewsViewHolder) viewHolder;
+                configureNewsViewHolder(newsViewHolder, position);
+                break;
+            case ITINERARY:
+                BookmarkedItineraryViewHolder bookmarkedItineraryViewHolder = (BookmarkedItineraryViewHolder) viewHolder;
+                configureBookmarkedItineraryViewHolder(bookmarkedItineraryViewHolder, position);
+                break;
+            default:
+                BookmarkedItineraryViewHolder defaultViewHolder = (BookmarkedItineraryViewHolder) viewHolder;
+                configureBookmarkedItineraryViewHolder(defaultViewHolder, position);
+                break;
+        }
+
+
+    }
+
+    private void configureHeaderViewHolder(HeaderViewHolder headerViewHolder, int position) {
+        Header header = (Header) items.get(position);
+        headerViewHolder.textViewHeader.setText(header.getTextHeader());
+    }
+
+    private void configureNewsViewHolder(NewsViewHolder newsViewHolder, int position) {
+        News news = (News)items.get(position);
+        String body = news.getBody();
+        newsViewHolder.textViewNewsTitle.setText(news.getTitle());
+        newsViewHolder.textViewNewsSubtitle.setText(news.getSubtitle());
+        newsViewHolder.setRecyclerViewOnClickListenerHack(this);
+        if(!news.getImagesUrls().get(0).isEmpty()){
+            Picasso.with(context).load(news.getImagesUrls().get(0)).into(newsViewHolder.imageViewNewsMain);
+        }
+        newsViewHolder.textViewNewsTime.setText(br.com.expressobits.hbus.util.TimeUtils.getTimeAgo(news.getTime(),context));
+        newsViewHolder.textViewNewsSource.setText(news.getSource());
+
+        for(int i=0;i<news.getImagesUrls().size();i++){
+            if(news.getBody().contains("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--")){
+                body = news.getBody().replace("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--","");
+            }
+        }
+        newsViewHolder.textViewNewsBody.setText(body);
+        ItemNewsAdapter.updateNewsChips(layoutInflater,newsViewHolder,news);
+
+    }
+
+    private void configureBookmarkedItineraryViewHolder(BookmarkedItineraryViewHolder bookmarkedItineraryViewHolder, int position) {
         String name  = "";
         String companyName = "";
-        Itinerary itinerary = itineraryList.get(position);
+        Itinerary itinerary = (Itinerary)items.get(position);
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(MainActivity.DEBUG,false)){
             name += itinerary.getId();
         }else{
             name += itinerary.getName();
             companyName += context.getString(R.string.company_use,FirebaseUtils.getCompany(itinerary.getId()));
         }
-        holder.textItineraryName.setText(name);
-        holder.textViewCompanyName.setText(companyName);
-        if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemBookmarkItineraryAdapter.PREF_TIME_HOME_SCREEN,true)){
-            getBusList(holder,itinerary);
+        bookmarkedItineraryViewHolder.textItineraryName.setText(name);
+        bookmarkedItineraryViewHolder.textViewCompanyName.setText(companyName);
+        if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemHomeAdapter.PREF_TIME_HOME_SCREEN,true)){
+            getBusList(bookmarkedItineraryViewHolder,itinerary);
         }
-
     }
 
     /**
@@ -87,7 +177,7 @@ public class ItemBookmarkItineraryAdapter extends
      * @param holder Holder view
      * @param itinerary Itinerary
      */
-    private void getBusList(final HolderFavoriteItinerary holder, final Itinerary itinerary){
+    private void getBusList(final BookmarkedItineraryViewHolder holder, final Itinerary itinerary){
 
         final HashMap<String,Bus> next = new HashMap<>();
         String country = FirebaseUtils.getCountry(itinerary.getId());
@@ -135,7 +225,7 @@ public class ItemBookmarkItineraryAdapter extends
         }
     }
 
-    private void setLastUpdate(HolderFavoriteItinerary holder,long time){
+    private void setLastUpdate(BookmarkedItineraryViewHolder holder, long time){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy", Locale.getDefault());
@@ -144,7 +234,7 @@ public class ItemBookmarkItineraryAdapter extends
 
     }
 
-    private void updateFieldNextBus(HolderFavoriteItinerary holder,Itinerary itinerary,HashMap<String,Bus> next){
+    private void updateFieldNextBus(BookmarkedItineraryViewHolder holder, Itinerary itinerary, HashMap<String,Bus> next){
 
         holder.linearLayoutHours.removeAllViews();
         for(int i=0;i<next.size();i++) {
@@ -181,51 +271,14 @@ public class ItemBookmarkItineraryAdapter extends
 
     @Override
     public int getItemCount() {
-        return itineraryList.size();
+        return items.size();
     }
 
     public void setRecyclerViewOnClickListenerHack(RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack) {
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
     }
 
-    class HolderFavoriteItinerary extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
-        private final TextView textItineraryName;
-        private final TextView textViewCompanyName;
-        private final TextView textViewUpdated;
-        private final Button buttonRemove;
-        private final Button buttonLookHours;
-        private final LinearLayout linearLayoutHours;
-
-        private HolderFavoriteItinerary(View itemView) {
-            super(itemView);
-
-            textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
-            textViewCompanyName = (TextView) itemView.findViewById(R.id.textViewCompanyName);
-            textViewUpdated = (TextView) itemView.findViewById(R.id.textViewLastUpdate);
-            linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
-            buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
-            buttonLookHours = (Button) itemView.findViewById(R.id.buttonLookTime);
-            buttonLookHours.setOnClickListener(this);
-            buttonRemove.setOnClickListener(this);
-
-        }
-
-
-
-        @Override
-        public void onClick(View v) {
-            if(recyclerViewOnClickListenerHack != null){
-                recyclerViewOnClickListenerHack.onClickListener(v,this.getAdapterPosition());
-            }
-        }
-
-
-        @Override
-        public boolean onLongClick(View v) {
-            return recyclerViewOnClickListenerHack != null && recyclerViewOnClickListenerHack.onLongClickListener(v,getAdapterPosition());
-        }
-    }
 
     private void loadCode(TextView textView,String codeName,String company,String country,String cityName){
         if(!codes.containsKey(codeName)){
@@ -277,5 +330,55 @@ public class ItemBookmarkItineraryAdapter extends
 
     }
 
+    @Override
+    public void onClickListener(View view, int position) {
+        if(items.get(position) instanceof News){
+            News news = (News)items.get(position);
+            Intent intent = new Intent(context, NewsDetailsActivity.class);
+            intent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,news.getId());
+            context.startActivity(intent);
+        }
+    }
+
+    @Override
+    public boolean onLongClickListener(View view, int position) {
+        return false;
+    }
+
+    private class BookmarkedItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
+
+        private final TextView textItineraryName;
+        private final TextView textViewCompanyName;
+        private final TextView textViewUpdated;
+        private final Button buttonRemove;
+        private final Button buttonLookHours;
+        private final LinearLayout linearLayoutHours;
+
+        private BookmarkedItineraryViewHolder(View itemView) {
+            super(itemView);
+
+            textItineraryName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
+            textViewCompanyName = (TextView) itemView.findViewById(R.id.textViewCompanyName);
+            textViewUpdated = (TextView) itemView.findViewById(R.id.textViewLastUpdate);
+            linearLayoutHours = (LinearLayout) itemView.findViewById(R.id.linearLayoutHours);
+            buttonRemove = (Button) itemView.findViewById(R.id.buttonRemove);
+            buttonLookHours = (Button) itemView.findViewById(R.id.buttonLookTime);
+            buttonLookHours.setOnClickListener(this);
+            buttonRemove.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(recyclerViewOnClickListenerHack != null){
+                recyclerViewOnClickListenerHack.onClickListener(v,this.getAdapterPosition());
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return recyclerViewOnClickListenerHack != null && recyclerViewOnClickListenerHack.onLongClickListener(v,getAdapterPosition());
+        }
+    }
 
 }

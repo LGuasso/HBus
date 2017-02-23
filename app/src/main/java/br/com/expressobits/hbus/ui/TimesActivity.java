@@ -41,7 +41,7 @@ public class TimesActivity extends AppCompatActivity {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (findViewById(R.id.appBar) != null) {
-                (findViewById(R.id.appBar)).setElevation(0);
+                (findViewById(R.id.appBar)).setElevation(4);
             }
         }
         getSupportActionBar().setTitle(getIntent().getStringExtra(ARGS_ITINERARY));

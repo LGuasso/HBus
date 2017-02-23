@@ -210,7 +210,11 @@
 
         <activity
             android:name=".ui.news.NewsDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
 
         <activity android:name=".ui.help.PrivacyPolicyActivity"
             android:theme="@style/AppTheme.NoActionBar"
