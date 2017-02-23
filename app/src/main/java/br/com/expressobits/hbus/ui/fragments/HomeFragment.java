@@ -142,7 +142,10 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
                 News news = dataSnapshot.getValue(News.class);
                 country = FirebaseUtils.getCountry(cityId);
                 news.setId(FirebaseUtils.getIdNewsCity(String.valueOf(news.getTime()), country, cityName));
-                if(news.isActived()/* && TODO verificar se leu noticia*/){
+
+                if(news.isActived() &&
+                        !(PreferenceManager.getDefaultSharedPreferences(getContext()).
+                                getBoolean(NewsDetailsActivity.READ_PREFERENCE+"/"+news.getId(), false))){
                     items.add(0,new Header(getResources().getString(R.string.unread_news)));
                     items.add(1,news);
                     updateListViews();

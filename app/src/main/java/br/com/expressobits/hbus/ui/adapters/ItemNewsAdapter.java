@@ -2,6 +2,7 @@ package br.com.expressobits.hbus.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,25 +46,29 @@ public class ItemNewsAdapter extends RecyclerView.Adapter<NewsViewHolder> implem
     }
 
     @Override
-    public void onBindViewHolder(NewsViewHolder holder, int position) {
+    public void onBindViewHolder(NewsViewHolder newsViewHolder, int position) {
         News news = newses.get(position);
         String body = news.getBody();
-        holder.textViewNewsTitle.setText(news.getTitle());
-        holder.textViewNewsSubtitle.setText(news.getSubtitle());
-        holder.setRecyclerViewOnClickListenerHack(this);
+        newsViewHolder.textViewNewsTitle.setText(news.getTitle());
+        newsViewHolder.textViewNewsSubtitle.setText(news.getSubtitle());
+        newsViewHolder.setRecyclerViewOnClickListenerHack(this);
         if(!news.getImagesUrls().get(0).isEmpty()){
-            Picasso.with(context).load(news.getImagesUrls().get(0)).into(holder.imageViewNewsMain);
+            Picasso.with(context).load(news.getImagesUrls().get(0)).into(newsViewHolder.imageViewNewsMain);
         }
-        holder.textViewNewsTime.setText(TimeUtils.getTimeAgo(news.getTime(),context));
-        holder.textViewNewsSource.setText(news.getSource());
+        newsViewHolder.textViewNewsTime.setText(TimeUtils.getTimeAgo(news.getTime(),context));
+        newsViewHolder.textViewNewsSource.setText(news.getSource());
 
         for(int i=0;i<news.getImagesUrls().size();i++){
             if(news.getBody().contains("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--")){
                 body = news.getBody().replace("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--","");
             }
         }
-        holder.textViewNewsBody.setText(body);
-        updateNewsChips(layoutInflater,holder,news);
+        newsViewHolder.textViewNewsBody.setText(body);
+        updateNewsChips(layoutInflater,newsViewHolder,news);
+        if(!PreferenceManager.getDefaultSharedPreferences(context).
+                getBoolean(NewsDetailsActivity.READ_PREFERENCE+"/"+news.getId(),false)){
+            newsViewHolder.textViewNewsUnread.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

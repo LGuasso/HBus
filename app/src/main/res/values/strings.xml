@@ -156,5 +156,6 @@
     <string name="news_image">news image</string>
     <string name="news_icon_image">news icon image</string>
     <string name="unread_news">Unread news</string>
+    <string name="unread">Unread</string>
 
 </resources>

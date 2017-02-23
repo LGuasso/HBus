@@ -149,6 +149,10 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         newsViewHolder.textViewNewsBody.setText(body);
         ItemNewsAdapter.updateNewsChips(layoutInflater,newsViewHolder,news);
+        if(!PreferenceManager.getDefaultSharedPreferences(context).
+                getBoolean(NewsDetailsActivity.READ_PREFERENCE+"/"+news.getId(),false)){
+            newsViewHolder.textViewNewsUnread.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -166,6 +170,8 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         bookmarkedItineraryViewHolder.textViewCompanyName.setText(companyName);
         if(itinerary.getWays().size()>0 & PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ItemHomeAdapter.PREF_TIME_HOME_SCREEN,true)){
             getBusList(bookmarkedItineraryViewHolder,itinerary);
+        }else{
+            bookmarkedItineraryViewHolder.textViewUpdated.setText("");
         }
     }
 

@@ -23,6 +23,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public final TextView textViewNewsSource;
     public final ImageView imageViewNewsMain;
     public final LinearLayout linearLayoutNewsChips;
+    public final TextView textViewNewsUnread;
     public RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
 
     public NewsViewHolder(View itemView){
@@ -33,6 +34,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         textViewNewsBody = (TextView) itemView.findViewById(R.id.textViewNewsBody);
         textViewNewsTime = (TextView) itemView.findViewById(R.id.textViewNewsTime);
         textViewNewsSource = (TextView) itemView.findViewById(R.id.textViewNewsSource);
+        textViewNewsUnread = (TextView) itemView.findViewById(R.id.textViewNewsUnread);
         imageViewNewsMain = (ImageView) itemView.findViewById(R.id.imageViewNewsMain);
         linearLayoutNewsChips = (LinearLayout) itemView.findViewById(R.id.linearLayoutNewsChips);
 

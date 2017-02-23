@@ -145,4 +145,5 @@
     <string name="action_privacy_policy">Política de privacidade</string>
     <string name="email_here">Seu e-mail aqui</string>
     <string name="unread_news">Notícias não lidas</string>
+    <string name="unread">Não lido</string>
 </resources>
