@@ -23,9 +23,13 @@ public class ChooseWayDialogFragment extends DialogFragment implements DialogInt
     List<String> ways;
     String itinerary;
     String company;
+    String city;
+    String country;
     private ChooseWayDialogListener mCallback;
 
-    public void setParameters(ChooseWayDialogListener mCallback,String company,String itinerary,List<String> ways){
+    public void setParameters(ChooseWayDialogListener mCallback,String country,String city,String company,String itinerary,List<String> ways){
+        this.country = country;
+        this.city = city;
         this.company = company;
         this.itinerary = itinerary;
         this.ways = ways;
@@ -46,6 +50,6 @@ public class ChooseWayDialogFragment extends DialogFragment implements DialogInt
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        mCallback.onItemClick(company,itinerary,ways.get(which));
+        mCallback.onItemClick(country,city,company,itinerary,ways.get(which));
     }
 }

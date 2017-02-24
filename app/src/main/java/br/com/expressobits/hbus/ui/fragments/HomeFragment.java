@@ -1,16 +1,23 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -27,11 +34,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.News;
 import br.com.expressobits.hbus.ui.MainActivity;
-import br.com.expressobits.hbus.ui.OnSettingsListener;
+import br.com.expressobits.hbus.ui.FragmentManagerListener;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemHomeAdapter;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
@@ -52,7 +60,7 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     public String selectedItem;
     private RecyclerView recyclerView;
     private List<Object> items = new ArrayList<>();
-    OnSettingsListener mCallback;
+    FragmentManagerListener mCallback;
     LinearLayout linearLayoutEmptyList;
     LinearLayoutManager llmUseful;
     private String cityId;
@@ -64,7 +72,7 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (OnSettingsListener) this.getActivity();
+            mCallback = (FragmentManagerListener) this.getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(this.getActivity().toString()
                     + " precisa implementar OnSettingsListener");
@@ -101,6 +109,7 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     private void initViews(View view){
         initListViews(view);
         initEmptyList(view);
+        setHasOptionsMenu(true);
     }
 
     private void initEmptyList(View view) {
@@ -189,6 +198,26 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.fragment_itineraries, menu);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView;
+        MenuItem item = menu.findItem(R.id.action_searchable_activity);
+
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ){
+            searchView = (SearchView) item.getActionView();
+        }
+        else{
+            searchView = (SearchView) MenuItemCompat.getActionView( item );
+        }
+
+        searchView.setSearchableInfo( searchManager.getSearchableInfo( getActivity().getComponentName() ) );
+        searchView.setQueryHint( getResources().getString(R.string.itinerary_search_hint) );
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onClickListener(final View view, int position) {
 
         if (items.get(position) instanceof Itinerary) {
@@ -237,8 +266,8 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
 
 
     @Override
-    public void onItemClick(String company,String itineraryId,String way) {
-        mCallback.onSettingsDone(company,itineraryId,way);
+    public void onItemClick(String country,String city,String company,String itineraryId,String way) {
+        AppManager.onSettingsDone(getActivity(),country,city,company,itineraryId,way);
     }
 
     @Override

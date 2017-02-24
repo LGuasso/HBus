@@ -5,13 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,29 +30,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.application.AppManager;
+import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
+import br.com.expressobits.hbus.firebase.FirebaseManager;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.provider.ItinerarySearchableProvider;
 import br.com.expressobits.hbus.ui.adapters.ItemItineraryAdapter;
+import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
+import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
-public class ItinerarySearchableActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack {
+import static br.com.expressobits.hbus.R.id.linearLayoutItemList;
 
+public class ItinerarySearchableActivity extends AppCompatActivity implements
+        ChooseWayDialogListener,RecyclerViewOnClickListenerHack {
+
+    private static final String TAG = "ItinerarySearchable";
+    private String country;
+    private String city;
+    private String company;
     private Toolbar toolbar;
     private RecyclerView mRecyclerView;
     private List<Itinerary> itinerariesSearchList;
     private ItemItineraryAdapter itemItineraryAdapter;
+    private ChooseWayDialogListener chooseWayDialogListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        city = FirebaseUtils.getCityName(cityId);
+        country = FirebaseUtils.getCountry(cityId);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_itinerary_searchable);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        //noinspection StatementWithEmptyBody
         if(savedInstanceState != null){
              /**mList = savedInstanceState.getParcelableArrayList("mList");
              itinerariesSearchList = savedInstanceState.getParcelableArrayList("itinerariesSearchList");*/
@@ -67,6 +88,8 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements Re
         itemItineraryAdapter = new ItemItineraryAdapter(this, itinerariesSearchList);
         itemItineraryAdapter.setRecyclerViewOnClickListenerHack(this);
         mRecyclerView.setAdapter(itemItineraryAdapter);
+
+        //AdManager.initAdInterstitial(this);
 
         handleSearch(getIntent());
     }
@@ -126,8 +149,9 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements Re
         itinerariesSearchList.clear();
         if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
             String q = intent.getStringExtra(SearchManager.QUERY);
-
-            getSupportActionBar().setTitle(q);
+            if(getSupportActionBar()!=null){
+                getSupportActionBar().setTitle(q);
+            }
             loadItinerariesFromFirebase(q,"BR/RS","Santa Maria","SIMSM");
             //filterItineraries(q);
 
@@ -185,10 +209,56 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements Re
         return true;
     }
 
+    @Override
+    public void onItemClick(String country,String city,String company,String itinerary, String way) {
+        AppManager.onSettingsDone(this,country,city,company,itinerary,way);
+    }
+
+    public void onCreateDialogChooseWay(Itinerary itinerary) {
+        List<String> ways;
+        String company = FirebaseUtils.getCompany(itinerary.getId());
+        ways = itinerary.getWays();
+        if (ways.size() > 1) {
+            ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
+            chooseWayDialogFragment.setParameters(this,country,city,company,itinerary.getName(), ways);
+            chooseWayDialogFragment.show(ItinerarySearchableActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
+        } else {
+            AppManager.onSettingsDone(this,country,city,company,itinerary.getName(),ways.get(0));
+        }
+    }
 
     @Override
     public void onClickListener(View view, int position) {
+        Itinerary itinerary = itinerariesSearchList.get(position);
+        switch (view.getId()) {
+            case R.id.icon:
+                BookmarkItineraryDAO dao = new BookmarkItineraryDAO(this);
+                if(dao.getItinerary(itinerary.getId())!=null){
+                    dao.removeFavorite(itinerary);
+                    dao.close();
+                    Log.d(TAG, "remove favorite " + itinerary.getId());
+                    String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
+                    Snackbar.make(
+                            view,
+                            result,
+                            Snackbar.LENGTH_LONG).show();
 
+                }else {
+                    dao.insert(itinerariesSearchList.get(position));
+                    Log.d(TAG,"insert favorite "+itinerary.getId());
+                    dao.close();
+                    FirebaseManager.loadBusesForItinerary(itinerary);
+                    Snackbar.make(
+                            view,
+                            getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
+                            Snackbar.LENGTH_LONG).show();
+                }
+                break;
+            case linearLayoutItemList:
+                onCreateDialogChooseWay(itinerary);
+                break;
+
+        }
     }
 
     @Override

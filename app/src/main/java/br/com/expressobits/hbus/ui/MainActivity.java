@@ -2,7 +2,6 @@ package br.com.expressobits.hbus.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -26,9 +25,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,7 +39,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
+import br.com.expressobits.hbus.application.AdManager;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.messaging.ClickActionHelper;
 import br.com.expressobits.hbus.model.City;
@@ -78,7 +74,7 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 ~  futuras, se for o caso; Atualizar comentários sempre quando atualizar código;
 ~ **************************************************************************************************/
 
-public class MainActivity extends AppCompatActivity implements OnSettingsListener,
+public class MainActivity extends AppCompatActivity implements FragmentManagerListener,
         ChooseWayDialogListener,NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
 
@@ -97,9 +93,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     private String country;
     private String city;
     private String company;
-    private String itinerary;
-    private String way;
-    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,9 +127,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     private void loadParams() {
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        city = FirebaseUtils.getCityName(cityId);
+        country = FirebaseUtils.getCountry(cityId);
         try {
-            city = FirebaseUtils.getCityName(cityId);
-            country = FirebaseUtils.getCountry(cityId);
             Log.e(TAG,country);
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference cityTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
@@ -203,39 +196,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     private void initViews() {
         initActionBar();
         initNavigationDrawer();
-        initAdInterstitial();
+        AdManager.initAdInterstitial(this);
         textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
-    }
-
-    private void initAdInterstitial(){
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.intersticial_ad_unit_id));
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                openTimes(country, city, company, itinerary, way);
-            }
-
-        });
-        requestNewInterstitial();
-    }
-
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.tablet_test_device_id))
-                .addTestDevice(getString(R.string.cel_motorola_xt_1089_test_device_id))
-                .build();
-        mInterstitialAd.loadAd(adRequest);
-    }
-
-    private boolean showAdIntersticial() {
-        if (mInterstitialAd.isLoaded() && AppManager.countTimesActivity(this)) {
-            mInterstitialAd.show();
-            return true;
-        } else {
-            return false;
-        }
     }
 
     private void initNavigationDrawer() {
@@ -323,32 +285,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
     }
-
-
-
-    @Override
-    public void onSettingsDone(String company,String itinerary, String way) {
-        this.company = company;
-        this.itinerary = itinerary;
-        this.way = way;
-        if(!showAdIntersticial()){
-            openTimes(country, city, company, itinerary, way);
-        }
-    }
-
-    private void openTimes(String country, String city, String company, String itinerary, String way) {
-        FirebaseAnalyticsManager.registerEventItinerary(this,country,city,company,itinerary);
-        Intent intent = new Intent(this, TimesActivity.class);
-        intent.putExtra(TimesActivity.ARGS_COUNTRY, country);
-        intent.putExtra(TimesActivity.ARGS_CITY, city);
-        intent.putExtra(TimesActivity.ARGS_COMPANY, company);
-        intent.putExtra(TimesActivity.ARGS_ITINERARY, itinerary);
-        intent.putExtra(TimesActivity.ARGS_WAY, way);
-        startActivity(intent);
-
-    }
-
-
 
 
     /**
@@ -467,25 +403,19 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         outState.putString(OnibusFragment.ARGS_COUNTRY, country);
         outState.putString(OnibusFragment.ARGS_CITY, city);
         outState.putString(OnibusFragment.ARGS_COMPANY, company);
-        outState.putString(OnibusFragment.ARGS_ITINERARY, itinerary);
-        outState.putString(OnibusFragment.ARGS_WAY, way);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
     public void onCreateDialogChooseWay(Itinerary itinerary) {
         List<String> ways;
         String company = FirebaseUtils.getCompany(itinerary.getId());
-        try {
-            ways = itinerary.getWays();
-            if (ways.size() > 1) {
-                ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-                chooseWayDialogFragment.setParameters(this,company,itinerary.getName(), ways);
-                chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
-            } else {
-                onSettingsDone(company,itinerary.getName(), ways.get(0));
-            }
-        }catch (SQLiteCantOpenDatabaseException exception){
-            Toast.makeText(this,"Ocorreu um erro no servidor,tente novamente...",Toast.LENGTH_LONG).show();
+        ways = itinerary.getWays();
+        if (ways.size() > 1) {
+            ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
+            chooseWayDialogFragment.setParameters(this,country,city,company,itinerary.getName(), ways);
+            chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
+        } else {
+            AppManager.onSettingsDone(this,country,city,company,itinerary.getName(),ways.get(0));
         }
     }
 
@@ -507,8 +437,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
 
     @Override
-    public void onItemClick(String company,String itinerary, String way) {
-        onSettingsDone(company,itinerary, way);
+    public void onItemClick(String country,String city,String company,String itinerary, String way) {
+        AppManager.onSettingsDone(this,country,city,company,itinerary,way);
     }
 
     @Override

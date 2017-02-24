@@ -55,7 +55,6 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
     private List<Itinerary> listItineraries = new ArrayList<>();
-    private List<Itinerary> favoriteItineraries;
     public static final String TAG = "ItinerariesFragment";
     private RecyclerView recyclerViewItineraries;
     private ProgressBar progressBar;
@@ -77,17 +76,10 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     public void onResume() {
         super.onResume();
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-
-        BookmarkItineraryDAO bookmarkItineraryDAO = new BookmarkItineraryDAO(getActivity());
-
-        favoriteItineraries = bookmarkItineraryDAO.getItineraries(cityId);
-
         if(listItineraries.size()>0){
             recyclerViewItineraries.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
             refreshRecyclerView();
-        }else {
-
         }
         country = FirebaseUtils.getCountry(cityId);
         city = FirebaseUtils.getCityName(cityId);
@@ -246,8 +238,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                 break;
             case R.id.linearLayoutItemList:
                 ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
-                //TODO verificar se é preciso carregar os horários com acesso desse menu apenas!
-                //FirebaseManager.loadBusesForItinerary(itinerary);
                 break;
         }
 
