@@ -157,5 +157,7 @@
     <string name="news_icon_image">news icon image</string>
     <string name="unread_news">Unread news</string>
     <string name="unread">Unread</string>
+    <string name="itinerary_search_hint">Search itinerary</string>
+    <string name="action_searchable_activity">Search itinerary</string>
 
 </resources>

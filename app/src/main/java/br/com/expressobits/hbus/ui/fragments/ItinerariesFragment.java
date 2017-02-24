@@ -1,13 +1,18 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -271,6 +276,19 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.fragment_itineraries, menu);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView;
+        MenuItem item = menu.findItem(R.id.action_searchable_activity);
+
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ){
+            searchView = (SearchView) item.getActionView();
+        }
+        else{
+            searchView = (SearchView) MenuItemCompat.getActionView( item );
+        }
+
+        searchView.setSearchableInfo( searchManager.getSearchableInfo( getActivity().getComponentName() ) );
+        searchView.setQueryHint( getResources().getString(R.string.itinerary_search_hint) );
         super.onCreateOptionsMenu(menu, inflater);
     }
 

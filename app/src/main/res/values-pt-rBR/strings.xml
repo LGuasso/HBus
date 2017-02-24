@@ -146,4 +146,6 @@
     <string name="email_here">Seu e-mail aqui</string>
     <string name="unread_news">Notícias não lidas</string>
     <string name="unread">Não lido</string>
+    <string name="itinerary_search_hint">Buscar itinerário</string>
+    <string name="action_searchable_activity">Buscar itinerário</string>
 </resources>
