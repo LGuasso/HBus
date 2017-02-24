@@ -1,6 +1,10 @@
 #Change log
 
-## [0.9.7] - 2016-02-13
+## [0.10.14] - 2016-02-24
+###Added
+- Added itinerary search bar
+
+## [0.09.70] - 2016-02-13
 ###Added
 - Added codes in main screen
 - Added schedules

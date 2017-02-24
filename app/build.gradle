@@ -15,8 +15,8 @@ android {
         applicationId "br.com.expressobits.hbus"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 1012
-        versionName "0.10.12"
+        versionCode 1014
+        versionName "0.10.14"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions {
