@@ -9,8 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,10 +31,10 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HoursFragment extends Fragment{
+public class ScheduleFragment extends Fragment{
 
     private RecyclerView recyclerView;
-    private LinearLayout linearLayoutEmptyState;
+    private TextView textViewEmptyState;
     private ProgressBar progressBar;
     private List<Bus> listBus;
     //private Context context;
@@ -52,7 +52,7 @@ public class HoursFragment extends Fragment{
     private String way;
     private String typeday;
 
-    public HoursFragment() {
+    public ScheduleFragment() {
         // Required empty public constructor
     }
 
@@ -60,10 +60,10 @@ public class HoursFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_hours, container, false);
+        View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         //this.context = inflater.getContext();
         initRecyclerView(view);
-        linearLayoutEmptyState = (LinearLayout) view.findViewById(R.id.empty_list);
+        textViewEmptyState = (TextView) view.findViewById(R.id.textViewEmptyState);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         listBus = new ArrayList<>();
         Bundle arguments = getArguments();
@@ -94,7 +94,7 @@ public class HoursFragment extends Fragment{
     }
 
     private void initRecyclerView(View view){
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_listline_line);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewSchedule);
         recyclerView.setHasFixedSize(true);
         recyclerView.setSelected(true);
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
@@ -105,7 +105,7 @@ public class HoursFragment extends Fragment{
 
     protected void refresh(final String country, final String city, final String company, final String itinerary, final String way, final String typeday){
         recyclerView.setVisibility(View.INVISIBLE);
-        linearLayoutEmptyState.setVisibility(View.INVISIBLE);
+        textViewEmptyState.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference busTableRef = database.getReference(FirebaseUtils.BUS_TABLE);
@@ -127,11 +127,11 @@ public class HoursFragment extends Fragment{
                         addBus(bus,(int)dataSnapshot.getChildrenCount());
                     }
                     recyclerView.setVisibility(View.VISIBLE);
-                    linearLayoutEmptyState.setVisibility(View.INVISIBLE);
+                    textViewEmptyState.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
                 }else{
                     recyclerView.setVisibility(View.INVISIBLE);
-                    linearLayoutEmptyState.setVisibility(View.VISIBLE);
+                    textViewEmptyState.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
                 }
 

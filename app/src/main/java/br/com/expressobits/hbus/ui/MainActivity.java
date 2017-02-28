@@ -49,8 +49,8 @@ import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.HomeFragment;
+import br.com.expressobits.hbus.ui.fragments.ScheduleFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
-import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
 import br.com.expressobits.hbus.ui.news.NewsFragment;
@@ -400,9 +400,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString(OnibusFragment.ARGS_COUNTRY, country);
-        outState.putString(OnibusFragment.ARGS_CITY, city);
-        outState.putString(OnibusFragment.ARGS_COMPANY, company);
+        outState.putString(ScheduleFragment.ARGS_COUNTRY, country);
+        outState.putString(ScheduleFragment.ARGS_CITY, city);
+        outState.putString(ScheduleFragment.ARGS_COMPANY, company);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
