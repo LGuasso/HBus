@@ -148,4 +148,6 @@
     <string name="unread">Não lido</string>
     <string name="itinerary_search_hint">Buscar itinerário</string>
     <string name="action_searchable_activity">Buscar itinerário</string>
+    <string name="dialog_alert_title_confirm_clear_search_history">Tem certeza de que deseja apagar seu histórico de pesquisa</string>
+    <string name="search_history_deleted">Histórico de pesquisa excluído</string>
 </resources>

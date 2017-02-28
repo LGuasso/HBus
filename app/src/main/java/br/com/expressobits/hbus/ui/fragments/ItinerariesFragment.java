@@ -276,7 +276,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         else{
             searchView = (SearchView) MenuItemCompat.getActionView( item );
         }
-
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getActivity().getComponentName() ) );
         searchView.setQueryHint( getResources().getString(R.string.itinerary_search_hint) );
         super.onCreateOptionsMenu(menu, inflater);

@@ -159,5 +159,7 @@
     <string name="unread">Unread</string>
     <string name="itinerary_search_hint">Search itinerary</string>
     <string name="action_searchable_activity">Search itinerary</string>
+    <string name="dialog_alert_title_confirm_clear_search_history">Are you sure you want to delete your search history?</string>
+    <string name="search_history_deleted">Search history deleted</string>
 
 </resources>

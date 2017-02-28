@@ -74,6 +74,8 @@
     <string name="pref_ringtone_silent">Silêncio</string>
     <string name="pref_title_vibrate">Vibratório</string>
 
+
+    <string name="pref_header_privacy">Privacidade</string>
     <string name="pref_header_about">Sobre</string>
     <string name="pref_title_tour_of_product">Tour do produto</string>
     <string name="pref_summary_tour_of_product">Informações sobre o aplicativo</string>
@@ -81,4 +83,12 @@
     <string name="pref_header_summary_about">Informações sobre aplicativo</string>
     <string name="pref_header_summary_general">Configurações em geral</string>
     <string name="pref_header_summary_notification">Notificações de alarmes</string>
+
+
+    <string name="pref_header_summary_privacy">Segurança de informações</string>
+
+    <string name="pref_title_clear_history_search">Limpar histórico de pesquisa</string>
+    <string name="pref_summary_clear_history_search">Limpar histórico de pesquisas feitas neste aplicativo</string>
+    <string name="pref_title_pause_search_history">Pausar histórico de pesquisa</string>
+    <string name="pref_summary_pause_search_history">Não salva nenhuma pesquisa se ativado</string>
 </resources>

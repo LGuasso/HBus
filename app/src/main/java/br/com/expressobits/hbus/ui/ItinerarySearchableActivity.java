@@ -38,6 +38,7 @@ import br.com.expressobits.hbus.provider.ItinerarySearchableProvider;
 import br.com.expressobits.hbus.ui.adapters.ItemItineraryAdapter;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
+import br.com.expressobits.hbus.ui.settings.PrivacyPreferenceFragment;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
@@ -154,11 +155,14 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
             }
             loadItinerariesFromFirebase(q,"BR/RS","Santa Maria","SIMSM");
             //filterItineraries(q);
+            if(!PreferenceManager.getDefaultSharedPreferences(this).
+                    getBoolean(PrivacyPreferenceFragment.PREFERENCE_PAUSE_SEARCH_HISTORY,false)){
+                SearchRecentSuggestions searchRecentSuggestions = new SearchRecentSuggestions(this,
+                        ItinerarySearchableProvider.AUTHORITY,
+                        ItinerarySearchableProvider.MODE);
+                searchRecentSuggestions.saveRecentQuery(q, null);
+            }
 
-            SearchRecentSuggestions searchRecentSuggestions = new SearchRecentSuggestions(this,
-                    ItinerarySearchableProvider.AUTHORITY,
-                    ItinerarySearchableProvider.MODE);
-            searchRecentSuggestions.saveRecentQuery(q, null);
         }
     }
 
@@ -182,7 +186,7 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
         } else {
             searchView = (SearchView) MenuItemCompat.getActionView(item);
         }
-
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint(getResources().getString(R.string.itinerary_search_hint));
 
