@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -116,6 +117,16 @@ public class TimesActivity extends AppCompatActivity {
         //TODO implement sunday days in holiday
         int typeday  = TimeUtils.getTypedayinCalendar(Calendar.getInstance()).toInt();
         viewPager.setCurrentItem(typeday);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        }
+        return true;
     }
 
     @Override

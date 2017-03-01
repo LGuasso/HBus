@@ -8,7 +8,7 @@
     android:layout_marginLeft="3dp"
     android:layout_marginRight="3dp"
     app:cardCornerRadius="3dp"
-    app:cardElevation="2dp"
+    app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
     tools:context=".ui.MainActivity">
 
@@ -18,103 +18,115 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageViewNewsIcon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="@string/news_icon_image"
+                android:src="@drawable/circleindicator_black_radius" />
+
+            <TextView
+                android:paddingStart="4dp"
+                android:id="@+id/textViewNewsSource"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="8dp"
+                android:text="@string/loading"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewNewsTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/loading"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textStyle="italic" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/line_divider"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            android:padding="8dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textViewNewsSource"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="8dp"
-                        android:text="@string/loading"
-                        android:textAppearance="?android:textAppearanceSmall"
-                        android:textStyle="italic|bold" />
-
-                    <TextView
-                        android:id="@+id/textViewNewsTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/loading"
-                        android:textAppearance="?android:textAppearanceSmall"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:id="@+id/textViewNewsUnread"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
-                        android:visibility="invisible"
-                        android:text="@string/unread"
-                        android:textAppearance="?android:textAppearanceSmall" />
-                </LinearLayout>
-
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textViewNewsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lorem_ipsum"
+                    android:maxLines="2"
+                    android:textAppearance="?android:textAppearance"/>
+
+                <TextView
+                    android:id="@+id/textViewNewsSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/loading"
-                    android:textAppearance="?android:textAppearance" />
+                    android:text="@string/lorem_ipsum"
+                    android:maxLines="1"
+                    android:textAppearance="?android:textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/textViewNewsBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="@string/lorem_ipsum"
+                    android:textAppearance="?android:textAppearanceSmall"/>
+
+                <!--chips -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutNewsChips"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="start"/>
+                </HorizontalScrollView>
 
             </LinearLayout>
 
-
             <ImageView
                 android:id="@+id/imageViewNewsMain"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/circleindicator_black_radius" />
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:padding="4dp"
+                android:contentDescription="@string/news_icon_image"
+                android:src="@drawable/ic_launcher_splash" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textViewNewsSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/loading"
-            android:textAppearance="?android:textAppearanceSmall" />
 
-
-        <TextView
-            android:id="@+id/textViewNewsBody"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:text="@string/loading"
-            android:textAppearance="?android:textAppearanceSmall"/>
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/linearLayoutNewsChips"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="end"/>
-        </HorizontalScrollView>
 
 
     </LinearLayout>
-
 
 </android.support.v7.widget.CardView>

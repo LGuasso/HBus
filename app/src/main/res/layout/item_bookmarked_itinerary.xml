@@ -7,18 +7,16 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="3dp"
     android:layout_marginRight="3dp"
-    app:cardElevation="2dp"
+    app:cardElevation="4dp"
     app:cardCornerRadius="3dp"
     app:cardUseCompatPadding="true"
-    tools:context=".ui.MainActivity"
-    >
+    tools:context=".ui.MainActivity">
 
     <LinearLayout
         android:id="@+id/listView_background_line"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/linearlayout_background_info"
@@ -100,12 +98,14 @@
                     <Button
                         android:id="@+id/buttonLookTime"
                         style="@style/AppTheme.Button.Borderless.Colored"
+                        android:textColor="@color/colorAccent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/view_timetable"/>
                     <Button
                         android:id="@+id/buttonRemove"
                         style="@style/AppTheme.Button.Borderless.Colored"
+                        android:textColor="@color/colorAccent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_remove"/>

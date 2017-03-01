@@ -16,7 +16,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -132,28 +131,8 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private void configureNewsViewHolder(NewsViewHolder newsViewHolder, int position) {
         News news = (News)items.get(position);
-        String body = news.getBody();
-        newsViewHolder.textViewNewsTitle.setText(news.getTitle());
-        newsViewHolder.textViewNewsSubtitle.setText(news.getSubtitle());
+        NewsViewHolder.bindNews(layoutInflater,context,newsViewHolder, news);
         newsViewHolder.setRecyclerViewOnClickListenerHack(this);
-        if(!news.getImagesUrls().get(0).isEmpty()){
-            Picasso.with(context).load(news.getImagesUrls().get(0)).into(newsViewHolder.imageViewNewsMain);
-        }
-        newsViewHolder.textViewNewsTime.setText(br.com.expressobits.hbus.util.TimeUtils.getTimeAgo(news.getTime(),context));
-        newsViewHolder.textViewNewsSource.setText(news.getSource());
-
-        for(int i=0;i<news.getImagesUrls().size();i++){
-            if(news.getBody().contains("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--")){
-                body = news.getBody().replace("--"+FirebaseUtils.NEWS_BODY_IMAGE_TAG+i+"--","");
-            }
-        }
-        newsViewHolder.textViewNewsBody.setText(body);
-        ItemNewsAdapter.updateNewsChips(layoutInflater,newsViewHolder,news);
-        if(!PreferenceManager.getDefaultSharedPreferences(context).
-                getBoolean(NewsDetailsActivity.READ_PREFERENCE+"/"+news.getId(),false)){
-            newsViewHolder.textViewNewsUnread.setVisibility(View.VISIBLE);
-        }
-
     }
 
     private void configureBookmarkedItineraryViewHolder(BookmarkedItineraryViewHolder bookmarkedItineraryViewHolder, int position) {

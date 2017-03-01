@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="br.com.expressobits.hbus.ui.MainActivity">
 
-    <include layout="@layout/toolbar_times"/>
+    <include layout="@layout/toolbar_default"/>
 
     <include layout="@layout/content_main" />
 

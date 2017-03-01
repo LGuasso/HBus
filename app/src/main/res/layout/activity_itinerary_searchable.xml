@@ -8,17 +8,8 @@
     android:fitsSystemWindows="true"
     tools:context="br.com.expressobits.hbus.ui.ItinerarySearchableActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/itineraryRecyclerView"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:scrollbars="vertical"
-        android:fitsSystemWindows="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarLayout"
-        android:fitsSystemWindows="true"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:theme="@style/HBusTheme.AppBarOverlay">
@@ -28,10 +19,15 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/HBusTheme.PopupOverlay"
-            />
+            app:popupTheme="@style/HBusTheme.PopupOverlay"/>
 
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/itineraryRecyclerView"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </android.support.design.widget.CoordinatorLayout>

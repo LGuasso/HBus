@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.application.AdManager;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
 import br.com.expressobits.hbus.firebase.FirebaseManager;
@@ -55,30 +56,23 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private List<Itinerary> itinerariesSearchList;
     private ItemItineraryAdapter itemItineraryAdapter;
-    private ChooseWayDialogListener chooseWayDialogListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        city = FirebaseUtils.getCityName(cityId);
-        country = FirebaseUtils.getCountry(cityId);
-
+        loadData();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_itinerary_searchable);
+        initViews();
+        AdManager.initAdInterstitial(this);
+        handleSearch(getIntent());
+    }
+
+    private void initViews() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        //noinspection StatementWithEmptyBody
-        if(savedInstanceState != null){
-             /**mList = savedInstanceState.getParcelableArrayList("mList");
-             itinerariesSearchList = savedInstanceState.getParcelableArrayList("itinerariesSearchList");*/
-        }else{
-             itinerariesSearchList = new ArrayList<>();
-        }
-
         mRecyclerView = (RecyclerView) findViewById(R.id.itineraryRecyclerView);
         mRecyclerView.setHasFixedSize(true);
 
@@ -89,13 +83,16 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
         itemItineraryAdapter = new ItemItineraryAdapter(this, itinerariesSearchList);
         itemItineraryAdapter.setRecyclerViewOnClickListenerHack(this);
         mRecyclerView.setAdapter(itemItineraryAdapter);
-
-        //AdManager.initAdInterstitial(this);
-
-        handleSearch(getIntent());
     }
 
-    private void loadItinerariesFromFirebase(String itineraryQuery,final String country, final String city, final String company) {
+    private void loadData() {
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        city = FirebaseUtils.getCityName(cityId);
+        country = FirebaseUtils.getCountry(cityId);
+        itinerariesSearchList = new ArrayList<>();
+    }
+
+    private void loadItinerariesFromFirebase(String itineraryQuery, final String country, final String city, final String company) {
         FirebaseDatabase database= FirebaseDatabase.getInstance();
         DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.ITINERARY_TABLE);
         DatabaseReference countryRef = itinerariesTableRef.child(country);
@@ -200,16 +197,6 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
         if (id == android.R.id.home) {
             finish();
         }
-        /**else if( id == R.id.action_delete ){
-         SearchRecentSuggestions searchRecentSuggestions = new SearchRecentSuggestions(this,
-         SearchableProvider.AUTHORITY,
-         SearchableProvider.MODE);
-
-         searchRecentSuggestions.clearHistory();
-
-         Toast.makeText(this, "Cookies removidos", Toast.LENGTH_SHORT).show();
-         }*/
-
         return true;
     }
 

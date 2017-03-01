@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
     private NavigationView navigationView;
     //Gerencia a atuacao dos fragments
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private TextView textViewCompanyUse;
 
     private ImageView imageViewCity;
     private ImageView circleImageViewCityProfile;
@@ -188,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
                 .placeholder(R.drawable.ic_flag_white_48dp)
                 .error(R.drawable.ic_flag_white_48dp)
                 .into(circleImageViewCityProfile));
-        textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
     }
 
 
@@ -197,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         initActionBar();
         initNavigationDrawer();
         AdManager.initAdInterstitial(this);
-        textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
     }
 
     private void initNavigationDrawer() {

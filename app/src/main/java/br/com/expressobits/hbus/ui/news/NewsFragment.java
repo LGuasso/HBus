@@ -38,8 +38,6 @@ public class NewsFragment extends Fragment{
 
     public static final String TAG = "NewsFragment";
 
-    public static final int LIMIT_TIME_TO_NEWS = 60*60*24*90;
-
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerViewNews;
     private List<News> newses = new ArrayList<>();
