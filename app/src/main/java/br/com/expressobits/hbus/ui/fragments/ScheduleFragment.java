@@ -11,22 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.ui.adapters.ItemBusAdapter;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,53 +100,31 @@ public class ScheduleFragment extends Fragment{
         recyclerView.setVisibility(View.INVISIBLE);
         textViewEmptyState.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference busTableRef = database.getReference(FirebaseUtils.BUS_TABLE);
-        DatabaseReference countryRef = busTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        DatabaseReference companyRef = cityRef.child(company);
-        DatabaseReference itineraryRef = companyRef.child(itinerary);
-        DatabaseReference wayRef = itineraryRef.child(way);
-        final DatabaseReference typedayRef = wayRef.child(typeday);
-        typedayRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG,"We're done loading the initial "+dataSnapshot.getChildrenCount()+" items");
-                if(dataSnapshot.getChildrenCount()>0){
 
-                    for(DataSnapshot dataSnapshotBus:dataSnapshot.getChildren()){
-                        Bus bus = dataSnapshotBus.getValue(Bus.class);
-                        bus.setId(FirebaseUtils.getIdBus(country,city,company,itinerary,way,typeday,String.valueOf(bus.getTime())));
-                        addBus(bus,(int)dataSnapshot.getChildrenCount());
-                    }
-                    recyclerView.setVisibility(View.VISIBLE);
-                    textViewEmptyState.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                }else{
-                    recyclerView.setVisibility(View.INVISIBLE);
-                    textViewEmptyState.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
+        //SQL
+        ScheduleDAO dao = new ScheduleDAO(getContext(),country,city);
+        List<Bus> buses = dao.getBuses(company,itinerary,way,typeday);
+        dao.close();
+        //
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(),"Erro "+databaseError.getCode(),Toast.LENGTH_LONG).show();
-                Log.e(TAG,databaseError.getDetails()+" message:"+databaseError.getMessage());
-            }
-        });
+        addBus(buses);
+        if(buses.size()>0){
+            recyclerView.setVisibility(View.VISIBLE);
+            textViewEmptyState.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        }else{
+            recyclerView.setVisibility(View.INVISIBLE);
+            textViewEmptyState.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
 
     }
 
-    private void addBus(Bus bus,int busCount){
-        listBus.add(bus);
-        if(listBus.size()==busCount){
-            Collections.sort(listBus);
-            ItemBusAdapter adapterUeful = new ItemBusAdapter(getActivity(), listBus);
-            recyclerView.setAdapter(adapterUeful);
-        }
-
+    private void addBus(List<Bus> buses){
+        listBus = buses;
+        Collections.sort(listBus);
+        ItemBusAdapter adapterUeful = new ItemBusAdapter(getActivity(), listBus);
+        recyclerView.setAdapter(adapterUeful);
     }
 
     @Override

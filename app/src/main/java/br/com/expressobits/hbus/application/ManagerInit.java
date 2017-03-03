@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import br.com.expressobits.hbus.ui.MainActivity;
+import br.com.expressobits.hbus.ui.DownloadScheduleActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.tour.TourActivity;
 
@@ -29,8 +29,10 @@ public class ManagerInit {
             selectCityIntent.putExtra(SelectCityActivity.STARTER_MODE,true);
             context.startActivity(selectCityIntent);
         }else {
-            Intent mainIntent = new Intent(context, MainActivity.class);
-            context.startActivity(mainIntent);
+            Intent downloadIntent = new Intent(context, DownloadScheduleActivity.class);
+             context.startActivity(downloadIntent);
+            /**Intent mainIntent = new Intent(context, MainActivity.class);
+            context.startActivity(mainIntent);*/
         }
 
     }

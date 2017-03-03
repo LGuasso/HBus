@@ -27,9 +27,9 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
+import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
@@ -117,7 +117,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     @Override
     public void onClickListener(View view, final int position) {
         City city = cities.get(position);
-        pullCompanies(city.getCountry(), city.getName());
         Log.d(TAG, "Selection city id=" + city.getId());
         SharedPreferences sharedPreferences = saveCityPreference(city);
         unsSubscribe(sharedPreferences.getString(TAG,SelectCityActivity.NOT_CITY));
@@ -186,29 +185,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
 
 
-    private void pullCompanies(final String country, final String city){
-        FirebaseDatabase database= FirebaseDatabase.getInstance();
-        DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.COMPANY_TABLE);
-        DatabaseReference countryRef = itinerariesTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshotCompany : dataSnapshot.getChildren()) {
-                    Company company = dataSnapshotCompany.getValue(Company.class);
-                    company.setId(FirebaseUtils.getIdCompany(country, city, company.getName()));
-                    addCompany(company);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        cityRef.addListenerForSingleValueEvent(valueEventListener);
-    }
-
     /**
      * Update cities of recyclerview with data from firebase realtime database
      * @param country Region with country
@@ -240,5 +216,8 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         countryRef.addListenerForSingleValueEvent(valueEventListener);
 
     }
+
+
+
 
 }

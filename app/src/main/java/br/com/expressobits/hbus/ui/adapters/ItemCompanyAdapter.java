@@ -47,13 +47,6 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
     public void onBindViewHolder(CompanyViewHolder holder, int position) {
         Company company = companies.get(position);
         holder.textView1.setText(company.getName());
-        if(!company.isActived()){
-            holder.imageView.setEnabled(false);
-            holder.textView1.setEnabled(false);
-        }else {
-            holder.imageView.setEnabled(true);
-            holder.textView1.setEnabled(true);
-        }
         if(company.getName().equals(companySelected)){
             holder.imageView.setSelected(true);
         }

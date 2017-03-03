@@ -22,21 +22,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
-import br.com.expressobits.hbus.firebase.FirebaseManager;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
@@ -115,91 +107,15 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         listItineraries.clear();
         progressBar.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
-        loadCompaniesFromFirebase(country,city);
+        loadItinerariesFromDatabase(country,city);
     }
 
-    private void loadCompaniesFromFirebase(final String country,final String city){
-        FirebaseDatabase database= FirebaseDatabase.getInstance();
-        DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.COMPANY_TABLE);
-        DatabaseReference countryRef = itinerariesTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Company company = dataSnapshot1.getValue(Company.class);
-                    if(ItinerariesFragment.this.isVisible()){
-                        loadItinerariesFromFirebase(country, city, company.getName());
-                        loadCodesFromFirebase(country, city, company.getName());
-                    }
-
-                    Log.d(TAG, company.getName());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        cityRef.addListenerForSingleValueEvent(valueEventListener);
-    }
-
-    private void loadItinerariesFromFirebase(final String country, final String city, final String company) {
-        FirebaseDatabase database= FirebaseDatabase.getInstance();
-        DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.ITINERARY_TABLE);
-        DatabaseReference countryRef = itinerariesTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        DatabaseReference companyRef = cityRef.child(company);
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshotItinerary : dataSnapshot.getChildren()) {
-                    if(ItinerariesFragment.this.isVisible()){
-                        Itinerary itinerary = dataSnapshotItinerary.getValue(Itinerary.class);
-                        itinerary.setId(FirebaseUtils.getIdItinerary(country, city, company, itinerary.getName()));
-                        addItinerary(itinerary);
-                    }else {
-                        Log.i(TAG,"Cancel load itinerary (FRAGMENT) no visible");
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        companyRef.addListenerForSingleValueEvent(valueEventListener);
-
-    }
-
-    private void loadCodesFromFirebase(final String country, final String city, final String company) {
-        FirebaseDatabase database= FirebaseDatabase.getInstance();
-        DatabaseReference codesTableRef = database.getReference(FirebaseUtils.CODE_TABLE);
-        DatabaseReference countryRef = codesTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        DatabaseReference companyRef = cityRef.child(company);
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshotCode : dataSnapshot.getChildren()) {
-                    if(ItinerariesFragment.this.isVisible()){
-                        Code code = dataSnapshotCode.getValue(Code.class);
-                        code.setId(FirebaseUtils.getIdCode(country, city, company, code.getName()));
-                        Log.d("CODE LOAD FORM FIREBASE", "Code " + code.getName());
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        companyRef.addListenerForSingleValueEvent(valueEventListener);
+    private void loadItinerariesFromDatabase(String country,String city){
+        ScheduleDAO scheduleDAO = new ScheduleDAO(getContext(),country,city);
+        List<Itinerary> itineraries = scheduleDAO.getItineraries();
+        for (Itinerary itinerary:itineraries) {
+            addItinerary(itinerary);
+        }
     }
 
     @Override
@@ -223,9 +139,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                     dao.insert(listItineraries.get(position));
                     Log.d(TAG,"insert favorite "+itinerary.getId());
                     dao.close();
-
-                    FirebaseManager.loadBusesForItinerary(itinerary);
-
 
                     lastPositionItinerary = position;
 

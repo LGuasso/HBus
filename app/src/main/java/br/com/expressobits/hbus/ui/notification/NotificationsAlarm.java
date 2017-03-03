@@ -14,15 +14,11 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.Calendar;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.SQLConstants;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
@@ -79,26 +75,12 @@ public class NotificationsAlarm {
     }
 
     private static void setCodeToNotification(Alarm alarm, final NotificationCompat.Builder alamNotificationBuilder) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference codeTableRef  = database.getReference(FirebaseUtils.CODE_TABLE);
-        DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(alarm.getId()));
-        DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(alarm.getId()));
-        DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(alarm.getId()));
-        DatabaseReference codeRef = companyRef.child(alarm.getCode());
-        codeRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Code code = dataSnapshot.getValue(Code.class);
-                if(code!=null){
-                    alamNotificationBuilder.setSubText(code.getDescrition());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        ScheduleDAO dao = new ScheduleDAO(alamNotificationBuilder.mContext,SQLConstants.getCountryFromBusId(alarm.getId()), SQLConstants.getCityFromBusId(alarm.getId()));
+        Code code = dao.getCode(SQLConstants.getCompanyFromBusId(alarm.getId()),alarm.getCode());
+        dao.close();
+        if(code!=null){
+            alamNotificationBuilder.setSubText(code.getDescrition());
+        }
 
     }
 

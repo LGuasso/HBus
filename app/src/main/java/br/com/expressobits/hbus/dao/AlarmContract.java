@@ -11,20 +11,20 @@ class AlarmContract {
 
     static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + Alarm.TABLE_NAME + " (" +
-                    Alarm._ID + BusHelper.TEXT_PRIMARY_KEY + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_TIME + BusHelper.TEXT_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_DAYS_SUNDAY + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_DAYS_MONDAY + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_DAYS_TUESDAY + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_DAYS_WEDNESDAY + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_DAYS_THURSDAY + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_DAYS_FRIDAY + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_DAYS_SATURDAY + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_TIME_DELAY + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_NAME + BusHelper.TEXT_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_ACTIVED + BusHelper.INTEGER_TYPE + BusHelper.COMMA_SEP +
-                    Alarm.COLUMN_NAME_CODE + BusHelper.TEXT_TYPE +
-                    BusHelper.PARENTES+BusHelper.POINTCOMMA;
+                    Alarm._ID + SQLConstants.TEXT_PRIMARY_KEY + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_TIME + SQLConstants.TEXT_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_DAYS_SUNDAY + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_DAYS_MONDAY + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_DAYS_TUESDAY + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_DAYS_WEDNESDAY + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_DAYS_THURSDAY + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_DAYS_FRIDAY + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_DAYS_SATURDAY + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_TIME_DELAY + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_NAME + SQLConstants.TEXT_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_ACTIVED + SQLConstants.INTEGER_TYPE + SQLConstants.COMMA_SEP +
+                    Alarm.COLUMN_NAME_CODE + SQLConstants.TEXT_TYPE +
+                    SQLConstants.PARENTES+SQLConstants.POINTCOMMA;
 
     static final String[] COLS = {
             Alarm._ID,

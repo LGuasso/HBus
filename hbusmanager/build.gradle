@@ -7,7 +7,9 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.firebase:firebase-server-sdk:3.0.1'
     compile project(':hbuslib')
     compile 'com.intellij:forms_rt:6.0.5'
+    compile 'org.xerial:sqlite-jdbc:3.5.9'
 }

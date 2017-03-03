@@ -11,12 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
@@ -171,41 +166,17 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(itinerary.getWays()!=null) {
             for (int j = 0; j < itinerary.getWays().size(); j++) {
                 final String way = itinerary.getWays().get(j);
-                final List<Bus> buses = new ArrayList<>();
+                List<Bus> buses = new ArrayList<>();
                 final String typeday = TimeUtils.getTypedayinCalendar(Calendar.getInstance()).toString();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference busTable = database.getReference(FirebaseUtils.BUS_TABLE);
-                DatabaseReference countryRef = busTable.child(country);
-                DatabaseReference cityRef = countryRef.child(city);
-                DatabaseReference companyRef = cityRef.child(company);
-                DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
-                DatabaseReference wayRef = itineraryRef.child(way);
-                DatabaseReference typedayRef = wayRef.child(typeday);
-                typedayRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot dataSnapshotBus : dataSnapshot.getChildren()) {
-                            Bus bus = dataSnapshotBus.getValue(Bus.class);
-                            bus.setId(FirebaseUtils.getIdBus(FirebaseUtils.getCountry(itinerary.getId()),
-                                    FirebaseUtils.getCityName(itinerary.getId()),
-                                    FirebaseUtils.getCompany(itinerary.getId()),
-                                    itinerary.getName(),
-                                    way,
-                                    typeday,
-                                    String.valueOf(bus.getTime())));
-                            buses.add(bus);
-                            next.put(way, BusUtils.getNextBusforList(buses));
-                            setLastUpdate(holder, bus.getTime());
-                            updateFieldNextBus(holder, itinerary, next);
-                        }
-                    }
+                ScheduleDAO dao = new ScheduleDAO(context,country,city);
+                buses = dao.getBuses(company,itinerary.getName(),way,typeday);
+                dao.close();
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-
-                });
+                if(buses.size()>0){
+                    next.put(way, BusUtils.getNextBusforList(buses));
+                    setLastUpdate(holder, buses.get(0).getTime());
+                    updateFieldNextBus(holder, itinerary, next);
+                }
             }
         }
     }
@@ -263,31 +234,13 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
     }
 
-
-
     private void loadCode(TextView textView,String codeName,String company,String country,String cityName){
         if(!codes.containsKey(codeName)){
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference busTable = database.getReference(FirebaseUtils.CODE_TABLE);
-            DatabaseReference countryRef = busTable.child(country);
-            DatabaseReference cityRef = countryRef.child(cityName);
-            DatabaseReference companyRef = cityRef.child(company);
-            DatabaseReference codeRef = companyRef.child(codeName);
-            codeRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Code code = dataSnapshot.getValue(Code.class);
-                    if(code!=null){
-                        addCode(textView,company,codeName,code);
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            ScheduleDAO dao = new ScheduleDAO(context,country,cityName);
+            Code code = dao.getCode(company,codeName);
+            if(code!=null){
+                addCode(textView,company,codeName,code);
+            }
         }else{
             addCode(textView,company,codeName);
         }

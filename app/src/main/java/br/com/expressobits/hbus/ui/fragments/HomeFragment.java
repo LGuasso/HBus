@@ -38,8 +38,8 @@ import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.News;
-import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.FragmentManagerListener;
+import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemHomeAdapter;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
@@ -125,6 +125,9 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
+        ItemHomeAdapter adapter = new ItemHomeAdapter(this.getActivity(), items);
+        adapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerView.setAdapter(adapter);
 
     }
 
@@ -190,10 +193,7 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     }
 
     private void updateListViews() {
-
-        ItemHomeAdapter adapter = new ItemHomeAdapter(this.getActivity(), items);
-        adapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerView.setAdapter(adapter);
+        recyclerView.getAdapter().notifyDataSetChanged();
         updateEmptyListView();
     }
 
@@ -236,7 +236,8 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
                         Itinerary itinerary1 = dao.getItinerary(selectedItem);
                         dao.removeFavorite(itinerary1);
                         HomeFragment.this.initListViews(HomeFragment.this.view);
-                        updateListViews();
+                        items.remove(itinerary);
+                        HomeFragment.this.
                         updateEmptyListView();
                         String result = getActivity().getResources().getString(R.string.delete_itinerary_with_sucess, itinerary1.getName());
                         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {

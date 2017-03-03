@@ -1,7 +1,5 @@
 package br.com.expressobits.hbus.dao;
 
-import android.provider.BaseColumns;
-
 /**
  * Following specified rules in android training
  * http://developer.android.com/intl/pt-br/training/basics/data-storage/databases.html
@@ -23,8 +21,9 @@ public final class CityContract {
             "DELETE FROM " + City.TABLE_NAME;
 
     /* Inner class that defines the table contents */
-    public static abstract class City implements BaseColumns {
+    public static abstract class City {
         public static final String TABLE_NAME = "city";
+        static final String _ID = "_id";
         static final String COLUMN_NAME_NAME = "name";
         static final String COLUMN_NAME_COUNTRY= "country";
         static final String COLUMN_NAME_LATITUDE= "latitude";

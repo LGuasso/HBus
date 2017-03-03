@@ -19,13 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +26,7 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AdManager;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
-import br.com.expressobits.hbus.firebase.FirebaseManager;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.provider.ItinerarySearchableProvider;
 import br.com.expressobits.hbus.ui.adapters.ItemItineraryAdapter;
@@ -51,7 +44,6 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
     private static final String TAG = "ItinerarySearchable";
     private String country;
     private String city;
-    private String company;
     private Toolbar toolbar;
     private RecyclerView mRecyclerView;
     private List<Itinerary> itinerariesSearchList;
@@ -92,47 +84,14 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
         itinerariesSearchList = new ArrayList<>();
     }
 
-    private void loadItinerariesFromFirebase(String itineraryQuery, final String country, final String city, final String company) {
-        FirebaseDatabase database= FirebaseDatabase.getInstance();
-        DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.ITINERARY_TABLE);
-        DatabaseReference countryRef = itinerariesTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        DatabaseReference companyRef = cityRef.child(company);
-        Query query = companyRef.orderByKey().startAt(itineraryQuery).endAt(itineraryQuery+"\uf8ff");
-        ChildEventListener childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Itinerary itinerary = dataSnapshot.getValue(Itinerary.class);
-                itinerary.setId(FirebaseUtils.getIdItinerary(country, city, company, itinerary.getName()));
-                addItinerary(itinerary);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        query.addChildEventListener(childEventListener);
-
+    private void loadItinerariesFromFirebase(String itineraryQuery, final String country, final String city) {
+        ScheduleDAO dao = new ScheduleDAO(getBaseContext(),country,city);
+        List<Itinerary> itineraries = dao.getSearchableItineraries(itineraryQuery);
+        addItinerary(itineraries);
     }
 
-    private void addItinerary(Itinerary itinerary) {
-        itinerariesSearchList.add(itinerary);
+    private void addItinerary(List<Itinerary> itinerary) {
+        itinerariesSearchList = itinerary;
         itemItineraryAdapter.notifyDataSetChanged();
     }
 
@@ -150,8 +109,7 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
             if(getSupportActionBar()!=null){
                 getSupportActionBar().setTitle(q);
             }
-            loadItinerariesFromFirebase(q,"BR/RS","Santa Maria","SIMSM");
-            //filterItineraries(q);
+            loadItinerariesFromFirebase(q,country,city);
             if(!PreferenceManager.getDefaultSharedPreferences(this).
                     getBoolean(PrivacyPreferenceFragment.PREFERENCE_PAUSE_SEARCH_HISTORY,false)){
                 SearchRecentSuggestions searchRecentSuggestions = new SearchRecentSuggestions(this,
@@ -238,7 +196,6 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
                     dao.insert(itinerariesSearchList.get(position));
                     Log.d(TAG,"insert favorite "+itinerary.getId());
                     dao.close();
-                    FirebaseManager.loadBusesForItinerary(itinerary);
                     Snackbar.make(
                             view,
                             getResources().getString(R.string.added_bookmark_itinerary_with_sucess),

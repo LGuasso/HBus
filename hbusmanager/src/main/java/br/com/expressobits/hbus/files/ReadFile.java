@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.expressobits.hbus.dao.SQLConstants;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
@@ -49,12 +50,11 @@ public class ReadFile {
 
     public Company toCompany(String text){
         Company company = new Company();
-        company.setActived(text.split(SPLIT_FILE)[0].equals("1"));
-        company.setName(text.split(SPLIT_FILE)[1]);
-        company.setEmail(text.split(SPLIT_FILE)[2]);
-        company.setWebsite(text.split(SPLIT_FILE)[3]);
-        company.setPhoneNumber(text.split(SPLIT_FILE)[4]);
-        company.setAddress(text.split(SPLIT_FILE).length<6?"":text.split(SPLIT_FILE)[5]);
+        company.setName(text.split(SPLIT_FILE)[0]);
+        company.setEmail(text.split(SPLIT_FILE)[1]);
+        company.setWebsite(text.split(SPLIT_FILE)[2]);
+        company.setPhoneNumber(text.split(SPLIT_FILE)[3]);
+        company.setAddress(text.split(SPLIT_FILE).length<5?"":text.split(SPLIT_FILE)[4]);
         return company;
     }
 
@@ -104,6 +104,8 @@ public class ReadFile {
         List<Company> companies = new ArrayList<>();
         for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+COMPANIES_FILE)){
             try{
+                Company company = toCompany(text);
+                company.setId(SQLConstants.getIdCompany(city.getCountry(),city.getName(),company.getName()));
                 companies.add(toCompany(text));
             }catch (Exception e){
                 System.err.println("Erro ao converter compania "+text);
@@ -117,7 +119,9 @@ public class ReadFile {
     public List<Itinerary> getItineraries(City city,Company company){
         List<Itinerary> itineraries = new ArrayList<>();
         for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+ITINERARIES_FILE)){
-            itineraries.add(toItinerary(text));
+            Itinerary itinerary = toItinerary(text);
+            itinerary.setId(SQLConstants.getIdItinerary(city.getCountry(),city.getName(),company.getName(),itinerary.getName()));
+            itineraries.add(itinerary);
         }
         return itineraries;
     }
@@ -126,6 +130,7 @@ public class ReadFile {
         List<Code> codes = new ArrayList<>();
         for(String text:readFile(city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+CODES_FILE)){
             Code code = toCode(text);
+            code.setId(SQLConstants.getIdCode(city.getCountry(),city.getName(),company.getName(),code.getName()));
             if(codes.contains(code)){
                 System.err.println("CODE EXISTS CODE:"+code.getName());
             }else {
@@ -156,6 +161,8 @@ public class ReadFile {
                         )){
                             try{
                                 Bus bus = toBus(text);
+                                bus.setId(SQLConstants.getIdBus(city.getCountry(),city.getName(),company.getName(),
+                                        itinerary.getName(),way,StringUtils.getTypeDayInt(i),String.valueOf(bus.getTime())));
                                 bus.setWay(way);
                                 bus.setTypeday(StringUtils.getTypeDayInt(i));
                                 buses1.add(bus);
