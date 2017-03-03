@@ -161,5 +161,8 @@
     <string name="action_searchable_activity">Search itinerary</string>
     <string name="dialog_alert_title_confirm_clear_search_history">Are you sure you want to delete your search history?</string>
     <string name="search_history_deleted">Search history deleted</string>
+    <string name="download_schedule_preparing">We\'re preparing everything for you ...</string>
+    <string name="notifications_about_a_bus">Notifications of route alarms</string>
+    <string name="download_schedule_completed_successfully">Download completed successfully!</string>
 
 </resources>

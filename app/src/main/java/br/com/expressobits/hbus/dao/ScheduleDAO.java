@@ -20,13 +20,14 @@ import br.com.expressobits.hbus.utils.StringUtils;
 public class ScheduleDAO extends SQLiteOpenHelper {
 
     private static final String TAG = "ScheduleDAO";
+    public static final int SCHEDULE_VERSION = 1;
     private static final int DATABASE_VERSION = 1;
 
     private String country;
     private String city;
 
     public ScheduleDAO(Context context,String country,String cityName){
-        super(context, StringUtils.getNameDatabase(country,cityName,DATABASE_VERSION),null,DATABASE_VERSION);
+        super(context, StringUtils.getNameDatabase(country,cityName, SCHEDULE_VERSION),null, DATABASE_VERSION);
         this.city = cityName;
         this.country = country;
     }

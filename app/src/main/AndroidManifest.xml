@@ -237,7 +237,12 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/itinerary_searchable" />
         </activity>
-        <activity android:name=".ui.DownloadScheduleActivity"></activity>
+        <activity android:name=".ui.DownloadScheduleActivity" />
+
+        <service
+            android:name=".download.DownloadScheduleService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

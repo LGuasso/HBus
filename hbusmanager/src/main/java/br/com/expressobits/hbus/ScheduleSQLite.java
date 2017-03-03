@@ -58,6 +58,7 @@ public class ScheduleSQLite {
     public void insert(City city, Company company){
         try {
             insert(CompanyContract.getInsertSQL(company), CompanyContract.Company.TABLE_NAME);
+            System.out.println("Insert "+ CompanyContract.Company.TABLE_NAME+"- "+company.getName()+" successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,6 +67,7 @@ public class ScheduleSQLite {
     public void insert(City city,Company company,Itinerary itinerary){
         try {
             insert(ItineraryContract.getInsertSQL(itinerary),ItineraryContract.Itinerary.TABLE_NAME);
+            System.out.println("\tInsert "+ ItineraryContract.Itinerary.TABLE_NAME+"- "+itinerary.getName()+" successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,6 +76,7 @@ public class ScheduleSQLite {
     public void insert(City city,Company company,Code code){
         try {
             insert(CodeContract.getInsertSQL(code), CodeContract.Code.TABLE_NAME);
+            System.out.println("\tInsert "+ CodeContract.Code.TABLE_NAME+"- "+code.getName()+" successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,7 +100,6 @@ public class ScheduleSQLite {
         stmt.executeUpdate(sql);
         stmt.close();
         //connection.commit();
-        System.out.println("Insert "+tableName+" successfully");
     }
 
     public void open() {

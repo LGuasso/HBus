@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
@@ -22,7 +23,7 @@ import br.com.expressobits.hbus.dao.SQLConstants;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.StringUtils;
 
-public class DownloadScheduleActivity extends Activity implements OnProgressListener<FileDownloadTask.TaskSnapshot>,OnFailureListener,OnSuccessListener<FileDownloadTask.TaskSnapshot> {
+public class DownloadScheduleActivity extends Activity implements OnPausedListener<FileDownloadTask.TaskSnapshot>,OnProgressListener<FileDownloadTask.TaskSnapshot>,OnFailureListener,OnSuccessListener<FileDownloadTask.TaskSnapshot> {
 
     private TextView textViewStatusLoading;
     @Override
@@ -44,14 +45,13 @@ public class DownloadScheduleActivity extends Activity implements OnProgressList
                 child(country).child(city).child(
                 StringUtils.getNameDatabase(country,city,DATABASE_VERSION));
 
-        Toast.makeText(this,fileRef.getName(),Toast.LENGTH_LONG).show();
-
         File localFile = getDatabasePath(
                 StringUtils.getNameDatabase(country,city,DATABASE_VERSION));
         FileDownloadTask fileDownloadTask = fileRef.getFile(localFile);
         fileDownloadTask.addOnSuccessListener(this);
         fileDownloadTask.addOnFailureListener(this);
         fileDownloadTask.addOnProgressListener(this);
+        fileDownloadTask.addOnPausedListener(this);
 
     }
 
@@ -63,7 +63,7 @@ public class DownloadScheduleActivity extends Activity implements OnProgressList
 
     @Override
     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-        textViewStatusLoading.setText("Download with sucess!");
+        //textViewStatusLoading.setText(getString(R.string.download_schedule_completed_successfully));
         Intent mainIntent = new Intent(this, MainActivity.class);
         this.startActivity(mainIntent);
     }
@@ -72,5 +72,11 @@ public class DownloadScheduleActivity extends Activity implements OnProgressList
     public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
         int percent = (int)(taskSnapshot.getBytesTransferred()*100/taskSnapshot.getTotalByteCount());
         textViewStatusLoading.setText(percent+"%");
+    }
+
+    @Override
+    public void onPaused(FileDownloadTask.TaskSnapshot taskSnapshot) {
+        int percent = (int)(taskSnapshot.getBytesTransferred()*100/taskSnapshot.getTotalByteCount());
+        Toast.makeText(DownloadScheduleActivity.this,"Paused in "+percent+"%",Toast.LENGTH_LONG).show();
     }
 }

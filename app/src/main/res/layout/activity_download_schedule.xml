@@ -13,12 +13,22 @@
 
         <TextView
             android:id="@+id/textViewStatusLoading"
-            android:layout_width="wrap_content"
+            android:textAppearance="@style/AppTheme.TextAppearance.AppCompat.Display1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:drawableTop="@drawable/common_full_open_on_phone"
-            android:textColor="@color/white"
+            android:gravity="center"
+            android:drawableTop="@drawable/ic_bus_stop"
+            android:textColor="@color/colorAccent"
             android:text="@string/loading"/>
+
+        <TextView
+            android:layout_alignTop="@+id/textViewStatusLoading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|bottom"
+            android:textColor="@color/white"
+            android:text="@string/download_schedule_preparing"/>
 
 
 </RelativeLayout>
