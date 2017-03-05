@@ -88,7 +88,7 @@ public class DownloadScheduleActivity extends Activity implements OnPausedListen
     @Override
     public void onFailure(@NonNull Exception exception) {
         Toast.makeText(DownloadScheduleActivity.this,exception.getMessage(),Toast.LENGTH_LONG).show();
-        textViewStatusLoading.setText("Download with failed!");
+        textViewStatusLoading.setText(getString(R.string.download_schedule_failed_download));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class DownloadScheduleActivity extends Activity implements OnPausedListen
     @Override
     public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
         int percent = (int)(taskSnapshot.getBytesTransferred()*100/taskSnapshot.getTotalByteCount());
-        textViewStatusLoading.setText(getString(R.string.common_percent,String.valueOf(percent)));
+        textViewStatusLoading.setText(getString(R.string.common_percent_download,percent));
     }
 
     @Override

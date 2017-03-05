@@ -20,6 +20,7 @@
             android:gravity="center"
             android:drawableTop="@drawable/ic_bus_stop"
             android:textColor="@color/colorAccent"
+            android:textStyle="bold"
             android:text="@string/loading"/>
 
         <TextView

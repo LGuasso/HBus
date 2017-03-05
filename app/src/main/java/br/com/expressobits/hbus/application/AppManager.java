@@ -3,12 +3,10 @@ package br.com.expressobits.hbus.application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 
 import br.com.expressobits.hbus.R;
@@ -80,16 +78,22 @@ public class AppManager {
                 StringUtils.getNameDatabase(country,city,DATABASE_VERSION));
         final SharedPreferences sharedPref = context.getSharedPreferences(
                 DATABASE_LAST_UPDATE_PREFERENCE_KEY,Context.MODE_PRIVATE);
-        fileRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-            @Override
-            public void onSuccess(StorageMetadata storageMetadata) {
-                if(sharedPref.getLong(SQLConstants.getIdCityDefault(country,city), 0L)<storageMetadata.getUpdatedTimeMillis()){
-                    Log.i("test","NO UPDATED "+storageMetadata.getUpdatedTimeMillis());
+        fileRef.getMetadata().addOnSuccessListener(storageMetadata -> {
+            if(sharedPref.getLong(SQLConstants.getIdCityDefault(country,city), 0L)<storageMetadata.getUpdatedTimeMillis()){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setIcon(R.drawable.ic_refresh_grey600_24dp);
+                builder.setMessage(R.string.dialog_alert_message_confirm_update);
+                builder.setTitle(R.string.dialog_alert_title_confirm_update);
+                builder.setNegativeButton(android.R.string.no, null);
+                builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     Intent downloadIntent = new Intent(context, DownloadScheduleActivity.class);
                     downloadIntent.putExtra(DownloadScheduleActivity.STARTER_MODE,false);
                     downloadIntent.putExtra(DownloadScheduleActivity.UPDATE_MODE,true);
                     context.startActivity(downloadIntent);
-                }
+                });
+                builder.show();
+
             }
         });
     }

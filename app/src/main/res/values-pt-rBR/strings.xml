@@ -150,8 +150,11 @@
     <string name="action_searchable_activity">Buscar itinerário</string>
     <string name="dialog_alert_title_confirm_clear_search_history">Tem certeza de que deseja apagar seu histórico de pesquisa</string>
     <string name="search_history_deleted">Histórico de pesquisa excluído</string>
-    <string name="download_schedule_preparing">Estamos preparando tudo para você...</string>
+    <string name="download_schedule_preparing">Estamos preparando tudo para você…</string>
     <string name="notification_alarm_ticker">Não perca o %1$s</string>
     <string name="download_schedule_completed_successfully">Download efetuado com sucesso!</string>
-    <string name="download_schedule_update_message">Atualizando banco de dados para você</string>
+    <string name="download_schedule_update_message">Atualizando banco de dados para você…</string>
+    <string name="dialog_alert_message_confirm_update">Atualize para obter a versão mais atual dos horários da sua cidade</string>
+    <string name="dialog_alert_title_confirm_update">Deseja atualizar?</string>
+    <string name="download_schedule_failed_download">Falha ao baixar banco de dados</string>
 </resources>
