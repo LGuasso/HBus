@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent">
@@ -10,23 +9,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:paddingTop="@dimen/activity_splash_margin_image_to_text"
             android:layout_above="@+id/linearLayoutText"
             android:layout_centerHorizontal="true">
-            <ImageView
+            <!--ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_tour_background"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"/-->
 
             <android.support.v7.widget.AppCompatImageView
-                android:tint="@color/md_amber_A200"
                 android:id="@+id/iconImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-
-                />
+                android:layout_centerInParent="true"/>
 
         </RelativeLayout>
 

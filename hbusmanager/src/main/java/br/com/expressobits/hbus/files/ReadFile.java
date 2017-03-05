@@ -106,7 +106,7 @@ public class ReadFile {
             try{
                 Company company = toCompany(text);
                 company.setId(SQLConstants.getIdCompany(city.getCountry(),city.getName(),company.getName()));
-                companies.add(toCompany(text));
+                companies.add(company);
             }catch (Exception e){
                 System.err.println("Erro ao converter compania "+text);
                 e.printStackTrace();

@@ -34,6 +34,7 @@ public class ManagerInit {
             context.startActivity(tourIntent);
         }else{
             String cityId = PreferenceManager.getDefaultSharedPreferences(context).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+
             if(cityId.equals(SelectCityActivity.NOT_CITY)){
                 Intent selectCityIntent = new Intent(context,SelectCityActivity.class);
                 selectCityIntent.putExtra(SelectCityActivity.STARTER_MODE,true);
@@ -43,6 +44,8 @@ public class ManagerInit {
                 String cityName = FirebaseUtils.getCityName(cityId);
                 if(!isDatabaseFileFound(context,country,cityName)){
                     Intent downloadIntent = new Intent(context, DownloadScheduleActivity.class);
+                    downloadIntent.putExtra(DownloadScheduleActivity.STARTER_MODE,true);
+                    downloadIntent.putExtra(DownloadScheduleActivity.UPDATE_MODE,false);
                     context.startActivity(downloadIntent);
                 }else {
                     Intent mainIntent = new Intent(context, MainActivity.class);
@@ -52,11 +55,11 @@ public class ManagerInit {
         }
 
     }
-
-
     public static boolean isDatabaseFileFound(Context context,String country,String cityName){
         File localFile = context.getDatabasePath(
                 StringUtils.getNameDatabase(country,cityName,DATABASE_VERSION));
         return localFile.exists();
     }
+
+
 }

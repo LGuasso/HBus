@@ -18,7 +18,6 @@
             android:layout_height="match_parent"
             android:background="@color/transparent">
 
-
             <include
                 android:id="@+id/inc_splash_relative"
                 android:layout_height="match_parent"

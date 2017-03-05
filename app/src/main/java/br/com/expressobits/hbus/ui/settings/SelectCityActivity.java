@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.ui.settings;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -30,6 +31,7 @@ import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
 import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.ui.DownloadScheduleActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
@@ -45,7 +47,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private ImageView imageViewNetworkError;
     private boolean starter = false;
     public static final String NOT_CITY = "not_city";
-    public static final String STARTER_MODE = "starter";
+    public static final String STARTER_MODE = "starterMode";
     public static final String DEFAULT_COUNTRY = "BR/RS";
 
     @Override
@@ -124,6 +126,13 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         FirebaseAnalyticsManager.registerEventCity(this,city.getCountry(),city.getName());
         if(starter){
             ManagerInit.manager(this);
+        }else {
+            if(!ManagerInit.isDatabaseFileFound(this,city.getCountry(),city.getName())){
+                Intent downloadIntent = new Intent(this, DownloadScheduleActivity.class);
+                downloadIntent.putExtra(DownloadScheduleActivity.STARTER_MODE,false);
+                this.startActivity(downloadIntent);
+            }
+
         }
         finish();
     }

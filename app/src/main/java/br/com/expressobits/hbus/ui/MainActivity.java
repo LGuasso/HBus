@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         super.onCreate(savedInstanceState);
         checkIntent(getIntent());
         setContentView(R.layout.activity_main);
-
         loadParams();
+        AppManager.verifyUpdatedDatabase(this,country,city);
         if (savedInstanceState == null) {
             Fragment fragment = new HomeFragment();
             if (findViewById(R.id.framelayout_main) != null) {

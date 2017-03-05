@@ -82,6 +82,9 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     @Override
     public void onResume() {
         super.onResume();
+        cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        country = FirebaseUtils.getCountry(cityId);
+        cityName = FirebaseUtils.getCityName(cityId);
         pullDataItens();
     }
 
@@ -98,9 +101,7 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        country = FirebaseUtils.getCountry(cityId);
-        cityName = FirebaseUtils.getCityName(cityId);
+
         view = inflater.inflate(R.layout.fragment_favorite_itinerary, container,false);
         initViews(view);
         return view;

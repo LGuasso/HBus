@@ -23,6 +23,7 @@
             android:text="@string/loading"/>
 
         <TextView
+            android:id="@+id/textViewStatusMessage"
             android:layout_alignTop="@+id/textViewStatusLoading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -153,4 +153,5 @@
     <string name="download_schedule_preparing">Estamos preparando tudo para você...</string>
     <string name="notification_alarm_ticker">Não perca o %1$s</string>
     <string name="download_schedule_completed_successfully">Download efetuado com sucesso!</string>
+    <string name="download_schedule_update_message">Atualizando banco de dados para você</string>
 </resources>
