@@ -167,5 +167,11 @@
     <string name="dialog_alert_title_confirm_update">Do you want to upgrade?</string>
     <string name="download_schedule_update_message">Updating database for you…</string>
     <string name="common_percent_download">%1$d%%</string>
+    <string name="pref_title_database_manager">Database manager</string>
+    <string name="dialog_alert_title_confirm_remove_database">Do you want to remove?</string>
+    <string name="dialog_alert_message_confirm_remove_database">This implies downloading the database of this city when you need to see the times again</string>
+    <string name="dialog_alert_message_no_delete_database_in_use">There is no way to delete a database that is in use!</string>
+    <string name="list_database_database_deleted_successfully">Database deleted successfully!</string>
+    <string name="list_database_dialog_title_is_not_possible_to_remove">Is not possible to remove!</string>
 
 </resources>

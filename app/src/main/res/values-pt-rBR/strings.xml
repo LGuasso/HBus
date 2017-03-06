@@ -157,4 +157,9 @@
     <string name="dialog_alert_message_confirm_update">Atualize para obter a versão mais atual dos horários da sua cidade</string>
     <string name="dialog_alert_title_confirm_update">Deseja atualizar?</string>
     <string name="download_schedule_failed_download">Falha ao baixar banco de dados</string>
+    <string name="dialog_alert_title_confirm_remove_database">Deseja remover?</string>
+    <string name="dialog_alert_message_confirm_remove_database">Isso implica em baixar o banco de dados desta cidade quando precisar ver os horários novamente</string>
+    <string name="dialog_alert_message_no_delete_database_in_use">Não há como excluir um banco de dados que está em uso!</string>
+    <string name="list_database_database_deleted_successfully">Banco de dados excluído com sucesso!</string>
+    <string name="list_database_dialog_title_is_not_possible_to_remove">Não é possível remover!</string>
 </resources>

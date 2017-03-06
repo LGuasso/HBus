@@ -3,7 +3,6 @@ package br.com.expressobits.hbus.application;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.io.File;
 
@@ -26,7 +25,6 @@ public class ManagerInit {
     public static void manager(final Context context){
 
         boolean isTour = getDefaultSharedPreferences(context).getBoolean(TourActivity.TAG, true);
-        Log.e("TESTE",isTour+" isTour");
 
         if(isTour){
             Intent tourIntent = new Intent(context,TourActivity.class);

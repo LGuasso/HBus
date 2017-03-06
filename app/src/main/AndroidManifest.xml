@@ -238,7 +238,8 @@
                 android:resource="@xml/itinerary_searchable" />
         </activity>
         <activity android:name=".ui.DownloadScheduleActivity" />
-        <activity android:name=".ui.download.ListScheduleDatabaseActivity"></activity>
+        <activity android:name=".ui.download.ListDatabaseActivity"
+            android:label="@string/pref_title_database_manager"/>
     </application>
 
 </manifest>

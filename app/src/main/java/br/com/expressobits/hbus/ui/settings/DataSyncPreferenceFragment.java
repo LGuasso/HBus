@@ -4,10 +4,12 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.view.MenuItem;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.ui.download.ListDatabaseActivity;
 
 /**
  * @author Rafael Correa
@@ -19,10 +21,17 @@ import br.com.expressobits.hbus.R;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DataSyncPreferenceFragment extends PreferenceFragment {
+
+    Preference preferenceHBusSchedules;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_data_sync);
+        preferenceHBusSchedules = findPreference("hbus_schedules");
+        preferenceHBusSchedules.setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(preference.getContext(), ListDatabaseActivity.class));
+            return false;
+        });
         setHasOptionsMenu(true);
         refreshComponents();
     }
@@ -32,6 +41,7 @@ public class DataSyncPreferenceFragment extends PreferenceFragment {
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference("hbus_schedules"));
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("no_actived_itens"));
     }

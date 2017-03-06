@@ -21,7 +21,6 @@ import br.com.expressobits.hbus.dao.SQLConstants;
 import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.ui.CompanyDetailsActivity;
-import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.TimesActivity;
 import br.com.expressobits.hbus.ui.adapters.ItemCompanyAdapter;
@@ -59,20 +58,16 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
         super.onResume();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-
-
         if(listCompanies.size()>0){
             recyclerViewCompanies.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
-
             refreshRecyclerView();
-        }else {
-
+        }else{
+            //TODO estado vazio nao existe companies vazia
         }
         String country = FirebaseUtils.getCountry(cityId);
         String city = FirebaseUtils.getCityName(cityId);
         refresh(country,city);
-
     }
 
     private void initViews(View view){
@@ -118,30 +113,13 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     @Override
     public void onClickListener(View view, int position) {
-
         Intent intent;
         Company company = listCompanies.get(position);
-        switch (view.getId()){
-            case R.id.text1:
-                intent = new Intent(getContext(), CompanyDetailsActivity.class);
-                intent.putExtra(TimesActivity.ARGS_COUNTRY, SQLConstants.getCountryFromBusId(company.getId()));
-                intent.putExtra(TimesActivity.ARGS_CITY, SQLConstants.getCityFromBusId(company.getId()));
-                intent.putExtra(TimesActivity.ARGS_COMPANY, company.getName());
-                startActivity(intent);
-                break;
-
-            case R.id.icon:
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(cityId,company.getName());
-                editor.apply();
-                refreshRecyclerView();
-                ((MainActivity)getActivity()).refresh();
-                break;
-
-
-        }
+        intent = new Intent(getContext(), CompanyDetailsActivity.class);
+        intent.putExtra(TimesActivity.ARGS_COUNTRY, SQLConstants.getCountryFromBusId(company.getId()));
+        intent.putExtra(TimesActivity.ARGS_CITY, SQLConstants.getCityFromBusId(company.getId()));
+        intent.putExtra(TimesActivity.ARGS_COMPANY, company.getName());
+        startActivity(intent);
     }
 
     @Override

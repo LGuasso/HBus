@@ -48,4 +48,12 @@ public class SQLConstants {
     public static String getCompanyFromBusId(String id) {
         return id.split(BARS)[4];
     }
+
+    public static String getCountry(String id) {
+        return id.split(BARS)[1]+BARS+id.split(BARS)[2];
+    }
+
+    public static String getCity(String id) {
+        return id.split(BARS)[3];
+    }
 }

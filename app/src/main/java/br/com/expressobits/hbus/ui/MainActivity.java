@@ -1,7 +1,6 @@
 package br.com.expressobits.hbus.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -23,15 +22,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -42,7 +35,6 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AdManager;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.messaging.ClickActionHelper;
-import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
@@ -91,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
     private TextView textViewCityName;
     private String country;
     private String city;
-    private String company;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,34 +119,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         city = FirebaseUtils.getCityName(cityId);
         country = FirebaseUtils.getCountry(cityId);
-        try {
-            Log.e(TAG,country);
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference cityTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
-            DatabaseReference countryRef = cityTableRef.child(country);
-            DatabaseReference cityRef = countryRef.child(city);
-            cityRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    City city = dataSnapshot.getValue(City.class);
-                    company = city.getCompanyDefault();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }catch (Exception e){
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(SelectCityActivity.TAG);
-            editor.apply();
-
-            Toast.makeText(this,getString(R.string.error_load_city),Toast.LENGTH_LONG).show();
-            startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
-        }
-
     }
 
     @Override
@@ -399,7 +362,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         outState.putString(ScheduleFragment.ARGS_COUNTRY, country);
         outState.putString(ScheduleFragment.ARGS_CITY, city);
-        outState.putString(ScheduleFragment.ARGS_COMPANY, company);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
