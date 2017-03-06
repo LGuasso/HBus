@@ -112,7 +112,7 @@
                 <!-- ATTENTION: This data URL was auto-generated. We recommend that you use the HTTP scheme. -->
                 <data
                     android:host="hbus-1206.firebaseapp.com"
-                    android:pathPrefix="/hbus"
+                    android:pathPrefix="/main"
                     android:scheme="http" />
             </intent-filter>
         </activity>
@@ -238,11 +238,7 @@
                 android:resource="@xml/itinerary_searchable" />
         </activity>
         <activity android:name=".ui.DownloadScheduleActivity" />
-
-        <service
-            android:name=".download.DownloadScheduleService"
-            android:enabled="true"
-            android:exported="false"></service>
+        <activity android:name=".ui.download.ListScheduleDatabaseActivity"></activity>
     </application>
 
 </manifest>

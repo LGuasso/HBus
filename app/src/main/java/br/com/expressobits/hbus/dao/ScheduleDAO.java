@@ -62,7 +62,7 @@ public class ScheduleDAO extends SQLiteOpenHelper {
     }
 
     public Company getCompany(String company) {
-        return ScheduleHelper.getCompany(getReadableDatabase(),company);
+        return ScheduleHelper.getCompany(getReadableDatabase(),country,city,company);
     }
 
     public Code getCode(String company,String code){

@@ -159,9 +159,9 @@ class ScheduleHelper {
 
     //GET UNIQUE DATA
 
-    public static Company getCompany(SQLiteDatabase db,String company){
+    public static Company getCompany(SQLiteDatabase db,String country,String city,String company){
         String where = CompanyContract.Company._ID+" = ?";
-        String arguments[] = {company};
+        String arguments[] = {BARS+country+BARS+city+BARS+company};
         Cursor cursor = db.query(
                 CompanyContract.Company.TABLE_NAME,
                 CompanyContract.COLS,
@@ -177,9 +177,9 @@ class ScheduleHelper {
         return null;
     }
 
-    public static Itinerary getItinerary(SQLiteDatabase db,String id){
+    public static Itinerary getItinerary(SQLiteDatabase db,String country,String city,String company,String itinerary){
         String where = ItineraryContract.Itinerary._ID+" = ?";
-        String arguments[] = {id};
+        String arguments[] = {BARS+country+BARS+city+BARS+company+BARS+itinerary};
         Cursor cursor = db.query(
                 ItineraryContract.Itinerary.TABLE_NAME,
                 ItineraryContract.COLS,
