@@ -16,21 +16,22 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/card_view_size_city"
+        android:background="@color/transparent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView_coming_soon"
-            android:layout_width="fill_parent"
-            android:textColor="@color/colorAccent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceButton"
-            android:layout_alignParentBottom="true"
-            android:text="@string/coming_soon"
-            android:orientation="vertical"/>
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/imageView_city"
+            android:src="@drawable/default_city"
+            android:layout_width="match_parent"
+            android:layout_height="144dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/city" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/transparent_card_view_image"
             android:orientation="vertical">
 
             <LinearLayout
@@ -41,21 +42,25 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/circleImageViewCityFlag"
-                    android:paddingRight="8dp"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/ic_checkbox_blank_circle_outline_white_48dp"/>
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_refresh_white_48dp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="56dp"
                     android:gravity="center_vertical"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:orientation="vertical">
                     <TextView
                         android:id="@+id/textView_city_name"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:textAppearance"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textAppearance="?android:textAppearanceLarge"
                         android:text="@string/abc_action_bar_home_description"
                         android:orientation="vertical"/>
 
@@ -63,6 +68,7 @@
                         android:id="@+id/textView_city_country"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:textAppearance="?android:textAppearanceSmall"
                         android:text="Rio Grande do Sul"
                         android:orientation="vertical"/>
@@ -71,14 +77,13 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView_city"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"/>
 
         </LinearLayout>
+
+
+
+
+
 
     </RelativeLayout>
 

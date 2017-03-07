@@ -161,6 +161,7 @@ public class ReadFile {
                         )){
                             try{
                                 Bus bus = toBus(text);
+                                verifyEqualTimes(city, company, itinerary, buses1, way, i, bus);
                                 bus.setId(SQLConstants.getIdBus(city.getCountry(),city.getName(),company.getName(),
                                         itinerary.getName(),way,StringUtils.getTypeDayInt(i),String.valueOf(bus.getTime())));
                                 bus.setWay(way);
@@ -183,6 +184,26 @@ public class ReadFile {
 
 
         return buses;
+    }
+
+    /**
+     * Método que verifica se existe mesmo time in bus
+     * @param city Cidade
+     * @param company compania
+     * @param itinerary itinerário
+     * @param buses1 lista de ônibus
+     * @param way Sentido
+     * @param i iterator
+     * @param bus ônibus
+     */
+    private void verifyEqualTimes(City city, Company company, Itinerary itinerary, List<Bus> buses1, String way, int i, Bus bus) {
+        while (buses1.contains(bus)){
+            System.out.println("BUS encontrado com mesmo tempo ANTES"+ SQLConstants.getIdBus(city.getCountry(),city.getName(),company.getName(),
+                    itinerary.getName(),way, StringUtils.getTypeDayInt(i),String.valueOf(bus.getTime())));
+            bus.setTime(bus.getTime()+1L);
+            System.out.println("BUS encontrado com mesmo tempo DEPOIS"+SQLConstants.getIdBus(city.getCountry(),city.getName(),company.getName(),
+                    itinerary.getName(),way,StringUtils.getTypeDayInt(i),String.valueOf(bus.getTime())));
+        }
     }
 
     public List<String> readFile(String fileName){

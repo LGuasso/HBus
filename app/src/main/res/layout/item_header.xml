@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="32dp">
 
     <TextView
-        android:layout_centerVertical="true"
-        android:paddingStart="@dimen/padding_left_item_subheader"
+        android:layout_gravity="center"
         android:id="@+id/textViewHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/chip"
+        android:text="@string/loading"
         android:textAppearance="@style/HbusTheme.TextAppearance.AppCompat.SubHeader"/>
 
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

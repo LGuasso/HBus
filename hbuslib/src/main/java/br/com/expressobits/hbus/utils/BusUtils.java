@@ -12,7 +12,6 @@ import br.com.expressobits.hbus.model.Bus;
 public class BusUtils {
 
     public static Bus getNextBusforList(List<Bus> buses){
-        //TODO Create metodo separado
         Bus nowBus = new Bus();
         Bus nextBus;
         //nowBus.setTime(HoursUtils.getNowTimeinString());
@@ -31,8 +30,7 @@ public class BusUtils {
             }
             return nextBus;
         }else{
-            //TODO create default pattern not found bus
-            nowBus.setTime(0l);
+            nowBus.setTime(0L);
             return nowBus;
        }
     }

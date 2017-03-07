@@ -162,4 +162,9 @@
     <string name="dialog_alert_message_no_delete_database_in_use">Não há como excluir um banco de dados que está em uso!</string>
     <string name="list_database_database_deleted_successfully">Banco de dados excluído com sucesso!</string>
     <string name="list_database_dialog_title_is_not_possible_to_remove">Não é possível remover!</string>
+    <string name="search_for_your_favorite">"Procure seu itinerário favorito e marque para que ele sempre apareça na tela principal. "</string>
+    <string name="get_started">Iniciar</string>
+    <string name="common_tips">Dicas</string>
+    <string name="pref_title_database_manager">Gerenciador de banco de dados</string>
+    <string name="alarm_list_there_is_no_alarm">Não há nenhum alarme</string>
 </resources>

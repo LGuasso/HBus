@@ -51,6 +51,7 @@
     </style>
 
 
+    <!--BUTTONS STYLES -->
     <style name="AppTheme.Button.Borderless.Colored" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:textAppearance">?android:textAppearanceButton</item>
         <item name="android:minHeight">36dip</item>
@@ -58,7 +59,6 @@
         <item name="android:padding">8dp</item>
         <item name="android:paddingLeft">24dp</item>
     </style>
-
     <style name="AppTheme.Base.Widget.AppCompat.Button.Colored" parent="@style/Base.Widget.AppCompat.Button.Colored">
         <item name="android:minHeight">36dip</item>
         <item name="android:minWidth">64dip</item>
@@ -67,6 +67,15 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
     </style>
+    <style name="HBusTheme.Widget.AppCompat.Button.Colored.BookmarkedItinerary" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+    <style name="HBusTheme.Widget.AppCompat.Button.Colored.GetStartedTip" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimaryMoreDark</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
 
     <style name="AppTheme.CardView" parent="CardView">
         <item name="android:background">@color/cardview_light_background</item>

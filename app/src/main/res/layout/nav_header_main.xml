@@ -11,6 +11,7 @@
 
         <ImageView
             android:id="@+id/imageViewCity"
+            android:src="@drawable/default_city"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
@@ -49,7 +50,7 @@
                 android:layout_gravity="end"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_flag_white_48dp"
+                android:src="@drawable/ic_refresh_white_48dp"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerCrop"/>
 

@@ -49,11 +49,11 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         Itinerary itinerary = listItineraries.get(position);
         if(dao.getItinerary(itinerary.getId())!=null){
             holder.imageViewStar.setSelected(true);
-           //holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
+           //holder.imageViewStar.setImageResource(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
 
         }else {
             holder.imageViewStar.setSelected(false);
-            //holder.imageViewStar.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_star_outline_accent_24dp));
+            //holder.imageViewStar.setImageResource(context.getResources().getDrawable(R.drawable.ic_star_outline_accent_24dp));
         }
         holder.textViewCompanyName.setText(FirebaseUtils.getCompany(itinerary.getId()));
         holder.textViewName.setText(itinerary.getName());

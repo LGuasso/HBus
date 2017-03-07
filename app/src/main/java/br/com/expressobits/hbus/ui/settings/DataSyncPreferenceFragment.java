@@ -22,6 +22,10 @@ import br.com.expressobits.hbus.ui.download.ListDatabaseActivity;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DataSyncPreferenceFragment extends PreferenceFragment {
 
+    public static String LAST_SYNC_PREFERENCE_KEY = "br.com.expressobits.hbus.ui.settings.last_sync";
+    public static String SYNC_FREQUENCY_PREFERENCE_KEY = "br.com.expressobits.hbus.ui.settings.sync_frequency";
+    public static String defaultSyncFrequency = "3600000";
+
     Preference preferenceHBusSchedules;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public class DataSyncPreferenceFragment extends PreferenceFragment {
         // updated to reflect the new value, per the Android Design
         // guidelines.
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("hbus_schedules"));
-        SettingsActivity.bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+        SettingsActivity.bindPreferenceSummaryToValue(findPreference(SYNC_FREQUENCY_PREFERENCE_KEY));
         SettingsActivity.bindPreferenceSummaryToValue(findPreference("no_actived_itens"));
     }
 

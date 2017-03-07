@@ -14,8 +14,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import java.util.Calendar;
-
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.SQLConstants;
 import br.com.expressobits.hbus.dao.ScheduleDAO;
@@ -86,8 +84,6 @@ public class NotificationsAlarm {
 
     private static NotificationCompat.Builder getBuilderNotification(Context context, Alarm alarm) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
         return new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_bus_white_24dp)
                 .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
@@ -95,7 +91,7 @@ public class NotificationsAlarm {
                 //        R.drawable.ic_close_white_24dp,getResources().getString(R.string.remove),
                 //        PendingIntent.getBroadcast(this,0,new Intent(this, HelpActivity.class),0)))
                 .setContentTitle(context.getString(R.string.notification_alarm_title_text,
-                        FirebaseUtils.getItinerary(alarm.getId()), TimeUtils.getFormatTime(calendar)))
+                        FirebaseUtils.getItinerary(alarm.getId()), TimeUtils.getFormatTime(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())))))
                 .setContentText(context.getString(R.string.notification_alarm_text,
                         FirebaseUtils.getWay(alarm.getId())))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

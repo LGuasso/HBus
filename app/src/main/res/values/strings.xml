@@ -173,5 +173,9 @@
     <string name="dialog_alert_message_no_delete_database_in_use">There is no way to delete a database that is in use!</string>
     <string name="list_database_database_deleted_successfully">Database deleted successfully!</string>
     <string name="list_database_dialog_title_is_not_possible_to_remove">Is not possible to remove!</string>
+    <string name="get_started">Get started</string>
+    <string name="search_for_your_favorite">Search for your favorite itinerary and check that it always appears on the main screen.</string>
+    <string name="common_tips">Tips</string>
+    <string name="alarm_list_there_is_no_alarm">There is no alarm</string>
 
 </resources>

@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,11 +53,10 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
 
     @Override
     public void onBindViewHolder(final HolderCity holder, final int position) {
-        String name = listCities.get(position).getName()+" - "+listCities.get(position).getCountry();
+        String name = listCities.get(position).getName();
         holder.textViewCity.setText(name);
 
         if(listCities.get(position).isActived() || PreferenceManager.getDefaultSharedPreferences(context).getBoolean("no_actived_items",false)){
-            holder.textViewComingSoon.setVisibility(View.INVISIBLE);
             holder.cardView.setOnClickListener(holder);
         }else {
             holder.imageViewCity.setColorFilter(ContextCompat.getColor(context,R.color.md_blue_gray_500), PorterDuff.Mode.MULTIPLY);
@@ -74,17 +72,20 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
                 +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
 
 
+        cityRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
-        cityRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(ItemCityAdapter.this.context).load(uri)
-                .into(holder.imageViewCity));
+            Picasso.with(ItemCityAdapter.this.context).load(uri)
+                    .placeholder(R.drawable.default_city)
+                    .into(holder.imageViewCity);
+        });
+
 
         cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
             Picasso.with(ItemCityAdapter.this.context).load(uri)
                     .error(R.drawable.ic_flag_white_48dp)
-                    .placeholder(R.drawable.ic_flag_white_48dp)
+                    .placeholder(R.drawable.ic_refresh_white_48dp)
                     .into(holder.imageViewPhoto);
-            Log.i(TAG,"Load image "+uri.getPath());
         });
 
     }
@@ -101,7 +102,6 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
     class HolderCity extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         final TextView textViewCity;
-        final TextView textViewComingSoon;
         final ImageView imageViewCity;
         final CardView cardView;
         final ImageView imageViewPhoto;
@@ -109,7 +109,6 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
         HolderCity(View itemView) {
             super(itemView);
             textViewCity = (TextView) itemView.findViewById(R.id.textView_city_name);
-            textViewComingSoon = (TextView) itemView.findViewById(R.id.textView_coming_soon);
             imageViewCity = (ImageView) itemView.findViewById(R.id.imageView_city);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
             imageViewPhoto = (ImageView) itemView.findViewById(R.id.circleImageViewCityFlag);

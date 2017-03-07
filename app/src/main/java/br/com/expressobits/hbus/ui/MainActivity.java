@@ -143,13 +143,22 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         StorageReference cityFlagRef = countryRef.child(city.toLowerCase().replace(" ","_")
                 +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
 
-        cityRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(MainActivity.this).load(uri)
-                .into(imageViewCity));
+        cityRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
-        cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(MainActivity.this).load(uri)
-                .placeholder(R.drawable.ic_flag_white_48dp)
-                .error(R.drawable.ic_flag_white_48dp)
-                .into(circleImageViewCityProfile));
+            Picasso.with(this).load(uri)
+                    .placeholder(R.drawable.default_city)
+                    .into(imageViewCity);
+        });
+
+
+        cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> {
+
+            Picasso.with(this).load(uri)
+                    .error(R.drawable.ic_flag_white_48dp)
+                    .placeholder(R.drawable.ic_refresh_white_48dp)
+                    .into(circleImageViewCityProfile);
+        });
+
     }
 
 
