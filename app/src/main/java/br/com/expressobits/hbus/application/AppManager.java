@@ -14,6 +14,7 @@ import com.google.firebase.storage.StorageReference;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
 import br.com.expressobits.hbus.dao.SQLConstants;
+import br.com.expressobits.hbus.provider.RecentItineraries;
 import br.com.expressobits.hbus.ui.DownloadScheduleActivity;
 import br.com.expressobits.hbus.ui.TimesActivity;
 import br.com.expressobits.hbus.ui.settings.DataSyncPreferenceFragment;
@@ -59,6 +60,10 @@ public class AppManager {
     }
 
     private static void openTimes(Context context, String country, String city, String company, String itinerary, String way) {
+        RecentItineraries.saveRecentItineraries(context,
+                SQLConstants.getIdItinerary(country,city,company,itinerary),
+                SQLConstants.getIdCityDefault(country,city));
+
         FirebaseAnalyticsManager.registerEventItinerary(context,country,city,company,itinerary);
         Intent intent = new Intent(context, TimesActivity.class);
         intent.putExtra(TimesActivity.ARGS_COUNTRY, country);

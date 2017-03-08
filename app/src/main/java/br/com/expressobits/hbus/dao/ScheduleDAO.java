@@ -82,4 +82,7 @@ public class ScheduleDAO extends SQLiteOpenHelper {
     }
 
 
+    public Itinerary getItineraryForId(String id) {
+        return ScheduleHelper.getItineraryForId(getReadableDatabase(),id);
+    }
 }

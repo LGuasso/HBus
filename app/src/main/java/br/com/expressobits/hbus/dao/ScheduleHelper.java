@@ -177,6 +177,24 @@ class ScheduleHelper {
         return null;
     }
 
+    public static Itinerary getItineraryForId(SQLiteDatabase db,String id){
+        String where = ItineraryContract.Itinerary._ID+" = ?";
+        String arguments[] = {id};
+        Cursor cursor = db.query(
+                ItineraryContract.Itinerary.TABLE_NAME,
+                ItineraryContract.COLS,
+                where,
+                arguments,
+                null,
+                null,
+                null
+        );
+        if(cursor.moveToFirst()){
+            return cursorToItinerary(cursor);
+        }
+        return null;
+    }
+
     public static Itinerary getItinerary(SQLiteDatabase db,String country,String city,String company,String itinerary){
         String where = ItineraryContract.Itinerary._ID+" = ?";
         String arguments[] = {BARS+country+BARS+city+BARS+company+BARS+itinerary};

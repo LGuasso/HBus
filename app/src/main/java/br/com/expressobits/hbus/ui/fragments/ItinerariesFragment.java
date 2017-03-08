@@ -28,8 +28,10 @@ import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
+import br.com.expressobits.hbus.dao.SQLConstants;
 import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.provider.RecentItineraries;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemItineraryAdapter;
@@ -105,10 +107,15 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     private void refresh(String country,String city){
         listItineraries.clear();
-        listItineraries.add(0,new Header(getString(R.string.all_itineraries)));
+
         progressBar.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
+
+        loadRecentItinerariesFromPreference();
+
+        listItineraries.add(new Header(getString(R.string.all_itineraries)));
         loadItinerariesFromDatabase(country,city);
+
     }
 
     private void loadItinerariesFromDatabase(String country,String city){
@@ -118,6 +125,20 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         for (Itinerary itinerary:itineraries) {
             addItinerary(itinerary);
         }
+        scheduleDAO.close();
+    }
+
+    private void loadRecentItinerariesFromPreference(){
+        List<String> ids = RecentItineraries.getListRecentIdItineraries(getContext(),SQLConstants.getIdCityDefault(country,city));
+        if(ids.size()>0){
+            listItineraries.add(0,new Header("Itinerários Recentes"));
+            ScheduleDAO scheduleDAO = new ScheduleDAO(getContext(),country,city);
+            for (int i = 0; i < ids.size(); i++) {
+                addItinerary(scheduleDAO.getItineraryForId(ids.get(i)));
+            }
+            scheduleDAO.close();
+        }
+
     }
 
     @Override
