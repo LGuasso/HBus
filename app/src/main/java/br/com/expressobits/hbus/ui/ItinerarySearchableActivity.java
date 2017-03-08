@@ -46,7 +46,7 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
     private String city;
     private Toolbar toolbar;
     private RecyclerView mRecyclerView;
-    private List<Itinerary> itinerariesSearchList;
+    private List<Object> itinerariesSearchList;
     private ItemItineraryAdapter itemItineraryAdapter;
 
     @Override
@@ -84,14 +84,18 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
         itinerariesSearchList = new ArrayList<>();
     }
 
-    private void loadItinerariesFromFirebase(String itineraryQuery, final String country, final String city) {
+    private void loadItinerariesFromDatabase(String itineraryQuery, final String country, final String city) {
         ScheduleDAO dao = new ScheduleDAO(getBaseContext(),country,city);
-        List<Itinerary> itineraries = dao.getSearchableItineraries(itineraryQuery);
-        addItinerary(itineraries);
+        List<Itinerary> itineraries = dao.getItineraries();
+        for (Itinerary itinerary : itineraries) {
+            if(itinerary.getName().toLowerCase().contains(itineraryQuery.toLowerCase())){
+                addItinerary(itinerary);
+            }
+        }
     }
 
-    private void addItinerary(List<Itinerary> itinerary) {
-        itinerariesSearchList = itinerary;
+    private void addItinerary(Itinerary itinerary) {
+        itinerariesSearchList.add(itinerary);
         itemItineraryAdapter.notifyDataSetChanged();
     }
 
@@ -109,7 +113,7 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
             if(getSupportActionBar()!=null){
                 getSupportActionBar().setTitle(q);
             }
-            loadItinerariesFromFirebase(q,country,city);
+            loadItinerariesFromDatabase(q,country,city);
             if(!PreferenceManager.getDefaultSharedPreferences(this).
                     getBoolean(PrivacyPreferenceFragment.PREFERENCE_PAUSE_SEARCH_HISTORY,false)){
                 SearchRecentSuggestions searchRecentSuggestions = new SearchRecentSuggestions(this,
@@ -178,35 +182,38 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
 
     @Override
     public void onClickListener(View view, int position) {
-        Itinerary itinerary = itinerariesSearchList.get(position);
-        switch (view.getId()) {
-            case R.id.icon:
-                BookmarkItineraryDAO dao = new BookmarkItineraryDAO(this);
-                if(dao.getItinerary(itinerary.getId())!=null){
-                    dao.removeFavorite(itinerary);
-                    dao.close();
-                    Log.d(TAG, "remove favorite " + itinerary.getId());
-                    String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
-                    Snackbar.make(
-                            view,
-                            result,
-                            Snackbar.LENGTH_LONG).show();
+        if(itinerariesSearchList.get(position) instanceof Itinerary){
+            Itinerary itinerary = (Itinerary)itinerariesSearchList.get(position);
+            switch (view.getId()) {
+                case R.id.icon:
+                    BookmarkItineraryDAO dao = new BookmarkItineraryDAO(this);
+                    if(dao.getItinerary(itinerary.getId())!=null){
+                        dao.removeFavorite(itinerary);
+                        dao.close();
+                        Log.d(TAG, "remove favorite " + itinerary.getId());
+                        String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
+                        Snackbar.make(
+                                view,
+                                result,
+                                Snackbar.LENGTH_LONG).show();
 
-                }else {
-                    dao.insert(itinerariesSearchList.get(position));
-                    Log.d(TAG,"insert favorite "+itinerary.getId());
-                    dao.close();
-                    Snackbar.make(
-                            view,
-                            getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
-                            Snackbar.LENGTH_LONG).show();
-                }
-                break;
-            case linearLayoutItemList:
-                onCreateDialogChooseWay(itinerary);
-                break;
+                    }else {
+                        dao.insert(itinerary);
+                        Log.d(TAG,"insert favorite "+itinerary.getId());
+                        dao.close();
+                        Snackbar.make(
+                                view,
+                                getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
+                                Snackbar.LENGTH_LONG).show();
+                    }
+                    break;
+                case linearLayoutItemList:
+                    onCreateDialogChooseWay(itinerary);
+                    break;
 
+            }
         }
+
     }
 
     @Override

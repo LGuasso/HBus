@@ -33,6 +33,7 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemItineraryAdapter;
+import br.com.expressobits.hbus.ui.model.Header;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
@@ -46,7 +47,7 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
  */
 public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
-    private List<Itinerary> listItineraries = new ArrayList<>();
+    private List<Object> listItineraries = new ArrayList<>();
     public static final String TAG = "ItinerariesFragment";
     private RecyclerView recyclerViewItineraries;
     private ProgressBar progressBar;
@@ -75,8 +76,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         }
         country = FirebaseUtils.getCountry(cityId);
         city = FirebaseUtils.getCityName(cityId);
-        company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"SIMSM");
-        refresh(country,city,company);
+        refresh(country,city);
     }
 
     private void initViews(View view){
@@ -103,8 +103,9 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     }
 
-    private void refresh(String country,String city,String company){
+    private void refresh(String country,String city){
         listItineraries.clear();
+        listItineraries.add(0,new Header(getString(R.string.all_itineraries)));
         progressBar.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
         loadItinerariesFromDatabase(country,city);
@@ -113,6 +114,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     private void loadItinerariesFromDatabase(String country,String city){
         ScheduleDAO scheduleDAO = new ScheduleDAO(getContext(),country,city);
         List<Itinerary> itineraries = scheduleDAO.getItineraries();
+        Collections.sort(itineraries);
         for (Itinerary itinerary:itineraries) {
             addItinerary(itinerary);
         }
@@ -120,39 +122,41 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     @Override
     public void onClickListener(View view, int position) {
+        if(listItineraries.get(position) instanceof Itinerary){
+            Itinerary itinerary = (Itinerary)listItineraries.get(position);
+            switch (view.getId()){
+                case R.id.icon:
+                    BookmarkItineraryDAO dao = new BookmarkItineraryDAO(getActivity());
+                    if(dao.getItinerary(itinerary.getId())!=null){
+                        dao.removeFavorite(itinerary);
+                        dao.close();
+                        Log.d(TAG, "remove favorite " + itinerary.getId());
+                        String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
+                        Snackbar.make(
+                                view,
+                                result,
+                                Snackbar.LENGTH_LONG).show();
 
-        Itinerary itinerary = listItineraries.get(position);
-        switch (view.getId()){
-            case R.id.icon:
-                BookmarkItineraryDAO dao = new BookmarkItineraryDAO(getActivity());
-                if(dao.getItinerary(itinerary.getId())!=null){
-                    dao.removeFavorite(itinerary);
-                    dao.close();
-                    Log.d(TAG, "remove favorite " + itinerary.getId());
-                    String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
-                    Snackbar.make(
-                            view,
-                            result,
-                            Snackbar.LENGTH_LONG).show();
+                    }else {
+                        dao.insert(itinerary);
+                        Log.d(TAG,"insert favorite "+itinerary.getId());
+                        dao.close();
 
-                }else {
-                    dao.insert(listItineraries.get(position));
-                    Log.d(TAG,"insert favorite "+itinerary.getId());
-                    dao.close();
+                        lastPositionItinerary = position;
 
-                    lastPositionItinerary = position;
+                        Snackbar.make(
+                                view,
+                                getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
+                                Snackbar.LENGTH_LONG).show();
+                    }
 
-                    Snackbar.make(
-                            view,
-                            getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
-                            Snackbar.LENGTH_LONG).show();
-                }
-
-                break;
-            case R.id.linearLayoutItemList:
-                ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
-                break;
+                    break;
+                case R.id.linearLayoutItemList:
+                    ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
+                    break;
+            }
         }
+
 
     }
 
@@ -165,8 +169,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     public void refreshRecyclerView(){
 
-        Collections.sort(listItineraries);
-
+        //
         ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(), listItineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
@@ -203,7 +206,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
         int id = item.getItemId();
         if (id == R.id.menu_action_refresh) {
-            this.refresh(country,city,company);
+            this.refresh(country,city);
 
             return true;
         }

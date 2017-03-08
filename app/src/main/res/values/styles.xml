@@ -39,6 +39,7 @@
     <style name="HBusTheme.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
         <item name="android:popupBackground">@drawable/custom_abc_btn_default_mtrl_shape</item>
         <item name="android:dropDownSelector">@color/colorPrimary</item>
+        <item name="android:icon">@drawable/ic_alarm_white_48dp</item>
     </style>
 
     <style name="ActionBarTabStyle" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">

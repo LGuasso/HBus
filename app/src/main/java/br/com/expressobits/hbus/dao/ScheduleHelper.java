@@ -254,8 +254,8 @@ class ScheduleHelper {
     public static List<Itinerary> getSearchableItineraries(SQLiteDatabase db,String searchName){
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         String where = ItineraryContract.Itinerary.COLUMN_NAME_NAME+" LIKE ?";
-        String arguments[] = {searchName};
-        String orderBy = ItineraryContract.Itinerary.COLUMN_NAME_NAME+" COLLATE NOCASE ASC";
+        String arguments[] = {searchName+"%"};
+        //String orderBy = ItineraryContract.Itinerary.COLUMN_NAME_NAME+" COLLATE NOCASE ASC";
         Cursor c;
         c = db.query(
                 ItineraryContract.Itinerary.TABLE_NAME,
@@ -264,7 +264,7 @@ class ScheduleHelper {
                 arguments,
                 null,
                 null,
-                orderBy);
+                null);
         while(c.moveToNext()){
             itineraries.add(cursorToItinerary(c));
         }

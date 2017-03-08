@@ -52,7 +52,7 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int HEADER = 0;
     private final int GET_STARTED_TIP = 1;
     private final int NEWS = 2;
-    private final int ITINERARY = 3;
+    private final int BOOKMARKEDITINERARY = 3;
 
     public ItemHomeAdapter(Context context, List<Object> list){
         this.context = context;
@@ -77,7 +77,7 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 View viewNews = inflater.inflate(R.layout.item_news, viewGroup, false);
                 viewHolder = new NewsViewHolder(viewNews);
                 break;
-            case ITINERARY:
+            case BOOKMARKEDITINERARY:
                 View viewItinerary = inflater.inflate(R.layout.item_bookmarked_itinerary, viewGroup, false);
                 viewHolder = new BookmarkedItineraryViewHolder(viewItinerary);
                 break;
@@ -98,7 +98,7 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }else if (items.get(position) instanceof News) {
             return NEWS;
         }else if (items.get(position) instanceof Itinerary) {
-            return ITINERARY;
+            return BOOKMARKEDITINERARY;
         }
         return -1;
     }
@@ -119,7 +119,7 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 NewsViewHolder newsViewHolder = (NewsViewHolder) viewHolder;
                 configureNewsViewHolder(newsViewHolder, position);
                 break;
-            case ITINERARY:
+            case BOOKMARKEDITINERARY:
                 BookmarkedItineraryViewHolder bookmarkedItineraryViewHolder = (BookmarkedItineraryViewHolder) viewHolder;
                 configureBookmarkedItineraryViewHolder(bookmarkedItineraryViewHolder, position);
                 break;

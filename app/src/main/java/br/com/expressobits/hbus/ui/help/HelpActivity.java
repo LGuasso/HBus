@@ -130,6 +130,10 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.linearLayoutDeveloperProfile:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/Rafinha2108")));
                 break;
+
+            case R.id.linearLayoutImagesAndIconsProfile:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.flaticon.com/authors/freepik")));
+                break;
         }
     }
 }

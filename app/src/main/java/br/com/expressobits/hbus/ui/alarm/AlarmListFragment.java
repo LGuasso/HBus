@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -32,7 +33,7 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
 
     private RecyclerView recyclerViewAlarms;
     private RelativeLayout relativeLayoutEmptyState;
-    private List<Alarm> alarmList;
+    private List<Alarm> alarmList = new ArrayList<>();
 
 
     public AlarmListFragment() {
@@ -87,10 +88,10 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     @Override
     public void onResume() {
         updateListAlarms(getActivity());
+        updateRecyclerViewAlarms();
         if(alarmList.size()>0){
             recyclerViewAlarms.setVisibility(View.VISIBLE);
             relativeLayoutEmptyState.setVisibility(View.INVISIBLE);
-            updateRecyclerViewAlarms();
         }else {
             recyclerViewAlarms.setVisibility(View.INVISIBLE);
             relativeLayoutEmptyState.setVisibility(View.VISIBLE);

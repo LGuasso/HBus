@@ -177,5 +177,8 @@
     <string name="search_for_your_favorite">Search for your favorite itinerary and check that it always appears on the main screen.</string>
     <string name="common_tips">Tips</string>
     <string name="alarm_list_there_is_no_alarm">There is no alarm</string>
+    <string name="developer_name">Rafael Morais Correa</string>
+    <string name="images_and_icons">Images and icons</string>
+    <string name="images_and_icons_name">Icon made by Freepik from www.flaticon.com</string>
 
 </resources>

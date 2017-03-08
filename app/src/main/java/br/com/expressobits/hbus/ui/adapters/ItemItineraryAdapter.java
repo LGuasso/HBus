@@ -9,13 +9,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.adapters.viewholder.HeaderViewHolder;
+import br.com.expressobits.hbus.ui.model.Header;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
@@ -23,45 +24,90 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
  * @author Rafael Correa
  * @since 13/08/15.
  */
-public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdapter.ItineraryViewHolder> {
+public class ItemItineraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<Itinerary> listItineraries;
+    private final List<Object> items;
     private final LayoutInflater layoutInflater;
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
     private final BookmarkItineraryDAO dao;
 
-    public ItemItineraryAdapter(Context context, List<Itinerary> listItineraries) {
-        this.listItineraries = listItineraries;
+    private final int HEADER = 0;
+    private final int ITINERARY = 4;
+
+    public ItemItineraryAdapter(Context context, List<Object> items) {
+        this.items = items;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dao = new BookmarkItineraryDAO(context);
     }
 
     @Override
-    public ItineraryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        view = layoutInflater.inflate(R.layout.item_list_simple_itinerary,parent,false);
-        return new ItineraryViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        switch (viewType){
+            case HEADER:
+                View viewHeader = inflater.inflate(R.layout.item_header, parent, false);
+                viewHolder = new HeaderViewHolder(viewHeader);
+                break;
+            default:
+                View viewItinerary = inflater.inflate(R.layout.item_list_simple_itinerary, parent, false);
+                viewHolder = new ItineraryViewHolder(viewItinerary);
+                break;
+        }
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ItineraryViewHolder holder, int position) {
+    public int getItemViewType(int position) {
+        if (items.get(position) instanceof Header) {
+            return HEADER;
+        }else if (items.get(position) instanceof Itinerary) {
+            return ITINERARY;
+        }
+        return -1;
+    }
 
-        Itinerary itinerary = listItineraries.get(position);
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        switch (viewHolder.getItemViewType()) {
+            case HEADER:
+                HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
+                configureHeaderViewHolder(headerViewHolder, position);
+                break;
+            default:
+                ItineraryViewHolder itineraryViewHolder = (ItineraryViewHolder) viewHolder;
+                configureItineraryViewHolder(itineraryViewHolder, position);
+                break;
+        }
+    }
+
+    private void configureItineraryViewHolder(ItineraryViewHolder itineraryViewHolder, int position) {
+        Itinerary itinerary = (Itinerary)items.get(position);
         if(dao.getItinerary(itinerary.getId())!=null){
-            holder.imageViewStar.setSelected(true);
-           //holder.imageViewStar.setImageResource(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
-
+            itineraryViewHolder.imageViewStar.setSelected(true);
+            //holder.imageViewStar.setImageResource(context.getResources().getDrawable(R.drawable.ic_star_accent_24dp));
         }else {
-            holder.imageViewStar.setSelected(false);
+            itineraryViewHolder.imageViewStar.setSelected(false);
             //holder.imageViewStar.setImageResource(context.getResources().getDrawable(R.drawable.ic_star_outline_accent_24dp));
         }
-        holder.textViewCompanyName.setText(FirebaseUtils.getCompany(itinerary.getId()));
-        holder.textViewName.setText(itinerary.getName());
+        itineraryViewHolder.textViewCompanyName.setText(FirebaseUtils.getCompany(itinerary.getId()));
+        //TODO criar banco de dados e ler dados de lá routes com cores - type de onibus
+        if(itinerary.getName().contains("Seletivo")){
+            itineraryViewHolder.imageViewItineraryIconType.setBackgroundResource(R.drawable.circle_icon_itinerary_blue_500);
+        }else{
+            itineraryViewHolder.imageViewItineraryIconType.setBackgroundResource(R.drawable.circle_icon_itinerary_default);
+        }
+        itineraryViewHolder.textViewName.setText(itinerary.getName());
+    }
+
+    private void configureHeaderViewHolder(HeaderViewHolder headerViewHolder, int position) {
+        Header header = (Header) items.get(position);
+        headerViewHolder.textViewHeader.setText(header.getTextHeader());
     }
 
     @Override
     public int getItemCount() {
-        return listItineraries.size();
+        return items.size();
     }
 
     public void setRecyclerViewOnClickListenerHack(RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack){
@@ -74,13 +120,15 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<ItemItineraryAdap
         final TextView textViewName;
         final TextView textViewCompanyName;
         final ImageView imageViewStar;
+        final ImageView imageViewItineraryIconType;
 
         ItineraryViewHolder(View itemView) {
             super(itemView);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayoutItemList);
-            textViewName = (TextView) itemView.findViewById(R.id.text1);
+            textViewName = (TextView) itemView.findViewById(R.id.textViewItineraryName);
             textViewCompanyName = (TextView) itemView.findViewById(R.id.textViewCompanyName);
             imageViewStar = (ImageView) itemView.findViewById(R.id.icon);
+            imageViewItineraryIconType = (ImageView) itemView.findViewById(R.id.imageViewItineraryIconType);
             linearLayout.setOnClickListener(this);
             imageViewStar.setOnClickListener(this);
             if(textViewName.isEnabled()){
