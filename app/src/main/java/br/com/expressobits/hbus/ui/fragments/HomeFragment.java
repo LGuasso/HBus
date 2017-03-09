@@ -88,8 +88,8 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         country = FirebaseUtils.getCountry(cityId);
         cityName = FirebaseUtils.getCityName(cityId);
         pullDataItens();
-        if(((MainActivity)mCallback).getActionBar()!=null){
-            ((MainActivity)mCallback).getActionBar().setTitle(TAG);
+        if(((MainActivity)mCallback).getSupportActionBar()!=null){
+            ((MainActivity)mCallback).setActionBarTitle(getString(R.string.app_name));
         }
     }
 

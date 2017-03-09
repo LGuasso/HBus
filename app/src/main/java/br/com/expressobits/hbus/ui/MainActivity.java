@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         this.finish();
     }
 
-    private void setActionBarTitle(String title){
+    public void setActionBarTitle(String title){
         pToolbar.setTitle(title);
     }
 

@@ -22,6 +22,7 @@ import java.io.File;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.dao.SQLConstants;
+import br.com.expressobits.hbus.provider.FastTipsProvider;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.StringUtils;
 
@@ -45,6 +46,10 @@ public class DownloadScheduleActivity extends Activity implements OnPausedListen
         super.onCreate(savedInstanceState);
         loadParams();
         setContentView(R.layout.activity_download_schedule);
+
+        TextView textViewFastTip = (TextView) findViewById(R.id.textViewFastTip);
+        textViewFastTip.setText(FastTipsProvider.getRandomFastTip(this));
+
         textViewStatusLoading = (TextView) findViewById(R.id.textViewStatusLoading);
         textViewStatusMessage = (TextView) findViewById(R.id.textViewStatusMessage);
         if(updateMode){

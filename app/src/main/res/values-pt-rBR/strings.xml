@@ -181,4 +181,15 @@
     <string name="route_history_viewed_excluded">Histórico de itinerários vistos excluído</string>
     <string name="pref_summary_pause_preview_history">Não salva no histórico visualizações</string>
     <string name="pref_title_pause_preview_history">Pausa histórico de visualização</string>
+    <string name="home">Home</string>
+    <string-array name="list_fast_tips">
+        <item>No interior de ônibus com poucos passageiros, snete-se próximo ao motorista.</item>
+        <item>Evite ficar sozinho em pontos de ônibus isolados, especialmente a noite. </item>
+        <item>Sinalize com braço quando o ônibus desejado estiver se aproximando da parada.</item>
+        <item>Quando estiver próximo da parada desejada, aperte a campainha para facilitar a parada.</item>
+        <item>Evite acidentes e transtornos. Não viaje com mochilas nas costas, posicione-a na frente do seu corpo</item>
+        <item>É proibido transportar vidros, produtos inflamáveis, ácidos. Assim como não é permitido transporte de animais</item>
+        <item>Respeite os bancos preferencias. Eles são destinados a pessoas com necessidas especias, com criança de colo, gestantes e idosos.</item>
+        <item>Não jogue lixo pela janela do ônibus.</item>
+    </string-array>
 </resources>

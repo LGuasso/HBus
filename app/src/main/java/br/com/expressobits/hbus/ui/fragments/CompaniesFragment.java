@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
+import com.l4digital.fastscroll.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     private List<Company> listCompanies = new ArrayList<>();
     public static final String TAG = "CompaniesFragment";
-    private RecyclerView recyclerViewCompanies;
+    private FastScrollRecyclerView recyclerViewCompanies;
     private ProgressBar progressBar;
 
 
@@ -76,7 +77,8 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     private void initListViews(View view){
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        recyclerViewCompanies = (RecyclerView) view.findViewById(R.id.recyclerViewCompanies);
+        recyclerViewCompanies = (FastScrollRecyclerView) view.findViewById(R.id.recyclerViewCompanies);
+        recyclerViewCompanies.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewCompanies.setHasFixedSize(true);
     }
 

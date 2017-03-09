@@ -58,7 +58,7 @@ public class RecentItineraries {
     }
 
     public static void saveRecentItineraries(Context context,String id,String cityId){
-        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PrivacyPreferenceFragment.PREFERENCE_PAUSE_VIEWING_HISTORY,false)){
+        if(!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PrivacyPreferenceFragment.PREFERENCE_PAUSE_VIEWING_HISTORY,false)){
             List<String> recents = getListRecentIdItineraries(context,cityId);
             if(recents.contains(id)){
                 recents.remove(id);

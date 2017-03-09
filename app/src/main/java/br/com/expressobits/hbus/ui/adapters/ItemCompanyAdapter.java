@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.l4digital.fastscroll.FastScroller;
+
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -17,7 +19,7 @@ import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
  * @author Rafael Correa
  * @since 27/06/16
  */
-public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.CompanyViewHolder>{
+public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.CompanyViewHolder> implements FastScroller.SectionIndexer{
 
     private final List<Company> companies;
     private final LayoutInflater layoutInflater;
@@ -46,6 +48,11 @@ public class ItemCompanyAdapter extends RecyclerView.Adapter<ItemCompanyAdapter.
     @Override
     public int getItemCount() {
         return companies.size();
+    }
+
+    @Override
+    public String getSectionText(int position) {
+        return String.valueOf(companies.get(position).getName().charAt(0));
     }
 
     class CompanyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

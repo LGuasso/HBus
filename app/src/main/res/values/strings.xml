@@ -190,5 +190,17 @@
     <string name="notificates_about_a_bus">Notifications of route alarms</string>
     <string name="dialog_alert_title_confirm_clear_route_history_viewed">Are you sure you want to delete your route history?</string>
     <string name="route_history_viewed_excluded">Route history viewed excluded</string>
+    <string name="home">Home</string>
+
+    <string-array name="list_fast_tips">
+        <item>Inside a bus with few passengers, join the driver.</item>
+        <item>Avoid staying alone at isolated bus stops, especially at night.</item>
+        <item>Flag with arm when the desired bus is approaching the stop.</item>
+        <item>When you are near the desired stop, press the buzzer to make it easier to stop.</item>
+        <item>Avoid accidents and disorders. Do not travel with backpacks, position it in front of your body</item>
+        <item>It is forbidden to carry glasses, inflammable products, acids. Just as transport of animals is not allowed</item>
+        <item>Respect the banks preferences. They are intended for people with special spices, with children of color, pregnant and elderly.</item>
+        <item>Do not litter through the bus window.</item>
+    </string-array>
 
 </resources>

@@ -82,7 +82,9 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     }
 
     private void updateRecyclerViewAlarms(){
-        recyclerViewAlarms.getAdapter().notifyDataSetChanged();
+        ItemAlarmAdapter itemAlarmAdapter = new ItemAlarmAdapter(getActivity(),alarmList);
+        itemAlarmAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewAlarms.setAdapter(itemAlarmAdapter);
     }
 
     @Override
