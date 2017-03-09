@@ -4,12 +4,10 @@ package br.com.expressobits.hbus.ui.fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -63,7 +60,6 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     private RecyclerView recyclerView;
     private List<Object> items = new ArrayList<>();
     FragmentManagerListener mCallback;
-    LinearLayout linearLayoutEmptyList;
     LinearLayoutManager llmUseful;
     private String cityId;
     View view;
@@ -92,6 +88,9 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         country = FirebaseUtils.getCountry(cityId);
         cityName = FirebaseUtils.getCityName(cityId);
         pullDataItens();
+        if(((MainActivity)mCallback).getActionBar()!=null){
+            ((MainActivity)mCallback).getActionBar().setTitle(TAG);
+        }
     }
 
 
@@ -210,17 +209,12 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.fragment_itineraries, menu);
+        inflater.inflate(R.menu.menu_home_fragment, menu);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView;
         MenuItem item = menu.findItem(R.id.action_searchable_activity);
 
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ){
-            searchView = (SearchView) item.getActionView();
-        }
-        else{
-            searchView = (SearchView) MenuItemCompat.getActionView( item );
-        }
+        searchView = (SearchView) item.getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getActivity().getComponentName() ) );
         searchView.setQueryHint( getResources().getString(R.string.itinerary_search_hint) );

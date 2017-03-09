@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.l4digital.fastscroll.FastScroller;
+
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -24,7 +26,7 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
  * @author Rafael Correa
  * @since 13/08/15.
  */
-public class ItemItineraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ItemItineraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScroller.SectionIndexer{
 
     private final List<Object> items;
     private final LayoutInflater layoutInflater;
@@ -50,7 +52,7 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolder = new HeaderViewHolder(viewHeader);
                 break;
             default:
-                View viewItinerary = inflater.inflate(R.layout.item_list_simple_itinerary, parent, false);
+                View viewItinerary = inflater.inflate(R.layout.item_list_itinerary, parent, false);
                 viewHolder = new ItineraryViewHolder(viewItinerary);
                 break;
         }
@@ -112,6 +114,16 @@ public class ItemItineraryAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void setRecyclerViewOnClickListenerHack(RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack){
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
+    }
+
+    @Override
+    public String getSectionText(int position) {
+        if(items.get(position) instanceof Itinerary){
+            return String.valueOf(((Itinerary)items.get(position)).getName().charAt(0));
+        }else{
+            return "#";
+        }
+
     }
 
     class ItineraryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

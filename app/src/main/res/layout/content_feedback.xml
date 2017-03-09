@@ -4,127 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="br.com.expressobits.hbus.ui.help.FeedbackActivity"
-    tools:showIn="@layout/activity_feedback"
-    android:background="@color/white">
-
-
+    tools:showIn="@layout/activity_feedback">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp">
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:padding="@dimen/activity_horizontal_margin">
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/select_the_type_of_feedback"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/line_divider"/>
+                    android:text="@string/select_the_type_of_feedback" />
             </LinearLayout>
 
 
-
-            <android.support.v7.widget.AppCompatSpinner
+            <Spinner
                 android:id="@+id/spinner_feedback"
-                android:padding="4dp"
+                style="@style/Platform.Widget.AppCompat.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/list_feedbacks"/>
+                android:entries="@array/list_feedbacks"
+                android:padding="4dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/line_divider"/>
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edit_text_email_feedback"
-                android:lines="1"
-                android:maxLines="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/email_here"
                 android:inputType="textEmailAddress"
-                android:hint="@string/email_here"/>
+                android:lines="1"
+                android:maxLines="1" />
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edit_text_feedback"
-                android:lines="@integer/max_lines_feedback"
-                android:maxLines="@integer/max_lines_feedback"
-                android:maxLength="@integer/max_length_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/write_your_feedback_here"/>
+                android:hint="@string/write_your_feedback_here"
+                android:lines="@integer/max_lines_feedback"
+                android:maxLength="@integer/max_length_feedback"
+                android:maxLines="@integer/max_lines_feedback" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkbox_feedback_includes_system_information"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/include_system_information"/>
+                android:text="@string/include_system_information" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
+        android:id="@+id/linear_layout_send_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/colorPrimary"
-        app:cardElevation="4dp">
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary"
+        android:layout_weight="1"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:clickable="true"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/linear_layout_send_feedback"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imageView_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/ic_help_circle_white_48dp" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:clickable="true">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/imageView_help"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/ic_help_circle_white_48dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:gravity="center_horizontal"
-                android:text="@string/send_your_feedback_to_expressobits"/>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-
-
-
+            android:gravity="center_horizontal"
+            android:text="@string/send_your_feedback_to_expressobits"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </LinearLayout>

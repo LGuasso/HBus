@@ -91,4 +91,9 @@
     <string name="pref_summary_clear_history_search">Limpar histórico de pesquisas feitas neste aplicativo</string>
     <string name="pref_title_pause_search_history">Pausar histórico de pesquisa</string>
     <string name="pref_summary_pause_search_history">Não salva nenhuma pesquisa se ativado</string>
+
+    <string name="pref_title_clear_route_history_viewed">Limpar histórico de itinerários vistos</string>
+    <string name="pref_summary_clear_route_history_viewed">Limpar histórico de visualizações de itinerários feitas neste aplicativo</string>
+    <string name="pref_title_pause_viewing_history">Pause histórico de pesquisa</string>
+    <string name="pref_summary_pause_viewing_history">Não salva histórico de visualização se ativado</string>
 </resources>

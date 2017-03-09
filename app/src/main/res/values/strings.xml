@@ -14,7 +14,7 @@
     <string name="next_bus">Next bus</string>
     <string name="all_lines">All lines</string>
     <string name="itinerary_name">Itinerary Name</string>
-    <string name="delete_itinerary_with_sucess">Delete itinerary %1$s with sucess!</string>
+    <string name="delete_itinerary_with_sucess">Delete itinerary %1$s with success!</string>
     <string name="title_activity_load">Splash screen</string>
     <string name="finish">Finish</string>
     <string name="not_found">Not found</string>
@@ -38,20 +38,19 @@
     <string name="send_your_feedback_to_expressobits">Send your feedback to Expresso Bits and make best app now!</string>
     <string name="downloading_data">Downloading data for city of %1$s</string>
     <string name="include_system_information">Include system information</string>
-    <string name="send_feedback_with_sucess">Send feedback with sucess!</string>
+    <string name="send_feedback_with_sucess">Send feedback with success!</string>
     <string name="wait_a_few_minutes">Wait a few minutes</string>
     <string name="action_refresh_cities_list">Refresh cities list</string>
     <string name="title_activity_times" translatable="false">TimesActivity</string>
     <string name="action_refresh">Refresh</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="city">City</string>
     <string name="click_here_to_change">Click here to change</string>
     <string name="add_itinerary">Add itinerary</string>
     <string name="see_all_itinerary">See all itinerary</string>
     <string name="select_the_type_of_feedback">Select the type of feedback</string>
     <string name="developer">Developer</string>
-    <string name="help_warning">    Este aplicativo tem função de facilitar o acesso aos horários disponíveis nas agências de transporte da sua cidade.A Expresso Bits não se responsabiliza pelos horários!</string>
     <string-array name="list_feedbacks">
         <item>Tip</item>
         <item>Error</item>
@@ -76,8 +75,8 @@
     <string name="name">Name</string>
     <string name="alarm_name">Alarm name</string>
     <string name="action_save">Save</string>
-    <string name="add_new_alarm_with_sucess">Add new alarm with sucess!</string>
-    <string name="updated_alarm_with_sucess">Updated alarm with sucess!</string>
+    <string name="add_new_alarm_with_sucess">Add new alarm with success!</string>
+    <string name="updated_alarm_with_sucess">Updated alarm with success!</string>
     <string name="notification_alarm_ticker">Don\'t miss the %1$s</string>
     <string name="notification">Notification</string>
     <string name="notification_alarm_title_text">%1$s left ace %2$s</string>
@@ -108,7 +107,7 @@
     <!-- Strings related to login -->
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
+    <string name="permission_rationale" translatable="false">"Contacts permissions are needed for providing email
         completions."
     </string>
     <string name="updated_date">Update %1$s</string>
@@ -117,7 +116,7 @@
     <string name="sign_in_anonymously"><a href="">Continue without login</a></string>
     <string name="exit">Exit</string>
     <string name="google_sign_sucess">Google Sign In was successful!</string>
-    <string name="loading_sign_google">Loading data by Google...</string>
+    <string name="loading_sign_google">Loading data by Google…</string>
     <string name="anonymous">Anonymous</string>
     <string name="no_have_news">No have news</string>
     <string name="last_ago">Last ago %1$s</string>
@@ -131,13 +130,13 @@
     <string name="days_ago">%1$s days ago</string>
     <string name="error_load_city">error on loading city.</string>
     <string name="add_bookmark">Add bookmark</string>
-    <string name="added_bookmark_itinerary_with_sucess">Added bookmark itinerary with sucess</string>
+    <string name="added_bookmark_itinerary_with_sucess">Added bookmark itinerary with success</string>
     <string name="all_itineraries">All itineraries</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="bus_code">Bus code</string>
     <string name="business_days">Business days</string>
     <string name="city_not_found">Not found city</string>
-    <string name="feedback_was_sent_with_sucess">Feedback was sent with sucess!</string>
+    <string name="feedback_was_sent_with_sucess">Feedback was sent with success!</string>
     <string name="no_bookmarked_itinerary">No bookmarked itineraries</string>
     <string name="title_activity_choose_city">Choose city</string>
     <string name="view_all_itineraries">View all itineraries</string>
@@ -166,7 +165,7 @@
     <string name="dialog_alert_message_confirm_update">Update to get the most current version of your city time</string>
     <string name="dialog_alert_title_confirm_update">Do you want to upgrade?</string>
     <string name="download_schedule_update_message">Updating database for you…</string>
-    <string name="common_percent_download">%1$d%%</string>
+    <string name="common_percent_download" translatable="false">%1$d%%</string>
     <string name="pref_title_database_manager">Database manager</string>
     <string name="dialog_alert_title_confirm_remove_database">Do you want to remove?</string>
     <string name="dialog_alert_message_confirm_remove_database">This implies downloading the database of this city when you need to see the times again</string>
@@ -177,8 +176,19 @@
     <string name="search_for_your_favorite">Search for your favorite itinerary and check that it always appears on the main screen.</string>
     <string name="common_tips">Tips</string>
     <string name="alarm_list_there_is_no_alarm">There is no alarm</string>
-    <string name="developer_name">Rafael Morais Correa</string>
+    <string name="developer_name" translatable="false">Rafael Morais Correa</string>
     <string name="images_and_icons">Images and icons</string>
-    <string name="images_and_icons_name">Icon made by Freepik from www.flaticon.com</string>
+    <string name="images_and_icons_name">Design made by Freepik from www.flaticon.com</string>
+    <string name="feedback_failed_to_send_feedback">Failed to send feedback</string>
+    <string name="download_schedule_failed_download">Failed to download database</string>
+    <string name="alarm_notification_body">Way %1$s</string>
+    <string name="alarm_notification_reminder">Do not miss the %1$s</string>
+    <string name="alarm_notification_title">%1$s part at %2$s</string>
+    <string name="alarm_was_updated_with_sucess">Updated alarm successfully!</string>
+    <string name="help_warning">This application has the ability to facilitate access to the schedules available at the transport agencies of your city. Expresso Bits is not responsible for schedules!</string>
+    <string name="itineraries_loaded_with_sucess">Schedules were synced!</string>
+    <string name="notificates_about_a_bus">Notifications of route alarms</string>
+    <string name="dialog_alert_title_confirm_clear_route_history_viewed">Are you sure you want to delete your route history?</string>
+    <string name="route_history_viewed_excluded">Route history viewed excluded</string>
 
 </resources>

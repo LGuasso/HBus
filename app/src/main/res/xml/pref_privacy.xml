@@ -12,4 +12,13 @@
         android:title="@string/pref_title_pause_search_history"
         android:defaultValue="false"/>
 
+    <Preference
+        android:key="clear_route_history_viewed"
+        android:title="@string/pref_title_clear_route_history_viewed"
+        android:summary="@string/pref_summary_clear_route_history_viewed"/>
+
+    <CheckBoxPreference
+        android:key="pause_viewing_history"
+        android:title="@string/pref_title_pause_viewing_history"
+        android:defaultValue="false"/>
 </PreferenceScreen>

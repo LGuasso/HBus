@@ -1,22 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="br.com.expressobits.hbus.ui.fragments.ItinerariesFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:paddingTop="8dp"
+    <com.l4digital.fastscroll.FastScrollRecyclerView
         android:id="@+id/recyclerViewItineraries"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:bubbleColor="@color/colorPrimary"
+        app:bubbleTextColor="@color/white"
+        app:trackColor="@color/colorPrimary"/>
+    <!--
+        app:handleColor="#999999"
+        app:hideScrollbar="false"
+        app:showTrack="true"-->
 
-
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!--ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/progressBar"
-        android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:indeterminate="false"
-        android:visibility="invisible"/>
+        android:visibility="invisible"/-->
 
-</RelativeLayout>
+</FrameLayout>

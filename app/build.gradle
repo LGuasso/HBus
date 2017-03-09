@@ -44,6 +44,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:10.2.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.l4digital.fastscroll:fastscroll:1.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

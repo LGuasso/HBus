@@ -31,7 +31,7 @@ public class NewsReadDAO extends SQLiteOpenHelper {
     }
 
     public boolean insert(News news){
-        if(isExist(news)){
+        if(!isExist(news)){
             NewsHelper.insert(getWritableDatabase(), news);
             return true;
         }else{

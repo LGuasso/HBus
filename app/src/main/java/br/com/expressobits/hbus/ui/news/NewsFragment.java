@@ -243,7 +243,7 @@ public class NewsFragment extends Fragment{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.fragment_itineraries, menu);
+        inflater.inflate(R.menu.menu_news_fragment, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

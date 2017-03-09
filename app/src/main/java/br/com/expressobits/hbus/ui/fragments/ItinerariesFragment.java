@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +19,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+
+import com.l4digital.fastscroll.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,8 +51,8 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     private List<Object> listItineraries = new ArrayList<>();
     public static final String TAG = "ItinerariesFragment";
-    private RecyclerView recyclerViewItineraries;
-    private ProgressBar progressBar;
+    private FastScrollRecyclerView recyclerViewItineraries;
+    //private ProgressBar progressBar;
     public int lastPositionItinerary;
     private String city;
     private String country;
@@ -73,7 +73,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         if(listItineraries.size()>0){
             recyclerViewItineraries.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
+            //progressBar.setVisibility(View.INVISIBLE);
             refreshRecyclerView();
         }
         country = FirebaseUtils.getCountry(cityId);
@@ -86,19 +86,19 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     }
 
     private void initListViews(View view){
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
+        //progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        recyclerViewItineraries = (FastScrollRecyclerView) view.findViewById(R.id.recyclerViewItineraries);
+        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
+        recyclerViewItineraries.setLayoutManager(llmUseful);
         recyclerViewItineraries.setHasFixedSize(true);
     }
-
-
 
     private void addItinerary(Itinerary itinerary){
         if(itinerary.getId()!=null){
             listItineraries.add(itinerary);
         }
         if(listItineraries.size()>0){
-            progressBar.setVisibility(View.INVISIBLE);
+            //progressBar.setVisibility(View.INVISIBLE);
             recyclerViewItineraries.setVisibility(View.VISIBLE);
         }
         refreshRecyclerView();
@@ -108,7 +108,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     private void refresh(String country,String city){
         listItineraries.clear();
 
-        progressBar.setVisibility(View.VISIBLE);
+        //progressBar.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
 
         loadRecentItinerariesFromPreference();
@@ -170,7 +170,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
                                 getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
                                 Snackbar.LENGTH_LONG).show();
                     }
-
+                    recyclerViewItineraries.getAdapter().notifyDataSetChanged();
                     break;
                 case R.id.linearLayoutItemList:
                     ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
@@ -195,14 +195,13 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
-        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewItineraries.setLayoutManager(llmUseful);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.fragment_itineraries, menu);
+        inflater.inflate(R.menu.menu_itineraries_fragment, menu);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView;
         MenuItem item = menu.findItem(R.id.action_searchable_activity);

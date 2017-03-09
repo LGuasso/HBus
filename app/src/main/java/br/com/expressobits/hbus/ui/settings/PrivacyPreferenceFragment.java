@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
+import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.provider.ItinerarySearchableProvider;
+import br.com.expressobits.hbus.provider.RecentItineraries;
 
 /**
  * @author Rafael Correa
@@ -19,16 +20,19 @@ import br.com.expressobits.hbus.provider.ItinerarySearchableProvider;
  */
 public class PrivacyPreferenceFragment extends PreferenceFragment{
 
+    public static final String PREFERENCE_CLEAR_ROUTE_HISTORY_VIEWED = "clear_route_history_viewed";
+    public static final String PREFERENCE_PAUSE_VIEWING_HISTORY  = "pause_viewing_history";
     public static final String PREFERENCE_CLEAR_HISTORY_SEARCH = "clear_history_search";
     public static final String PREFERENCE_PAUSE_SEARCH_HISTORY = "pause_search_history";
+    Preference preferenceClearRouteHistoryViewed;
     Preference preferenceClearSearchHistory;
-    SwitchPreference preferencePauseSearchHistory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_privacy);
         preferenceClearSearchHistory = findPreference(PREFERENCE_CLEAR_HISTORY_SEARCH);
+        preferenceClearRouteHistoryViewed = findPreference(PREFERENCE_CLEAR_ROUTE_HISTORY_VIEWED);
         preferenceClearSearchHistory.setOnPreferenceClickListener(preference -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.dialog_alert_title_confirm_clear_search_history);
@@ -39,6 +43,20 @@ public class PrivacyPreferenceFragment extends PreferenceFragment{
                         ItinerarySearchableProvider.MODE);
                 searchRecentSuggestions.clearHistory();
                 Toast.makeText(getActivity(),getString(R.string.search_history_deleted), Toast.LENGTH_SHORT).show();
+            });
+            builder.show();
+
+            return false;
+        });
+        preferenceClearRouteHistoryViewed.setOnPreferenceClickListener(preference -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.dialog_alert_title_confirm_clear_route_history_viewed);
+            builder.setNegativeButton(android.R.string.no, null);
+            builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                String cityID = PreferenceManager.getDefaultSharedPreferences(getActivity()).
+                        getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
+                RecentItineraries.clearRecentViewItinerary(getActivity(),cityID);
+                Toast.makeText(getActivity(),getString(R.string.route_history_viewed_excluded), Toast.LENGTH_SHORT).show();
             });
             builder.show();
 

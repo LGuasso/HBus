@@ -46,6 +46,9 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         View linearLayoutSendFeedback = findViewById(R.id.linearLayoutSendFeedback);
         linearLayoutSendFeedback.setOnClickListener(this);
 
+        View linearLayoutImagesAndIconsProfile = findViewById(R.id.linearLayoutImagesAndIconsProfile);
+        linearLayoutImagesAndIconsProfile.setOnClickListener(this);
+
     }
 
     @Override
