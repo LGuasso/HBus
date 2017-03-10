@@ -193,7 +193,7 @@
     <string name="home">Home</string>
 
     <string-array name="list_fast_tips">
-        <item>Inside a bus with few passengers, join the driver.</item>
+        <item>Inside a bus with few passengers, sit next to the driver.</item>
         <item>Avoid staying alone at isolated bus stops, especially at night.</item>
         <item>Flag with arm when the desired bus is approaching the stop.</item>
         <item>When you are near the desired stop, press the buzzer to make it easier to stop.</item>
