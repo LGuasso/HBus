@@ -5,7 +5,7 @@ package br.com.expressobits.hbus.model;
  * @author Rafael Correa
  * @since 26/05/16
  */
-public class Company {
+public class Company implements Comparable<Company>{
     private String id;
     private String name;
     private String email;
@@ -64,5 +64,12 @@ public class Company {
     @Override
     public String toString() {
         return this.getName();
+    }
+
+
+    @Override
+    public int compareTo(Company company) {
+        return this.getName().compareTo(company.getName());
+
     }
 }

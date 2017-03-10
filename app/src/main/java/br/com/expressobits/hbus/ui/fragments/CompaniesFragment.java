@@ -12,9 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.l4digital.fastscroll.FastScrollRecyclerView;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -84,6 +85,7 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     private void addCompanies(List<Company> companies){
         listCompanies = companies;
+        Collections.sort(listCompanies);
         if(listCompanies.size()>0){
             progressBar.setVisibility(View.INVISIBLE);
             recyclerViewCompanies.setVisibility(View.VISIBLE);

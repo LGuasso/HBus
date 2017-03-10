@@ -4,14 +4,14 @@
     tools:context="br.com.expressobits.hbus.ui.fragments.CompaniesFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.l4digital.fastscroll.FastScrollRecyclerView
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/recyclerViewCompanies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        app:bubbleColor="@color/colorPrimary"
-        app:bubbleTextColor="@color/white"
-        app:trackColor="@color/colorPrimary"/>
+        app:fastScrollPopupBgColor="@color/colorPrimary"
+        app:fastScrollPopupTextColor="@color/white"
+        app:fastScrollThumbColor="@color/colorPrimary"/>
 
 
     <ProgressBar
