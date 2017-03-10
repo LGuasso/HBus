@@ -3,6 +3,7 @@ package br.com.expressobits.hbus.ui.adapters;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -27,7 +29,7 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
  * @author Rafael Correa
  * @since 18/10/15
  */
-public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.HolderCity> {
+public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.HolderCity> implements FastScrollRecyclerView.SectionedAdapter{
 
     private final Context context;
     private final List<City> listCities;
@@ -97,6 +99,12 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
 
     public void setRecyclerViewOnClickListenerHack(RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack) {
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
+    }
+
+    @NonNull
+    @Override
+    public String getSectionName(int position) {
+        return String.valueOf(listCities.get(position).getName().charAt(0));
     }
 
     class HolderCity extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{

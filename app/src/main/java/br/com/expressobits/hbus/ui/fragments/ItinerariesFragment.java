@@ -9,7 +9,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -52,11 +53,10 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     private List<Object> listItineraries = new ArrayList<>();
     public static final String TAG = "ItinerariesFragment";
     private FastScrollRecyclerView recyclerViewItineraries;
-    //private ProgressBar progressBar;
     public int lastPositionItinerary;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private String city;
     private String country;
-    private String company;
 
     @Nullable
     @Override
@@ -73,8 +73,9 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         if(listItineraries.size()>0){
             recyclerViewItineraries.setVisibility(View.VISIBLE);
-            //progressBar.setVisibility(View.INVISIBLE);
             refreshRecyclerView();
+        }else {
+            //TODO empty state
         }
         country = FirebaseUtils.getCountry(cityId);
         city = FirebaseUtils.getCityName(cityId);
@@ -82,6 +83,14 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     }
 
     private void initViews(View view){
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(getActivity(),R.color.colorPrimary),
+                ContextCompat.getColor(getActivity(),R.color.colorAccent));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            refresh(country,city);
+            swipeRefreshLayout.setRefreshing(false);
+        });
         initListViews(view);
     }
 
@@ -91,6 +100,9 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
         recyclerViewItineraries.setLayoutManager(llmUseful);
         recyclerViewItineraries.setHasFixedSize(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            recyclerViewItineraries.setScrollBarSize(30);
+        }
     }
 
     private void addItinerary(Itinerary itinerary){
@@ -206,12 +218,7 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
         SearchView searchView;
         MenuItem item = menu.findItem(R.id.action_searchable_activity);
 
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ){
-            searchView = (SearchView) item.getActionView();
-        }
-        else{
-            searchView = (SearchView) MenuItemCompat.getActionView( item );
-        }
+        searchView = (SearchView) item.getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getActivity().getComponentName() ) );
         searchView.setQueryHint( getResources().getString(R.string.itinerary_search_hint) );
@@ -220,16 +227,6 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        int id = item.getItemId();
-        if (id == R.id.menu_action_refresh) {
-            this.refresh(country,city);
-
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -10,12 +10,21 @@
     tools:showIn="@layout/activity_select_city"
     android:background="@color/colorPrimary">
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recyclerView_cities"
-        android:visibility="gone"
-        />
+        android:layout_height="match_parent">
+
+        <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerView_cities"
+            android:visibility="gone"
+            app:fastScrollPopupBgColor="@color/colorAccentDark"
+            app:fastScrollPopupTextColor="@color/white"
+            app:fastScrollThumbColor="@color/colorAccentDark"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:layout_width="wrap_content"

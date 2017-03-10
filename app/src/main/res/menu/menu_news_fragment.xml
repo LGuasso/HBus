@@ -5,10 +5,5 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context="br.com.expressobits.hbus.ui.MainActivity">
 
-    <item android:id="@+id/menu_action_refresh"
-        android:title="@string/action_refresh"
-        android:icon="@drawable/ic_refresh_white_24dp"
-        app:showAsAction="ifRoom"
-        android:orderInCategory="101"/>
 
 </menu>

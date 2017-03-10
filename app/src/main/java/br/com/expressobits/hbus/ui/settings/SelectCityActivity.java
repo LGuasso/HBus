@@ -5,9 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +44,10 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private List<City> cities;
     public boolean initial = false;
     public static final String TAG = "city";
-    private RecyclerView recyclerView;
+    private FastScrollRecyclerView recyclerView;
     private ProgressBar progressBar;
     private ImageView imageViewNetworkError;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private boolean starter = false;
     public static final String NOT_CITY = "not_city";
     public static final String STARTER_MODE = "starterMode";
@@ -69,10 +72,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menu_action_refresh) {
-            refresh(DEFAULT_COUNTRY);
-        }
         return false;
     }
 
@@ -84,22 +83,31 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
     private void initViews() {
         initProgressBar();
         initActionBar();
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(this,R.color.colorPrimary),
+                ContextCompat.getColor(this,R.color.colorAccent));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            refresh(DEFAULT_COUNTRY,true);
+        });
         imageViewNetworkError = (ImageView) findViewById(R.id.imageNetworkError);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_cities);
+        recyclerView = (FastScrollRecyclerView) findViewById(R.id.recyclerView_cities);
         recyclerView.setHasFixedSize(true);
         recyclerView.setSelected(true);
         recyclerView.setClickable(true);
         LinearLayoutManager llmUseful = new LinearLayoutManager(this);
-        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
         cities = new ArrayList<>();
+        ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this, cities);
+        itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerView.setAdapter(itemCityAdapter);
         //Se houver cidades no database local não haverá procura no remoto
         if(cities.size()>0){
             recyclerView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
             imageViewNetworkError.setVisibility(View.INVISIBLE);
         }else{
-            refresh(DEFAULT_COUNTRY);
+            refresh(DEFAULT_COUNTRY,false);
         }
     }
 
@@ -107,9 +115,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
      * Update recyclerview with arraylist city
      */
     private void refreshRecyclerView() {
-        ItemCityAdapter itemCityAdapter = new ItemCityAdapter(this, cities);
-        itemCityAdapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerView.setAdapter(itemCityAdapter);
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     private void initProgressBar() {
@@ -176,13 +182,17 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
      * Add city in recycler view adapter
      * @param city city object from database
      */
-    private void addCity(City city){
+    private void addCity(City city,boolean swipeOrigin){
         if(!cities.contains(city)){
             cities.add(city);
             refreshRecyclerView();
             if(cities.size()>0){
-                progressBar.setVisibility(View.INVISIBLE);
-                recyclerView.setVisibility(View.VISIBLE);
+                if(swipeOrigin){
+                    swipeRefreshLayout.setRefreshing(false);
+                }else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
@@ -198,10 +208,12 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
      * Update cities of recyclerview with data from firebase realtime database
      * @param country Region with country
      */
-    public void refresh(final String country){
+    public void refresh(final String country,final boolean swipeOrigin){
         cities.clear();
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
+        if(!swipeOrigin){
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
         FirebaseDatabase database= FirebaseDatabase.getInstance();
         DatabaseReference citiesTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
         DatabaseReference countryRef = citiesTableRef.child(country);
@@ -211,7 +223,7 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
                 for (DataSnapshot dataSnapshotCity : dataSnapshot.getChildren()) {
                     City city = dataSnapshotCity.getValue(City.class);
                     city.setId(FirebaseUtils.getIdCity(country, city.getName()));
-                    addCity(city);
+                    addCity(city,swipeOrigin);
                 }
             }
 
