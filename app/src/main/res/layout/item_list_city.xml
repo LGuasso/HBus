@@ -21,7 +21,7 @@
 
         <ImageView
             android:layout_centerInParent="true"
-            android:id="@+id/imageView_city"
+            android:id="@+id/imageViewCityPhoto"
             android:src="@drawable/default_city"
             android:layout_width="match_parent"
             android:layout_height="144dp"
@@ -41,10 +41,11 @@
                 android:layout_height="wrap_content">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/circleImageViewCityFlag"
+                    android:id="@+id/circleImageViewCityCoatsOfArms"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
+                    app:civ_fill_color="@color/white"
                     android:src="@drawable/ic_refresh_white_48dp"/>
 
                 <LinearLayout

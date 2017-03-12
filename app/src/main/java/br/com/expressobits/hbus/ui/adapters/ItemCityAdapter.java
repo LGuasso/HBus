@@ -61,33 +61,32 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
         if(listCities.get(position).isActived() || PreferenceManager.getDefaultSharedPreferences(context).getBoolean("no_actived_items",false)){
             holder.cardView.setOnClickListener(holder);
         }else {
-            holder.imageViewCity.setColorFilter(ContextCompat.getColor(context,R.color.md_blue_gray_500), PorterDuff.Mode.MULTIPLY);
+            holder.imageViewCityPhoto.setColorFilter(ContextCompat.getColor(context,R.color.md_blue_gray_500), PorterDuff.Mode.MULTIPLY);
         }
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
-        StorageReference tableRef = storageRef.child(FirebaseUtils.CITY_TABLE);
+        StorageReference imageRef = storageRef.child(FirebaseUtils.REF_STORAGE_HBUS_IMAGE);
+        StorageReference tableRef = imageRef.child(FirebaseUtils.CITY_TABLE);
         StorageReference countryRef = tableRef.child(listCities.get(position).getCountry());
-        StorageReference cityRef = countryRef.child(listCities.get(position).getName().toLowerCase().replace(" ","_")+FirebaseUtils.EXTENSION_IMAGE);
+        StorageReference cityRef = countryRef.child(listCities.get(position).getName());
 
-        StorageReference cityFlagRef = countryRef.child(listCities.get(position).getName().toLowerCase().replace(" ","_")
-                +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
+        StorageReference cityProfileRef = cityRef.child(FirebaseUtils.IMAGE_CITY_PHOTO_FILE +FirebaseUtils.EXTENSION_IMAGE_JPG);
+        StorageReference cityFlagRef = cityRef.child(FirebaseUtils.IMAGE_CITY_COATS_OF_ARMS_FILE +FirebaseUtils.EXTENSION_IMAGE_PNG);
 
-
-        cityRef.getDownloadUrl().addOnSuccessListener(uri -> {
+        cityProfileRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
             Picasso.with(ItemCityAdapter.this.context).load(uri)
                     .placeholder(R.drawable.default_city)
-                    .into(holder.imageViewCity);
+                    .into(holder.imageViewCityPhoto);
         });
-
 
         cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
             Picasso.with(ItemCityAdapter.this.context).load(uri)
                     .error(R.drawable.ic_flag_white_48dp)
-                    .placeholder(R.drawable.ic_refresh_white_48dp)
-                    .into(holder.imageViewPhoto);
+                    .placeholder(R.drawable.ic_shield_grey600_24dp)
+                    .into(holder.imageViewCityCoatsOfArms);
         });
 
     }
@@ -110,16 +109,16 @@ public class ItemCityAdapter extends RecyclerView.Adapter<ItemCityAdapter.Holder
     class HolderCity extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         final TextView textViewCity;
-        final ImageView imageViewCity;
+        final ImageView imageViewCityPhoto;
         final CardView cardView;
-        final ImageView imageViewPhoto;
+        final ImageView imageViewCityCoatsOfArms;
 
         HolderCity(View itemView) {
             super(itemView);
             textViewCity = (TextView) itemView.findViewById(R.id.textView_city_name);
-            imageViewCity = (ImageView) itemView.findViewById(R.id.imageView_city);
+            imageViewCityPhoto = (ImageView) itemView.findViewById(R.id.imageViewCityPhoto);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
-            imageViewPhoto = (ImageView) itemView.findViewById(R.id.circleImageViewCityFlag);
+            imageViewCityCoatsOfArms = (ImageView) itemView.findViewById(R.id.circleImageViewCityCoatsOfArms);
         }
 
 

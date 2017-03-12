@@ -148,4 +148,8 @@ public class StringUtils {
     public static String getNameDatabase(String country, String name, int databaseVersion) {
         return ((SQLConstants.DATABASE_PATTERN_NAME+"_"+country.replace("/","_")+"_"+name.replace(" ","_")+"_"+databaseVersion+".db").toLowerCase());
     }
+
+    public static String getNameDatabaseZipFile(String country, String name, int databaseVersion) {
+        return getNameDatabase(country,name,databaseVersion)+".zip";
+    }
 }

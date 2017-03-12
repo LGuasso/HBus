@@ -17,14 +17,25 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.dao.SQLConstants;
 import br.com.expressobits.hbus.provider.FastTipsProvider;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
+import br.com.expressobits.hbus.util.ZipUtils;
 import br.com.expressobits.hbus.utils.StringUtils;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static br.com.expressobits.hbus.util.ZipUtils.unzip;
 
 public class DownloadScheduleActivity extends Activity implements OnPausedListener<FileDownloadTask.TaskSnapshot>,OnProgressListener<FileDownloadTask.TaskSnapshot>,OnFailureListener,OnSuccessListener<FileDownloadTask.TaskSnapshot> {
 
@@ -40,6 +51,9 @@ public class DownloadScheduleActivity extends Activity implements OnPausedListen
     public static final String STARTER_MODE = "starterMode";
     public static final String UPDATE_MODE = "updateMode";
     public static final String DATABASE_LAST_UPDATE_PREFERENCE_KEY = "br.com.expressobits.hbus.database_last_update";
+    private File zipFile;
+    private File localFile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +78,14 @@ public class DownloadScheduleActivity extends Activity implements OnPausedListen
         StorageReference storageRef = storage.getReference();
         StorageReference fileRef = storageRef.child(SQLConstants.DATABASE_PATTERN_NAME).
                 child(country).child(city).child(
-                StringUtils.getNameDatabase(country,city,DATABASE_VERSION));
+                StringUtils.getNameDatabaseZipFile(country,city,DATABASE_VERSION));
 
-        File localFile = getDatabasePath(
+        zipFile = getDatabasePath(
+                StringUtils.getNameDatabaseZipFile(country,city,DATABASE_VERSION));
+
+        localFile = getDatabasePath(
                 StringUtils.getNameDatabase(country,city,DATABASE_VERSION));
-        FileDownloadTask fileDownloadTask = fileRef.getFile(localFile);
+        FileDownloadTask fileDownloadTask = fileRef.getFile(zipFile);
         fileDownloadTask.addOnSuccessListener(this);
         fileDownloadTask.addOnFailureListener(this);
         fileDownloadTask.addOnProgressListener(this);
@@ -98,6 +115,14 @@ public class DownloadScheduleActivity extends Activity implements OnPausedListen
 
     @Override
     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+        try {
+            ZipUtils.unzip(zipFile,localFile);
+            if(zipFile.delete()){
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         finishTask();
     }
 

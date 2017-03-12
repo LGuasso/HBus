@@ -6,10 +6,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.Calendar;
-import java.util.TimeZone;
 
-import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.ui.notification.NotificationsAlarm;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
 import br.com.expressobits.hbus.utils.TimeUtils;
@@ -36,8 +35,8 @@ public class AlarmService extends IntentService{
 
     private void sendNotification(Alarm alarm) {
         Log.d(TAG,"trying ntification "+alarm.getTimeAlarm());
-        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Calendar cAlarm = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        Calendar c = Calendar.getInstance();
+        Calendar cAlarm = Calendar.getInstance();
 
 
         int hour = TimeUtils.getHour(alarm.getTimeAlarm());

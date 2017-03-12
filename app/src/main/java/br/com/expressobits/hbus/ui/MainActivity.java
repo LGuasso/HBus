@@ -136,14 +136,15 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
-        StorageReference tableRef = storageRef.child(FirebaseUtils.CITY_TABLE);
+        StorageReference imageRef = storageRef.child(FirebaseUtils.REF_STORAGE_HBUS_IMAGE);
+        StorageReference tableRef = imageRef.child(FirebaseUtils.CITY_TABLE);
         StorageReference countryRef = tableRef.child(country);
-        StorageReference cityRef = countryRef.child(city.toLowerCase().replace(" ","_")+FirebaseUtils.EXTENSION_IMAGE);
+        StorageReference cityRef = countryRef.child(FirebaseUtils.getCityName(cityId));
 
-        StorageReference cityFlagRef = countryRef.child(city.toLowerCase().replace(" ","_")
-                +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
+        StorageReference cityProfileRef = cityRef.child(FirebaseUtils.IMAGE_CITY_PHOTO_FILE +FirebaseUtils.EXTENSION_IMAGE_JPG);
+        StorageReference cityFlagRef = cityRef.child(FirebaseUtils.IMAGE_CITY_COATS_OF_ARMS_FILE +FirebaseUtils.EXTENSION_IMAGE_PNG);
 
-        cityRef.getDownloadUrl().addOnSuccessListener(uri -> {
+        cityProfileRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
             Picasso.with(this).load(uri)
                     .placeholder(R.drawable.default_city)
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
 
             Picasso.with(this).load(uri)
                     .error(R.drawable.ic_flag_white_48dp)
-                    .placeholder(R.drawable.ic_refresh_white_48dp)
+                    .placeholder(R.drawable.ic_shield_grey600_24dp)
                     .into(circleImageViewCityProfile);
         });
 
