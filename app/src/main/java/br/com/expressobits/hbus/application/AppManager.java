@@ -3,7 +3,6 @@ package br.com.expressobits.hbus.application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
@@ -21,6 +20,7 @@ import br.com.expressobits.hbus.ui.settings.DataSyncPreferenceFragment;
 import br.com.expressobits.hbus.utils.StringUtils;
 
 import static android.R.string.no;
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static br.com.expressobits.hbus.ui.DownloadScheduleActivity.DATABASE_LAST_UPDATE_PREFERENCE_KEY;
 import static br.com.expressobits.hbus.ui.DownloadScheduleActivity.DATABASE_VERSION;
 
@@ -35,7 +35,26 @@ public class AppManager {
 
     private static int countCloseTimesActivity = 0;
 
+
+    private static String COUNT_OPEN_APP = "counts_beta_program";
+
+    public static void countsOpenApp(Context context){
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(context);
+        int counts = sharedPreferences.getInt(COUNT_OPEN_APP,0);
+        counts++;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(COUNT_OPEN_APP,counts);
+        editor.apply();
+    }
+
+    public static int getOpenAppCount(Context context){
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(context);
+        int counts = sharedPreferences.getInt(COUNT_OPEN_APP,0);
+        return counts;
+    }
+
     static boolean countTimesActivity(Context context){
+        //TODO remote config
         if(countCloseTimesActivity>=context.getResources().getInteger(R.integer.counts_close_times_activity)){
             countCloseTimesActivity = 0;
             return true;
@@ -83,13 +102,13 @@ public class AppManager {
      */
     public static void verifyUpdatedDatabase(Context context,String country, String city){
 
-        long lastSync = PreferenceManager.getDefaultSharedPreferences(context).
+        long lastSync = getDefaultSharedPreferences(context).
                 getLong(DataSyncPreferenceFragment.LAST_SYNC_PREFERENCE_KEY,0L);
-        long syncFrequency = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).
+        long syncFrequency = Long.parseLong(getDefaultSharedPreferences(context).
                 getString(DataSyncPreferenceFragment.SYNC_FREQUENCY_PREFERENCE_KEY,DataSyncPreferenceFragment.defaultSyncFrequency));
         if(System.currentTimeMillis()-lastSync>syncFrequency){
             Log.i(TAG,"Verify database update...");
-            SharedPreferences lastSyncSharedPreferences = PreferenceManager.
+            SharedPreferences lastSyncSharedPreferences =
                     getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = lastSyncSharedPreferences.edit();
             editor.putLong(DataSyncPreferenceFragment.LAST_SYNC_PREFERENCE_KEY,System.currentTimeMillis());
@@ -124,5 +143,8 @@ public class AppManager {
         }
 
     }
+
+
+
 
 }

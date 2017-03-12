@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import br.com.expressobits.hbus.BuildConfig;
 import br.com.expressobits.hbus.dao.CityContract;
 import br.com.expressobits.hbus.dao.ItineraryContract;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
@@ -20,14 +21,28 @@ public class FirebaseAnalyticsManager {
      * https://support.google.com/firebase/answer/6317508?hl=en&ref_topic=6317484
      */
     public static void registerEventItinerary(Context context, String country, String city, String company, String itinerary) {
-        // Obtain the FirebaseAnalytics instance.
-        com.google.firebase.analytics.FirebaseAnalytics mFirebaseAnalytics;
-        mFirebaseAnalytics = com.google.firebase.analytics.FirebaseAnalytics.getInstance(context);
-        Bundle bundle = new Bundle();
-        bundle.putString(com.google.firebase.analytics.FirebaseAnalytics.Param.ITEM_ID, country+"/"+city+"/"+company+"/"+itinerary);
-        bundle.putString(com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE, ItineraryContract.Itinerary.TABLE_NAME);
-        mFirebaseAnalytics.logEvent(com.google.firebase.analytics.FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        if(!BuildConfig.DEBUG){
+            // Obtain the FirebaseAnalytics instance.
+            com.google.firebase.analytics.FirebaseAnalytics mFirebaseAnalytics;
+            mFirebaseAnalytics = com.google.firebase.analytics.FirebaseAnalytics.getInstance(context);
+            Bundle bundle = new Bundle();
+            bundle.putString(com.google.firebase.analytics.FirebaseAnalytics.Param.ITEM_ID, country+"/"+city+"/"+company+"/"+itinerary);
+            bundle.putString(com.google.firebase.analytics.FirebaseAnalytics.Param.CONTENT_TYPE, ItineraryContract.Itinerary.TABLE_NAME);
+            mFirebaseAnalytics.logEvent(com.google.firebase.analytics.FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        }
     }
+
+    public static void registerEventSearchItinerary(Context context, String country, String city, String searchTerm) {
+        if(!BuildConfig.DEBUG){
+            // Obtain the FirebaseAnalytics instance.
+            FirebaseAnalytics mFirebaseAnalytics;
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.SEARCH_TERM, country+"/"+city+"/"+searchTerm);
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH, bundle);
+        }
+    }
+
 
 
     /**
@@ -36,30 +51,36 @@ public class FirebaseAnalyticsManager {
      * @param city  Name of city
      */
     public static void registerEventCity(Context context,String country, String city) {
-        // Obtain the FirebaseAnalytics instance.
-        FirebaseAnalytics mFirebaseAnalytics;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, FirebaseUtils.getIdCity(country,city));
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, city);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, CityContract.City.TABLE_NAME);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        if(!BuildConfig.DEBUG){
+            // Obtain the FirebaseAnalytics instance.
+            FirebaseAnalytics mFirebaseAnalytics;
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, FirebaseUtils.getIdCity(country,city));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, city);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, CityContract.City.TABLE_NAME);
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        }
     }
 
 
     public static void registerEventTutorialBegin(Context context) {
-        // Obtain the FirebaseAnalytics instance.
-        FirebaseAnalytics mFirebaseAnalytics;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-        Bundle bundle = new Bundle();
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN,bundle);
+        if(!BuildConfig.DEBUG){
+            // Obtain the FirebaseAnalytics instance.
+            FirebaseAnalytics mFirebaseAnalytics;
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+            Bundle bundle = new Bundle();
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN,bundle);
+        }
     }
 
     public static void registerEventTutorialComplete(Context context) {
-        // Obtain the FirebaseAnalytics instance.
-        FirebaseAnalytics mFirebaseAnalytics;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-        Bundle bundle = new Bundle();
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_COMPLETE,bundle);
+        if(!BuildConfig.DEBUG){
+            // Obtain the FirebaseAnalytics instance.
+            FirebaseAnalytics mFirebaseAnalytics;
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+            Bundle bundle = new Bundle();
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.TUTORIAL_COMPLETE,bundle);
+        }
     }
 }

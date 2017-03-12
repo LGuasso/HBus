@@ -14,21 +14,24 @@ import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
  * @since 06/03/17
  */
 
-public class GetStartedTipViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class HotTipViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
-    public Button buttonSeeItineraries;
     public TextView textViewTitle;
     public TextView textViewMessage;
     public ImageView imageView;
+    public Button button1;
+    public Button button2;
 
-    public GetStartedTipViewHolder(View itemView) {
+    public HotTipViewHolder(View itemView) {
         super(itemView);
-        buttonSeeItineraries = (Button) itemView.findViewById(R.id.cardViewEmptyStateButton);
+        button1 = (Button) itemView.findViewById(R.id.buttonHotTip1);
+        button2 = (Button) itemView.findViewById(R.id.buttonHotTip2);
         textViewTitle = (TextView) itemView.findViewById(R.id.cardViewEmptyStateTextViewTitle);
         textViewMessage = (TextView) itemView.findViewById(R.id.cardViewEmptyStateTextViewMessage);
         imageView = (ImageView) itemView.findViewById(R.id.cardViewEmptyStateImageView);
-        buttonSeeItineraries.setOnClickListener(this);
+        button1.setOnClickListener(this);
+        button2.setOnClickListener(this);
     }
 
     public void setRecyclerViewOnClickListenerHack(RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack) {

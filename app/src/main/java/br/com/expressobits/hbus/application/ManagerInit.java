@@ -24,6 +24,7 @@ public class ManagerInit {
 
     public static void manager(final Context context){
 
+
         boolean isTour = getDefaultSharedPreferences(context).getBoolean(TourActivity.TAG, true);
 
         if(isTour){

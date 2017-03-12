@@ -4,6 +4,8 @@ package br.com.expressobits.hbus.ui.fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -36,13 +38,15 @@ import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
 import br.com.expressobits.hbus.dao.NewsReadDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.News;
+import br.com.expressobits.hbus.provider.HotTipsProvider;
 import br.com.expressobits.hbus.ui.FragmentManagerListener;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemHomeAdapter;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
-import br.com.expressobits.hbus.ui.model.GetStartedTip;
+import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.model.Header;
+import br.com.expressobits.hbus.ui.model.HotTip;
 import br.com.expressobits.hbus.ui.news.NewsDetailsActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
@@ -189,15 +193,19 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         items.clear();
         if(getBookmarkedItineraries()){
             getLastNews();
+            if(HotTipsProvider.isViewRateUs(getActivity())){
+                items.add(0,HotTipsProvider.getRateUsHotTip(getActivity()));
+                items.add(0,headerTips);
+            }else if(HotTipsProvider.isViewBetaProgram(getActivity())){
+                items.add(0,HotTipsProvider.getBetaProgramHotTip(getActivity()));
+                items.add(0,headerTips);
+            }
+
         }else{
             items.add(headerTips);
-            items.add(new GetStartedTip(
-                    getString(R.string.get_started),
-                    getString(R.string.search_for_your_favorite),
-                    R.drawable.ic_big_bus,
-                    getString(R.string.itineraries)
-            ));
+            items.add(HotTipsProvider.getGetStartedHotTip(getActivity()));
         }
+
         updateListViews();
 
     }
@@ -239,16 +247,6 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
                         BookmarkItineraryDAO dao = new BookmarkItineraryDAO(getActivity());
                         Itinerary itinerary1 = dao.getItinerary(selectedItem);
                         dao.removeFavorite(itinerary1);
-                        if(dao.getItineraries(cityId).size()<1){
-                            items.remove(headerBookmark);
-                            items.add(0,new GetStartedTip(
-                                    getString(R.string.get_started),
-                                    getString(R.string.search_for_your_favorite),
-                                    R.drawable.ic_big_bus,
-                                    getString(R.string.itineraries)
-                            ));
-                            items.add(0,headerTips);
-                        }
                         items.remove(itinerary);
                         updateListViews();
                         String result = getActivity().getResources().getString(R.string.delete_itinerary_with_sucess, itinerary1.getName());
@@ -267,8 +265,64 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
             Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
             intent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,news.getId());
             getContext().startActivity(intent);
-        }else if(items.get(position) instanceof GetStartedTip){
-            mCallback.addFragment(ItinerariesFragment.TAG);
+        }else if(items.get(position) instanceof HotTip){
+            HotTip hottip = (HotTip)(items.get(position));
+            int type = hottip.getType();
+            if(type == HotTipsProvider.TYPE_GETSTARTED){
+                mCallback.addFragment(ItinerariesFragment.TAG);
+            }else if(type == HotTipsProvider.TYPE_BETA_PROGRAM){
+                if(view.getId() == R.id.buttonHotTip1){
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.beta_community_link))));
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(HotTipsProvider.DISMISS_VIEW_BETA_PROGRAM,false);
+                    editor.apply();
+                    items.remove(position);
+                    items.remove(0);
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }else if(view.getId() == R.id.buttonHotTip2) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.dialog_alert_title_confirm_no_beta);
+                    builder.setNegativeButton(android.R.string.no, null);
+                    builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(HotTipsProvider.DISMISS_VIEW_BETA_PROGRAM, false);
+                        editor.apply();
+                        items.remove(position);
+                        items.remove(headerTips);
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    });
+                    builder.show();
+                }
+
+            }else if(type == HotTipsProvider.TYPE_RATE_US){
+                if(view.getId() == R.id.buttonHotTip1){
+                    HelpActivity.openAppInPlayStore(getActivity());
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(HotTipsProvider.DISMISS_VIEW_RATE_US,false);
+                    editor.apply();
+                    items.remove(position);
+                    items.remove(0);
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }else if(view.getId() == R.id.buttonHotTip2) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.dialog_alert_title_confirm_rate_us);
+                    builder.setNegativeButton(android.R.string.no,null);
+                    builder.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(HotTipsProvider.DISMISS_VIEW_RATE_US,false);
+                        editor.apply();
+                        items.remove(position);
+                        items.remove(headerTips);
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    });
+                    builder.show();
+                }
+            }
+
         }
 
     }

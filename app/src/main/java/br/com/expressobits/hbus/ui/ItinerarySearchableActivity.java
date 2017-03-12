@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
 import br.com.expressobits.hbus.application.AdManager;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
@@ -110,6 +111,7 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
         itinerariesSearchList.clear();
         if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
             String q = intent.getStringExtra(SearchManager.QUERY);
+            FirebaseAnalyticsManager.registerEventSearchItinerary(this,country,city,q);
             if(getSupportActionBar()!=null){
                 getSupportActionBar().setTitle(q);
             }
