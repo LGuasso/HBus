@@ -108,7 +108,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
                         0,
                         getString(R.string.tour_title_palm),
                         getString(R.string.tour_subtitle_palm),
-                        R.drawable.ic_bus_white_48dp)
+                        R.drawable.ic_big_bus)
         );
         fragments.add(
                 PagerFragment.newInstance(
@@ -116,7 +116,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
                         1,
                         getString(R.string.tour_title_update),
                         getString(R.string.tour_subtitle_update),
-                        R.drawable.ic_refresh_white_48dp)
+                        R.drawable.ic_antenna)
         );
         fragments.add(
                 PagerFragment.newInstance(
@@ -124,7 +124,7 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
                         2,
                         getString(R.string.tour_title_feedback),
                         getString(R.string.tour_subtitle_feedback),
-                        R.drawable.ic_information_white_48dp)
+                        R.drawable.ic_crosswalk)
         );
         defaultPagerAdapter = new ContentPagerAdapter(getSupportFragmentManager(), fragments);
         defaultViewpager.setAdapter(defaultPagerAdapter);

@@ -1,7 +1,6 @@
 package br.com.expressobits.hbus.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -23,15 +22,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -42,15 +35,14 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AdManager;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.messaging.ClickActionHelper;
-import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
 import br.com.expressobits.hbus.ui.fragments.HomeFragment;
-import br.com.expressobits.hbus.ui.fragments.ScheduleFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
+import br.com.expressobits.hbus.ui.fragments.ScheduleFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
 import br.com.expressobits.hbus.ui.news.NewsFragment;
@@ -91,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
     private TextView textViewCityName;
     private String country;
     private String city;
-    private String company;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         super.onCreate(savedInstanceState);
         checkIntent(getIntent());
         setContentView(R.layout.activity_main);
-
         loadParams();
+        AppManager.verifyUpdatedDatabase(this,country,city);
         if (savedInstanceState == null) {
             Fragment fragment = new HomeFragment();
             if (findViewById(R.id.framelayout_main) != null) {
@@ -128,34 +119,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
         city = FirebaseUtils.getCityName(cityId);
         country = FirebaseUtils.getCountry(cityId);
-        try {
-            Log.e(TAG,country);
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference cityTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
-            DatabaseReference countryRef = cityTableRef.child(country);
-            DatabaseReference cityRef = countryRef.child(city);
-            cityRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    City city = dataSnapshot.getValue(City.class);
-                    company = city.getCompanyDefault();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }catch (Exception e){
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(SelectCityActivity.TAG);
-            editor.apply();
-
-            Toast.makeText(this,getString(R.string.error_load_city),Toast.LENGTH_LONG).show();
-            startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
-        }
-
     }
 
     @Override
@@ -173,20 +136,30 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
-        StorageReference tableRef = storageRef.child(FirebaseUtils.CITY_TABLE);
+        StorageReference imageRef = storageRef.child(FirebaseUtils.REF_STORAGE_HBUS_IMAGE);
+        StorageReference tableRef = imageRef.child(FirebaseUtils.CITY_TABLE);
         StorageReference countryRef = tableRef.child(country);
-        StorageReference cityRef = countryRef.child(city.toLowerCase().replace(" ","_")+FirebaseUtils.EXTENSION_IMAGE);
+        StorageReference cityRef = countryRef.child(FirebaseUtils.getCityName(cityId));
 
-        StorageReference cityFlagRef = countryRef.child(city.toLowerCase().replace(" ","_")
-                +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
+        StorageReference cityProfileRef = cityRef.child(FirebaseUtils.IMAGE_CITY_PHOTO_FILE +FirebaseUtils.EXTENSION_IMAGE_JPG);
+        StorageReference cityFlagRef = cityRef.child(FirebaseUtils.IMAGE_CITY_COATS_OF_ARMS_FILE +FirebaseUtils.EXTENSION_IMAGE_PNG);
 
-        cityRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(MainActivity.this).load(uri)
-                .into(imageViewCity));
+        cityProfileRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
-        cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(MainActivity.this).load(uri)
-                .placeholder(R.drawable.ic_flag_white_48dp)
-                .error(R.drawable.ic_flag_white_48dp)
-                .into(circleImageViewCityProfile));
+            Picasso.with(this).load(uri)
+                    .placeholder(R.drawable.default_city)
+                    .into(imageViewCity);
+        });
+
+
+        cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> {
+
+            Picasso.with(this).load(uri)
+                    .error(R.drawable.ic_flag_white_48dp)
+                    .placeholder(R.drawable.ic_shield_grey600_24dp)
+                    .into(circleImageViewCityProfile);
+        });
+
     }
 
 
@@ -399,7 +372,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         outState.putString(ScheduleFragment.ARGS_COUNTRY, country);
         outState.putString(ScheduleFragment.ARGS_CITY, city);
-        outState.putString(ScheduleFragment.ARGS_COMPANY, company);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
@@ -428,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         this.finish();
     }
 
-    private void setActionBarTitle(String title){
+    public void setActionBarTitle(String title){
         pToolbar.setTitle(title);
     }
 

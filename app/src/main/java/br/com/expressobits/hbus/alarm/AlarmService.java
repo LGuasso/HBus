@@ -7,8 +7,8 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.ui.notification.NotificationsAlarm;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
 import br.com.expressobits.hbus.utils.TimeUtils;

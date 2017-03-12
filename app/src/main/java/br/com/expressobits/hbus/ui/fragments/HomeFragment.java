@@ -4,12 +4,10 @@ package br.com.expressobits.hbus.ui.fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -36,13 +33,15 @@ import java.util.List;
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
+import br.com.expressobits.hbus.dao.NewsReadDAO;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.News;
-import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.FragmentManagerListener;
+import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemHomeAdapter;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
+import br.com.expressobits.hbus.ui.model.GetStartedTip;
 import br.com.expressobits.hbus.ui.model.Header;
 import br.com.expressobits.hbus.ui.news.NewsDetailsActivity;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
@@ -61,12 +60,15 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     private RecyclerView recyclerView;
     private List<Object> items = new ArrayList<>();
     FragmentManagerListener mCallback;
-    LinearLayout linearLayoutEmptyList;
     LinearLayoutManager llmUseful;
     private String cityId;
     View view;
     private String country;
     private String cityName;
+
+    private Header headerTips;
+    private Header headerLastUnreadNews;
+    private Header headerBookmark;
 
     @Override
     public void onAttach(Context context) {
@@ -82,40 +84,31 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
     @Override
     public void onResume() {
         super.onResume();
+        cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        country = FirebaseUtils.getCountry(cityId);
+        cityName = FirebaseUtils.getCityName(cityId);
         pullDataItens();
-    }
-
-    private void updateEmptyListView() {
-        if(items.size()<1){
-            recyclerView.setVisibility(View.GONE);
-            linearLayoutEmptyList.setVisibility(View.VISIBLE);
-        }else{
-            recyclerView.setVisibility(View.VISIBLE);
-            linearLayoutEmptyList.setVisibility(View.GONE);
+        if(((MainActivity)mCallback).getSupportActionBar()!=null){
+            ((MainActivity)mCallback).setActionBarTitle(getString(R.string.app_name));
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        country = FirebaseUtils.getCountry(cityId);
-        cityName = FirebaseUtils.getCityName(cityId);
+
         view = inflater.inflate(R.layout.fragment_favorite_itinerary, container,false);
+        headerTips = new Header(getString(R.string.common_tips));
+        headerLastUnreadNews = new Header(getString(R.string.unread_news));
+        headerBookmark = new Header(getString(R.string.bookmarks));
         initViews(view);
         return view;
     }
 
     private void initViews(View view){
         initListViews(view);
-        initEmptyList(view);
         setHasOptionsMenu(true);
-    }
-
-    private void initEmptyList(View view) {
-        linearLayoutEmptyList = (LinearLayout)view.findViewById(R.id.list_empty);
-        linearLayoutEmptyList.setOnClickListener(this);
-
     }
 
     private void initListViews(View view){
@@ -125,16 +118,23 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
         llmUseful = new LinearLayoutManager(getActivity());
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmUseful);
+        ItemHomeAdapter adapter = new ItemHomeAdapter(this.getActivity(), items);
+        adapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerView.setAdapter(adapter);
 
     }
 
-    private void getBookmarkedItineraries(){
+    private boolean getBookmarkedItineraries(){
         BookmarkItineraryDAO dao  = new BookmarkItineraryDAO(getActivity());
         List<Itinerary> itineraries = dao.getItineraries(cityId);
         dao.close();
-        items.add(0,new Header(getResources().getString(R.string.bookmarks)));
-        items.addAll(itineraries);
-        updateListViews();
+        if(itineraries.size()>0){
+            items.add(0,headerBookmark);
+            items.addAll(itineraries);
+            return true;
+        }else {
+            return false;
+        }
     }
 
     private void getLastNews(){
@@ -152,12 +152,14 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
                 country = FirebaseUtils.getCountry(cityId);
                 news.setId(FirebaseUtils.getIdNewsCity(String.valueOf(news.getTime()), country, cityName));
 
-                if(news.isActived() &&
-                        !(PreferenceManager.getDefaultSharedPreferences(getContext()).
-                                getBoolean(NewsDetailsActivity.READ_PREFERENCE+"/"+news.getId(), false))){
-                    items.add(0,new Header(getResources().getString(R.string.unread_news)));
-                    items.add(1,news);
-                    updateListViews();
+                if(news.isActived()){
+                    NewsReadDAO newsReadDAO = new NewsReadDAO(getContext());
+                    if(!newsReadDAO.isExist(news)){
+                        items.add(0,headerLastUnreadNews);
+                        items.add(1,news);
+                        updateListViews();
+                    }
+                    newsReadDAO.close();
                 }
             }
 
@@ -185,32 +187,34 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
 
     private void pullDataItens(){
         items.clear();
-        getBookmarkedItineraries();
-        getLastNews();
+        if(getBookmarkedItineraries()){
+            getLastNews();
+        }else{
+            items.add(headerTips);
+            items.add(new GetStartedTip(
+                    getString(R.string.get_started),
+                    getString(R.string.search_for_your_favorite),
+                    R.drawable.ic_big_bus,
+                    getString(R.string.itineraries)
+            ));
+        }
+        updateListViews();
+
     }
 
     private void updateListViews() {
-
-        ItemHomeAdapter adapter = new ItemHomeAdapter(this.getActivity(), items);
-        adapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerView.setAdapter(adapter);
-        updateEmptyListView();
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.fragment_itineraries, menu);
+        inflater.inflate(R.menu.menu_home_fragment, menu);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView;
         MenuItem item = menu.findItem(R.id.action_searchable_activity);
 
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ){
-            searchView = (SearchView) item.getActionView();
-        }
-        else{
-            searchView = (SearchView) MenuItemCompat.getActionView( item );
-        }
+        searchView = (SearchView) item.getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo( searchManager.getSearchableInfo( getActivity().getComponentName() ) );
         searchView.setQueryHint( getResources().getString(R.string.itinerary_search_hint) );
@@ -235,9 +239,18 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
                         BookmarkItineraryDAO dao = new BookmarkItineraryDAO(getActivity());
                         Itinerary itinerary1 = dao.getItinerary(selectedItem);
                         dao.removeFavorite(itinerary1);
-                        HomeFragment.this.initListViews(HomeFragment.this.view);
+                        if(dao.getItineraries(cityId).size()<1){
+                            items.remove(headerBookmark);
+                            items.add(0,new GetStartedTip(
+                                    getString(R.string.get_started),
+                                    getString(R.string.search_for_your_favorite),
+                                    R.drawable.ic_big_bus,
+                                    getString(R.string.itineraries)
+                            ));
+                            items.add(0,headerTips);
+                        }
+                        items.remove(itinerary);
                         updateListViews();
-                        updateEmptyListView();
                         String result = getActivity().getResources().getString(R.string.delete_itinerary_with_sucess, itinerary1.getName());
                         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(MainActivity.DEBUG, false)) {
                             Toast.makeText(getContext(),result, Toast.LENGTH_LONG).show();
@@ -254,6 +267,8 @@ public class HomeFragment extends Fragment implements RecyclerViewOnClickListene
             Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
             intent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,news.getId());
             getContext().startActivity(intent);
+        }else if(items.get(position) instanceof GetStartedTip){
+            mCallback.addFragment(ItinerariesFragment.TAG);
         }
 
     }

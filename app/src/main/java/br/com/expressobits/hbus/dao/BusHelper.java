@@ -21,6 +21,7 @@ import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.BusUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
 import br.com.expressobits.hbus.utils.StringUtils;
+import static br.com.expressobits.hbus.dao.SQLConstants.*;
 
 /**
  * @author Rafael
@@ -28,17 +29,8 @@ import br.com.expressobits.hbus.utils.StringUtils;
  */
 @SuppressWarnings("ALL")
 @SuppressLint("ALL")
+@Deprecated
 class BusHelper {
-    static final String TEXT_TYPE = " TEXT";
-    static final String INTEGER_TYPE = " INTEGER";
-    private static final String REAL_TYPE = " REAL";
-    static final String COMMA_SEP = ",";
-    static final String TEXT_PRIMARY_KEY = " TEXT PRIMARY KEY";
-    static final String PARENTES = " )";
-    static final String POINTCOMMA = ";";
-    static final String BARS = "/";
-
-
 
     private static final String SQL_CREATE_CITIES =
             "CREATE TABLE " + CityContract.City.TABLE_NAME + " (" +

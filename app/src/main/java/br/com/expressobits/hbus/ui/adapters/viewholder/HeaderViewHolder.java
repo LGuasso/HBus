@@ -18,5 +18,6 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder{
     public HeaderViewHolder(View itemView) {
         super(itemView);
         textViewHeader = (TextView) itemView.findViewById(R.id.textViewHeader);
+        textViewHeader.setSelected(true);
     }
 }

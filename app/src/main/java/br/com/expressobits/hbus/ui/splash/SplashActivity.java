@@ -6,12 +6,14 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.application.ManagerInit;
+import br.com.expressobits.hbus.provider.FastTipsProvider;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity{
@@ -19,11 +21,15 @@ public class SplashActivity extends AppCompatActivity{
     private static FirebaseAuth mAuth;
     private static FirebaseAuth.AuthStateListener mAuthListener;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        int SPLASH_DISPLAY_LENGTH = 1000;
+        TextView textViewFastTip = (TextView) findViewById(R.id.textViewFastTip);
+        textViewFastTip.setText(FastTipsProvider.getRandomFastTip(this));
+        int SPLASH_DISPLAY_LENGTH = 4000;
         new Handler().postDelayed(() -> mAuth.addAuthStateListener(mAuthListener), SPLASH_DISPLAY_LENGTH);
     }
 

@@ -5,14 +5,13 @@ package br.com.expressobits.hbus.model;
  * @author Rafael Correa
  * @since 26/05/16
  */
-public class Company {
+public class Company implements Comparable<Company>{
     private String id;
     private String name;
     private String email;
     private String website;
     private String phoneNumber;
     private String address;
-    private boolean actived;
 
     public String getId() {
         return id;
@@ -62,16 +61,15 @@ public class Company {
         this.address = address;
     }
 
-    public void setActived(boolean actived) {
-        this.actived = actived;
-    }
-
-    public boolean isActived() {
-        return actived;
-    }
-
     @Override
     public String toString() {
         return this.getName();
+    }
+
+
+    @Override
+    public int compareTo(Company company) {
+        return this.getName().compareTo(company.getName());
+
     }
 }

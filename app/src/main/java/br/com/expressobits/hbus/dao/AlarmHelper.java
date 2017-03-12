@@ -117,7 +117,7 @@ class AlarmHelper {
     static List<Alarm> getAlarms(SQLiteDatabase db, City city){
         ArrayList<Alarm> alarms = new ArrayList<>();
         String where = AlarmContract.Alarm._ID+" LIKE ?";
-        String arguments[] = {BusHelper.BARS+city.getCountry()+BusHelper.BARS+city.getName()+"%"};
+        String arguments[] = {SQLConstants.BARS+city.getCountry()+SQLConstants.BARS+city.getName()+"%"};
         Cursor c;
         c = db.query(
                 AlarmContract.Alarm.TABLE_NAME,

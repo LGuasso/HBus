@@ -1,10 +1,8 @@
 package br.com.expressobits.hbus.ui.news;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.NewsReadDAO;
 import br.com.expressobits.hbus.model.News;
 import br.com.expressobits.hbus.util.TimeUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
@@ -32,7 +31,6 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 public class NewsDetailsActivity extends AppCompatActivity {
 
     public static final String ARGS_NEWS_ID = "br.com.expressobits.hbus.ui.news.NewsIdKey";
-    public static final String READ_PREFERENCE = "br.com.expressobits.hbus.ui.news.ReadNews";
     private Toolbar toolbar;
     private TextView textViewBody;
     private ImageView imageView;
@@ -186,10 +184,10 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
     public void setNewsToRead(String id) {
-        //TODO sharedprefence???
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(NewsDetailsActivity.this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(READ_PREFERENCE+"/"+id,true);
-        editor.apply();
+        NewsReadDAO newsReadDAO = new NewsReadDAO(this);
+        News news = new News();
+        news.setId(id);
+        newsReadDAO.insert(news);
+        newsReadDAO.close();
     }
 }

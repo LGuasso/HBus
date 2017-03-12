@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -52,9 +51,7 @@ public class ItemAlarmAdapter extends RecyclerView.Adapter<ItemAlarmAdapter.MyVi
         //holder.view.setTag(holder);
         holder.textViewItineraryName.setText(FirebaseUtils.getItinerary(alarm.getId()));
         holder.textViewName.setText(alarm.getName()!=null&alarm.getName().length()>1?alarm.getName():context.getString(R.string.alarm));
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(alarm.getTimeAlarm());
-        holder.textViewTime.setText(TimeUtils.getFormatTime(calendar));
+        holder.textViewTime.setText(TimeUtils.getFormatTime(alarm.getTimeAlarm()));
         holder.switchActived.setChecked(alarm.isActived());
         verifyIsActivedAlarm(holder,alarm);
         holder.switchActived.setOnCheckedChangeListener((buttonView, isChecked) -> {

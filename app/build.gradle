@@ -15,8 +15,8 @@ android {
         applicationId "br.com.expressobits.hbus"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 1016
-        versionName "0.10.16"
+        versionCode 1090
+        versionName "0.10.90"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions {
@@ -44,6 +44,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:10.2.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.simplecityapps:recyclerview-fastscroll:1.0.11'
 }
 
 apply plugin: 'com.google.gms.google-services'

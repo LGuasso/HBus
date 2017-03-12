@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.push;
 
+import br.com.expressobits.hbus.Sender;
 import br.com.expressobits.hbus.files.ReadFile;
 import br.com.expressobits.hbus.model.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @since 09/12/16
  */
 
-public class SendData {
+public class SendData{
 
     List<City> cities = new ArrayList<>();
     HashMap<City, List<Company>> companies = new HashMap<>();
@@ -204,23 +205,23 @@ public class SendData {
         }
     }
 
-    private void push(City city){
+    public void push(City city){
         SendCityToFirebase.sendToFirebase(city);
     }
 
-    private void push(City city,Company company){
+    public void push(City city,Company company){
         SendCompanyToFirebase.sendToFirebase(city,company);
     }
 
-    private void push(City city,Company company,Code code){
+    public void push(City city,Company company,Code code){
         SendCodeToFirebase.sendToFirebase(city,company,code);
     }
 
-    private void push(City city,Company company,Itinerary itinerary){
+    public void push(City city,Company company,Itinerary itinerary){
         SendItineraryToFirebase.sendToFirebase(city,company,itinerary);
     }
 
-    private void push(City city,Company company,Itinerary itinerary,List<Bus> bus){
+    public void push(City city,Company company,Itinerary itinerary,List<Bus> bus){
         SendBusToFirebase.sendToFirebase(city,company,itinerary,bus);
     }
 

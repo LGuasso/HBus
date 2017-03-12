@@ -7,26 +7,22 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.SQLConstants;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.ui.CompanyDetailsActivity;
-import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.TimesActivity;
 import br.com.expressobits.hbus.ui.adapters.ItemCompanyAdapter;
@@ -40,7 +36,7 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     private List<Company> listCompanies = new ArrayList<>();
     public static final String TAG = "CompaniesFragment";
-    private RecyclerView recyclerViewCompanies;
+    private FastScrollRecyclerView recyclerViewCompanies;
     private ProgressBar progressBar;
 
 
@@ -64,20 +60,16 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
         super.onResume();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-
-
         if(listCompanies.size()>0){
             recyclerViewCompanies.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
-
             refreshRecyclerView();
-        }else {
-
+        }else{
+            //TODO estado vazio nao existe companies vazia
         }
         String country = FirebaseUtils.getCountry(cityId);
         String city = FirebaseUtils.getCityName(cityId);
         refresh(country,city);
-
     }
 
     private void initViews(View view){
@@ -86,16 +78,14 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     private void initListViews(View view){
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        recyclerViewCompanies = (RecyclerView) view.findViewById(R.id.recyclerViewCompanies);
+        recyclerViewCompanies = (FastScrollRecyclerView) view.findViewById(R.id.recyclerViewCompanies);
+        recyclerViewCompanies.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewCompanies.setHasFixedSize(true);
-
-
     }
 
-    private void addCompany(Company company){
-        if(company.getId()!=null){
-            listCompanies.add(company);
-        }
+    private void addCompanies(List<Company> companies){
+        listCompanies = companies;
+        Collections.sort(listCompanies);
         if(listCompanies.size()>0){
             progressBar.setVisibility(View.INVISIBLE);
             recyclerViewCompanies.setVisibility(View.VISIBLE);
@@ -107,38 +97,16 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
         listCompanies.clear();
         progressBar.setVisibility(View.VISIBLE);
         recyclerViewCompanies.setVisibility(View.INVISIBLE);
-        loadCompaniesFromFirebase(country, city);
+        loadCompaniesFromDatabase(country, city);
     }
 
-    private void loadCompaniesFromFirebase(final String country, final String city){
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference companiesTable = firebaseDatabase.getReference(FirebaseUtils.COMPANY_TABLE);
-        DatabaseReference countryReference = companiesTable.child(country);
-        DatabaseReference cityReference = countryReference.child(city);
-        cityReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshotCompany:dataSnapshot.getChildren()){
-                    if(CompaniesFragment.this.isVisible()){
-                        Company company = dataSnapshotCompany.getValue(Company.class);
-                        company.setId(FirebaseUtils.getIdCompany(country,city,company.getName()));
-                        addCompany(company);
-                    }else{
-                        Log.i(TAG,"Cancel load company Cause:Fragment not visible");
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private void loadCompaniesFromDatabase(String country,String city){
+        ScheduleDAO dao = new ScheduleDAO(getContext(),country,city);
+        addCompanies(dao.getCompanies());
+        dao.close();
     }
 
     public void refreshRecyclerView(){
-
         ItemCompanyAdapter arrayAdapter = new ItemCompanyAdapter(getContext(),listCompanies);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewCompanies.setAdapter(arrayAdapter);
@@ -149,34 +117,13 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     @Override
     public void onClickListener(View view, int position) {
-
         Intent intent;
         Company company = listCompanies.get(position);
-        switch (view.getId()){
-            case R.id.text1:
-                if(company.isActived()){
-                    intent = new Intent(getContext(), CompanyDetailsActivity.class);
-                    intent.putExtra(TimesActivity.ARGS_COUNTRY,FirebaseUtils.getCountry(company.getId()));
-                    intent.putExtra(TimesActivity.ARGS_CITY, FirebaseUtils.getCityName(company.getId()));
-                    intent.putExtra(TimesActivity.ARGS_COMPANY, company.getName());
-                    startActivity(intent);
-                    break;
-                }
-
-            case R.id.icon:
-                if(company.isActived()){
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(cityId,company.getName());
-                    editor.apply();
-                    refreshRecyclerView();
-                    ((MainActivity)getActivity()).refresh();
-                    break;
-                }
-
-
-        }
+        intent = new Intent(getContext(), CompanyDetailsActivity.class);
+        intent.putExtra(TimesActivity.ARGS_COUNTRY, SQLConstants.getCountryFromBusId(company.getId()));
+        intent.putExtra(TimesActivity.ARGS_CITY, SQLConstants.getCityFromBusId(company.getId()));
+        intent.putExtra(TimesActivity.ARGS_COMPANY, company.getName());
+        startActivity(intent);
     }
 
     @Override

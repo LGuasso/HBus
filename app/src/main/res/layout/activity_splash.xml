@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -16,23 +17,35 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_splash"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_splash" />
+
+        <TextView
+            android:id="@+id/textViewFastTip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textAppearance="@style/TextStyle.Medium"
+            android:layout_above="@+id/textView"
+            android:paddingBottom="16dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:text="@string/company_name"
             android:textAllCaps="true"
             android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@color/white"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"/>
+            android:id="@+id/textView" />
 
     </RelativeLayout>
-
-
 
 
 </android.support.design.widget.CoordinatorLayout>

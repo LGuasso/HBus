@@ -1,11 +1,11 @@
 package br.com.expressobits.hbusmanager;
 
+import br.com.expressobits.hbus.dao.SendDataToSQL;
 import br.com.expressobits.hbus.files.ReadFile;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.model.Itinerary;
-import br.com.expressobits.hbus.push.*;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +23,7 @@ import java.util.List;
  * @author Rafael Correa
  * @since 31/12/16
  */
-public class HBusManager extends JFrame implements RemoveListener {
+public class HBusManager extends JFrame {
     private JButton buttonSend;
     private JPanel panel1;
     private JComboBox comboBoxCountries;
@@ -42,8 +42,8 @@ public class HBusManager extends JFrame implements RemoveListener {
     private JButton buttonRemoveBuses;
     private JCheckBox singleItineraryCheckBox;
     ReadFile readFile = new ReadFile();
-    SendData sendData = new SendData();
-    City city;
+    List<City> cities;
+    SendDataToSQL sendData;
 
     List<String> countries = new ArrayList<>();
 
@@ -54,7 +54,11 @@ public class HBusManager extends JFrame implements RemoveListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+
         loadCountries();
+
+
         comboBoxCountries.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -64,17 +68,12 @@ public class HBusManager extends JFrame implements RemoveListener {
         buttonSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                setSenders();
-                City city = sendData.getCities().get(comboBoxCities.getSelectedIndex());
-                Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
-                if (singleItineraryCheckBox.isSelected()) {
-                    Itinerary itinerary = sendData.getItineraries(city, company).get(jTableItineraries.getSelectedRow());
-                    System.out.println(itinerary.getName());
-                    sendData.pushItinerary(city, company, itinerary);
-                } else {
-                    sendData.pushCity(city, company);
-                }
+                sendData.open();
+                City city = cities.get(comboBoxCities.getSelectedIndex());
+                for (Company company : sendData.getCompanies(city)) {
+                    sendData.sendCompany(city, company);
+                 }
+                sendData.close();
 
             }
         });
@@ -87,8 +86,9 @@ public class HBusManager extends JFrame implements RemoveListener {
         buttonRead.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                city = sendData.readData(countries.get(comboBoxCountries.getSelectedIndex()),
-                        sendData.getCities().get(comboBoxCities.getSelectedIndex()));
+                City city = cities.get(comboBoxCities.getSelectedIndex());
+                sendData = new SendDataToSQL(city);
+                sendData.readData(city);
                 loadCompanies(city);
             }
         });
@@ -99,72 +99,16 @@ public class HBusManager extends JFrame implements RemoveListener {
                 loadCodeTable();
             }
         });
-        buttonRemoveCompanies.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("remove company");
-                int result = JOptionPane.showConfirmDialog(HBusManager.this, "Confirme a remoção?",
-                        "Remover?", JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    SendCompanyToFirebase.removeAllValues(sendData.getCities().get(comboBoxCities.getSelectedIndex()), HBusManager.this);
-                } else {
-                    System.out.println("Result fail " + result);
-                }
-            }
-        });
-        buttonRemoveItineraries.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                int result = JOptionPane.showConfirmDialog(null, "Confirme a remoção?",
-                        "Remover?", JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    City city = sendData.getCities().get(comboBoxCities.getSelectedIndex());
-                    Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
-                    SendItineraryToFirebase.removeAllValues(city, company, HBusManager.this);
-                }
-            }
-        });
-        buttonRemoveCodes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                int result = JOptionPane.showConfirmDialog(null, "Confirme a remoção?",
-                        "Remover?", JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    City city = sendData.getCities().get(comboBoxCities.getSelectedIndex());
-                    Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
-                    SendCodeToFirebase.removeAllValues(city, company, HBusManager.this);
-                }
-            }
-        });
-        buttonRemoveBuses.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                int result = JOptionPane.showConfirmDialog(null, "Confirme a remoção?",
-                        "Remover?", JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    City city = sendData.getCities().get(comboBoxCities.getSelectedIndex());
-                    Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
-                    SendBusToFirebase.removeAllValues(city, company, HBusManager.this);
-                }
-            }
-        });
-    }
-
-    public void setSenders() {
-        sendData.setBusSend(checkBoxBus.isSelected());
-        sendData.setCodeSend(checkBoxCode.isSelected());
-        sendData.setItinerarySend(checkBoxItinerary.isSelected());
-        sendData.setCompanySend(checkBoxCompany.isSelected());
     }
 
     public void loadItineraryTable() {
         String[] itineraryColunas = new String[]{"Name", "N*s buses"};
         DefaultTableModel itineraryTableModel = new DefaultTableModel(itineraryColunas, 0);
-        //City city = cities.get(comboBoxCities.getSelectedIndex());
+        City city = cities.get(comboBoxCities.getSelectedIndex());
         Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
 
         for (Itinerary itinerary : sendData.getItineraries(city, company)) {
-            String[] campos = {itinerary.getName(), sendData.getSizeBusesOfItinerary(city, company, itinerary) + ""};
+            String[] campos = {itinerary.getName(), sendData.getSizeBusesOfItinerary(company, itinerary) + ""};
             itineraryTableModel.addRow(campos);
         }
         jTableItineraries.setModel(itineraryTableModel);
@@ -173,7 +117,7 @@ public class HBusManager extends JFrame implements RemoveListener {
     public void loadCodeTable() {
         String[] codeColunas = new String[]{"Code", "Description"};
         DefaultTableModel codeTableModel = new DefaultTableModel(codeColunas, 0);
-        //City city = cities.get(comboBoxCities.getSelectedIndex());
+        City city = cities.get(comboBoxCities.getSelectedIndex());
         Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
 
         for (Code code : sendData.getCodes(city, company)) {
@@ -190,8 +134,8 @@ public class HBusManager extends JFrame implements RemoveListener {
     }
 
     public void loadCities() {
-        sendData.readDataCities(countries.get(comboBoxCountries.getSelectedIndex()));
-        DefaultComboBoxModel defaultComboBoxModelCities = new DefaultComboBoxModel(sendData.getCities().toArray());
+        cities = readFile.getCities(countries.get(comboBoxCountries.getSelectedIndex()));
+        DefaultComboBoxModel defaultComboBoxModelCities = new DefaultComboBoxModel(cities.toArray());
         comboBoxCities.setModel(defaultComboBoxModelCities);
     }
 
@@ -203,11 +147,6 @@ public class HBusManager extends JFrame implements RemoveListener {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-    }
-
-    @Override
-    public void removeSucess(String message) {
-        JOptionPane.showMessageDialog(this, message);
     }
 
     {

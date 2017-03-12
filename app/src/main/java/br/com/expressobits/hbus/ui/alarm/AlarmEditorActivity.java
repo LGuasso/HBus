@@ -137,9 +137,7 @@ public class AlarmEditorActivity extends AppCompatActivity {
         int delay = alarm.getMinuteDelay();
         spinnerDelayType.setSelection((10+delay)/5);
         editTextName.setText(alarm.getName());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
-        textViewTime.setText(TimeUtils.getFormatTime(calendar));
+        textViewTime.setText(TimeUtils.getFormatTime(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId()))));
         resumeWeekDays();
         alarm.setCode(code);
         return editing;

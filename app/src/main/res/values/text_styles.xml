@@ -31,7 +31,7 @@
     </style>
 
     <style name="HbusTheme.TextAppearance.AppCompat.SubHeader" parent="TextAppearance.AppCompat.Subhead">
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="TextStyle.Large" parent="TextAppearance.AppCompat.Large">

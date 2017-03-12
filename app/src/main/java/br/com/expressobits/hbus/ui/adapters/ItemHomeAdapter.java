@@ -11,12 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,14 +19,17 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.News;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.adapters.viewholder.GetStartedTipViewHolder;
 import br.com.expressobits.hbus.ui.adapters.viewholder.HeaderViewHolder;
 import br.com.expressobits.hbus.ui.adapters.viewholder.NewsViewHolder;
+import br.com.expressobits.hbus.ui.model.GetStartedTip;
 import br.com.expressobits.hbus.ui.model.Header;
 import br.com.expressobits.hbus.ui.news.NewsDetailsActivity;
 import br.com.expressobits.hbus.utils.BusUtils;
@@ -53,8 +50,9 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final HashMap<String,HashMap<String,Code>> codes = new HashMap<>();
 
     private final int HEADER = 0;
-    private final int NEWS = 1;
-    private final int ITINERARY = 2;
+    private final int GET_STARTED_TIP = 1;
+    private final int NEWS = 2;
+    private final int BOOKMARKEDITINERARY = 3;
 
     public ItemHomeAdapter(Context context, List<Object> list){
         this.context = context;
@@ -71,11 +69,15 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 View viewHeader = inflater.inflate(R.layout.item_header, viewGroup, false);
                 viewHolder = new HeaderViewHolder(viewHeader);
                 break;
+            case GET_STARTED_TIP:
+                View viewGetStarted = inflater.inflate(R.layout.item_home_get_started_empty_state, viewGroup, false);
+                viewHolder = new GetStartedTipViewHolder(viewGetStarted);
+                break;
             case NEWS:
                 View viewNews = inflater.inflate(R.layout.item_news, viewGroup, false);
                 viewHolder = new NewsViewHolder(viewNews);
                 break;
-            case ITINERARY:
+            case BOOKMARKEDITINERARY:
                 View viewItinerary = inflater.inflate(R.layout.item_bookmarked_itinerary, viewGroup, false);
                 viewHolder = new BookmarkedItineraryViewHolder(viewItinerary);
                 break;
@@ -91,10 +93,12 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemViewType(int position) {
         if (items.get(position) instanceof Header) {
             return HEADER;
+        }else if (items.get(position) instanceof GetStartedTip) {
+            return GET_STARTED_TIP;
         }else if (items.get(position) instanceof News) {
             return NEWS;
         }else if (items.get(position) instanceof Itinerary) {
-            return ITINERARY;
+            return BOOKMARKEDITINERARY;
         }
         return -1;
     }
@@ -107,11 +111,15 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 configureHeaderViewHolder(headerViewHolder, position);
                 break;
+            case GET_STARTED_TIP:
+                GetStartedTipViewHolder getStartedTipViewHolder = (GetStartedTipViewHolder) viewHolder;
+                configureGetStartedTipViewHolder(getStartedTipViewHolder, position);
+                break;
             case NEWS:
                 NewsViewHolder newsViewHolder = (NewsViewHolder) viewHolder;
                 configureNewsViewHolder(newsViewHolder, position);
                 break;
-            case ITINERARY:
+            case BOOKMARKEDITINERARY:
                 BookmarkedItineraryViewHolder bookmarkedItineraryViewHolder = (BookmarkedItineraryViewHolder) viewHolder;
                 configureBookmarkedItineraryViewHolder(bookmarkedItineraryViewHolder, position);
                 break;
@@ -127,6 +135,15 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void configureHeaderViewHolder(HeaderViewHolder headerViewHolder, int position) {
         Header header = (Header) items.get(position);
         headerViewHolder.textViewHeader.setText(header.getTextHeader());
+    }
+
+    private void configureGetStartedTipViewHolder(GetStartedTipViewHolder getStartedTipViewHolder, int position) {
+        GetStartedTip getStartedTip = (GetStartedTip)items.get(position);
+        getStartedTipViewHolder.textViewTitle.setText(getStartedTip.getTitle());
+        getStartedTipViewHolder.textViewMessage.setText(getStartedTip.getMessage());
+        getStartedTipViewHolder.imageView.setImageResource(getStartedTip.getImageResource());
+        getStartedTipViewHolder.buttonSeeItineraries.setText(getStartedTip.getButtonText());
+        getStartedTipViewHolder.setRecyclerViewOnClickListenerHack(this);
     }
 
     private void configureNewsViewHolder(NewsViewHolder newsViewHolder, int position) {
@@ -171,41 +188,17 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(itinerary.getWays()!=null) {
             for (int j = 0; j < itinerary.getWays().size(); j++) {
                 final String way = itinerary.getWays().get(j);
-                final List<Bus> buses = new ArrayList<>();
+                List<Bus> buses = new ArrayList<>();
                 final String typeday = TimeUtils.getTypedayinCalendar(Calendar.getInstance()).toString();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference busTable = database.getReference(FirebaseUtils.BUS_TABLE);
-                DatabaseReference countryRef = busTable.child(country);
-                DatabaseReference cityRef = countryRef.child(city);
-                DatabaseReference companyRef = cityRef.child(company);
-                DatabaseReference itineraryRef = companyRef.child(itinerary.getName());
-                DatabaseReference wayRef = itineraryRef.child(way);
-                DatabaseReference typedayRef = wayRef.child(typeday);
-                typedayRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot dataSnapshotBus : dataSnapshot.getChildren()) {
-                            Bus bus = dataSnapshotBus.getValue(Bus.class);
-                            bus.setId(FirebaseUtils.getIdBus(FirebaseUtils.getCountry(itinerary.getId()),
-                                    FirebaseUtils.getCityName(itinerary.getId()),
-                                    FirebaseUtils.getCompany(itinerary.getId()),
-                                    itinerary.getName(),
-                                    way,
-                                    typeday,
-                                    String.valueOf(bus.getTime())));
-                            buses.add(bus);
-                            next.put(way, BusUtils.getNextBusforList(buses));
-                            setLastUpdate(holder, bus.getTime());
-                            updateFieldNextBus(holder, itinerary, next);
-                        }
-                    }
+                ScheduleDAO dao = new ScheduleDAO(context,country,city);
+                buses = dao.getBuses(company,itinerary.getName(),way,typeday);
+                dao.close();
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-
-                });
+                if(buses.size()>0){
+                    next.put(way, BusUtils.getNextBusforList(buses));
+                    setLastUpdate(holder, buses.get(0).getTime());
+                    updateFieldNextBus(holder, itinerary, next);
+                }
             }
         }
     }
@@ -263,31 +256,13 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
     }
 
-
-
     private void loadCode(TextView textView,String codeName,String company,String country,String cityName){
         if(!codes.containsKey(codeName)){
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference busTable = database.getReference(FirebaseUtils.CODE_TABLE);
-            DatabaseReference countryRef = busTable.child(country);
-            DatabaseReference cityRef = countryRef.child(cityName);
-            DatabaseReference companyRef = cityRef.child(company);
-            DatabaseReference codeRef = companyRef.child(codeName);
-            codeRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Code code = dataSnapshot.getValue(Code.class);
-                    if(code!=null){
-                        addCode(textView,company,codeName,code);
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            ScheduleDAO dao = new ScheduleDAO(context,country,cityName);
+            Code code = dao.getCode(company,codeName);
+            if(code!=null){
+                addCode(textView,company,codeName,code);
+            }
         }else{
             addCode(textView,company,codeName);
         }
@@ -322,6 +297,9 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Intent intent = new Intent(context, NewsDetailsActivity.class);
             intent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,news.getId());
             context.startActivity(intent);
+        }
+        if(items.get(position) instanceof GetStartedTip){
+            recyclerViewOnClickListenerHack.onClickListener(view, position);
         }
     }
 

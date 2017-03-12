@@ -14,11 +14,8 @@ import br.com.expressobits.hbus.model.TypeDay;
 public class TimeUtils {
 
     public static final String TAG = "TimeUtils";
-    /**
-     * Constante que contém a data de troca dos tempos do servidor UTC
-     * Wed Jun 01 2016 03:00:00
-     */
-    public static final long TIME_CHANGE_TIMEZONE_TO_UTC = 1464750000000l;
+
+    public static Calendar CALENDAR_UTC = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
     /**
      * Retorna um inteiro referente ao tipo de dia da semana
@@ -44,11 +41,7 @@ public class TimeUtils {
         if(time.contains(":")){
 
             Calendar calendar;
-            if(System.currentTimeMillis()<TIME_CHANGE_TIMEZONE_TO_UTC){
-                calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-            }else{
-                calendar = Calendar.getInstance();
-            }
+            calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time.split(":")[0]));
             calendar.set(Calendar.MINUTE,Integer.parseInt(time.split(":")[1]));
             return calendar;
@@ -60,22 +53,14 @@ public class TimeUtils {
 
     public static int getHour(long time){
         Calendar calendar;
-        if(time<TIME_CHANGE_TIMEZONE_TO_UTC){
-            calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        }else{
-            calendar = Calendar.getInstance();
-        }
+        calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         return calendar.get(Calendar.HOUR_OF_DAY);
     }
 
     public static int getMinute(long time){
         Calendar calendar;
-        if(time<TIME_CHANGE_TIMEZONE_TO_UTC){
-            calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        }else{
-            calendar = Calendar.getInstance();
-        }
+        calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         return calendar.get(Calendar.MINUTE);
     }
@@ -89,11 +74,7 @@ public class TimeUtils {
         //TODO bug #032 corrigir todos horários para UTC até 01/03/2017
         //
         Calendar calendar;
-        if(time<TIME_CHANGE_TIMEZONE_TO_UTC){
-            calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        }else{
-            calendar = Calendar.getInstance();
-        }
+        calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -117,7 +98,4 @@ public class TimeUtils {
         }
         return false;
     }
-
-
-
 }

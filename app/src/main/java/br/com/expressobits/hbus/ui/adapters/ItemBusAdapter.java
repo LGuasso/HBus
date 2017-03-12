@@ -7,6 +7,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,23 +15,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.AlarmDAO;
+import br.com.expressobits.hbus.dao.SQLConstants;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.StringUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
@@ -130,30 +126,20 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
         }else {
             myViewHolder.txtViewCode.setText(bus.getCode());
             myViewHolder.txtViewDescription.setText(context.getString(R.string.loading));
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference codeTableRef = database.getReference(FirebaseUtils.CODE_TABLE);
-            DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(bus.getId()));
-            DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(bus.getId()));
-            DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(bus.getId()));
-            DatabaseReference codeRef = companyRef.child(bus.getCode());
-            codeRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Code code = dataSnapshot.getValue(Code.class);
-                    if (code != null) {
-                        myViewHolder.txtViewDescription.setText(code.getDescrition());
-                    } else {
-                        myViewHolder.txtViewDescription.setText(context.getString(R.string.error_loading_description));
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    myViewHolder.txtViewDescription.setText("Error " + "Code " + databaseError.getCode() + " - Details " + databaseError.getDetails() + " " +
-                            databaseError.getMessage());
-                }
-            });
+            ScheduleDAO dao = new ScheduleDAO(context,
+                    SQLConstants.getCountryFromBusId(bus.getId()),
+                    SQLConstants.getCityFromBusId(bus.getId()));
+            Code code = dao.getCode(SQLConstants.getCompanyFromBusId(bus.getId()),bus.getCode());
+            dao.close();
+            if (code != null) {
+                myViewHolder.txtViewDescription.setText(code.getDescrition());
+            } else {
+                Log.e("TESTE",SQLConstants.getCountryFromBusId(bus.getId())+" "+
+                        SQLConstants.getCityFromBusId(bus.getId())+" "+
+                        SQLConstants.getCompanyFromBusId(bus.getId())+" "+
+                        bus.getCode());
+                myViewHolder.txtViewDescription.setText(context.getString(R.string.error_loading_description));
+            }
         }
 
         final Alarm alarm = alarmDAO.getAlarm(bus.getId());

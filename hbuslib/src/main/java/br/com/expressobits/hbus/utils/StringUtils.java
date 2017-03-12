@@ -1,9 +1,11 @@
 package br.com.expressobits.hbus.utils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import br.com.expressobits.hbus.dao.SQLConstants;
 import br.com.expressobits.hbus.model.TypeDay;
 
 /**
@@ -24,6 +26,15 @@ public class StringUtils {
             if(i!=days.size()-1){
                 result+=",";
             }
+        }
+
+        return result;
+    }
+
+    public static List<String> getSentidosinList(String sentidos){
+        List<String> result = new ArrayList<>();
+        for(String sentido:sentidos.split(",")){
+            result.add(sentido);
         }
 
         return result;
@@ -127,4 +138,18 @@ public class StringUtils {
 
     }
 
+    /**
+     * Create name to database in android files
+     * @param country Country of city
+     * @param name city name
+     * @param databaseVersion database version number
+     * @return String formated with name database with format file
+     */
+    public static String getNameDatabase(String country, String name, int databaseVersion) {
+        return ((SQLConstants.DATABASE_PATTERN_NAME+"_"+country.replace("/","_")+"_"+name.replace(" ","_")+"_"+databaseVersion+".db").toLowerCase());
+    }
+
+    public static String getNameDatabaseZipFile(String country, String name, int databaseVersion) {
+        return getNameDatabase(country,name,databaseVersion)+".zip";
+    }
 }

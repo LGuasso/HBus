@@ -10,7 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -30,7 +32,8 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     public static final String TAG = "AlarmListFragment";
 
     private RecyclerView recyclerViewAlarms;
-    private List<Alarm> alarmList;
+    private RelativeLayout relativeLayoutEmptyState;
+    private List<Alarm> alarmList = new ArrayList<>();
 
 
     public AlarmListFragment() {
@@ -51,6 +54,21 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
 
     private void initViews(View view){
         initRecyclerViewAlarms(view,getActivity());
+        relativeLayoutEmptyState = (RelativeLayout)  view.findViewById(R.id.relativeLayoutEmptyList);
+    }
+
+
+    private void initRecyclerViewAlarms(View view,Context context){
+        recyclerViewAlarms = (RecyclerView) view.findViewById(R.id.recyclerViewAlarms);
+        recyclerViewAlarms.setHasFixedSize(true);
+        recyclerViewAlarms.setSelected(true);
+        LinearLayoutManager llmUseful = new LinearLayoutManager(context);
+        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewAlarms.setLayoutManager(llmUseful);
+        ItemAlarmAdapter adapter =
+                new ItemAlarmAdapter(context,alarmList);
+        adapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewAlarms.setAdapter(adapter);
     }
 
     private void updateListAlarms(Context context){
@@ -63,26 +81,24 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         alarmDAO.close();
     }
 
-    private void initRecyclerViewAlarms(View view,Context context){
-        recyclerViewAlarms = (RecyclerView) view.findViewById(R.id.recyclerViewAlarms);
-        recyclerViewAlarms.setHasFixedSize(true);
-        recyclerViewAlarms.setSelected(true);
-        LinearLayoutManager llmUseful = new LinearLayoutManager(context);
-        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewAlarms.setLayoutManager(llmUseful);
-    }
-
-    private void updateRecyclerViewAlarms(Context context){
-        ItemAlarmAdapter adapter =
-                new ItemAlarmAdapter(context,alarmList);
-        adapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerViewAlarms.setAdapter(adapter);
+    private void updateRecyclerViewAlarms(){
+        ItemAlarmAdapter itemAlarmAdapter = new ItemAlarmAdapter(getActivity(),alarmList);
+        itemAlarmAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewAlarms.setAdapter(itemAlarmAdapter);
     }
 
     @Override
     public void onResume() {
         updateListAlarms(getActivity());
-        updateRecyclerViewAlarms(getActivity());
+        updateRecyclerViewAlarms();
+        if(alarmList.size()>0){
+            recyclerViewAlarms.setVisibility(View.VISIBLE);
+            relativeLayoutEmptyState.setVisibility(View.INVISIBLE);
+        }else {
+            recyclerViewAlarms.setVisibility(View.INVISIBLE);
+            relativeLayoutEmptyState.setVisibility(View.VISIBLE);
+        }
+
         super.onResume();
     }
 
