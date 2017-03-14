@@ -68,10 +68,12 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
     </style>
-    <style name="HBusTheme.Widget.AppCompat.Button.Colored.BookmarkedItinerary" parent="Widget.AppCompat.Button.Borderless.Colored">
-        <item name="android:textColor">@color/colorAccent</item>
+    <style name="HBusTheme.Widget.AppCompat.Button.Colored.BookmarkedItinerary" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:animation">@anim/fade_in</item>
     </style>
-    <style name="HBusTheme.Widget.AppCompat.Button.Colored.GetStartedTip" parent="Widget.AppCompat.Button.Colored">
+    <style name="HBusTheme.Widget.AppCompat.Button.Colored.HotTip" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorPrimaryMoreDark</item>
         <item name="android:textColor">@color/white</item>
     </style>

@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
     public static final String DEBUG = "debug";
     private Toolbar pToolbar;
     private NavigationView navigationView;
-    //Gerencia a atuacao dos fragments
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
     private ImageView imageViewCity;
@@ -86,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         checkIntent(getIntent());
         setContentView(R.layout.activity_main);
@@ -101,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
             }
         }
         initViews();
+        AppManager.countsOpenApp(this);
     }
 
     @Override
@@ -144,25 +143,17 @@ public class MainActivity extends AppCompatActivity implements FragmentManagerLi
         StorageReference cityProfileRef = cityRef.child(FirebaseUtils.IMAGE_CITY_PHOTO_FILE +FirebaseUtils.EXTENSION_IMAGE_JPG);
         StorageReference cityFlagRef = cityRef.child(FirebaseUtils.IMAGE_CITY_COATS_OF_ARMS_FILE +FirebaseUtils.EXTENSION_IMAGE_PNG);
 
-        cityProfileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-
-            Picasso.with(this).load(uri)
-                    .placeholder(R.drawable.default_city)
-                    .into(imageViewCity);
-        });
+        cityProfileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(this).load(uri)
+                .placeholder(R.drawable.default_city)
+                .into(imageViewCity));
 
 
-        cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> {
-
-            Picasso.with(this).load(uri)
-                    .error(R.drawable.ic_flag_white_48dp)
-                    .placeholder(R.drawable.ic_shield_grey600_24dp)
-                    .into(circleImageViewCityProfile);
-        });
+        cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(this).load(uri)
+                .error(R.drawable.ic_flag_white_48dp)
+                .placeholder(R.drawable.ic_shield_grey600_24dp)
+                .into(circleImageViewCityProfile));
 
     }
-
-
 
     private void initViews() {
         initActionBar();

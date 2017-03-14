@@ -191,6 +191,14 @@
     <string name="dialog_alert_title_confirm_clear_route_history_viewed">Are you sure you want to delete your route history?</string>
     <string name="route_history_viewed_excluded">Route history viewed excluded</string>
     <string name="home">Home</string>
+    <string name="hot_tip_become_a_tester">Become a tester</string>
+    <string name="hot_tip_turn_an_application_beta_tester_and_test_new_features">Turn an application beta tester and test new features!</string>
+    <string name="hot_tip_come_on">Come on!</string>
+    <string name="hot_tip_not_now">Not now</string>
+    <string name="beta_community_link" translatable="false">https://plus.google.com/communities/107491529957879513170</string>
+    <string name="dialog_alert_title_confirm_no_beta">Do not really want the beta program?</string>
+    <string name="hot_tip_rate_us">Rate us</string>
+    <string name="hot_tip_did_you_like_our_app">Did you like our app? Rate to help increase our audience, so the potential of our app.</string>
 
     <string-array name="list_fast_tips">
         <item>Inside a bus with few passengers, sit next to the driver.</item>
@@ -202,5 +210,10 @@
         <item>Respect the banks preferences. They are intended for people with special spices, with children of color, pregnant and elderly.</item>
         <item>Do not litter through the bus window.</item>
     </string-array>
+    <string name="dialog_alert_title_confirm_rate_us">Do not really want to rate our app?</string>
+    <string name="pref_title_pause_preview_history">Pause search history</string>
+    <string name="pref_summary_pause_preview_history">Does not save any search if enabled</string>
+    <string name="choose_way">Choose an way</string>
+    <string name="no_have_connection_with_internet">No have internet connection</string>
 
 </resources>

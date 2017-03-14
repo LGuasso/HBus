@@ -12,6 +12,11 @@
         <item name="android:textSize">16dp</item>
     </style>
 
+
+    <style name="HbusTheme.TextAppearance.ChooseWay" parent="Base.Widget.AppCompat.Button">
+        <item name="android:textSize">24dp</item>
+    </style>
+
     <!--BASE -->
     <style name="AppTheme.TextAppearance.AppCompat.HeadLine" parent="@style/Base.TextAppearance.AppCompat.Headline">
     </style>

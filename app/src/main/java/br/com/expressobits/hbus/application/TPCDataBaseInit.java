@@ -41,7 +41,7 @@ public class TPCDataBaseInit extends Application{
             e.printStackTrace();
         }
 
-        if(93> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0) && 0<PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
+        if(100> PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0) && 0<PreferenceManager.getDefaultSharedPreferences(this).getInt("version",0)){
             Log.d(TAG,"NAO DEVE APARECER ISSO!");
             clearApplicationData(this);
         }

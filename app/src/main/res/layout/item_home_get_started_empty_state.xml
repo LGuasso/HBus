@@ -44,14 +44,33 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"/>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/cardViewEmptyStateButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:theme="@style/HBusTheme.Widget.AppCompat.Button.Colored.GetStartedTip"
-            android:textColor="@color/white"
-            android:text="@string/itineraries"/>
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/buttonHotTip2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:theme="@style/HBusTheme.Widget.AppCompat.Button.Colored.HotTip"
+                android:textColor="@color/white"
+                android:text="@string/itineraries"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/buttonHotTip1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:theme="@style/HBusTheme.Widget.AppCompat.Button.Colored.HotTip"
+                android:textColor="@color/white"
+                android:text="@string/itineraries"/>
+        </LinearLayout>
+
+
+
 
     </LinearLayout>
 

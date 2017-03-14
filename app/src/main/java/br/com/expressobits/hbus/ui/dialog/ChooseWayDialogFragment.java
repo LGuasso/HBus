@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.widget.ArrayAdapter;
 
@@ -43,6 +44,8 @@ public class ChooseWayDialogFragment extends DialogFragment implements DialogInt
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),R.layout.simple_way_list_item,ways);
         builder.setAdapter(arrayAdapter,this);
+        builder.setTitle(getString(R.string.choose_way));
+        builder.setIcon(ContextCompat.getDrawable(getActivity(),R.drawable.ic_send_grey600_48dp));
         // Create the AlertDialog object and return it
 
         return builder.create();

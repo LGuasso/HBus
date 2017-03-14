@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,11 +33,11 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
 import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.ui.DownloadScheduleActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemCityAdapter;
 import br.com.expressobits.hbus.ui.dialog.FinishListener;
+import br.com.expressobits.hbus.util.NetworkUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 public class SelectCityActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack,FinishListener{
@@ -124,23 +125,28 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onClickListener(View view, final int position) {
-        City city = cities.get(position);
-        Log.d(TAG, "Selection city id=" + city.getId());
-        SharedPreferences sharedPreferences = saveCityPreference(city);
-        unsSubscribe(sharedPreferences.getString(TAG,SelectCityActivity.NOT_CITY));
-        subscribe(city.getId());
-        FirebaseAnalyticsManager.registerEventCity(this,city.getCountry(),city.getName());
-        if(starter){
-            ManagerInit.manager(this);
-        }else {
-            if(!ManagerInit.isDatabaseFileFound(this,city.getCountry(),city.getName())){
-                Intent downloadIntent = new Intent(this, DownloadScheduleActivity.class);
-                downloadIntent.putExtra(DownloadScheduleActivity.STARTER_MODE,false);
-                this.startActivity(downloadIntent);
-            }
+        if(NetworkUtils.isWifiConnected(this) || NetworkUtils.isMobileConnected(this)){
+            City city = cities.get(position);
+            Log.d(TAG, "Selection city id=" + city.getId());
+            SharedPreferences sharedPreferences = saveCityPreference(city);
+            unsSubscribe(sharedPreferences.getString(TAG,SelectCityActivity.NOT_CITY));
+            subscribe(city.getId());
+            FirebaseAnalyticsManager.registerEventCity(this,city.getCountry(),city.getName());
+            if(starter){
+                ManagerInit.manager(this);
+            }else {
+                if(!ManagerInit.isDatabaseFileFound(this,city.getCountry(),city.getName())){
+                    Intent downloadIntent = new Intent(this, DownloadScheduleActivity.class);
+                    downloadIntent.putExtra(DownloadScheduleActivity.STARTER_MODE,false);
+                    this.startActivity(downloadIntent);
+                }
 
+            }
+            finish();
+        }else{
+            Toast.makeText(this,R.string.no_have_connection_with_internet,Toast.LENGTH_LONG).show();
         }
-        finish();
+
     }
 
     @NonNull
@@ -148,7 +154,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SelectCityActivity.this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(TAG, city.getId());
-        editor.putString(city.getId(), city.getCompanyDefault());
         editor.apply();
         return sharedPreferences;
     }
@@ -196,12 +201,6 @@ public class SelectCityActivity extends AppCompatActivity implements RecyclerVie
             }
         }
     }
-
-    private void addCompany(Company company){
-        Log.d(TAG,"add company "+company.getName());
-        //TODO implementar adiçao de empresa
-    }
-
 
 
     /**

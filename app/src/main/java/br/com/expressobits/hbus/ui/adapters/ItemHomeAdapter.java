@@ -26,10 +26,10 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.News;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
-import br.com.expressobits.hbus.ui.adapters.viewholder.GetStartedTipViewHolder;
+import br.com.expressobits.hbus.ui.adapters.viewholder.HotTipViewHolder;
 import br.com.expressobits.hbus.ui.adapters.viewholder.HeaderViewHolder;
 import br.com.expressobits.hbus.ui.adapters.viewholder.NewsViewHolder;
-import br.com.expressobits.hbus.ui.model.GetStartedTip;
+import br.com.expressobits.hbus.ui.model.HotTip;
 import br.com.expressobits.hbus.ui.model.Header;
 import br.com.expressobits.hbus.ui.news.NewsDetailsActivity;
 import br.com.expressobits.hbus.utils.BusUtils;
@@ -50,7 +50,7 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final HashMap<String,HashMap<String,Code>> codes = new HashMap<>();
 
     private final int HEADER = 0;
-    private final int GET_STARTED_TIP = 1;
+    private final int HOT_TIP = 1;
     private final int NEWS = 2;
     private final int BOOKMARKEDITINERARY = 3;
 
@@ -69,9 +69,9 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 View viewHeader = inflater.inflate(R.layout.item_header, viewGroup, false);
                 viewHolder = new HeaderViewHolder(viewHeader);
                 break;
-            case GET_STARTED_TIP:
+            case HOT_TIP:
                 View viewGetStarted = inflater.inflate(R.layout.item_home_get_started_empty_state, viewGroup, false);
-                viewHolder = new GetStartedTipViewHolder(viewGetStarted);
+                viewHolder = new HotTipViewHolder(viewGetStarted);
                 break;
             case NEWS:
                 View viewNews = inflater.inflate(R.layout.item_news, viewGroup, false);
@@ -93,8 +93,8 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemViewType(int position) {
         if (items.get(position) instanceof Header) {
             return HEADER;
-        }else if (items.get(position) instanceof GetStartedTip) {
-            return GET_STARTED_TIP;
+        }else if (items.get(position) instanceof HotTip) {
+            return HOT_TIP;
         }else if (items.get(position) instanceof News) {
             return NEWS;
         }else if (items.get(position) instanceof Itinerary) {
@@ -111,9 +111,9 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 configureHeaderViewHolder(headerViewHolder, position);
                 break;
-            case GET_STARTED_TIP:
-                GetStartedTipViewHolder getStartedTipViewHolder = (GetStartedTipViewHolder) viewHolder;
-                configureGetStartedTipViewHolder(getStartedTipViewHolder, position);
+            case HOT_TIP:
+                HotTipViewHolder hotTipViewHolder = (HotTipViewHolder) viewHolder;
+                configureHotTipViewHolder(hotTipViewHolder, position);
                 break;
             case NEWS:
                 NewsViewHolder newsViewHolder = (NewsViewHolder) viewHolder;
@@ -137,13 +137,21 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         headerViewHolder.textViewHeader.setText(header.getTextHeader());
     }
 
-    private void configureGetStartedTipViewHolder(GetStartedTipViewHolder getStartedTipViewHolder, int position) {
-        GetStartedTip getStartedTip = (GetStartedTip)items.get(position);
-        getStartedTipViewHolder.textViewTitle.setText(getStartedTip.getTitle());
-        getStartedTipViewHolder.textViewMessage.setText(getStartedTip.getMessage());
-        getStartedTipViewHolder.imageView.setImageResource(getStartedTip.getImageResource());
-        getStartedTipViewHolder.buttonSeeItineraries.setText(getStartedTip.getButtonText());
-        getStartedTipViewHolder.setRecyclerViewOnClickListenerHack(this);
+    private void configureHotTipViewHolder(HotTipViewHolder hotTipViewHolder, int position) {
+        HotTip hotTip = (HotTip)items.get(position);
+        hotTipViewHolder.textViewTitle.setText(hotTip.getTitle());
+        hotTipViewHolder.textViewMessage.setText(hotTip.getMessage());
+        hotTipViewHolder.imageView.setImageResource(hotTip.getImageResource());
+        hotTipViewHolder.button1.setText(hotTip.getButtonText());
+        if(hotTip.getButton2Text()==null){
+            hotTipViewHolder.button2.setEnabled(false);
+            hotTipViewHolder.button2.setVisibility(View.INVISIBLE);
+        }else{
+            hotTipViewHolder.button2.setEnabled(true);
+            hotTipViewHolder.button2.setVisibility(View.VISIBLE);
+            hotTipViewHolder.button2.setText(hotTip.getButton2Text());
+        }
+        hotTipViewHolder.setRecyclerViewOnClickListenerHack(this);
     }
 
     private void configureNewsViewHolder(NewsViewHolder newsViewHolder, int position) {
@@ -298,7 +306,7 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             intent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,news.getId());
             context.startActivity(intent);
         }
-        if(items.get(position) instanceof GetStartedTip){
+        if(items.get(position) instanceof HotTip){
             recyclerViewOnClickListenerHack.onClickListener(view, position);
         }
     }
