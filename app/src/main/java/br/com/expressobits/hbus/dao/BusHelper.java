@@ -1,5 +1,6 @@
 package br.com.expressobits.hbus.dao;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,59 +20,50 @@ import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.utils.BusUtils;
 import br.com.expressobits.hbus.utils.TimeUtils;
-import br.com.expressobits.hbus.utils.TextUtils;
+import br.com.expressobits.hbus.utils.StringUtils;
+import static br.com.expressobits.hbus.dao.SQLConstants.*;
 
 /**
  * @author Rafael
  * @since 19/01/16
  */
-public class BusHelper {
-    private static final String TAG = "BusHelper";
-    protected static final String TEXT_TYPE = " TEXT";
-    protected static final String INTEGER_TYPE = " INTEGER";
-    protected static final String REAL_TYPE = " REAL";
-    protected static final String COMMA_SEP = ",";
-    protected static final String INTEGER_PRIMARY_KEY = " INTEGER PRIMARY KEY";
-    protected static final String TEXT_PRIMARY_KEY = " TEXT PRIMARY KEY";
-    protected static final String PARENTES = " )";
-    protected static final String POINTCOMMA = ";";
-    public static final String BARS = "/";
-    public static final String NOT_FOUND_TIME = " --:-- ";
+@SuppressWarnings("ALL")
+@SuppressLint("ALL")
+@Deprecated
+class BusHelper {
 
-
-
-    protected static final String SQL_CREATE_CITIES =
+    private static final String SQL_CREATE_CITIES =
             "CREATE TABLE " + CityContract.City.TABLE_NAME + " (" +
                     CityContract.City._ID + TEXT_PRIMARY_KEY + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_COUNTRY + TEXT_TYPE + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_LATITUDE + REAL_TYPE + COMMA_SEP +
                     CityContract.City.COLUMN_NAME_LONGITUDE + REAL_TYPE +
-                    " )";
+                    PARENTES;
 
 
 
 
     //CONTENT VALUES
-    protected static ContentValues toContentValues(City city){
+    private static ContentValues toContentValues(City city){
         ContentValues values = new ContentValues();
         values.put(CityContract.City._ID,city.getId());
         values.put(CityContract.City.COLUMN_NAME_NAME,city.getName());
         values.put(CityContract.City.COLUMN_NAME_COUNTRY,city.getCountry());
-        values.put(CityContract.City.COLUMN_NAME_LATITUDE,(Double)city.getLocalization().get(CityContract.City.COLUMN_NAME_LATITUDE));
-        values.put(CityContract.City.COLUMN_NAME_LONGITUDE,(Double)city.getLocalization().get(CityContract.City.COLUMN_NAME_LONGITUDE));
+        values.put(CityContract.City.COLUMN_NAME_LATITUDE,city.getLocalization().get(CityContract.City.COLUMN_NAME_LATITUDE));
+        values.put(CityContract.City.COLUMN_NAME_LONGITUDE,city.getLocalization().get(CityContract.City.COLUMN_NAME_LONGITUDE));
         return values;
     }
 
-    protected static ContentValues toContentValues(Itinerary itinerary){
+    private static ContentValues toContentValues(Itinerary itinerary){
         ContentValues values = new ContentValues();
         values.put(ItineraryContract.Itinerary._ID,itinerary.getId());
         values.put(ItineraryContract.Itinerary.COLUMN_NAME_NAME,itinerary.getName());
-        values.put(ItineraryContract.Itinerary.COLUMN_NAME_WAYS, TextUtils.getSentidosinString(itinerary.getWays()));
+        values.put(ItineraryContract.Itinerary.COLUMN_NAME_WAYS, StringUtils.getSentidosinString(itinerary.getWays()));
         return values;
     }
 
-    protected static ContentValues toContentValues(Code code){
+    private static ContentValues toContentValues(Code code){
         ContentValues values = new ContentValues();
         values.put(CodeContract.Code._ID, code.getId());
         values.put(CodeContract.Code.COLUMN_NAME_NAME, code.getName());
@@ -79,7 +71,7 @@ public class BusHelper {
         return values;
     }
 
-    protected static ContentValues toContentValues(Bus bus){
+    private static ContentValues toContentValues(Bus bus){
         ContentValues values = new ContentValues();
         values.put(BusContract.Bus._ID,bus.getId());
         values.put(BusContract.Bus.COLUMN_NAME_TIME,bus.getTime());
@@ -165,7 +157,7 @@ public class BusHelper {
         Itinerary itinerary = new Itinerary();
         itinerary.setId(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary._ID)));
         itinerary.setName(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_NAME)));
-        itinerary.setWays(new ArrayList<String>(Arrays.asList(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_WAYS)).split(COMMA_SEP))));
+        itinerary.setWays(new ArrayList<>(Arrays.asList(c.getString(c.getColumnIndexOrThrow(ItineraryContract.Itinerary.COLUMN_NAME_WAYS)).split(COMMA_SEP))));
         return itinerary;
     }
 
@@ -294,14 +286,9 @@ public class BusHelper {
         return null;
     }
 
-
-
-
-
-
     //GET LIST OBJCTS
     public static List<City> getCities(SQLiteDatabase db){
-        ArrayList<City> cities = new ArrayList<City>();
+        ArrayList<City> cities = new ArrayList<>();
         Cursor c;
         c = db.query(
                 CityContract.City.TABLE_NAME,
@@ -319,7 +306,7 @@ public class BusHelper {
     }
 
     public static List<Itinerary> getItineraries(SQLiteDatabase db){
-        ArrayList<Itinerary> itineraries = new ArrayList<Itinerary>();
+        ArrayList<Itinerary> itineraries = new ArrayList<>();
         Cursor c;
         c = db.query(
                 ItineraryContract.Itinerary.TABLE_NAME,
@@ -337,7 +324,7 @@ public class BusHelper {
     }
 
     public static List<Itinerary> getItineraries(SQLiteDatabase db,City city){
-        ArrayList<Itinerary> itineraries = new ArrayList<Itinerary>();
+        ArrayList<Itinerary> itineraries = new ArrayList<>();
         String where = ItineraryContract.Itinerary._ID+" LIKE ?";
         String arguments[] = {BARS+city.getCountry()+BARS+city.getName()+"%"};
         Cursor c;
@@ -357,9 +344,7 @@ public class BusHelper {
     }
 
     public static List<Code> getCodes(SQLiteDatabase db,City city){
-        ArrayList<Code> codes = new ArrayList<Code>();
-        String where = CodeContract.Code._ID+" LIKE ?";
-        String arguments[] = {city.getCountry()+BARS+city.getName()+"%"};
+        ArrayList<Code> codes = new ArrayList<>();
         Cursor c;
         c = db.query(
                 CodeContract.Code.TABLE_NAME,
@@ -377,7 +362,7 @@ public class BusHelper {
     }
 
     public static List<Bus> getBuses(SQLiteDatabase db,City city,Itinerary itinerary,String way,TypeDay typeDay){
-        ArrayList<Bus> buses = new ArrayList<Bus>();
+        ArrayList<Bus> buses = new ArrayList<>();
         Cursor c;
         String where = BusContract.Bus._ID+" LIKE ?";
         Log.e("TEST",city.getCountry()+BARS+city.getName()+BARS+
@@ -401,7 +386,7 @@ public class BusHelper {
     }
 
     public static List<Bus> getBuses(SQLiteDatabase db,City city,Itinerary itinerary){
-        ArrayList<Bus> buses = new ArrayList<Bus>();
+        ArrayList<Bus> buses = new ArrayList<>();
         Cursor c;
         String where = BusContract.Bus._ID+" LIKE ?";
         Log.e("TEST",city.getCountry()+BARS+city.getName()+BARS+
@@ -427,7 +412,6 @@ public class BusHelper {
     ///DELETES
 
     public static int deleteItineraries(SQLiteDatabase db,City city){
-        ArrayList<Bus> buses = new ArrayList<Bus>();
         String where = ItineraryContract.Itinerary._ID+" LIKE ?";
         String arguments[] = {city.getCountry()+BARS+city.getName()+"%"};
         return db.delete(
@@ -438,7 +422,6 @@ public class BusHelper {
     }
 
     public static int deleteCodes(SQLiteDatabase db,City city){
-        ArrayList<Bus> buses = new ArrayList<Bus>();
         String where = CodeContract.Code._ID+" LIKE ?";
         String arguments[] = {city.getCountry()+BARS+city.getName()+"%"};
         return db.delete(
@@ -450,7 +433,6 @@ public class BusHelper {
 
 
     public static int deleteBuses(SQLiteDatabase db,City city,Itinerary itinerary){
-        ArrayList<Bus> buses = new ArrayList<Bus>();
         String where = BusContract.Bus._ID+" LIKE ?";
         String arguments[] = {city.getCountry()+BARS+city.getName()+BARS+
                 itinerary.getName()+"%"};
@@ -463,7 +445,7 @@ public class BusHelper {
 
     public static List<Bus> getNextBuses(SQLiteDatabase db,City city,Itinerary itinerary){
 
-        ArrayList<Bus> next = new ArrayList<Bus>();
+        ArrayList<Bus> next = new ArrayList<>();
         if(itinerary.getWays()!=null){
             for(int j = 0;j< itinerary.getWays().size();j++) {
                 next.add(BusUtils.getNextBusforList(

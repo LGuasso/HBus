@@ -4,6 +4,8 @@ package br.com.expressobits.hbus.ui.news;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,12 +36,13 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment{
 
     public static final String TAG = "NewsFragment";
 
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerViewNews;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private List<News> newses = new ArrayList<>();
     private LinearLayout linearLayoutEmptyView;
     private ViewGroup progressBarLayout;
@@ -70,12 +73,20 @@ public class NewsFragment extends Fragment {
     }
 
     private void initListView(View view) {
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(getActivity(),R.color.colorPrimary),
+                ContextCompat.getColor(getActivity(),R.color.colorAccent));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            update(true);
+        });
         recyclerViewNews = (RecyclerView) view.findViewById(R.id.recyclerViewNews);
         recyclerViewNews.setHasFixedSize(true);
         recyclerViewNews.setSelected(true);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewNews.setLayoutManager(linearLayoutManager);
+        ItemNewsAdapter itemNewsAdapter = new ItemNewsAdapter(getActivity(),newses);
+        recyclerViewNews.setAdapter(itemNewsAdapter);
     }
 
     private void initEmptyView(View view) {
@@ -85,10 +96,10 @@ public class NewsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        update();
+        update(false);
     }
 
-    private void update(){
+    private void update(boolean isSwipe){
         newses = new ArrayList<>();
         updateListView();
         getGeneralNews();
@@ -98,6 +109,9 @@ public class NewsFragment extends Fragment {
         getCityNews(country,city);
         String company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"");
         getCompanyNews(company,country,city);
+        if(isSwipe){
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     /**
@@ -133,7 +147,6 @@ public class NewsFragment extends Fragment {
                 if(news.isActived()){
                     newses.add(news);
                 }
-
                 updateListView();
             }
 
@@ -243,24 +256,12 @@ public class NewsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.fragment_itineraries, menu);
+        inflater.inflate(R.menu.menu_news_fragment, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        int id = item.getItemId();
-        if (id == R.id.menu_action_refresh) {
-            update();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
-
-
 }

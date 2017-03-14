@@ -16,22 +16,3 @@
 
 
 
-Corrigido erro de carregamento de dados
-Corrigido erro de horário
-Corrigido erro ao abrir horários de empresas diferentes
-Adicionado códigos na tela principal
-Adicionado política de privacidade
-
-Reformulado os feedback
-
-
-Adicionado horários
-Santa Maria:
-    >Expresso Dores
-    >Expresso Medianeira
-    >Centro Oeste
-
-Corrigido vários bugs
-
-
-

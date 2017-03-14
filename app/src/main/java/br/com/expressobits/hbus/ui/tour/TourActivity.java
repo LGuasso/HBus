@@ -1,25 +1,23 @@
 package br.com.expressobits.hbus.ui.tour;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.ui.ManagerInit;
-import me.relex.circleindicator.CircleIndicator;
+import br.com.expressobits.hbus.analytics.FirebaseAnalyticsManager;
+import br.com.expressobits.hbus.application.ManagerInit;
 
 /**
  * Tela de tour(intro)
@@ -42,22 +40,16 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         starter = getIntent().getBooleanExtra(STARTER_MODE,false);
-        Log.e("TESTE",starter + " starter mode");
-
-
+        if(starter){
+            FirebaseAnalyticsManager.registerEventTutorialBegin(this);
+        }
         setContentView(R.layout.activity_tour);
-
         referencesLayoutXML();
-
         showCircleIndicatorDefault();
-
         setSupportActionBar(mToolbarBottom);
-
         setupToolbarBottom();
     }
-
 
     @Override
     protected void onResume() {
@@ -72,30 +64,22 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     private void setupToolbarBottom() {
-        jumpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        jumpButton.setOnClickListener(v -> finishTour());
+        nextButton.setOnClickListener(v -> {
+            if (defaultPagerAdapter.getCount() == defaultViewpager.getCurrentItem() + 1) {
                 finishTour();
+
+
             }
-        });
-
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (defaultPagerAdapter.getCount() == defaultViewpager.getCurrentItem() + 1) {
-                    finishTour();
-
-
+            if(defaultViewpager.getCurrentItem() + 2 == defaultPagerAdapter.getCount()){
+                nextButton.setText(getResources().getText(R.string.finish));
+                if(starter){
+                    FirebaseAnalyticsManager.registerEventTutorialComplete(this);
                 }
-                if(defaultViewpager.getCurrentItem() + 2 == defaultPagerAdapter.getCount()){
-                    nextButton.setText(getResources().getText(R.string.finish));
-                }else{
-                    nextButton.setText(getResources().getText(R.string.action_next));
-                }
-
-                defaultViewpager.setCurrentItem(defaultViewpager.getCurrentItem() + 1);
+            }else{
+                nextButton.setText(getResources().getText(R.string.action_next));
             }
+            defaultViewpager.setCurrentItem(defaultViewpager.getCurrentItem() + 1);
         });
     }
 
@@ -115,69 +99,49 @@ public class TourActivity extends AppCompatActivity implements ViewPager.OnPageC
     private void showCircleIndicatorDefault() {
         defaultViewpager = (ViewPager) findViewById(R.id.viewpager_default);
         defaultViewpager.setOffscreenPageLimit(2);
-        CircleIndicator defaultIndicator = (CircleIndicator) findViewById(R.id.indicator_default);
-
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDots);
+        tabLayout.setupWithViewPager(defaultViewpager, true);
         ArrayList<Fragment> fragments = new ArrayList<>();
-        //TODO para resources este dados
-        try{
-            fragments.add(
-                    PagerFragment.newInstance(
-                            getResources().getColor(R.color.tour_color_palm),
-                            0,
-                            getString(R.string.tour_title_palm),
-                            getString(R.string.tour_subtitle_palm),
-                            R.drawable.ic_bus_white_48dp)
-            );
-            fragments.add(
-                    PagerFragment.newInstance(
-                            getResources().getColor(R.color.tour_color_update),
-                            1,
-                            getString(R.string.tour_title_update),
-                            getString(R.string.tour_subtitle_update),
-                            R.drawable.ic_refresh_white_48dp)
-            );
-            fragments.add(
-                    PagerFragment.newInstance(
-                            getResources().getColor(R.color.tour_color_feedback),
-                            2,
-                            getString(R.string.tour_title_feedback),
-                            getString(R.string.tour_subtitle_feedback),
-                            R.drawable.ic_information_white_48dp)
-            );
-        }catch (Resources.NotFoundException ex){
-            //TODO remove este try cacth quando erradicar este bug
-            //https://play.google.com/apps/publish/?dev_acc=07647321672896290368#ErrorClusterDetailsPlace:p=br.com.expressobits.hbus&et=CRASH&lr=LAST_7_DAYS&ecn=android.content.res.Resources$NotFoundException&tf=Resources.java&tc=android.content.res.Resources&tm=getText&nid&an&c&s=new_status_desc&ed=0
-            finishTour();
-        }
-
-        //fragments.add(PagerFragment.newInstance(1, 0,"HBus", "A hora nas suas mãos!\nEncontre a linha urbana favorita!", R.drawable.modelo));
-        //fragments.add(PagerFragment.newInstance(1, 0, "Fácil de usar!", "Com poucos toques utilize o máximo!\nCom favoritos que exibem já os próximos horários!", R.mipmap.ic_launcher));
-        //fragments.add(PagerFragment.newInstance(1, 0, "Ajude-nos!", "Ainda em fase de testes, este aplicativo vai crescer com sua ajuda e feedback!", R.mipmap.ic_launcher));
-
+        fragments.add(
+                PagerFragment.newInstance(
+                        ContextCompat.getColor(getApplicationContext(), R.color.tour_color_palm),
+                        0,
+                        getString(R.string.tour_title_palm),
+                        getString(R.string.tour_subtitle_palm),
+                        R.drawable.ic_big_bus)
+        );
+        fragments.add(
+                PagerFragment.newInstance(
+                        ContextCompat.getColor(getApplicationContext(), R.color.tour_color_update),
+                        1,
+                        getString(R.string.tour_title_update),
+                        getString(R.string.tour_subtitle_update),
+                        R.drawable.ic_antenna)
+        );
+        fragments.add(
+                PagerFragment.newInstance(
+                        ContextCompat.getColor(getApplicationContext(), R.color.tour_color_feedback),
+                        2,
+                        getString(R.string.tour_title_feedback),
+                        getString(R.string.tour_subtitle_feedback),
+                        R.drawable.ic_crosswalk)
+        );
         defaultPagerAdapter = new ContentPagerAdapter(getSupportFragmentManager(), fragments);
         defaultViewpager.setAdapter(defaultPagerAdapter);
-
         defaultViewpager.setAdapter(new ContentPagerAdapter(getSupportFragmentManager(), fragments));
-
-        defaultIndicator.setViewPager(defaultViewpager);
-        defaultViewpager.setOnPageChangeListener(this);
+        //tabLayout.setViewPager(defaultViewpager);
+        defaultViewpager.addOnPageChangeListener(this);
     }
 
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_splash, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         return super.onOptionsItemSelected(item);
     }
 

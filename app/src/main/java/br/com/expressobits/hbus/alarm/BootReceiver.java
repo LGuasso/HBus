@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
+ * Receiver on alarm after phone reset
+ * @see android.content.BroadcastReceiver
  * http://stackoverflow.com/questions/26296270/alarmmanager-not-trigger-after-the-phone-reset?lq=1
  * @author Rafael Correa
  * @since 21/04/16

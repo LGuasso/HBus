@@ -1,12 +1,14 @@
 package br.com.expressobits.hbus.utils;
 
+import java.text.Normalizer;
+
 /**
  * @author Rafael
  * @since 19/01/16
  */
 public class FirebaseUtils {
 
-    public static final String EXTENSION_IMAGE = ".jpg";
+    public static final String EXTENSION_IMAGE_JPG = ".jpg";
     public static final String FLAG_TEXT_FILE = "_flag";
     public static final String GENERAL = "general";
     public static final String BARS = "/";
@@ -22,6 +24,10 @@ public class FirebaseUtils {
     public static final String NEWS_TABLE = "news";
 
     public static final String NEWS_BODY_IMAGE_TAG = "imagehbus";
+    public static final String REF_STORAGE_HBUS_IMAGE = "images";
+    public static final String IMAGE_CITY_PHOTO_FILE = "image_photo";
+    public static final String IMAGE_CITY_COATS_OF_ARMS_FILE = "image_coats_of_arms";
+    public static final String EXTENSION_IMAGE_PNG = ".png";
 
     public static String getIdNewsGeneral(String time){
         return BARS+NEWS_TABLE+BARS+GENERAL+BARS+time;
@@ -106,6 +112,8 @@ public class FirebaseUtils {
     }
 
     public static String getIdForSubscribeCity(String id){
+        id = Normalizer.normalize(id, Normalizer.Form.NFD);
+        id = id.replaceAll("[^\\p{ASCII}]", "");
         return id.replace(" ","%").replace(FirebaseUtils.BARS,"-");
     }
 

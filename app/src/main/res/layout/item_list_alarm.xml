@@ -2,53 +2,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relativeLayoutItemListAlarm"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="72dp"
+    android:animateLayoutChanges="true"
     android:orientation="vertical"
-    android:padding="2dp"
-    android:animateLayoutChanges="true">
+    android:padding="2dp">
+
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="2dp"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="2dp">
 
             <TextView
+                android:id="@+id/textViewTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/textViewTime"
+                android:gravity="center_vertical"
+                android:text="@string/example_hours"
                 android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="32dp"
                 android:textColor="@color/colorPrimary"
-                android:gravity="center_vertical" />
+                android:padding="8dp"
+                android:textSize="32dp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:padding="8dp"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+
 
             <TextView
+                android:id="@+id/textViewName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:id="@+id/textViewName"/>
+                android:text="@string/alarm" />
 
             <TextView
+                android:id="@+id/textViewItineraryName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:id="@+id/textViewItineraryName"/>
-
+                android:text="@string/itinerary_name" />
 
 
             <LinearLayout
@@ -57,59 +66,72 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
                     android:id="@+id/textViewDaysSunday"
-                    android:text="@string/sundayFirstChar"
-                    style="@style/DayOfWeek.TextView"/>
-                <TextView
+                    style="@style/DayOfWeek.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:text="@string/sundayFirstChar" />
+
+                <TextView
                     android:id="@+id/textViewDaysMonday"
-                    android:text="@string/mondayFirstChar"
-                    style="@style/DayOfWeek.TextView"/>
-                <TextView
+                    style="@style/DayOfWeek.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:text="@string/mondayFirstChar" />
+
+                <TextView
                     android:id="@+id/textViewDaysTuesday"
-                    android:text="@string/tuesdayFirstChar"
-                    style="@style/DayOfWeek.TextView"/>
-                <TextView
+                    style="@style/DayOfWeek.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:text="@string/tuesdayFirstChar" />
+
+                <TextView
                     android:id="@+id/textViewDaysWednesday"
-                    android:text="@string/wednesdayFirstChar"
-                    style="@style/DayOfWeek.TextView"/>
-                <TextView
+                    style="@style/DayOfWeek.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:text="@string/wednesdayFirstChar" />
+
+                <TextView
                     android:id="@+id/textViewDaysThursday"
-                    android:text="@string/thursdayFirstChar"
-                    style="@style/DayOfWeek.TextView"/>
-                <TextView
+                    style="@style/DayOfWeek.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:text="@string/thursdayFirstChar" />
+
+                <TextView
                     android:id="@+id/textViewDaysFriday"
-                    android:text="@string/fridayFirstChar"
-                    style="@style/DayOfWeek.TextView"/>
-                <TextView
+                    style="@style/DayOfWeek.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:text="@string/fridayFirstChar" />
+
+                <TextView
                     android:id="@+id/textViewDaysSaturday"
-                    android:text="@string/saturdayFirstChar"
-                    style="@style/DayOfWeek.TextView"/>
+                    style="@style/DayOfWeek.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/saturdayFirstChar" />
+
 
             </LinearLayout>
+
         </LinearLayout>
+
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/toggleActived"
-            android:padding="16dp"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="16dp" />
 
     </LinearLayout>
 
-
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent" />
 
 </LinearLayout>

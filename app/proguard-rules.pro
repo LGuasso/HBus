@@ -1,6 +1,6 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
-# in D:\Program Files (x86)\Android\android-sdk/tools/proguard/proguard-android.txt
+# in android-sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
 # directive in build.gradle.
 #
@@ -15,15 +15,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
-#depura��o
--verbose
-#desabilita o op��o de otimiza��o
 -dontoptimize
 
 -repackageclasses ''
 
-#desabilita o op��o para metodos onClick
+#disable option methods onClik View
 -keepclassmembers class * extends android.app.Activity {
    public void *(android.view.View);
 }
@@ -34,29 +30,17 @@
 
 -keep class com.google.inject.** { *; }
 
--keep public class br.com.expressobits.hbus.ui.MainActivity
 
--keep public class br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment
--keep public class br.com.expressobits.hbus.ui.fragments.OnibusFragment
--keep public class br.com.expressobits.hbus.ui.fragments.FavoriteItineraryFragment
--keep public class br.com.expressobits.hbus.ui.splash.SplashActivty
--keep public class br.com.expressobits.hbus.ui.tour.TourActivity
--keep public class br.com.expressobits.hbus.ui.tour.PagerFragment
--keep public class br.com.expressobits.hbus.ui.tour.ContentPagerAdapter
--keep public class br.com.expressobits.hbus.ui.settings.SettingsActivity
--keep public class br.com.expressobits.hbus.ui.settings.AboutPreferenceFragment
--keep public class br.com.expressobits.hbus.ui.settings.SelectCityFragment
--keep public class br.com.expressobits.hbus.ui.settings.DataSyncPreferenceFragment
--keep public class br.com.expressobits.hbus.ui.settings.GeneralPreferenceFragment
--keep public class br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment
+-keep class br.com.expressobits.hbus.application.TPCDataBaseInit
 
 
--keep class com.mikepenz.materialdrawer.** { *; }
+-keep class br.com.expressobits.hbus.ui.*
 
--dontwarn android.support.**
+-keep class com.mikepenz.materialdrawer.*
 
 -keep public class com.google.android.gms.* { public *; }
 
--dontwarn com.google.android.gms.**
 
--keep class org.slf4j.**
+-keep class com.google.android.gms.ads.*
+
+-keep class com.google.ads.mediation.AdUrlAdapter

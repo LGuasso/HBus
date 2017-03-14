@@ -2,13 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.expressobits.hbus">
 
-    <!-- Permissão para ler memória externa -->
-    <!-- uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" / -->
-    <!-- Permissão para ler memória externa -->
-    <!-- uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" / -->
-    <!-- Permissão para acesso á internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Permissão para saber o estatus da rede -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -24,23 +18,49 @@
     <permission
         android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+    <permission
+        android:name="br.com.expressobits.hbus.permission.HBUS_PERMISSION"
+        android:protectionLevel="normal" />
 
     <uses-permission android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
+    <uses-permission android:name="br.com.expressobits.hbus.permission.HBUS_PERMISSION" />
 
-    <!-- uses-permission android:name="android.permission.READ_PROFILE" / -->
-    <!-- uses-permission android:name="android.permission.READ_CONTACTS" / -->
-    <!-- uses-permission android:name="android.permission.GET_ACCOUNTS" / -->
     <application
         android:name=".application.TPCDataBaseInit"
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:fullBackupContent="@xml/hbus_backup_files"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/HBusTheme">
 
         <!-- Esta meta data é requerida com o play services -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <!-- Provider get search view to itinerary -->
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value="br.com.expressobits.hbus.ui.ItinerarySearchableActivity" />
+
+        <provider
+            android:name=".provider.ItinerarySearchableProvider"
+            android:authorities="br.com.expressobits.hbus.provider.ItinerarySearchableProvider" />
+
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_bus_white_24dp" />
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
 
         <!--
          Optionally, register AnalyticsReceiver and AnalyticsService to support background
@@ -48,7 +68,8 @@
         -->
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:permission="br.com.expressobits.hbus.permission.HBUS_PERMISSION">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
@@ -65,7 +86,8 @@
         -->
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
-            android:exported="true">
+            android:exported="true"
+            android:permission="br.com.expressobits.hbus.permission.HBUS_PERMISSION">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -76,7 +98,24 @@
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:windowSoftInputMode="adjustPan|adjustNothing">
+
+            <!--
+            ATTENTION: This intent was auto-generated. Follow instructions at
+            https://g.co/AppIndexing/AndroidStudio to publish your URLs.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- ATTENTION: This data URL was auto-generated. We recommend that you use the HTTP scheme. -->
+                <data
+                    android:host="hbus-1206.firebaseapp.com"
+                    android:pathPrefix="/main"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
@@ -84,18 +123,15 @@
         <activity
             android:name=".ui.tour.TourActivity"
             android:label="@string/app_name"
-            android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:noHistory="true" />
         <activity
             android:name=".ui.settings.SelectCityActivity"
             android:label="@string/title_activity_choose_city"
-            android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:noHistory="true" />
         <activity
             android:name=".ui.splash.SplashActivity"
             android:label="@string/app_name"
-            android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -104,27 +140,21 @@
         </activity>
         <activity
             android:name=".ui.help.HelpActivity"
-            android:label="@string/title_activity_help"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_help">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
         </activity>
         <activity
             android:name=".ui.help.FeedbackActivity"
-            android:label="@string/title_activity_feedback"
-            android:parentActivityName=".ui.help.HelpActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_feedback">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.help.HelpActivity" />
         </activity>
         <activity
             android:name=".ui.TimesActivity"
-            android:label="@string/title_activity_times"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_times">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
@@ -132,20 +162,17 @@
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.MainActivity">
+            android:theme="@style/HBusTheme.ActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
         </activity>
         <activity
             android:name=".ui.help.HelpContentActivity"
-            android:label="@string/title_activity_help_content"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_help_content" />
         <activity
             android:name=".ui.alarm.AlarmEditorActivity"
-            android:label="@string/title_activity_help_content"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_help_content">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
@@ -169,17 +196,12 @@
             android:name=".alarm.BootService"
             android:enabled="true" />
 
-        <activity
-            android:name=".ui.CompanyDetailsActivity"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".ui.CompanyDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />
         </activity>
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.login.LoginActivity" />
 
         <service
             android:name=".messaging.NewsFirebaseMessagingService"
@@ -190,17 +212,34 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".ui.news.NewsDetailsActivity"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".ui.help.PrivacyPolicyActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".ui.login.LoginActivity"
-            android:label="@string/title_activity_privacy_policy">
-
+        <activity android:name=".ui.news.NewsDetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
         </activity>
+        <activity
+            android:name=".ui.help.PrivacyPolicyActivity"
+            android:label="@string/title_activity_privacy_policy">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.ItinerarySearchableActivity"
+            android:label="@string/itineraries"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|adjustNothing">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/itinerary_searchable" />
+        </activity>
+        <activity android:name=".ui.DownloadScheduleActivity" />
+        <activity android:name=".ui.download.ListDatabaseActivity"
+            android:label="@string/pref_title_database_manager"/>
     </application>
 
 </manifest>

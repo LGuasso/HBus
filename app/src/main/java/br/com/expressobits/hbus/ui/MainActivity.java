@@ -1,16 +1,16 @@
 package br.com.expressobits.hbus.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,19 +22,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -42,104 +32,92 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.application.AdManager;
 import br.com.expressobits.hbus.application.AppManager;
-import br.com.expressobits.hbus.dao.ItineraryContract;
-import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.messaging.ClickActionHelper;
 import br.com.expressobits.hbus.model.Itinerary;
 import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
 import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
 import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
-import br.com.expressobits.hbus.ui.fragments.BookmarkItineraryFragment;
+import br.com.expressobits.hbus.ui.fragments.HomeFragment;
 import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
-import br.com.expressobits.hbus.ui.news.NewsFragment;
-import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
+import br.com.expressobits.hbus.ui.fragments.ScheduleFragment;
 import br.com.expressobits.hbus.ui.help.HelpActivity;
 import br.com.expressobits.hbus.ui.login.LoginActivity;
+import br.com.expressobits.hbus.ui.news.NewsFragment;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.ui.settings.SettingsActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
-public class MainActivity extends AppCompatActivity implements OnSettingsListener,
+/* *************************************************************************************************
+~ Juramento do Programador no desenvolvimento de Código Limpo:
+~
+~  Antes de codificar, me colocarei na posição dos outros colaboradores desenvolvedores,
+~  buscando me expressar de maneira simples, logo:
+~
+~  - Nomearei as entidades como classes, métodos e variáveis com nomes significativos, pronunciáveis
+~  e pesquisável, que revelem a sua verdadeira e atual intenção;
+~
+~  - Farei com que cada método e cada deve ter apenas uma única responsabilidade, caso contrário,
+~  deve ser refatorados em métodos unitários;
+~
+~  - Ao comentar sobre uma entidade, deixarei claro qual é o seu papel atual e sugerirei  melhorias
+~  futuras, se for o caso; Atualizar comentários sempre quando atualizar código;
+~ **************************************************************************************************/
+
+public class MainActivity extends AppCompatActivity implements FragmentManagerListener,
         ChooseWayDialogListener,NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
-    public static final String TAG = "Atividade Principal";
-    public static final String DEBUG = "debug";
-    public static final String STACK = "pilha";
-    public Toolbar pToolbar;
-    private NavigationView navigationView;
-    //Gerencia a atuacao dos fragments
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    TextView textViewCompanyUse;
 
-    ImageView imageViewCity;
-    ImageView circleImageViewCityProfile;
-    TextView textViewCityName;
+    private static final String TAG = "MainActivity";
+    private static final String STACK = "stack";
+    public static final String DEBUG = "debug";
+    private Toolbar pToolbar;
+    private NavigationView navigationView;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+
+    private ImageView imageViewCity;
+    private ImageView circleImageViewCityProfile;
+    private TextView textViewCityName;
     private String country;
     private String city;
-    private String company;
-    private String itinerary;
-    private String way;
-    private boolean isDualPane;
-    public InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        checkIntent(getIntent());
         setContentView(R.layout.activity_main);
-
         loadParams();
+        AppManager.verifyUpdatedDatabase(this,country,city);
         if (savedInstanceState == null) {
-            Fragment fragment = new BookmarkItineraryFragment();
+            Fragment fragment = new HomeFragment();
             if (findViewById(R.id.framelayout_main) != null) {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_main, fragment, BookmarkItineraryFragment.TAG);
+                ft.add(R.id.framelayout_main, fragment, HomeFragment.TAG);
                 ft.commit();
-            } else if (findViewById(R.id.framelayout_content) != null) {
-                FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.add(R.id.framelayout_menu, fragment, BookmarkItineraryFragment.TAG);
-                ft.add(R.id.framelayout_content, new OnibusFragment(),OnibusFragment.TAG);
-                ft.commit();
-                //Define se tela é para dois framgnetos
-                isDualPane = true;
             }
         }
         initViews();
+        AppManager.countsOpenApp(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkIntent(intent);
+    }
+
+    private void checkIntent(Intent intent) {
+        if (intent.hasExtra("click_action")) {
+            ClickActionHelper.startActivity(intent.getStringExtra("click_action"), intent.getExtras(), this);
+        }
     }
 
     private void loadParams() {
         String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        try {
-            city = FirebaseUtils.getCityName(cityId);
-            country = FirebaseUtils.getCountry(cityId);
-            Log.e(TAG,country);
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference cityTableRef = database.getReference(FirebaseUtils.CITY_TABLE);
-            DatabaseReference countryRef = cityTableRef.child(country);
-            DatabaseReference cityRef = countryRef.child(city);
-            cityRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    City city = dataSnapshot.getValue(City.class);
-                    company = city.getCompanyDefault();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }catch (Exception e){
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(SelectCityActivity.TAG);
-            editor.apply();
-
-            Toast.makeText(this,getString(R.string.error_load_city),Toast.LENGTH_LONG).show();
-            startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
-        }
-
+        city = FirebaseUtils.getCityName(cityId);
+        country = FirebaseUtils.getCountry(cityId);
     }
 
     @Override
@@ -157,81 +135,37 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
-        StorageReference tableRef = storageRef.child(FirebaseUtils.CITY_TABLE);
+        StorageReference imageRef = storageRef.child(FirebaseUtils.REF_STORAGE_HBUS_IMAGE);
+        StorageReference tableRef = imageRef.child(FirebaseUtils.CITY_TABLE);
         StorageReference countryRef = tableRef.child(country);
-        StorageReference cityRef = countryRef.child(city.toLowerCase().replace(" ","_")+FirebaseUtils.EXTENSION_IMAGE);
+        StorageReference cityRef = countryRef.child(FirebaseUtils.getCityName(cityId));
 
-        StorageReference cityFlagRef = countryRef.child(city.toLowerCase().replace(" ","_")
-                +FirebaseUtils.FLAG_TEXT_FILE+FirebaseUtils.EXTENSION_IMAGE);
+        StorageReference cityProfileRef = cityRef.child(FirebaseUtils.IMAGE_CITY_PHOTO_FILE +FirebaseUtils.EXTENSION_IMAGE_JPG);
+        StorageReference cityFlagRef = cityRef.child(FirebaseUtils.IMAGE_CITY_COATS_OF_ARMS_FILE +FirebaseUtils.EXTENSION_IMAGE_PNG);
 
-        cityRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-
-                Picasso.with(MainActivity.this).load(uri)
-                        .into(imageViewCity);
-            }
+        cityProfileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(this).load(uri)
+                .placeholder(R.drawable.default_city)
+                .into(imageViewCity));
 
 
-        });
+        cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(this).load(uri)
+                .error(R.drawable.ic_flag_white_48dp)
+                .placeholder(R.drawable.ic_shield_grey600_24dp)
+                .into(circleImageViewCityProfile));
 
-        cityFlagRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-
-                Picasso.with(MainActivity.this).load(uri)
-                        .placeholder(R.drawable.ic_flag_white_48dp)
-                        .error(R.drawable.ic_flag_white_48dp)
-                        .into(circleImageViewCityProfile);
-            }
-        });
-        textViewCompanyUse.setText(getString(R.string.company_use,PreferenceManager.getDefaultSharedPreferences(this).getString(cityId,"")));
     }
-
-
 
     private void initViews() {
         initActionBar();
         initNavigationDrawer();
-        initAdInterstitial();
-        textViewCompanyUse = (TextView) findViewById(R.id.textCompanyUse);
-    }
-
-    private void initAdInterstitial(){
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.intersticial_ad_unit_id));
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                openTimes(country, city, company, itinerary, way);
-            }
-
-        });
-        requestNewInterstitial();
-    }
-
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(getString(R.string.tablet_test_device_id))
-                .build();
-        mInterstitialAd.loadAd(adRequest);
-    }
-
-    private boolean showAdIntersticial() {
-        if (mInterstitialAd.isLoaded() && AppManager.countTimesActivity(this)) {
-            mInterstitialAd.show();
-            return true;
-        } else {
-            return false;
-        }
+        AdManager.initAdInterstitial(this);
     }
 
     private void initNavigationDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, pToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -239,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
         View naviHeader = navigationView.getHeaderView(0);
         View naviView = naviHeader.findViewById(R.id.side_nav_bar);
-        /**TODO mostrar empresa selecionada no menu com companies */
         naviView.setOnClickListener(this);
         TextView textViewUserName = (TextView)naviHeader.findViewById(R.id.textViewUserName);
         TextView textViewUserEmail = (TextView)naviHeader.findViewById(R.id.textViewUserEmail);
@@ -250,24 +183,23 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         circleImageViewCityProfile = (ImageView) naviHeader.findViewById(R.id.imageViewCityProfile);
         imageViewCity = (ImageView) naviHeader.findViewById(R.id.imageViewCity);
         imageViewCity.setOnClickListener(this);
-
-
-        //textViewCityName.setText(city + " - " + country);
-        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        if(userName!=null && !userName.isEmpty()){
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser!=null){
+            String userName = currentUser.getDisplayName();
             textViewUserName.setText(userName);
-            Uri uriImage = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
+            Uri uriImage = currentUser.getPhotoUrl();
             Log.d(TAG,"Uri image"+uriImage);
             Picasso.with(this).load(uriImage)
                     .placeholder(R.drawable.ic_account_white_48dp)
                     .error(R.drawable.ic_account_white_48dp)
                     .into(imageViewUserProfile);
-        }else {
+            textViewUserEmail.setText(currentUser.getEmail());
+        }else{
             textViewUserName.setText(getString(R.string.anonymous));
-            imageViewUserProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_account_outline_white_48dp));
+            imageViewUserProfile.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_account_outline_white_48dp));
         }
 
-        textViewUserEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
     }
 
     @Override
@@ -316,102 +248,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
     }
 
 
-
-    @Override
-    public void onSettingsDone(String company,String itinerary, String way) {
-        this.company = company;
-        this.itinerary = itinerary;
-        this.way = way;
-        if(showAdIntersticial()){
-
-        }else {
-            openTimes(country, city, company, itinerary, way);
-        }
-
-    }
-
-    private void openTimes(String country, String city, String company, String itinerary, String way) {
-        registerEvent(itinerary, way);
-        if (isDualPane) {
-            /*pToolbar.setTitle(itinerary);
-            pToolbar.setSubtitle(way);
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            *//** Se for acessodado de um smartphone o espaco main existir *//*
-            *//** Adiciona o fragment com o novo conteudo no unico espaco *//*
-            OnibusFragment onibusFragment = (OnibusFragment) fragmentManager.findFragmentByTag("onibusFragment");
-
-            if (findViewById(R.id.framelayout_main) != null) {
-
-                if (onibusFragment != null) {
-                    onibusFragment.refresh(country, city, company, itinerary, way);
-                } else {
-                    onibusFragment = new OnibusFragment();
-                    Bundle args = new Bundle();
-                    args.putString(OnibusFragment.ARGS_COUNTRY, country);
-                    args.putString(OnibusFragment.ARGS_CITY, city);
-                    args.putString(OnibusFragment.ARGS_COMPANY, company);
-                    args.putString(OnibusFragment.ARGS_ITINERARY, itinerary);
-                    args.putString(OnibusFragment.ARGS_WAY, way);
-                    onibusFragment.setArguments(args);
-                    // Troca o que quer que tenha na view do fragment_container por este fragment,
-                    // e adiciona a transa��o novamente na pilha de navega��o
-                    ft.replace(R.id.framelayout_main, onibusFragment, OnibusFragment.TAG);
-                    ft.addToBackStack("pilha");
-                }
-            } else if (findViewById(R.id.framelayout_content) != null) {
-                if (onibusFragment != null) {
-                    onibusFragment.refresh(country, city, company, itinerary, way);
-                } else {
-                    onibusFragment = new OnibusFragment();
-                    Bundle args = new Bundle();
-                    args.putString(OnibusFragment.ARGS_COUNTRY, country);
-                    args.putString(OnibusFragment.ARGS_CITY, city);
-                    args.putString(OnibusFragment.ARGS_COMPANY, company);
-                    args.putString(OnibusFragment.ARGS_ITINERARY, itinerary);
-                    args.putString(OnibusFragment.ARGS_WAY, way);
-                    onibusFragment.setArguments(args);
-                    // Troca o que quer que tenha na view do fragment_container por este fragment,
-                    // e adiciona a transacao novamente na pilha de navegacao
-                    ft.replace(R.id.framelayout_content, onibusFragment, OnibusFragment.TAG);
-                }
-            }
-            ft.commit();*/
-        } else {
-            Intent intent = new Intent(this, TimesActivity.class);
-            intent.putExtra(TimesActivity.ARGS_COUNTRY, country);
-            intent.putExtra(TimesActivity.ARGS_CITY, city);
-            intent.putExtra(TimesActivity.ARGS_COMPANY, company);
-            intent.putExtra(TimesActivity.ARGS_ITINERARY, itinerary);
-            intent.putExtra(TimesActivity.ARGS_WAY, way);
-            startActivity(intent);
-        }
-    }
-
-    /**
-     * https://support.google.com/firebase/answer/6317508?hl=en&ref_topic=6317484
-     * @param itinerary
-     * @param way
-     */
-    private void registerEvent(String itinerary, String way) {
-        // Obtain the FirebaseAnalytics instance.
-        FirebaseAnalytics mFirebaseAnalytics;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, way);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, itinerary);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, ItineraryContract.Itinerary.TABLE_NAME);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-    }
-
-
     /**
      * Ao abrir qualquer fragment, seta o navigation dawer evitando assim atalhos que não sejam
      * selecionados no navigation
-     * @param TAG
      */
-    public void setSelectItemNavigation(String TAG){
+    private void setSelectItemNavigation(String TAG){
         switch (TAG){
-            case BookmarkItineraryFragment.TAG:
+            case HomeFragment.TAG:
                 navigationView.getMenu().findItem(R.id.nav_favorites).setChecked(true);
                 break;
             case ItinerariesFragment.TAG:
@@ -429,15 +272,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         }
     }
 
-    /**
-     *
-     * @param TAG
-     */
     public void addFragment(String TAG) {
         Fragment fragment = new Fragment();
         setSelectItemNavigation(TAG);
         switch (TAG){
-            case BookmarkItineraryFragment.TAG:
+            case HomeFragment.TAG:
                 setActionBarTitle(getString(R.string.app_name));
                 if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
                     getSupportFragmentManager().popBackStack();
@@ -512,10 +351,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
                 // e adiciona a transa��o novamente na pilha de navegacao
                 fragmentTransaction.replace(R.id.framelayout_main, fragment,TAG);
                 fragmentTransaction.addToBackStack(STACK);
-            } else if (findViewById(R.id.framelayout_content) != null) {
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transa��o novamente na pilha de navegacaoo
-                fragmentTransaction.replace(R.id.framelayout_content, fragment,TAG);
             }
             // Finaliza a transacao com sucesso
             fragmentTransaction.commit();
@@ -526,43 +361,30 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString(OnibusFragment.ARGS_COUNTRY, country);
-        outState.putString(OnibusFragment.ARGS_CITY, city);
-        outState.putString(OnibusFragment.ARGS_COMPANY, company);
-        outState.putString(OnibusFragment.ARGS_ITINERARY, itinerary);
-        outState.putString(OnibusFragment.ARGS_WAY, way);
+        outState.putString(ScheduleFragment.ARGS_COUNTRY, country);
+        outState.putString(ScheduleFragment.ARGS_CITY, city);
         super.onSaveInstanceState(outState, outPersistentState);
-    }
-
-    public void setActionBarTitle() {
-        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-        pToolbar.setTitle("HBus");
-        pToolbar.setSubtitle(FirebaseUtils.getCityName(cityId) + " - " + FirebaseUtils.getCountry(cityId));
     }
 
     public void onCreateDialogChooseWay(Itinerary itinerary) {
         List<String> ways;
         String company = FirebaseUtils.getCompany(itinerary.getId());
-        try {
-            ways = itinerary.getWays();
-            if (ways.size() > 1) {
-                ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
-                chooseWayDialogFragment.setParameters(this,company,itinerary.getName(), ways);
-                chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
-            } else {
-                onSettingsDone(company,itinerary.getName(), ways.get(0));
-            }
-        }catch (SQLiteCantOpenDatabaseException exception){
-            Toast.makeText(this,"Ocorreu um erro no servidor,tente novamente...",Toast.LENGTH_LONG).show();
+        ways = itinerary.getWays();
+        if (ways.size() > 1) {
+            ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
+            chooseWayDialogFragment.setParameters(this,country,city,company,itinerary.getName(), ways);
+            chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
+        } else {
+            AppManager.onSettingsDone(this,country,city,company,itinerary.getName(),ways.get(0));
         }
     }
 
-    public void openHelp(){
+    private void openHelp(){
         Intent intent = new Intent(this,HelpActivity.class);
         startActivity(intent);
     }
 
-    public void logout(){
+    private void logout(){
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this,LoginActivity.class);
         startActivity(intent);
@@ -575,20 +397,18 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
 
 
     @Override
-    public void onItemClick(String company,String itinerary, String way) {
-        onSettingsDone(company,itinerary, way);
+    public void onItemClick(String country,String city,String company,String itinerary, String way) {
+        AppManager.onSettingsDone(this,country,city,company,itinerary,way);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_logout) {
             logout();
         }else if (id == R.id.nav_favorites) {
-            addFragment(BookmarkItineraryFragment.TAG);
+            addFragment(HomeFragment.TAG);
         } else if (id == R.id.nav_all_itineraries) {
             addFragment(ItinerariesFragment.TAG);
         }else if (id == R.id.nav_alarms) {

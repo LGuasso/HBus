@@ -3,7 +3,6 @@ package br.com.expressobits.hbus.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +15,9 @@ import br.com.expressobits.hbus.utils.BooleanConvert;
  * @author Rafael Correa
  * @since 30/03/16
  */
-public class AlarmHelper {
+class AlarmHelper {
 
-    private static final String TAG = "AlarmHelper";
-
-    protected static ContentValues toContentValues(Alarm alarm){
+    private static ContentValues toContentValues(Alarm alarm){
         ContentValues values = new ContentValues();
         values.put(AlarmContract.Alarm._ID,alarm.getId());
         values.put(AlarmContract.Alarm.COLUMN_NAME_TIME,alarm.getTimeAlarm());
@@ -45,7 +42,7 @@ public class AlarmHelper {
                 toContentValues(alarm));
     }
 
-    public static void update(SQLiteDatabase db,Alarm alarm){
+    static void update(SQLiteDatabase db, Alarm alarm){
         db.update(
                 AlarmContract.Alarm.TABLE_NAME,
                 toContentValues(alarm),
@@ -53,7 +50,7 @@ public class AlarmHelper {
                 new String[]{alarm.getId()});
     }
 
-    protected static Alarm cursorToAlarm(Cursor c){
+    private static Alarm cursorToAlarm(Cursor c){
         Alarm alarm = new Alarm();
         alarm.setId(c.getString(c.getColumnIndexOrThrow(AlarmContract.Alarm._ID)));
         alarm.setTimeAlarm(Long.valueOf(
@@ -80,7 +77,7 @@ public class AlarmHelper {
         return alarm;
     }
 
-    public static Alarm getAlarm(SQLiteDatabase db, String id){
+    static Alarm getAlarm(SQLiteDatabase db, String id){
         String where = AlarmContract.Alarm._ID+" = ?";
         String arguments[] = {id};
         Cursor cursor = db.query(
@@ -98,8 +95,8 @@ public class AlarmHelper {
         return null;
     }
 
-    public static List<Alarm> getAlarms(SQLiteDatabase db){
-        ArrayList<Alarm> alarms = new ArrayList<Alarm>();
+    static List<Alarm> getAlarms(SQLiteDatabase db){
+        ArrayList<Alarm> alarms = new ArrayList<>();
         Cursor c;
         c = db.query(
                 AlarmContract.Alarm.TABLE_NAME,
@@ -117,11 +114,10 @@ public class AlarmHelper {
         return alarms;
     }
 
-    public static List<Alarm> getAlarms(SQLiteDatabase db,City city){
-        Log.e("TESTE","TESTE");
-        ArrayList<Alarm> alarms = new ArrayList<Alarm>();
+    static List<Alarm> getAlarms(SQLiteDatabase db, City city){
+        ArrayList<Alarm> alarms = new ArrayList<>();
         String where = AlarmContract.Alarm._ID+" LIKE ?";
-        String arguments[] = {BusHelper.BARS+city.getCountry()+BusHelper.BARS+city.getName()+"%"};
+        String arguments[] = {SQLConstants.BARS+city.getCountry()+SQLConstants.BARS+city.getName()+"%"};
         Cursor c;
         c = db.query(
                 AlarmContract.Alarm.TABLE_NAME,
@@ -139,31 +135,10 @@ public class AlarmHelper {
         return alarms;
     }
 
-    public static List<Alarm> getAlarms(SQLiteDatabase db, City city, String time){
-        ArrayList<Alarm> alarms = new ArrayList<Alarm>();
-        String where = AlarmContract.Alarm._ID+" LIKE ? AND "+ AlarmContract.Alarm.COLUMN_NAME_TIME+" = ?";
-        String arguments[] = {BusHelper.BARS+city.getCountry()+BusHelper.BARS+city.getName()+"%",time};
-        Cursor c;
-        c = db.query(
-                AlarmContract.Alarm.TABLE_NAME,
-                AlarmContract.COLS,
-                where,
-                arguments,
-                null,
-                null,
-                null
-        );
-        while (c.moveToNext()){
-            alarms.add(cursorToAlarm(c));
-        }
-        c.close();
-        return alarms;
-    }
-
-    public static int delete(SQLiteDatabase db,String id){
+    public static void delete(SQLiteDatabase db,String id){
         String where = AlarmContract.Alarm._ID+" = ?";
         String arguments[] = {id};
-        return db.delete(
+        db.delete(
                 AlarmContract.Alarm.TABLE_NAME,
                 where,
                 arguments

@@ -1,5 +1,9 @@
 #Change log
 
+## [0.10.14] - 24-02-2016
+###Adicionado
+- Adicionado barra de pesquisa de itinerário
+
 ## [0.9.7] - 13-02-2016
 ###Adicionado
 - Adicionado códigos na tela principal

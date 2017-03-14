@@ -21,16 +21,16 @@ public class AboutPreferenceFragment extends PreferenceFragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_about);
-
         preferenceTour = findPreference("tour");
-        preferenceTour.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(preference.getContext(), TourActivity.class));
-                return false;
-            }
+        preferenceTour.setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(preference.getContext(), TourActivity.class));
+            return false;
         });
+        setHasOptionsMenu(true);
+        refreshComponents();
+    }
 
+    private void refreshComponents() {
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design

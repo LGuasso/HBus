@@ -20,7 +20,6 @@
     <string name="title_activity_load">Tela inicial</string>
     <string name="finish">Finalizar</string>
     <string name="title_activity_choose_city">Selecione cidade</string>
-    <string name="title_activity_splash"></string>
     <string name="no_bookmarked_itinerary">Não há itinerários favoritos</string>
     <string name="pref_title_active_debug_mode">Ativar o modo de depuração</string>
     <string name="action_remove">Remover</string>
@@ -43,7 +42,6 @@
     <string name="action_refresh_cities_list">Atualizar lista de cidades</string>
     <string name="city">Cidade</string>
     <string name="click_here_to_change">Clique aqui para mudar</string>
-    <string name="navigation_drawer_close"></string>
     <string name="feedback_was_sent_with_sucess">Enviado feedback com sucesso!</string>
     <string name="add_itinerary">Adicionar itinerário</string>
     <string name="all_itineraries">Todos itinerários</string>
@@ -102,7 +100,7 @@
     <string name="or">Ou</string>
     <string name="sign_in_anonymously"><a href="">Continuar sem logar</a></string>
     <string name="exit">Sair</string>
-    <string name="loading_sign_google">Carregando dados do Google...</string>
+    <string name="loading_sign_google">Carregando dados do Google…</string>
     <string name="google_sign_sucess">Login pelo Google efetuado com sucesso!</string>
     <string name="anonymous">Anônimo</string>
     <string name="itineraries">Itinerários</string>
@@ -144,4 +142,64 @@
     <string name="title_activity_privacy_policy">Política de privacidade</string>
     <string name="action_privacy_policy">Política de privacidade</string>
     <string name="email_here">Seu e-mail aqui</string>
+    <string name="unread_news">Notícias não lidas</string>
+    <string name="unread">Não lido</string>
+    <string name="itinerary_search_hint">Buscar itinerário</string>
+    <string name="action_searchable_activity">Buscar itinerário</string>
+    <string name="dialog_alert_title_confirm_clear_search_history">Tem certeza de que deseja apagar seu histórico de pesquisa</string>
+    <string name="search_history_deleted">Histórico de pesquisa excluído</string>
+    <string name="download_schedule_preparing">Estamos preparando tudo para você…</string>
+    <string name="notification_alarm_ticker">Não perca o %1$s</string>
+    <string name="download_schedule_completed_successfully">Download efetuado com sucesso!</string>
+    <string name="download_schedule_update_message">Atualizando banco de dados para você…</string>
+    <string name="dialog_alert_message_confirm_update">Atualize para obter a versão mais atual dos horários da sua cidade</string>
+    <string name="dialog_alert_title_confirm_update">Deseja atualizar?</string>
+    <string name="download_schedule_failed_download">Falha ao baixar banco de dados</string>
+    <string name="dialog_alert_title_confirm_remove_database">Deseja remover?</string>
+    <string name="dialog_alert_message_confirm_remove_database">Isso implica em baixar o banco de dados desta cidade quando precisar ver os horários novamente</string>
+    <string name="dialog_alert_message_no_delete_database_in_use">Não há como excluir um banco de dados que está em uso!</string>
+    <string name="list_database_database_deleted_successfully">Banco de dados excluído com sucesso!</string>
+    <string name="list_database_dialog_title_is_not_possible_to_remove">Não é possível remover!</string>
+    <string name="search_for_your_favorite">Procure seu itinerário favorito e marque para que ele sempre apareça na tela principal.</string>
+    <string name="get_started">Iniciar</string>
+    <string name="common_tips">Dicas</string>
+    <string name="pref_title_database_manager">Gerenciador de banco de dados</string>
+    <string name="alarm_list_there_is_no_alarm">Não há nenhum alarme</string>
+    <string name="feedback_failed_to_send_feedback">Falha ao enviar feedback</string>
+    <string name="help_aswner_hours_there_are_no">Horas não há?</string>
+    <string name="help_warning">Este aplicativo tem função de facilitar o acesso aos horários disponíveis nas agências de transporte da sua cidade.A Expresso Bits não se responsabiliza pelos horários!</string>
+    <string name="images_and_icons">Imagens e ícones</string>
+    <string name="images_and_icons_name">Design feito pela Freepik a partir de www.flaticon.com</string>
+    <string name="in_bus_time">Em tempo de ônibus</string>
+    <string name="news_icon_image">ìcone da notícia</string>
+    <string name="news_image">Imagem da notícia</string>
+    <string name="no_have_itinerary">Nenhum itinerário favorito</string>
+    <string name="not_found">Não encontrado</string>
+    <string name="not_found_city">Não encontrado cidade</string>
+    <string name="title_activity_help_content">Conteúdo de ajuda</string>
+    <string name="dialog_alert_title_confirm_clear_route_history_viewed">Tem certeza de que deseja apagar seu histórico de itinerários vistos?</string>
+    <string name="route_history_viewed_excluded">Histórico de itinerários vistos excluído</string>
+    <string name="pref_summary_pause_preview_history">Não salva no histórico visualizações</string>
+    <string name="pref_title_pause_preview_history">Pausa histórico de visualização</string>
+    <string name="home">Home</string>
+    <string-array name="list_fast_tips">
+        <item>No interior de ônibus com poucos passageiros, sente-se próximo ao motorista.</item>
+        <item>Evite ficar sozinho em pontos de ônibus isolados, especialmente a noite. </item>
+        <item>Sinalize com braço quando o ônibus desejado estiver se aproximando da parada.</item>
+        <item>Quando estiver próximo da parada desejada, aperte a campainha para facilitar a parada.</item>
+        <item>Evite acidentes e transtornos. Não viaje com mochilas nas costas, posicione-a na frente do seu corpo</item>
+        <item>É proibido transportar vidros, produtos inflamáveis, ácidos. Assim como não é permitido transporte de animais</item>
+        <item>Respeite os bancos preferencias. Eles são destinados a pessoas com necessidas especias, com criança de colo, gestantes e idosos.</item>
+        <item>Não jogue lixo pela janela do ônibus.</item>
+    </string-array>
+    <string name="hot_tip_turn_an_application_beta_tester_and_test_new_features">Vire um testador da versão beta do aplicativo e teste novos recursos!</string>
+    <string name="hot_tip_become_a_tester">Torne-se um testador</string>
+    <string name="hot_tip_come_on">Vamos lá!</string>
+    <string name="hot_tip_not_now">Não agora</string>
+    <string name="dialog_alert_title_confirm_no_beta">Realmente não deseja do programa beta?</string>
+    <string name="hot_tip_did_you_like_our_app">Gostou do nosso aplicativo? Avalie para ajudar a aumentar o nosso público ,assim o potencial do nosso aplicativo</string>
+    <string name="hot_tip_rate_us">Avalie-nos</string>
+    <string name="dialog_alert_title_confirm_rate_us">Realmente não deseja avaliar?</string>
+    <string name="choose_way">Escolha um sentido</string>
+    <string name="no_have_connection_with_internet">Não há conexão com internet!</string>
 </resources>

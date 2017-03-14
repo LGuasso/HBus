@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="tour_title_welcome">Bem vindo!</string>
     <string name="tour_title_palm">Veja horários sempre na sua mão</string>
     <string name="tour_title_feedback">Ajude o aplicativo e seus usuários</string>
     <string name="tour_title_update">Mantenha sempre atualizado</string>
 
-    <string name="tour_subtitle_welcome"></string>
     <string name="tour_subtitle_palm">Eles estarão sempre disponível com ou sem internet</string>
     <string name="tour_subtitle_feedback">Envie feedbacks com alguma sugestão ou crítica</string>
     <string name="tour_subtitle_update">Dos horários até notícias sobre seu itinerário favorito</string>

@@ -8,7 +8,7 @@
         <item
             android:id="@+id/nav_favorites"
             android:icon="@drawable/ic_menu_favorite"
-            android:title="@string/bookmarks"/>
+            android:title="@string/home"/>
 
         <item
             android:id="@+id/nav_all_itineraries"
@@ -28,7 +28,7 @@
 
         <item
             android:id="@+id/nav_alarms"
-            android:icon="@drawable/ic_alarm_plus_grey600_24dp"
+            android:icon="@drawable/ic_alarm_grey_600_24dp"
             android:title="@string/alarms" />
     </group>
 

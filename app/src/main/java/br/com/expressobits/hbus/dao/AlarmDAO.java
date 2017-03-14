@@ -11,7 +11,7 @@ import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.model.City;
 
 /**
- * Classe acesso a arquivos do sqlite do Alarmes
+ * Class manager a database of alarms
  * @author Rafael Correa
  * @since 30/03/16
  */
@@ -20,11 +20,8 @@ public class AlarmDAO extends SQLiteOpenHelper {
     private static final String TAG = "AlarmDAO";
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "alarms.db";
-    private Context context;
     public AlarmDAO(Context context){
-
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
     }
 
     @Override
@@ -39,7 +36,6 @@ public class AlarmDAO extends SQLiteOpenHelper {
 
     /**
      *
-     * @param alarm
      * @return false if old alarm and true to new alarm
      */
     public boolean insert(Alarm alarm){
@@ -65,10 +61,6 @@ public class AlarmDAO extends SQLiteOpenHelper {
 
     public List<Alarm> getAlarms(City city){
         return AlarmHelper.getAlarms(getReadableDatabase(), city);
-    }
-
-    public List<Alarm> getAlarms(City city,String time){
-        return AlarmHelper.getAlarms(getReadableDatabase(), city, time);
     }
 
     public void delete(String id){

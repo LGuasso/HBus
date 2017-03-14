@@ -10,7 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
@@ -30,7 +32,8 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     public static final String TAG = "AlarmListFragment";
 
     private RecyclerView recyclerViewAlarms;
-    private List<Alarm> alarmList;
+    private RelativeLayout relativeLayoutEmptyState;
+    private List<Alarm> alarmList = new ArrayList<>();
 
 
     public AlarmListFragment() {
@@ -43,27 +46,17 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_alarm_list, container, false);
+        View view;
+        view = inflater.inflate(R.layout.fragment_alarm_list, container, false);
         initViews(view);
         return view;
     }
 
     private void initViews(View view){
         initRecyclerViewAlarms(view,getActivity());
+        relativeLayoutEmptyState = (RelativeLayout)  view.findViewById(R.id.relativeLayoutEmptyList);
     }
 
-    private void updateListAlarms(Context context){
-        AlarmDAO alarmDAO = new AlarmDAO(context);
-        String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-        String companyId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,SelectCityActivity.DEFAULT_COUNTRY);
-        City city= new City();
-        city.setName(FirebaseUtils.getCityName(cityId));
-        city.setCountry(FirebaseUtils.getCountry(cityId));
-        if(city!=null){
-            alarmList = alarmDAO.getAlarms(city);
-        }
-        alarmDAO.close();
-    }
 
     private void initRecyclerViewAlarms(View view,Context context){
         recyclerViewAlarms = (RecyclerView) view.findViewById(R.id.recyclerViewAlarms);
@@ -72,19 +65,40 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         LinearLayoutManager llmUseful = new LinearLayoutManager(context);
         llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewAlarms.setLayoutManager(llmUseful);
-    }
-
-    private void udpateRecyclerViewAlarms(Context context){
         ItemAlarmAdapter adapter =
                 new ItemAlarmAdapter(context,alarmList);
         adapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewAlarms.setAdapter(adapter);
     }
 
+    private void updateListAlarms(Context context){
+        AlarmDAO alarmDAO = new AlarmDAO(context);
+        String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
+        City city= new City();
+        city.setName(FirebaseUtils.getCityName(cityId));
+        city.setCountry(FirebaseUtils.getCountry(cityId));
+        alarmList = alarmDAO.getAlarms(city);
+        alarmDAO.close();
+    }
+
+    private void updateRecyclerViewAlarms(){
+        ItemAlarmAdapter itemAlarmAdapter = new ItemAlarmAdapter(getActivity(),alarmList);
+        itemAlarmAdapter.setRecyclerViewOnClickListenerHack(this);
+        recyclerViewAlarms.setAdapter(itemAlarmAdapter);
+    }
+
     @Override
     public void onResume() {
         updateListAlarms(getActivity());
-        udpateRecyclerViewAlarms(getActivity());
+        updateRecyclerViewAlarms();
+        if(alarmList.size()>0){
+            recyclerViewAlarms.setVisibility(View.VISIBLE);
+            relativeLayoutEmptyState.setVisibility(View.INVISIBLE);
+        }else {
+            recyclerViewAlarms.setVisibility(View.INVISIBLE);
+            relativeLayoutEmptyState.setVisibility(View.VISIBLE);
+        }
+
         super.onResume();
     }
 

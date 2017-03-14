@@ -5,5 +5,5 @@ package br.com.expressobits.hbus.ui.dialog;
  * @since 08/11/15
  */
 public interface ChooseWayDialogListener {
-    void onItemClick(String company,String itineraryId, String way);
+    void onItemClick(String country,String city,String company,String itineraryId, String way);
 }

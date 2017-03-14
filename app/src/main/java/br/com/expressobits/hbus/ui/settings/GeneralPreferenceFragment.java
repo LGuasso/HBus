@@ -24,12 +24,9 @@ public class GeneralPreferenceFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
         preferenceCity = findPreference(SelectCityActivity.TAG);
-        preferenceCity.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(preference.getContext(), SelectCityActivity.class));
-                return false;
-            }
+        preferenceCity.setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(preference.getContext(), SelectCityActivity.class));
+            return false;
         });
         setHasOptionsMenu(true);
         refreshComponents();

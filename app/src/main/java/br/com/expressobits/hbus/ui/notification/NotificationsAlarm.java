@@ -11,17 +11,12 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.Calendar;
-
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.SQLConstants;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
@@ -31,7 +26,7 @@ import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * @author Rafael Correa
- * @since 14/04/16;
+ * @since 14/04/16
  */
 public class NotificationsAlarm {
 
@@ -65,10 +60,10 @@ public class NotificationsAlarm {
             alarmNotificationManager = (NotificationManager) context
                     .getSystemService(Context.NOTIFICATION_SERVICE);
             if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(NotificationPreferenceFragment.PREF_NOTIFICATION_ALERT_BUS_VIBRATE,true)){
-                alamNotificationBuilder.setVibrate(getVibrate(context));
+                alamNotificationBuilder.setVibrate(getVibrate());
             }
 
-            setCodeToNotification(context, alarm, alamNotificationBuilder);
+            setCodeToNotification(alarm, alamNotificationBuilder);
 
             Notification notification = alamNotificationBuilder.build();
             alarmNotificationManager.notify(alarm.getId(), 1,notification);
@@ -77,35 +72,18 @@ public class NotificationsAlarm {
 
     }
 
-    private static void setCodeToNotification(Context context, Alarm alarm, final NotificationCompat.Builder alamNotificationBuilder) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //TODO implementar COMPANY
-        DatabaseReference codeTableRef  = database.getReference(FirebaseUtils.CODE_TABLE);
-        DatabaseReference countryRef = codeTableRef.child(FirebaseUtils.getCountry(alarm.getId()));
-        DatabaseReference cityRef = countryRef.child(FirebaseUtils.getCityName(alarm.getId()));
-        DatabaseReference companyRef = cityRef.child(FirebaseUtils.getCompany(alarm.getId()));
-        DatabaseReference codeRef = companyRef.child(alarm.getCode());
-        codeRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Code code = dataSnapshot.getValue(Code.class);
-                if(code!=null){
-                    alamNotificationBuilder.setSubText(code.getDescrition());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    private static void setCodeToNotification(Alarm alarm, final NotificationCompat.Builder alamNotificationBuilder) {
+        ScheduleDAO dao = new ScheduleDAO(alamNotificationBuilder.mContext,SQLConstants.getCountryFromBusId(alarm.getId()), SQLConstants.getCityFromBusId(alarm.getId()));
+        Code code = dao.getCode(SQLConstants.getCompanyFromBusId(alarm.getId()),alarm.getCode());
+        dao.close();
+        if(code!=null){
+            alamNotificationBuilder.setSubText(code.getDescrition());
+        }
 
     }
 
     private static NotificationCompat.Builder getBuilderNotification(Context context, Alarm alarm) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())));
         return new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_bus_white_24dp)
                 .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
@@ -113,7 +91,7 @@ public class NotificationsAlarm {
                 //        R.drawable.ic_close_white_24dp,getResources().getString(R.string.remove),
                 //        PendingIntent.getBroadcast(this,0,new Intent(this, HelpActivity.class),0)))
                 .setContentTitle(context.getString(R.string.notification_alarm_title_text,
-                        FirebaseUtils.getItinerary(alarm.getId()), TimeUtils.getFormatTime(calendar)))
+                        FirebaseUtils.getItinerary(alarm.getId()), TimeUtils.getFormatTime(Long.valueOf(FirebaseUtils.getTimeForBus(alarm.getId())))))
                 .setContentText(context.getString(R.string.notification_alarm_text,
                         FirebaseUtils.getWay(alarm.getId())))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -122,23 +100,22 @@ public class NotificationsAlarm {
                 .setTicker(context.getString(R.string.notification_alarm_ticker, FirebaseUtils.getItinerary(alarm.getId())))
                 .setSound(getUriRingtone(context))
                 .setWhen(System.currentTimeMillis())
-                .setColor(context.getResources().getColor(R.color.colorAccent))
+                .setColor(ContextCompat.getColor(context,R.color.colorAccent))
                 .setContentInfo(alarm.getCode())
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                         R.mipmap.ic_launcher))
                 ;
     }
 
-    public static Uri getUriRingtone(Context context) {
+    private static Uri getUriRingtone(Context context) {
         String ringtoneUri =
                 PreferenceManager.getDefaultSharedPreferences(context).getString(
                         NotificationPreferenceFragment.PREF_NOTIFICATION_ALERT_BUS_RINGTONE, Settings.System.DEFAULT_NOTIFICATION_URI.getPath());
         Log.d("testSettingRingtone",ringtoneUri);
-        Uri uri = Uri.parse(ringtoneUri);
-        return uri;
+        return Uri.parse(ringtoneUri);
     }
 
-    public static long[] getVibrate(Context context) {
+    private static long[] getVibrate() {
         return (new long[]{ 1000, 0,1000,0});
     }
 }

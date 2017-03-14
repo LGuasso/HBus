@@ -11,11 +11,11 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.News;
-import br.com.expressobits.hbus.ui.alarm.AlarmEditorActivity;
 import br.com.expressobits.hbus.ui.news.NewsDetailsActivity;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
 
@@ -31,7 +31,8 @@ public class NotificationsNews {
         Log.d("AlarmService", "Preparing to send notification...: " + news.getId());
         NotificationCompat.Builder newsNotificationBuilder = getBuilderNotification(context, news);
         // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(context, AlarmEditorActivity.class);
+        Intent resultIntent = new Intent(context, NewsDetailsActivity.class);
+        resultIntent.putExtra(NewsDetailsActivity.ARGS_NEWS_ID,news.getId());
         // The stack builder object will contain an artificial back stack for the
         // started Activity.
         // This ensures that navigating backward from the Activity leads out of
@@ -51,13 +52,11 @@ public class NotificationsNews {
         newsNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(NotificationPreferenceFragment.PREF_NOTIFICATION_ALERT_BUS_VIBRATE,true)){
-            newsNotificationBuilder.setVibrate(getVibrate(context));
+            newsNotificationBuilder.setVibrate(getVibrate());
         }
 
 
         Notification notification = newsNotificationBuilder.build();
-        //TODO colocar uma imagem no notificação
-        //Picasso.with(context).load(news.getImagesUrls().get(0)).into();
         newsNotificationManager.notify(news.getId(), 1,notification);
         Log.d("NewsService", "Notification sent.");
 
@@ -80,23 +79,22 @@ public class NotificationsNews {
                 .setTicker(news.getTitle())
                 .setSound(getUriRingtone(context))
                 .setWhen(System.currentTimeMillis())
-                .setColor(context.getResources().getColor(R.color.colorAccent))
+                .setColor(ContextCompat.getColor(context,R.color.colorAccent))
                 .setContentInfo(news.getBody())
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                         R.mipmap.ic_launcher))
                 ;
     }
 
-    public static Uri getUriRingtone(Context context) {
+    private static Uri getUriRingtone(Context context) {
         String ringtoneUri =
                 PreferenceManager.getDefaultSharedPreferences(context).getString(
                         NotificationPreferenceFragment.PREF_NOTIFICATION_ALERT_BUS_RINGTONE, Settings.System.DEFAULT_NOTIFICATION_URI.getPath());
         Log.d("testSettingRingtone",ringtoneUri);
-        Uri uri = Uri.parse(ringtoneUri);
-        return uri;
+        return Uri.parse(ringtoneUri);
     }
 
-    public static long[] getVibrate(Context context) {
+    private static long[] getVibrate() {
         return (new long[]{ 1000, 0,1000,0});
     }
 }

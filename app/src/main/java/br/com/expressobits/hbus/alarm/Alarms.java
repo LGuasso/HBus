@@ -10,6 +10,7 @@ import android.util.Log;
 import br.com.expressobits.hbus.model.Alarm;
 
 /**
+ * Manager alarms in application
  * @author Rafael Correa
  * @since 21/04/16
  */

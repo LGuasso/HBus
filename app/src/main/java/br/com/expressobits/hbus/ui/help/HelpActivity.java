@@ -1,9 +1,11 @@
 package br.com.expressobits.hbus.ui.help;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,8 +25,18 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_help);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+
+        }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (findViewById(R.id.appBar) != null) {
+                (findViewById(R.id.appBar)).setElevation(4);
+            }
+        }
 
         View linearLayoutHelpContent = findViewById(R.id.linearLayoutHelpContent);
         linearLayoutHelpContent.setOnClickListener(this);
@@ -34,6 +46,9 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
 
         View linearLayoutSendFeedback = findViewById(R.id.linearLayoutSendFeedback);
         linearLayoutSendFeedback.setOnClickListener(this);
+
+        View linearLayoutImagesAndIconsProfile = findViewById(R.id.linearLayoutImagesAndIconsProfile);
+        linearLayoutImagesAndIconsProfile.setOnClickListener(this);
 
     }
 
@@ -73,15 +88,18 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(id == R.id.menu_action_see_on_play_store){
-            final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
-            try {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-            } catch (android.content.ActivityNotFoundException anfe) {
-                //TODO ERROR imlementar erro
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-            }
+            openAppInPlayStore(this);
         }
         return false;
+    }
+
+    public static void openAppInPlayStore(Context context) {
+        final String appPackageName = context.getPackageName(); // getPackageName() from Context or Activity object
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+        }
     }
 
     private void startSendFeedback() {
@@ -119,6 +137,10 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.linearLayoutDeveloperProfile:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/Rafinha2108")));
+                break;
+
+            case R.id.linearLayoutImagesAndIconsProfile:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.flaticon.com/authors/freepik")));
                 break;
         }
     }

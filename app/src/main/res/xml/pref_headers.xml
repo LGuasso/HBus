@@ -23,6 +23,12 @@
         android:icon="@drawable/ic_sync_amber_500_24dp"/>
 
     <header
+        android:fragment="br.com.expressobits.hbus.ui.settings.PrivacyPreferenceFragment"
+        android:summary="@string/pref_header_summary_privacy"
+        android:title="@string/pref_header_privacy"
+        android:icon="@drawable/ic_security_amber_500_24dp"/>
+
+    <header
         android:fragment="br.com.expressobits.hbus.ui.settings.AboutPreferenceFragment"
         android:summary="@string/pref_header_summary_about"
         android:title="@string/pref_header_about"

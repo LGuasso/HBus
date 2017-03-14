@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
 /**
+ * Receiver Alarm
+ * @see android.support.v4.content.WakefulBroadcastReceiver
+ * @see android.content.BroadcastReceiver
  * @author Rafael Correa
  * @since 10/04/16
  */

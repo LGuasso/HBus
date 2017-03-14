@@ -77,6 +77,14 @@ public class Bus implements Comparable<Bus>{
 
 
     @Override
+    public boolean equals(Object o) {
+        if(o instanceof Bus){
+            return this.getTime() == (((Bus) o).getTime());
+        }
+        return super.equals(o);
+    }
+
+    @Override
     public int compareTo(Bus another) {
 
         Calendar thisCalendar = Calendar.getInstance();

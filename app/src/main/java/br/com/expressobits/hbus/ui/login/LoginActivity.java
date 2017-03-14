@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.ui.ManagerInit;
+import br.com.expressobits.hbus.application.ManagerInit;
 import br.com.expressobits.hbus.ui.help.PrivacyPolicyActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
@@ -101,6 +101,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
         textViewLoading.setText(getString(R.string.loading_sign_google));
+
+
+        progressBarLayout.setVisibility(View.VISIBLE);
+        mainLayout.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -124,7 +128,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 progressBarLayout.setVisibility(View.INVISIBLE);
                 mainLayout.setVisibility(View.VISIBLE);
                 Toast.makeText(this,"Google Sign In failed",Toast.LENGTH_LONG).show();
-                Log.d(TAG,"Google Sign In failed " +result.getStatus().getStatusMessage());
+                Log.w(TAG,"Google Sign In failed " +result.getStatus().getStatusMessage());
+                Log.w(TAG,"Google Sign In failed " +result.getStatus().toString());
             }
         }
     }
@@ -182,6 +187,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // ...
                     }
                 });
+
+        progressBarLayout.setVisibility(View.VISIBLE);
+        mainLayout.setVisibility(View.INVISIBLE);
     }
 
 
@@ -200,11 +208,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.sign_in_button:
@@ -218,8 +221,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
         }
-        progressBarLayout.setVisibility(View.VISIBLE);
-        mainLayout.setVisibility(View.INVISIBLE);
     }
 
     @Override

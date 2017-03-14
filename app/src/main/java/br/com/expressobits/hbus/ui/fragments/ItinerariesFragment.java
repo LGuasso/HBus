@@ -1,13 +1,18 @@
 package br.com.expressobits.hbus.ui.fragments;
 
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,27 +20,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.FavoriteDAO;
-import br.com.expressobits.hbus.firebase.FirebaseManager;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.dao.BookmarkItineraryDAO;
+import br.com.expressobits.hbus.dao.SQLConstants;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.provider.RecentItineraries;
 import br.com.expressobits.hbus.ui.MainActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.adapters.ItemItineraryAdapter;
+import br.com.expressobits.hbus.ui.model.Header;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
@@ -49,15 +50,13 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
  */
 public class ItinerariesFragment extends Fragment implements RecyclerViewOnClickListenerHack{
 
-    private List<Itinerary> listItineraries = new ArrayList<>();
-    private List<Itinerary> favoriteItineraries;
+    private List<Object> listItineraries = new ArrayList<>();
     public static final String TAG = "ItinerariesFragment";
-    private RecyclerView recyclerViewItineraries;
-    private ProgressBar progressBar;
+    private FastScrollRecyclerView recyclerViewItineraries;
     public int lastPositionItinerary;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private String city;
     private String country;
-    private String company;
 
     @Nullable
     @Override
@@ -72,179 +71,125 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
     public void onResume() {
         super.onResume();
         String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
-
-        FavoriteDAO favoriteDAO = new FavoriteDAO(getActivity());
-
-        favoriteItineraries = favoriteDAO.getItineraries(cityId);
-
         if(listItineraries.size()>0){
             recyclerViewItineraries.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
             refreshRecyclerView();
         }else {
-
+            //TODO empty state
         }
         country = FirebaseUtils.getCountry(cityId);
         city = FirebaseUtils.getCityName(cityId);
-        company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"SIMSM");
-        refresh(country,city,company);
+        refresh(country,city);
     }
 
     private void initViews(View view){
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(getActivity(),R.color.colorPrimary),
+                ContextCompat.getColor(getActivity(),R.color.colorAccent));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            refresh(country,city);
+            swipeRefreshLayout.setRefreshing(false);
+        });
         initListViews(view);
     }
 
     private void initListViews(View view){
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        recyclerViewItineraries = (RecyclerView) view.findViewById(R.id.recyclerViewItineraries);
+        //progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        recyclerViewItineraries = (FastScrollRecyclerView) view.findViewById(R.id.recyclerViewItineraries);
+        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
+        recyclerViewItineraries.setLayoutManager(llmUseful);
         recyclerViewItineraries.setHasFixedSize(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            recyclerViewItineraries.setScrollBarSize(30);
+        }
     }
-
-
 
     private void addItinerary(Itinerary itinerary){
         if(itinerary.getId()!=null){
             listItineraries.add(itinerary);
         }
         if(listItineraries.size()>0){
-            progressBar.setVisibility(View.INVISIBLE);
+            //progressBar.setVisibility(View.INVISIBLE);
             recyclerViewItineraries.setVisibility(View.VISIBLE);
         }
         refreshRecyclerView();
 
     }
 
-    private void refresh(String country,String city,String company){
+    private void refresh(String country,String city){
         listItineraries.clear();
-        progressBar.setVisibility(View.VISIBLE);
+
+        //progressBar.setVisibility(View.VISIBLE);
         recyclerViewItineraries.setVisibility(View.INVISIBLE);
-        loadCompaniesFromFirebase(country,city);
-    }
 
-    private void loadCompaniesFromFirebase(final String country,final String city){
-        FirebaseDatabase database= FirebaseDatabase.getInstance();
-        DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.COMPANY_TABLE);
-        DatabaseReference countryRef = itinerariesTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Company company = dataSnapshot1.getValue(Company.class);
-                    if(ItinerariesFragment.this.isVisible()){
-                        loadItinerariesFromFirebase(country, city, company.getName());
-                        loadCodesFromFirebase(country, city, company.getName());
-                    }
+        loadRecentItinerariesFromPreference();
 
-                    Log.d(TAG, company.getName());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        cityRef.addListenerForSingleValueEvent(valueEventListener);
-    }
-
-    private void loadItinerariesFromFirebase(final String country, final String city, final String company) {
-        FirebaseDatabase database= FirebaseDatabase.getInstance();
-        DatabaseReference itinerariesTableRef = database.getReference(FirebaseUtils.ITINERARY_TABLE);
-        DatabaseReference countryRef = itinerariesTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        DatabaseReference companyRef = cityRef.child(company);
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshotItinerary : dataSnapshot.getChildren()) {
-                    if(ItinerariesFragment.this.isVisible()){
-                        Itinerary itinerary = dataSnapshotItinerary.getValue(Itinerary.class);
-                        itinerary.setId(FirebaseUtils.getIdItinerary(country, city, company, itinerary.getName()));
-                        addItinerary(itinerary);
-                    }else {
-                        Log.i(TAG,"Cancel load itinerary (FRAGMENT) no visible");
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        companyRef.addListenerForSingleValueEvent(valueEventListener);
+        listItineraries.add(new Header(getString(R.string.all_itineraries)));
+        loadItinerariesFromDatabase(country,city);
 
     }
 
-    private void loadCodesFromFirebase(final String country, final String city, final String company) {
-        FirebaseDatabase database= FirebaseDatabase.getInstance();
-        DatabaseReference codesTableRef = database.getReference(FirebaseUtils.CODE_TABLE);
-        DatabaseReference countryRef = codesTableRef.child(country);
-        DatabaseReference cityRef = countryRef.child(city);
-        DatabaseReference companyRef = cityRef.child(company);
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshotCode : dataSnapshot.getChildren()) {
-                    if(ItinerariesFragment.this.isVisible()){
-                        Code code = dataSnapshotCode.getValue(Code.class);
-                        code.setId(FirebaseUtils.getIdCode(country, city, company, code.getName()));
-                        Log.d("CODE LOAD FORM FIREBASE", "Code " + code.getName());
-                    }
+    private void loadItinerariesFromDatabase(String country,String city){
+        ScheduleDAO scheduleDAO = new ScheduleDAO(getContext(),country,city);
+        List<Itinerary> itineraries = scheduleDAO.getItineraries();
+        Collections.sort(itineraries);
+        for (Itinerary itinerary:itineraries) {
+            addItinerary(itinerary);
+        }
+        scheduleDAO.close();
+    }
 
-                }
+    private void loadRecentItinerariesFromPreference(){
+        List<String> ids = RecentItineraries.getListRecentIdItineraries(getContext(),SQLConstants.getIdCityDefault(country,city));
+        if(ids.size()>0){
+            listItineraries.add(0,new Header("Itinerários Recentes"));
+            ScheduleDAO scheduleDAO = new ScheduleDAO(getContext(),country,city);
+            for (int i = 0; i < ids.size(); i++) {
+                addItinerary(scheduleDAO.getItineraryForId(ids.get(i)));
             }
+            scheduleDAO.close();
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        companyRef.addListenerForSingleValueEvent(valueEventListener);
     }
 
     @Override
     public void onClickListener(View view, int position) {
+        if(listItineraries.get(position) instanceof Itinerary){
+            Itinerary itinerary = (Itinerary)listItineraries.get(position);
+            switch (view.getId()){
+                case R.id.icon:
+                    BookmarkItineraryDAO dao = new BookmarkItineraryDAO(getActivity());
+                    if(dao.getItinerary(itinerary.getId())!=null){
+                        dao.removeFavorite(itinerary);
+                        dao.close();
+                        Log.d(TAG, "remove favorite " + itinerary.getId());
+                        String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
+                        Snackbar.make(
+                                view,
+                                result,
+                                Snackbar.LENGTH_LONG).show();
 
-        Itinerary itinerary = listItineraries.get(position);
-        switch (view.getId()){
-            case R.id.icon:
-                FavoriteDAO dao = new FavoriteDAO(getActivity());
-                if(dao.getItinerary(itinerary.getId())!=null){
-                    dao.removeFavorite(itinerary);
-                    dao.close();
-                    Log.d(TAG, "remove favorite " + itinerary.getId());
-                    String result = String.format(getResources().getString(R.string.delete_itinerary_with_sucess),itinerary.getName());
-                    Snackbar.make(
-                            view,
-                            result,
-                            Snackbar.LENGTH_LONG).show();
+                    }else {
+                        dao.insert(itinerary);
+                        Log.d(TAG,"insert favorite "+itinerary.getId());
+                        dao.close();
 
-                }else {
-                    dao.insert(listItineraries.get(position));
-                    Log.d(TAG,"insert favorite "+itinerary.getId());
-                    dao.close();
+                        lastPositionItinerary = position;
 
-                    FirebaseManager.loadBusesForItinerary(itinerary);
-
-
-                    lastPositionItinerary = position;
-
-                    Snackbar.make(
-                            view,
-                            getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
-                            Snackbar.LENGTH_LONG).show();
-                }
-
-                break;
-            case R.id.linearLayoutItemList:
-                ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
-                //TODO verificar se é preciso carregar os horários com acesso desse menu apenas!
-                //FirebaseManager.loadBusesForItinerary(itinerary);
-                break;
+                        Snackbar.make(
+                                view,
+                                getResources().getString(R.string.added_bookmark_itinerary_with_sucess),
+                                Snackbar.LENGTH_LONG).show();
+                    }
+                    recyclerViewItineraries.getAdapter().notifyDataSetChanged();
+                    break;
+                case R.id.linearLayoutItemList:
+                    ((MainActivity)getActivity()).onCreateDialogChooseWay(itinerary);
+                    break;
+            }
         }
+
 
     }
 
@@ -257,35 +202,31 @@ public class ItinerariesFragment extends Fragment implements RecyclerViewOnClick
 
     public void refreshRecyclerView(){
 
-        Collections.sort(listItineraries);
-
-        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(),true,listItineraries,favoriteItineraries);
+        //
+        ItemItineraryAdapter arrayAdapter = new ItemItineraryAdapter(getContext(), listItineraries);
         arrayAdapter.setRecyclerViewOnClickListenerHack(this);
         recyclerViewItineraries.setAdapter(arrayAdapter);
         LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
-        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewItineraries.setLayoutManager(llmUseful);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.fragment_itineraries, menu);
+        inflater.inflate(R.menu.menu_itineraries_fragment, menu);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView;
+        MenuItem item = menu.findItem(R.id.action_searchable_activity);
+
+        searchView = (SearchView) item.getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setSearchableInfo( searchManager.getSearchableInfo( getActivity().getComponentName() ) );
+        searchView.setQueryHint( getResources().getString(R.string.itinerary_search_hint) );
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        int id = item.getItemId();
-        if (id == R.id.menu_action_refresh) {
-            this.refresh(country,city,company);
-
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

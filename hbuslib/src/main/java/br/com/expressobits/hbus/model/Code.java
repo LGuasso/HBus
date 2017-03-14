@@ -17,8 +17,6 @@ public class Code {
      */
     private String descrition;
 
-    private Long cityid;
-
     public String getId() {
         return id;
     }
@@ -51,14 +49,6 @@ public class Code {
 
     public void setDescrition(String descrition) {
         this.descrition = descrition;
-    }
-
-    public Long getCityid() {
-        return cityid;
-    }
-
-    public void setCityid(Long cityid) {
-        this.cityid = cityid;
     }
 
     @Override

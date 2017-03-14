@@ -1,21 +1,3 @@
-/*
- * ************************************************************************************************
- * Juramento do Programador no desenvolvimento de Código Limpo:
- *
- *  Antes de codificar, me colocarei na posição dos outros colaboradores desenvolvedores,
- *  buscando me expressar de maneira simples, logo:
- *
- *  - Nomearei as entidades como classes, métodos e variáveis com nomes significativos, pronunciáveis
- *  e pesquisável, que revelem a sua verdadeira e atual intenção;
- *
- *  - Farei com que cada método e cada deve ter apenas uma única responsabilidade, caso contrário,
- *  deve ser refatorados em métodos unitários;
- *
- *  - Ao comentar sobre uma entidade, deixarei claro qual é o seu papel atual e sugerirei  melhorias
- *  futuras, se for o caso; Atualizar comentários sempre quando atualizar código;
- * ************************************************************************************************
- */
-
 package br.com.expressobits.hbus.ui.tour;
 
 import android.os.Bundle;
@@ -31,14 +13,12 @@ import br.com.expressobits.hbus.R;
 
 public class PagerFragment extends Fragment {
 
-    private static final String TAG = "PagerFragment";
-
-    public static final String ARG_COLOR    = "color";
-    public static final String ARG_PAGE     = "page";
-    public static final String ARG_TITLE    = "title";
-    public static final String ARG_SUBTITLE = "subtitle";
-    public static final String ARG_ICON     = "icon";
-    public static final String ARG_ICON_BOTTOM = "iconbottom";
+    private static final String ARG_COLOR    = "color";
+    private static final String ARG_PAGE     = "page";
+    private static final String ARG_TITLE    = "title";
+    private static final String ARG_SUBTITLE = "subtitle";
+    private static final String ARG_ICON     = "icon";
+    private static final String ARG_ICON_BOTTOM = "iconbottom";
 
     private int mColor;
     private int mPage;
@@ -60,16 +40,8 @@ public class PagerFragment extends Fragment {
 
         fragment.setArguments(args);
 
-        return (fragment);
+        return fragment;
     }
-
-
-    /**
-     * Construtor público vazio necessária
-     */
-    public PagerFragment() {
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +67,6 @@ public class PagerFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-
         outState.putInt(ARG_PAGE, mPage);
         outState.putString(ARG_TITLE, mTitle);
         outState.putString(ARG_SUBTITLE, mSubTitle);
@@ -107,22 +78,17 @@ public class PagerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tour_relative, container, false);
+        View viewTour = inflater.inflate(R.layout.tour_relative, container, false);
 
-        AppCompatImageView iconImage = (AppCompatImageView) view.findViewById(R.id.iconImage);
+        AppCompatImageView iconImage = (AppCompatImageView) viewTour.findViewById(R.id.iconImage);
+        TextView titleText = (TextView) viewTour.findViewById(R.id.titleText);
+        TextView subtitleText = (TextView) viewTour.findViewById(R.id.subtitleText);
 
-        TextView titleText = (TextView) view.findViewById(R.id.titleText);
-
-        TextView subtitleText = (TextView) view.findViewById(R.id.subtitleText);
-
-
+        viewTour.setBackgroundColor(mColor);
         iconImage.setImageResource(mIcon);
         titleText.setText(mTitle);
         subtitleText.setText(mSubTitle);
 
-        return view;
+        return viewTour;
     }
-
-
-
 }

@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.help.HelpActivity">
 
-    <include layout="@layout/toolbar_default" />
+    <include layout="@layout/toolbar_default"/>
 
     <include layout="@layout/content_help"/>
 

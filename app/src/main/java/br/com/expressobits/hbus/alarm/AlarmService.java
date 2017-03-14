@@ -7,8 +7,8 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
+import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.ui.notification.NotificationsAlarm;
 import br.com.expressobits.hbus.ui.settings.NotificationPreferenceFragment;
 import br.com.expressobits.hbus.utils.TimeUtils;
@@ -50,28 +50,27 @@ public class AlarmService extends IntentService{
 
         int day = c.get(Calendar.DAY_OF_WEEK);
         boolean isDayToday = false;
-        switch (day){
-            case 1:
-                isDayToday = alarm.isSunday();
-                break;
-            case 2:
-                isDayToday = alarm.isMonday();
-                break;
-            case 3:
-                isDayToday = alarm.isTuesday();
-                break;
-            case 4:
-                isDayToday = alarm.isWednesday();
-                break;
-            case 5:
-                isDayToday = alarm.isThursday();
-                break;
-            case 6:
-                isDayToday = alarm.isFriday();
-                break;
-            case 7:
-                isDayToday = alarm.isSaturday();
-                break;
+        if (day == Calendar.SUNDAY) {
+            isDayToday = alarm.isSunday();
+
+        } else if (day == Calendar.MONDAY) {
+            isDayToday = alarm.isMonday();
+
+        } else if (day == Calendar.TUESDAY) {
+            isDayToday = alarm.isTuesday();
+
+        } else if (day == Calendar.WEDNESDAY) {
+            isDayToday = alarm.isWednesday();
+
+        } else if (day == Calendar.THURSDAY) {
+            isDayToday = alarm.isThursday();
+
+        } else if (day == Calendar.FRIDAY) {
+            isDayToday = alarm.isFriday();
+
+        } else if (day == Calendar.SATURDAY) {
+            isDayToday = alarm.isSaturday();
+
         }
 
         String minutesToleradosString = PreferenceManager.getDefaultSharedPreferences(this).

@@ -54,11 +54,11 @@
         <item>Never</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>10800000</item>
+        <item>21600000</item>
         <item>-1</item>
     </string-array>
 
@@ -94,5 +94,18 @@
     <string name="pref_header_summary_notification">Notifications of alarms</string>
     <string name="pref_header_summary_general">General settings</string>
     <string name="pref_header_summary_data_sync">Sync with server</string>
+    <string name="pref_header_privacy">Privacy</string>
     <string name="pref_header_summary_about">Application information</string>
+    <string name="pref_header_summary_privacy">Information Security</string>
+
+    <string name="pref_title_clear_history_search">Clear search history</string>
+    <string name="pref_summary_clear_history_search">Clear search history made in this application</string>
+    <string name="pref_title_pause_search_history">Pause search history</string>
+    <string name="pref_summary_pause_search_history">Does not save any search if enabled</string>
+
+    <string name="pref_title_clear_route_history_viewed">Clear route history viewed</string>
+    <string name="pref_summary_clear_route_history_viewed">Clear history of itinerary views made in this app</string>
+    <string name="pref_title_pause_viewing_history">Pause viewing history</string>
+    <string name="pref_summary_pause_viewing_history">Does not save in historical views if enabled</string>
+
 </resources>
