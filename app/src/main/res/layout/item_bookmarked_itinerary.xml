@@ -76,10 +76,10 @@
 
         </LinearLayout>
 
-        <View
+        <!--View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:drawable/divider_horizontal_bright"/>
+            android:background="@android:drawable/divider_horizontal_bright"/-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -92,16 +92,16 @@
                     android:gravity="end"
                     android:orientation="horizontal">
 
-
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/buttonLookTime"
-                        style="@style/HBusTheme.Widget.AppCompat.Button.Colored.BookmarkedItinerary"
                         android:layout_width="wrap_content"
+                        android:theme="@style/HBusTheme.Widget.AppCompat.Button.Colored.BookmarkedItinerary"
                         android:layout_height="wrap_content"
                         android:text="@string/view_timetable"/>
-                    <Button
+
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/buttonRemove"
-                        style="@style/HBusTheme.Widget.AppCompat.Button.Colored.BookmarkedItinerary"
+                        android:theme="@style/HBusTheme.Widget.AppCompat.Button.Colored.BookmarkedItinerary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_remove"/>

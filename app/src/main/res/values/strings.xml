@@ -213,5 +213,7 @@
     <string name="dialog_alert_title_confirm_rate_us">Do not really want to rate our app?</string>
     <string name="pref_title_pause_preview_history">Pause search history</string>
     <string name="pref_summary_pause_preview_history">Does not save any search if enabled</string>
+    <string name="choose_way">Choose an way</string>
+    <string name="no_have_connection_with_internet">No have internet connection</string>
 
 </resources>

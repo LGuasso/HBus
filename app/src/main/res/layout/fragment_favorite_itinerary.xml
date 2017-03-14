@@ -16,7 +16,8 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
-            android:padding="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:id="@+id/list_lines"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
