@@ -59,14 +59,11 @@ public class Asset2Converter {
                         Code code = new Code();
                         code.setName(codeName.replace(" ",""));
                         code.setDescrition(getDescriptionCodeForamted(company,itinerary,codeName));
-                        codesFormated.put(codeName,code);
+                        codesFormated.put(codeName.replace(" ",""),code);
                         codesList.add(code);
                     }
 
-                    if(codeName.contains(" ")){
-                        codeName=codeName.replace(" ","");
-                    }
-                    bus.setCode(codeName);
+                    bus.setCode(codeName.replace(" ",""));
                 }
                 codes.get(company).put(itinerary,codesList);
             }

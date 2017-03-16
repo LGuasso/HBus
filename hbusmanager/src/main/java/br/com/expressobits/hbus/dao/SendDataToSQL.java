@@ -27,6 +27,7 @@ public class SendDataToSQL {
     private HashMap<Company, HashMap<Itinerary,List<Code>>> codes = new HashMap<>();
     private HashMap<Company, HashMap<Itinerary, List<Bus>>> buses = new HashMap<>();
     private ScheduleSQLite scheduleSQLite;
+    private static final int DATABASE_VERSION = 2;
 
     private ReadAssetsV1File readAssetsV1File;
 
@@ -35,7 +36,7 @@ public class SendDataToSQL {
                 SQLConstants.DATABASE_PATTERN_NAME+"/"+
                         city.getCountry()+"/"+
                         city.getName()+"/"+
-                        StringUtils.getNameDatabase(city.getCountry(),city.getName(),1));
+                        StringUtils.getNameDatabase(city.getCountry(),city.getName(),DATABASE_VERSION));
         readAssetsV1File = new ReadAssetsV1File();
     }
 

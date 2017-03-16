@@ -82,9 +82,12 @@ public class HBusManager extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 sendData.open();
                 City city = cities.get(comboBoxCities.getSelectedIndex());
-                for (Company company : sendData.getCompanies(city)) {
+                /**for (Company company : sendData.getCompanies(city)) {
                     sendData.sendCompany(city, company);
-                 }
+                 }*/
+
+                sendData.sendCompany(city,sendData.getCompanies(city).get(
+                        comboBoxCompanies.getSelectedIndex()));
                 sendData.close();
 
             }

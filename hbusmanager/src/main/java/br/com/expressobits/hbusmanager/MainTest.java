@@ -29,9 +29,9 @@ public class MainTest {
         sendData.pushCity(city);
         JOptionPane.showMessageDialog(null,"Aguarde!");*/
 
-        //HBusManager hBusManager = new HBusManager();
+        HBusManager hBusManager = new HBusManager();
 
-        runV2();
+        //runV2();
 
         /*Itinerary itinerary = new Itinerary();
         itinerary.setId("/BR/RS/Santa Maria/SIMSM/7 de Dezembro");
