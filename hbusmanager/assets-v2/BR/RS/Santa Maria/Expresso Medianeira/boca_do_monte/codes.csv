@@ -1,20 +1,20 @@
-!;11:50 Lageadinho 12:05 BM via Niederauer
-$;06:50 Lageadinho 07:20 BM // ter e qui Quilombo
-£;QD na Quinta
-2;Sai as 07:10 do lageadinho e as 07:30 da BM
-3;Sai as 06:50 de S Antonio e as 07:20 da BM
-BM;Boca do Monte
-BZ;Via Bozano
-DA;Direto pelo Asfalto
-LG;Lageadinho
-LGSA;ate Lg e SA 2,4,6 e VE
-LGSAQU;lageadinho // ter e Qui Quilombo // segunda sexta S Antonio
-Man;Sai do terminal do maneco
-Mnc;ate maneco
-MV;Passa no meio da Vila
-Nied;Via Niederauer
-QD;Quebra dente
-QL;Quilombo
-SCA;Quebradente Qui // Qua Quilombo
-VE;vai Vila Esmeralda
-Via Man;via terminal do maneco
+! - 11:50 Lageadinho 12:05 BM via Niederauer
+$ - 06:50 Lageadinho 07:20 BM // ter e qui Quilombo
+£ - QD na Quinta
+2 - Sai as 07:10 do lageadinho e as 07:30 da BM
+3 - Sai as 06:50 de S Antonio e as 07:20 da BM
+BM - Boca do Monte
+BZ - Via Bozano
+DA - Direto pelo Asfalto
+LG - Lageadinho
+LGSA - ate Lg e SA 2,4,6 e VE
+LGSAQU - lageadinho // ter e Qui Quilombo // segunda sexta S Antonio
+Man - Sai do terminal do maneco
+Mnc - ate maneco
+MV - Passa no meio da Vila
+Nied - Via Niederauer
+QD - Quebra dente
+QL - Quilombo
+SCA - Quebradente Qui // Qua Quilombo
+VE - vai Vila Esmeralda
+Via Man - via terminal do maneco

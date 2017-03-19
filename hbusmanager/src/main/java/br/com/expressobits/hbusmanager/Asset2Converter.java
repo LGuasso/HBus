@@ -55,15 +55,18 @@ public class Asset2Converter {
                 List<Code> codesList = new ArrayList<>();
                 for (Bus bus:buses.get(company).get(itinerary)){
                     String codeName = bus.getCode();
-                    if(!codesFormated.containsKey(codeName.replace(" ",""))){
-                        Code code = new Code();
-                        code.setName(codeName.replace(" ",""));
-                        code.setDescrition(getDescriptionCodeForamted(company,itinerary,codeName));
-                        codesFormated.put(codeName.replace(" ",""),code);
-                        codesList.add(code);
+                    if(!codeName.equals("NOT CODE")){
+                        if(!codesFormated.containsKey(codeName.replace(" ",""))){
+                            Code code = new Code();
+                            code.setName(codeName.replace(" ",""));
+                            code.setDescrition(getDescriptionCodeForamted(company,itinerary,codeName));
+                            codesFormated.put(codeName.replace(" ",""),code);
+                            codesList.add(code);
+                        }
+
+                        bus.setCode(codeName.replace(" ",""));
                     }
 
-                    bus.setCode(codeName.replace(" ",""));
                 }
                 codes.get(company).put(itinerary,codesList);
             }
@@ -96,8 +99,28 @@ public class Asset2Converter {
 
     public String getDescriptionCodeForamted(Company company,Itinerary itinerary,String codeNoFormated){
         String texto = "";
+        boolean concatCode = false;
+        String concatTemp = "";
         for(String text:codeNoFormated.split(" ")){
-            texto=texto.concat(","+codesNoFormatedHash.get(company).get(itinerary).get(text).getDescrition());
+
+            if(codesNoFormatedHash.get(company).get(itinerary).get(text)!=null){
+                texto=texto.concat(","+codesNoFormatedHash.get(company).get(itinerary).get(text).getDescrition());
+            }else{
+                if(concatCode && codesNoFormatedHash.get(company).get(itinerary).get(concatTemp+text)!=null){
+                    concatTemp = concatTemp+text;
+                    texto=texto.concat(","+codesNoFormatedHash.get(company).get(itinerary).get(concatTemp).getDescrition());
+                    System.out.println("CONCAT FALSE "+itinerary.getName());
+                    System.out.println("code is encounter for concats method! "+concatTemp);
+                    concatCode = false;
+                    concatTemp = "";
+                }else {
+                    System.out.println("CONCAT TRUE" +text+"  "+itinerary.getName());
+                    concatCode = true;
+                    concatTemp = concatTemp+text;
+                }
+
+            }
+
         }
         texto=texto.replaceFirst(",","");
         return texto;

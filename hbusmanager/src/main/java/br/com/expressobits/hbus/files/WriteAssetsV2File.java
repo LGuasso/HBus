@@ -48,14 +48,16 @@ public class WriteAssetsV2File {
     public String toText(Bus bus){
         String texto = TimeUtils.getFormatTime(bus.getTime());
         texto=texto.concat(SPLIT_FILE);
-        texto=texto.concat(bus.getCode());
+        if(!bus.getCode().equals("NOT CODE")){
+            texto=texto.concat(bus.getCode());
+        }
         return texto;
     }
 
 
     public void writeItineraries(City city, Company company,List<Itinerary> itineraries){
         for(Itinerary itinerary:itineraries){
-            FileManager.write(true,toText(itinerary),"assets"+BARS+city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+ITINERARIES_FILE);
+            FileManager.write(DEBUG,toText(itinerary),"assets"+BARS+city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+ITINERARIES_FILE);
         }
     }
 
@@ -63,7 +65,7 @@ public class WriteAssetsV2File {
 
         for(Itinerary itinerary:itineraries){
             for(Code code:codes.get(itinerary)){
-                FileManager.write(true,
+                FileManager.write(DEBUG,
                         toText(code),
                         "assets"+BARS+city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+
                                 StringUtils.toSimpleNameFile(itinerary.getName())+BARS+CODES_FILE);

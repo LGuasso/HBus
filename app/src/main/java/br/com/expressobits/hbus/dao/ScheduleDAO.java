@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
+import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Company;
@@ -20,14 +21,13 @@ import br.com.expressobits.hbus.utils.StringUtils;
 public class ScheduleDAO extends SQLiteOpenHelper {
 
     private static final String TAG = "ScheduleDAO";
-    public static final int SCHEDULE_VERSION = 1;
     private static final int DATABASE_VERSION = 1;
 
     private String country;
     private String city;
 
     public ScheduleDAO(Context context,String country,String cityName){
-        super(context, StringUtils.getNameDatabase(country,cityName, SCHEDULE_VERSION),null, DATABASE_VERSION);
+        super(context, StringUtils.getNameDatabase(country,cityName, AppManager.DATABASE_VERSION),null, DATABASE_VERSION);
         this.city = cityName;
         this.country = country;
     }
@@ -53,8 +53,8 @@ public class ScheduleDAO extends SQLiteOpenHelper {
         return ScheduleHelper.getItineraries(getReadableDatabase(),country,city,company);
     }
 
-    public List<Code> getCodes(String company){
-        return ScheduleHelper.getCodes(getReadableDatabase(),country,city,company);
+    public List<Code> getCodes(String company,String itinerary){
+        return ScheduleHelper.getCodes(getReadableDatabase(),country,city,company,itinerary);
     }
 
     public List<Bus> getBuses(String company, String itinerary, String way, String typeday) {
@@ -65,10 +65,10 @@ public class ScheduleDAO extends SQLiteOpenHelper {
         return ScheduleHelper.getCompany(getReadableDatabase(),country,city,company);
     }
 
-    public Code getCode(String company,String code){
+    public Code getCode(String company,String itinerary,String code){
         //TODO fazer try em todos
         try{
-            return ScheduleHelper.getCode(getReadableDatabase(),country,city,company,code);
+            return ScheduleHelper.getCode(getReadableDatabase(),country,city,company,itinerary,code);
         }catch (SQLException e){
             e.printStackTrace();
             return null;

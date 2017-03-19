@@ -129,7 +129,9 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
             ScheduleDAO dao = new ScheduleDAO(context,
                     SQLConstants.getCountryFromBusId(bus.getId()),
                     SQLConstants.getCityFromBusId(bus.getId()));
-            Code code = dao.getCode(SQLConstants.getCompanyFromBusId(bus.getId()),bus.getCode());
+            Code code = dao.getCode(SQLConstants.getCompanyFromBusId(bus.getId()),
+                    SQLConstants.getItinerary(bus.getId()),
+                    bus.getCode());
             dao.close();
             if (code != null) {
                 myViewHolder.txtViewDescription.setText(code.getDescrition());

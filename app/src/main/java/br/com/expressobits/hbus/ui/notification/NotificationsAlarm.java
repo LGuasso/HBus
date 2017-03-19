@@ -74,7 +74,9 @@ public class NotificationsAlarm {
 
     private static void setCodeToNotification(Alarm alarm, final NotificationCompat.Builder alamNotificationBuilder) {
         ScheduleDAO dao = new ScheduleDAO(alamNotificationBuilder.mContext,SQLConstants.getCountryFromBusId(alarm.getId()), SQLConstants.getCityFromBusId(alarm.getId()));
-        Code code = dao.getCode(SQLConstants.getCompanyFromBusId(alarm.getId()),alarm.getCode());
+        Code code = dao.getCode(SQLConstants.getCompanyFromBusId(alarm.getId()),
+                SQLConstants.getItinerary(alarm.getId()),
+                alarm.getCode());
         dao.close();
         if(code!=null){
             alamNotificationBuilder.setSubText(code.getDescrition());

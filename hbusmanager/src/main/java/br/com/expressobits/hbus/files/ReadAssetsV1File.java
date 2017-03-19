@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import br.com.expressobits.hbus.dao.SQLConstants;
+import br.com.expressobits.hbus.dao.SendDataToSQL;
 import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Code;
@@ -84,8 +85,8 @@ public class ReadAssetsV1File {
         try{
             bus.setCode(text.split(SPLIT_FILE)[1]);
         }catch (Exception e){
-            System.out.println(" "+"TEXTO("+text+")");
-            bus.setCode("NOT CODE");
+            //System.out.println(" "+"TEXTO("+text+")");
+            bus.setCode("");
 
         }
         return bus;
@@ -133,7 +134,11 @@ public class ReadAssetsV1File {
             for(String text:readFile(DEBUG,"assets"+BARS+city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+
                     StringUtils.toSimpleNameFile(itinerary.getName())+BARS+CODES_FILE)){
                 Code code = toCode(text);
-                code.setId(SQLConstants.getIdCode(city.getCountry(),city.getName(),company.getName(),code.getName()));
+                if(SendDataToSQL.DATABASE_VERSION==1){
+                    code.setId(SQLConstants.getIdCodeVersion1(city.getCountry(),city.getName(),company.getName(),code.getName()));
+                }else{
+                    code.setId(SQLConstants.getIdCode(city.getCountry(),city.getName(),company.getName(),itinerary.getName(),code.getName()));
+                }
                 if(codes.contains(code)){
                     System.err.println(company.getName()+"/"+itinerary.getName()+"/CODE EXISTS CODE:"+code.getName());
                 }else {

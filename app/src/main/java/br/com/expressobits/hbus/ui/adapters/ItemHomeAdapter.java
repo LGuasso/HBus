@@ -240,7 +240,9 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 textViewCode.setText(code);
                 if(code.length()<= Code.CODE_LENGTH_TO_DESCRIPTION){
                     loadCode(textViewCode,code,FirebaseUtils.getCompany(itinerary.getId()),
-                            FirebaseUtils.getCountry(itinerary.getId()),FirebaseUtils.getCityName(itinerary.getId()));
+                            FirebaseUtils.getCountry(itinerary.getId()),FirebaseUtils.getCityName(itinerary.getId()),
+                            itinerary.getName()
+                    );
                 }
 
                 textViewCode.setSelected(true);
@@ -264,10 +266,10 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.recyclerViewOnClickListenerHack = recyclerViewOnClickListenerHack;
     }
 
-    private void loadCode(TextView textView,String codeName,String company,String country,String cityName){
+    private void loadCode(TextView textView,String codeName,String company,String country,String cityName,String itinerary){
         if(!codes.containsKey(codeName)){
             ScheduleDAO dao = new ScheduleDAO(context,country,cityName);
-            Code code = dao.getCode(company,codeName);
+            Code code = dao.getCode(company,itinerary,codeName);
             if(code!=null){
                 addCode(textView,company,codeName,code);
             }

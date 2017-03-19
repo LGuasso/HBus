@@ -27,6 +27,7 @@ public class ReadAssetsV2File {
     private static final String SPLIT_FILE_TIME = " ";
     private static final String SPLIT_FILE = ";";
     private static final String SPLIT_FILE_SECONDARY = ",";
+    private static final String SPLIT_FILE_CODE_ASSETSV2 = " - ";
     private static final String CITIES_FILE = "cities.csv";
     private static final String ITINERARIES_FILE = "itineraries.csv";
     private static final String COMPANIES_FILE = "companies.csv";
@@ -34,7 +35,7 @@ public class ReadAssetsV2File {
     private static final String TAG = "FILEGENERATOR";
     private static final String FORMAT = ".csv";
     private static final String ASSET_DIRECTORY = "assets-v2";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private String country;
 
     public Itinerary toItinerary(String text){
@@ -49,23 +50,32 @@ public class ReadAssetsV2File {
 
     public Code toCode(String text){
         Code code = new Code();
-        code.setName(text.split(SPLIT_FILE)[0]);
-        if(text.split(SPLIT_FILE).length>1){
-            code.setDescrition(text.split(SPLIT_FILE)[1]);
+        code.setName(text.split(SPLIT_FILE_CODE_ASSETSV2)[0].replace(" ",""));
+        if(text.split(SPLIT_FILE_CODE_ASSETSV2).length>1){
+            code.setDescrition(text.split(SPLIT_FILE_CODE_ASSETSV2)[1]);
         }
         return code;
     }
 
     public Bus toBus(String text){
         Bus bus = new Bus();
-        bus.setTime(TimeUtils.getTimeInCalendar(text.split(SPLIT_FILE_TIME)[0]).getTimeInMillis());
-
-        try{
-            bus.setCode(text.replace(text.split(SPLIT_FILE_TIME)[0]+SPLIT_FILE_TIME,""));
-        }catch (Exception e){
-            System.out.println(" "+"TEXTO("+text+")");
+        if(text.contains(" ")){
+            bus.setTime(TimeUtils.getTimeInCalendar(text.split(SPLIT_FILE_TIME)[0]).getTimeInMillis());
+            if(text.split(SPLIT_FILE_TIME).length>1){
+                try{
+                    bus.setCode(text.replace(text.split(SPLIT_FILE_TIME)[0]+SPLIT_FILE_TIME,""));
+                }catch (Exception e){
+                    System.out.println(" "+"TEXTO("+text+")");
+                    bus.setCode("NOT CODE");
+                }
+            }else{
+                bus.setCode("NOT CODE");
+            }
+        }else{
+            bus.setTime(TimeUtils.getTimeInCalendar(text).getTimeInMillis());
             bus.setCode("NOT CODE");
         }
+
         return bus;
     }
 
@@ -87,7 +97,7 @@ public class ReadAssetsV2File {
             for(String text:readFile(DEBUG,ASSET_DIRECTORY+BARS+city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+
                     StringUtils.toSimpleNameFile(itinerary.getName())+BARS+CODES_FILE)){
                 Code code = toCode(text);
-                code.setId(SQLConstants.getIdCode(city.getCountry(),city.getName(),company.getName(),code.getName()));
+                code.setId(SQLConstants.getIdCode(city.getCountry(),city.getName(),company.getName(),itinerary.getName(),code.getName()));
                 if(codes.contains(code)){
                     System.err.println("CODE EXISTS CODE:"+code.getName());
                 }else {
@@ -107,7 +117,7 @@ public class ReadAssetsV2File {
             for(String text:readFile(DEBUG,ASSET_DIRECTORY+BARS+city.getCountry()+BARS+city.getName()+BARS+company.getName()+BARS+
                     StringUtils.toSimpleNameFile(itinerary.getName())+BARS+CODES_FILE)){
                 Code code = toCode(text);
-                code.setId(SQLConstants.getIdCode(city.getCountry(),city.getName(),company.getName(),code.getName()));
+                code.setId(SQLConstants.getIdCode(city.getCountry(),city.getName(),company.getName(),itinerary.getName(),code.getName()));
                 if(codes.containsKey(code.getName())){
                     System.err.println("CODE EXISTS CODE:"+code.getName());
                 }else {

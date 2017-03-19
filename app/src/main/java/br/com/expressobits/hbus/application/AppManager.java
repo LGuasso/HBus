@@ -22,7 +22,6 @@ import br.com.expressobits.hbus.utils.StringUtils;
 import static android.R.string.no;
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static br.com.expressobits.hbus.ui.DownloadScheduleActivity.DATABASE_LAST_UPDATE_PREFERENCE_KEY;
-import static br.com.expressobits.hbus.ui.DownloadScheduleActivity.DATABASE_VERSION;
 
 /**
  * @author Rafael Correa
@@ -34,6 +33,8 @@ public class AppManager {
     private static final String TAG = "AppManager";
 
     private static int countCloseTimesActivity = 0;
+
+    public static final int DATABASE_VERSION = 2;
 
 
     private static String COUNT_OPEN_APP = "counts_beta_program";

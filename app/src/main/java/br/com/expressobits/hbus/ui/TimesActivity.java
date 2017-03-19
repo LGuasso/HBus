@@ -14,15 +14,19 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.util.Calendar;
+import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.dao.ScheduleDAO;
+import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.ui.adapters.ViewPagerAdapter;
+import br.com.expressobits.hbus.ui.dialog.ChooseCodeFilterFragment;
 import br.com.expressobits.hbus.utils.TimeUtils;
 
 /**
  * Activity with Fragment
  */
-public class TimesActivity extends AppCompatActivity {
+public class TimesActivity extends AppCompatActivity implements ChooseCodeFilterFragment.OnConfirmFilterCodes{
 
     public static final String TAG = "TimesActivity";
     public static final String ARGS_COUNTRY = "country";
@@ -35,6 +39,9 @@ public class TimesActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
+
+    private String[] codes;
+    private boolean[] codesChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +117,18 @@ public class TimesActivity extends AppCompatActivity {
         String company = getIntent().getStringExtra(ARGS_COMPANY);
         String itinerary = getIntent().getStringExtra(ARGS_ITINERARY);
         String way = getIntent().getStringExtra(ARGS_WAY);
+
+
+
+        ScheduleDAO dao = new ScheduleDAO(this,country,city);
+        List<Code> codes = dao.getCodes(company,itinerary);
+        this.codes = new String[codes.size()];
+        this.codesChecked = new boolean[codes.size()];
+        for (int i = 0; i < codes.size(); i++) {
+            this.codes[i] = codes.get(i).getName();
+            this.codesChecked[i] = true;
+        }
+
         toolbar.setTitle(itinerary);
         toolbar.setSubtitle(way);
         textViewCompanyUse.setText(getString(R.string.company_use,company));
@@ -126,12 +145,29 @@ public class TimesActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             finish();
         }
-        return true;
+        if (id == R.id.menu_action_filter) {
+            openChooseCodeFilter();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openChooseCodeFilter(){
+        ChooseCodeFilterFragment chooseCodeFilterFragment = new ChooseCodeFilterFragment();
+        chooseCodeFilterFragment.setParameters(this,codes,codesChecked);
+        chooseCodeFilterFragment.show(getSupportFragmentManager(),TAG);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_times, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public void onConfirmFilter(String[] codes, boolean[] codesChecked) {
+        this.codes = codes;
+        this.codesChecked = codesChecked;
+        refresh();
+    }
 }

@@ -215,5 +215,6 @@
     <string name="pref_summary_pause_preview_history">Does not save any search if enabled</string>
     <string name="choose_way">Choose an way</string>
     <string name="no_have_connection_with_internet">No have internet connection</string>
+    <string name="action_filter">filter</string>
 
 </resources>

@@ -27,7 +27,7 @@ public class SendDataToSQL {
     private HashMap<Company, HashMap<Itinerary,List<Code>>> codes = new HashMap<>();
     private HashMap<Company, HashMap<Itinerary, List<Bus>>> buses = new HashMap<>();
     private ScheduleSQLite scheduleSQLite;
-    private static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 2;
 
     private ReadAssetsV1File readAssetsV1File;
 
