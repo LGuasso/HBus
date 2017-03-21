@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -40,20 +41,50 @@ public class TimesActivity extends AppCompatActivity implements ChooseCodeFilter
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
 
-    private String[] codes;
-    private boolean[] codesChecked;
+    private List<Code> codes;
+    private List<Code> codesNoSelected;
+    private String country;
+    private String city;
+    private String company;
+    private String itinerary;
+    private String way;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        loadParams();
+        loadCodes();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_times);
         initViews();
     }
 
+    /**
+     * Load codes in memory from database
+     */
+    private void loadCodes() {
+        ScheduleDAO dao = new ScheduleDAO(this, country, city);
+        codes = dao.getCodes(company, itinerary);
+        codesNoSelected = new ArrayList<>();
+    }
+
+    /**
+     * Load args params from intent activity
+     */
+    private void loadParams() {
+        country = getIntent().getStringExtra(ARGS_COUNTRY);
+        city = getIntent().getStringExtra(ARGS_CITY);
+        company = getIntent().getStringExtra(ARGS_COMPANY);
+        itinerary = getIntent().getStringExtra(ARGS_ITINERARY);
+        way = getIntent().getStringExtra(ARGS_WAY);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        refresh();
+        refresh(getCharSequenceArrayList(codesNoSelected));
+        //TODO implement sunday days in holiday
+        int typeday  = TimeUtils.getTypedayinCalendar(Calendar.getInstance()).toInt();
+        viewPager.setCurrentItem(typeday);
     }
 
     /**
@@ -104,38 +135,19 @@ public class TimesActivity extends AppCompatActivity implements ChooseCodeFilter
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),this);
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     /**
      * Refresh all views with data from getIntent()
      */
-    public void refresh(){
-        String country = getIntent().getStringExtra(ARGS_COUNTRY);
-        String city = getIntent().getStringExtra(ARGS_CITY);
-        String company = getIntent().getStringExtra(ARGS_COMPANY);
-        String itinerary = getIntent().getStringExtra(ARGS_ITINERARY);
-        String way = getIntent().getStringExtra(ARGS_WAY);
-
-
-
-        ScheduleDAO dao = new ScheduleDAO(this,country,city);
-        List<Code> codes = dao.getCodes(company,itinerary);
-        this.codes = new String[codes.size()];
-        this.codesChecked = new boolean[codes.size()];
-        for (int i = 0; i < codes.size(); i++) {
-            this.codes[i] = codes.get(i).getName();
-            this.codesChecked[i] = true;
-        }
-
+    public void refresh(ArrayList<String> codesName){
+        loadParams();
         toolbar.setTitle(itinerary);
         toolbar.setSubtitle(way);
         textViewCompanyUse.setText(getString(R.string.company_use,company));
-        viewPagerAdapter.refresh(country,city,company,itinerary,way);
-        //TODO implement sunday days in holiday
-        int typeday  = TimeUtils.getTypedayinCalendar(Calendar.getInstance()).toInt();
-        viewPager.setCurrentItem(typeday);
+
+        viewPagerAdapter.refresh(country,city,company,itinerary,way,codesName);
     }
 
     @Override
@@ -152,9 +164,12 @@ public class TimesActivity extends AppCompatActivity implements ChooseCodeFilter
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Open alert dialog for filter codes in Bus list
+     */
     private void openChooseCodeFilter(){
         ChooseCodeFilterFragment chooseCodeFilterFragment = new ChooseCodeFilterFragment();
-        chooseCodeFilterFragment.setParameters(this,codes,codesChecked);
+        chooseCodeFilterFragment.setParameters(this,codes, codesNoSelected);
         chooseCodeFilterFragment.show(getSupportFragmentManager(),TAG);
     }
 
@@ -165,9 +180,21 @@ public class TimesActivity extends AppCompatActivity implements ChooseCodeFilter
     }
 
     @Override
-    public void onConfirmFilter(String[] codes, boolean[] codesChecked) {
-        this.codes = codes;
-        this.codesChecked = codesChecked;
-        refresh();
+    public void onConfirmFilter(List<Code> codesSelected) {
+        this.codesNoSelected = codesSelected;
+        refresh(getCharSequenceArrayList(codesSelected));
+    }
+
+    /**
+     * Transform codes object list in string name list
+     * @param codesSelected Codes list
+     * @return ArrayList of name codes
+     */
+    private ArrayList<String> getCharSequenceArrayList(List<Code> codesSelected){
+        ArrayList<String> codesNamesSelected = new ArrayList<>();
+        for(Code code:codesSelected){
+            codesNamesSelected.add(code.getName());
+        }
+        return codesNamesSelected;
     }
 }

@@ -236,14 +236,12 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 String code = next.get(way).getCode();
                 textViewWay.setText(way);
                 textViewHour.setText(time);
-                code=code.replace(" ","");
                 textViewCode.setText(code);
-                if(code.length()<= Code.CODE_LENGTH_TO_DESCRIPTION){
-                    loadCode(textViewCode,code,FirebaseUtils.getCompany(itinerary.getId()),
-                            FirebaseUtils.getCountry(itinerary.getId()),FirebaseUtils.getCityName(itinerary.getId()),
-                            itinerary.getName()
-                    );
-                }
+                loadCode(textViewCode,code,FirebaseUtils.getCompany(itinerary.getId()),
+                        FirebaseUtils.getCountry(itinerary.getId()),FirebaseUtils.getCityName(itinerary.getId()),
+                        itinerary.getName()
+                );
+
 
                 textViewCode.setSelected(true);
                 holder.linearLayoutHours.addView(view, i);
@@ -267,15 +265,20 @@ public class ItemHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private void loadCode(TextView textView,String codeName,String company,String country,String cityName,String itinerary){
-        if(!codes.containsKey(codeName)){
-            ScheduleDAO dao = new ScheduleDAO(context,country,cityName);
-            Code code = dao.getCode(company,itinerary,codeName);
-            if(code!=null){
-                addCode(textView,company,codeName,code);
+        if(codeName.replace(" ","").length()>0){
+            if(!codes.containsKey(codeName)){
+                ScheduleDAO dao = new ScheduleDAO(context,country,cityName);
+                Code code = dao.getCode(company,itinerary,codeName);
+                if(code!=null){
+                    addCode(textView,company,codeName,code);
+                }
+            }else{
+                addCode(textView,company,codeName);
             }
         }else{
-            addCode(textView,company,codeName);
+            textView.setText(itinerary);
         }
+
 
     }
 

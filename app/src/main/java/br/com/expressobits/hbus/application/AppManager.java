@@ -118,12 +118,15 @@ public class AppManager {
             StorageReference storageRef = storage.getReference();
             StorageReference fileRef = storageRef.child(SQLConstants.DATABASE_PATTERN_NAME).
                     child(country).child(city).child(
-                    StringUtils.getNameDatabase(country,city,DATABASE_VERSION));
+                    StringUtils.getNameDatabaseZipFile(country,city,DATABASE_VERSION));
             final SharedPreferences sharedPref = context.getSharedPreferences(
                     DATABASE_LAST_UPDATE_PREFERENCE_KEY,Context.MODE_PRIVATE);
-            fileRef.getMetadata().addOnSuccessListener(storageMetadata -> {
-                if(sharedPref.getLong(SQLConstants.getIdCityDefault(country,city), 0L)<storageMetadata.getUpdatedTimeMillis()){
 
+            fileRef.getMetadata().addOnSuccessListener(storageMetadata -> {
+                Log.i(TAG,storageMetadata.getUpdatedTimeMillis()+" storage update -"+
+                        sharedPref.getLong(SQLConstants.getIdCityDefault(country,city), 0L));
+                if(sharedPref.getLong(SQLConstants.getIdCityDefault(country,city), 0L)<storageMetadata.getUpdatedTimeMillis()){
+                    Log.i(TAG,"database new update!");
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setIcon(R.drawable.ic_refresh_grey600_24dp);
                     builder.setMessage(R.string.dialog_alert_message_confirm_update);
@@ -137,6 +140,8 @@ public class AppManager {
                     });
                     builder.show();
 
+                }else{
+                    Log.i(TAG,"your database updated!");
                 }
             });
         }else{
