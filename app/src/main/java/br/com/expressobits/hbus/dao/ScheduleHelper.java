@@ -213,9 +213,9 @@ class ScheduleHelper {
         return null;
     }
 
-    public static Code getCode(SQLiteDatabase db,String country,String city,String company,String codeName){
+    public static Code getCode(SQLiteDatabase db,String country,String city,String company,String itinerary,String codeName){
         String where = CodeContract.Code._ID+" = ?";
-        String arguments[] = {BARS+country+BARS+city+BARS+company+BARS+codeName};
+        String arguments[] = {BARS+country+BARS+city+BARS+company+BARS+itinerary+BARS+codeName};
         Cursor cursor = db.query(
                 CodeContract.Code.TABLE_NAME,
                 CodeContract.COLS,
@@ -330,11 +330,11 @@ class ScheduleHelper {
         return itineraries;
     }
 
-    public static List<Code> getCodes(SQLiteDatabase db,String country,String city,String company){
+    public static List<Code> getCodes(SQLiteDatabase db,String country,String city,String company,String itinerary){
         ArrayList<Code> codes = new ArrayList<>();
         Cursor c;
         String where = CodeContract.Code._ID+" LIKE ?";
-        String arguments[] = {BARS+country+BARS+city+BARS+company+"%"};
+        String arguments[] = {BARS+country+BARS+city+BARS+company+BARS+itinerary+"%"};
         c = db.query(
                 CodeContract.Code.TABLE_NAME,
                 CodeContract.COLS,

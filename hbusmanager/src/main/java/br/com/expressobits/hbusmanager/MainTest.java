@@ -4,11 +4,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.expressobits.hbus.ScheduleSQLite;
-import br.com.expressobits.hbus.model.Bus;
-import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.model.Itinerary;
 
 /**
  * @author Rafael
@@ -33,6 +30,8 @@ public class MainTest {
         JOptionPane.showMessageDialog(null,"Aguarde!");*/
 
         HBusManager hBusManager = new HBusManager();
+
+        //runV2();
 
         /*Itinerary itinerary = new Itinerary();
         itinerary.setId("/BR/RS/Santa Maria/SIMSM/7 de Dezembro");
@@ -73,5 +72,22 @@ public class MainTest {
             e.printStackTrace();
         }*/
 
+    }
+
+
+    public static void runV2(){
+        City city = new City();
+        city.setName("Santa Maria");
+        city.setCountry("BR/RS");
+        List<Company> companies = new ArrayList<>();
+        Company company = new Company();
+        company.setName("Expresso Medianeira");
+        companies.add(company);
+        Asset2Converter asset2Converter = new Asset2Converter();
+        asset2Converter.setCity(city);
+        asset2Converter.setCompanies(companies);
+        asset2Converter.read();
+
+        asset2Converter.write();
     }
 }

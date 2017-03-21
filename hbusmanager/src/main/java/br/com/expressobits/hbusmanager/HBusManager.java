@@ -1,21 +1,33 @@
 package br.com.expressobits.hbusmanager;
 
-import br.com.expressobits.hbus.dao.SendDataToSQL;
-import br.com.expressobits.hbus.files.ReadFile;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Company;
-import br.com.expressobits.hbus.model.Itinerary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import br.com.expressobits.hbus.dao.SendDataToSQL;
+import br.com.expressobits.hbus.files.ReadAssetsV1File;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.model.Itinerary;
 
 /**
  * Gerenciador do programa no firebase.
@@ -41,7 +53,7 @@ public class HBusManager extends JFrame {
     private JButton buttonRemoveCodes;
     private JButton buttonRemoveBuses;
     private JCheckBox singleItineraryCheckBox;
-    ReadFile readFile = new ReadFile();
+    ReadAssetsV1File readAssetsV1File = new ReadAssetsV1File();
     List<City> cities;
     SendDataToSQL sendData;
 
@@ -73,6 +85,9 @@ public class HBusManager extends JFrame {
                 for (Company company : sendData.getCompanies(city)) {
                     sendData.sendCompany(city, company);
                  }
+
+                /*sendData.sendCompany(city,sendData.getCompanies(city).get(
+                        comboBoxCompanies.getSelectedIndex()));*/
                 sendData.close();
 
             }
@@ -119,10 +134,12 @@ public class HBusManager extends JFrame {
         DefaultTableModel codeTableModel = new DefaultTableModel(codeColunas, 0);
         City city = cities.get(comboBoxCities.getSelectedIndex());
         Company company = sendData.getCompanies(city).get(comboBoxCompanies.getSelectedIndex());
-
-        for (Code code : sendData.getCodes(city, company)) {
-            String[] campos = {code.getName(), code.getDescrition()};
-            codeTableModel.addRow(campos);
+        List<Itinerary> itineraries = sendData.getItineraries(city,company);
+        for (Itinerary itinerary:itineraries){
+            for (Code code : sendData.getCodes(city, company,itinerary)) {
+                String[] campos = {code.getName(), code.getDescrition()};
+                codeTableModel.addRow(campos);
+            }
         }
         jTableCodes.setModel(codeTableModel);
     }
@@ -134,7 +151,7 @@ public class HBusManager extends JFrame {
     }
 
     public void loadCities() {
-        cities = readFile.getCities(countries.get(comboBoxCountries.getSelectedIndex()));
+        cities = readAssetsV1File.getCities(countries.get(comboBoxCountries.getSelectedIndex()));
         DefaultComboBoxModel defaultComboBoxModelCities = new DefaultComboBoxModel(cities.toArray());
         comboBoxCities.setModel(defaultComboBoxModelCities);
     }

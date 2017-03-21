@@ -14,7 +14,6 @@ import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.StringUtils;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-import static br.com.expressobits.hbus.ui.DownloadScheduleActivity.DATABASE_VERSION;
 
 /**
  * @author Rafael Correa
@@ -56,7 +55,7 @@ public class ManagerInit {
     }
     public static boolean isDatabaseFileFound(Context context,String country,String cityName){
         File localFile = context.getDatabasePath(
-                StringUtils.getNameDatabase(country,cityName,DATABASE_VERSION));
+                StringUtils.getNameDatabase(country,cityName,AppManager.DATABASE_VERSION));
         return localFile.exists();
     }
 

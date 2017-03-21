@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity{
         setContentView(R.layout.activity_splash);
         TextView textViewFastTip = (TextView) findViewById(R.id.textViewFastTip);
         textViewFastTip.setText(FastTipsProvider.getRandomFastTip(this));
-        int SPLASH_DISPLAY_LENGTH = 4000;
+        int SPLASH_DISPLAY_LENGTH = 1000;
         new Handler().postDelayed(() -> mAuth.addAuthStateListener(mAuthListener), SPLASH_DISPLAY_LENGTH);
     }
 

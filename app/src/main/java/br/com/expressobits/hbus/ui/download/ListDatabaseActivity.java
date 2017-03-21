@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
+import br.com.expressobits.hbus.application.AppManager;
 import br.com.expressobits.hbus.dao.SQLConstants;
 import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
@@ -32,8 +33,6 @@ import br.com.expressobits.hbus.ui.adapters.ItemFileDabaseAdapter;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 import br.com.expressobits.hbus.utils.StringUtils;
-
-import static br.com.expressobits.hbus.ui.DownloadScheduleActivity.DATABASE_VERSION;
 
 public class ListDatabaseActivity extends AppCompatActivity implements RecyclerViewOnClickListenerHack{
 
@@ -86,7 +85,7 @@ public class ListDatabaseActivity extends AppCompatActivity implements RecyclerV
                     City city = dataSnapshotCity.getValue(City.class);
                     city.setId(FirebaseUtils.getIdCity(country, city.getName()));
                     File localFile = getDatabasePath(
-                            StringUtils.getNameDatabase(city.getCountry(),city.getName(),DATABASE_VERSION));
+                            StringUtils.getNameDatabase(city.getCountry(),city.getName(), AppManager.DATABASE_VERSION));
                         Log.i(TAG,localFile.getName());
                     if(localFile.exists()){
                         Log.i(TAG,"\tfile exists! file size "+localFile.length());
@@ -143,7 +142,7 @@ public class ListDatabaseActivity extends AppCompatActivity implements RecyclerV
                         StringUtils.getNameDatabase(
                                 SQLConstants.getCountry(cityId),
                                 SQLConstants.getCity(cityId),
-                                DATABASE_VERSION))){
+                                AppManager.DATABASE_VERSION))){
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(ListDatabaseActivity.this);
                     builder1.setTitle(R.string.list_database_dialog_title_is_not_possible_to_remove);
                     builder1.setMessage(R.string.dialog_alert_message_no_delete_database_in_use);

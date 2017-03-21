@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.TypeDay;
 import br.com.expressobits.hbus.ui.fragments.ScheduleFragment;
@@ -25,6 +27,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private String company;
     private String itinerary;
     private String way;
+    private ArrayList<String> codesNoSelected;
     private Context context;
 
     public ViewPagerAdapter(FragmentManager manager,Context context) {
@@ -44,8 +47,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             args.putString(ScheduleFragment.ARGS_ITINERARY,itinerary);
             args.putString(ScheduleFragment.ARGS_WAY,way);
             args.putString(ScheduleFragment.ARGS_TYPEDAY,StringUtils.getTypeDayInt(position));
+            args.putStringArrayList(ScheduleFragment.ARGS_CODES, codesNoSelected);
             scheduleFragment.setArguments(args);
             mFragmentList[position] = scheduleFragment;
+        }else{
+
         }
         return mFragmentList[position];
     }
@@ -86,12 +92,21 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
      * @param itinerary itinerary name
      * @param way way
      */
-    public void refresh(String country,String city,String company,String itinerary,String way){
+    public void refresh(String country,String city,String company,String itinerary,String way,ArrayList<String> codes){
         this.country = country;
         this.city = city;
         this.company = company;
         this.itinerary = itinerary;
         this.way = way;
+        this.codesNoSelected = codes;
+        Log.d(TAG,"viewpager refresh");
+        for (int i = 0; i < mFragmentList.length; i++) {
+            Log.d(TAG,"viewpager refresh "+i);
+            if(mFragmentList[i]!=null){
+                Log.d(TAG,"viewpager refresh "+i+" framgnet");
+                mFragmentList[i].refresh(country,city,company,itinerary,way,
+                        StringUtils.getTypeDayInt(i),codes);
+            }
+        }
     }
-
 }

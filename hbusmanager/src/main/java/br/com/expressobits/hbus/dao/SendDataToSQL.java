@@ -1,15 +1,19 @@
 package br.com.expressobits.hbus.dao;
 
-import br.com.expressobits.hbus.ScheduleSQLite;
-import br.com.expressobits.hbus.files.ReadFile;
-import br.com.expressobits.hbus.model.*;
-import br.com.expressobits.hbus.push.*;
-import br.com.expressobits.hbus.utils.StringUtils;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import br.com.expressobits.hbus.ScheduleSQLite;
+import br.com.expressobits.hbus.files.ReadAssetsV1File;
+import br.com.expressobits.hbus.model.Bus;
+import br.com.expressobits.hbus.model.City;
+import br.com.expressobits.hbus.model.Code;
+import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.utils.StringUtils;
 
 /**
  * @author Rafael
@@ -19,20 +23,21 @@ public class SendDataToSQL {
 
     private City city;
     private List<Company> companies = new ArrayList<>();
-    private HashMap<Company, List<Code>> codes = new HashMap<>();
     private HashMap<Company, List<Itinerary>> itineraries = new HashMap<>();
+    private HashMap<Company, HashMap<Itinerary,List<Code>>> codes = new HashMap<>();
     private HashMap<Company, HashMap<Itinerary, List<Bus>>> buses = new HashMap<>();
     private ScheduleSQLite scheduleSQLite;
+    public static final int DATABASE_VERSION = 2;
 
-    private ReadFile readFile;
+    private ReadAssetsV1File readAssetsV1File;
 
     public SendDataToSQL(City city){
         scheduleSQLite = new ScheduleSQLite(
                 SQLConstants.DATABASE_PATTERN_NAME+"/"+
                         city.getCountry()+"/"+
                         city.getName()+"/"+
-                        StringUtils.getNameDatabase(city.getCountry(),city.getName(),1));
-        readFile = new ReadFile();
+                        StringUtils.getNameDatabase(city.getCountry(),city.getName(),DATABASE_VERSION));
+        readAssetsV1File = new ReadAssetsV1File();
     }
 
     public List<Company> getCompanies(City city){
@@ -43,8 +48,8 @@ public class SendDataToSQL {
         return itineraries.get(company);
     }
 
-    public List<Code> getCodes(City city, Company company){
-        return codes.get(company);
+    public List<Code> getCodes(City city, Company company,Itinerary itinerary){
+        return codes.get(company).get(itinerary);
     }
 
     public int getSizeBusesOfItinerary( Company company, Itinerary itinerary){
@@ -52,15 +57,15 @@ public class SendDataToSQL {
     }
 
     public City readData(City city) {
-        companies = readFile.getCompanies(city);
-        HashMap<Company, List<Code>> listCodes = new HashMap<>();
+        companies = readAssetsV1File.getCompanies(city);
         HashMap<Company, List<Itinerary>> listItineraries = new HashMap<>();
+        HashMap<Company, HashMap<Itinerary,List<Code>>> listCodes = new HashMap<>();
         HashMap<Company, HashMap<Itinerary, List<Bus>>> listBuses = new HashMap<>();
         for (Company company : companies) {
-            listCodes.put(company, readFile.getCodes(city, company));
-            List<Itinerary> itineraries = readFile.getItineraries(city, company);
+            List<Itinerary> itineraries = readAssetsV1File.getItineraries(city, company);
             listItineraries.put(company, itineraries);
-            listBuses.put(company, readFile.getBuses(city, company, itineraries));
+            listCodes.put(company, readAssetsV1File.getCodes(city, company,itineraries));
+            listBuses.put(company, readAssetsV1File.getBuses(city, company, itineraries));
         }
         codes = listCodes ;
         itineraries = listItineraries;
@@ -73,16 +78,8 @@ public class SendDataToSQL {
         send(city, company);
         System.out.println("\tcompany " + company.getName());
 
-        List<Code> codesList = codes.get(company);
         List<Itinerary> itineraryList = itineraries.get(company);
-        if (codesList == null) {
-            System.out.println("\t\tcodeList null!" + company.getName());
-        } else {
-            for (Code code : codesList) {
-                send(city, company, code);
-            }
-            System.out.println("\t\tcodeList size!" + codesList.size());
-        }
+
         if (itineraryList == null) {
             System.out.println("\t\titineraryList null!" + company.getName());
         } else {
@@ -95,6 +92,19 @@ public class SendDataToSQL {
 
     private void sendItinerary(City city, Company company, Itinerary itinerary) {
         send(city, company, itinerary);
+
+        //CODES
+        List<Code> codesList = codes.get(company).get(itinerary);
+        if (codesList == null) {
+            System.out.println("\t\tcodeList null!" + company.getName());
+        } else {
+            for (Code code : codesList) {
+                send(city, company, code);
+            }
+            System.out.println("\t\tcodeList size!" + codesList.size());
+        }
+
+        //BUSES
         HashMap<Itinerary, List<Bus>> busList = buses.get(company);
         List<Bus> busListed = busList.get(itinerary);
         if (busListed == null) {

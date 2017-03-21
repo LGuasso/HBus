@@ -25,8 +25,12 @@ public class SQLConstants {
         return getIdCityDefault(country,city)+BARS+company+BARS+itinerary;
     }
 
-    public static String getIdCode(String country,String city,String company,String code){
+    public static String getIdCodeVersion1(String country,String city,String company,String code){
         return getIdCityDefault(country,city)+BARS+company+BARS+code;
+    }
+
+    public static String getIdCode(String country,String city,String company,String itinerary,String code){
+        return getIdCityDefault(country,city)+BARS+company+BARS+itinerary+BARS+code;
     }
 
     public static String getIdBus(String country,String city,String company,String itinerary,String way,String typeday,String time){
@@ -55,5 +59,9 @@ public class SQLConstants {
 
     public static String getCity(String id) {
         return id.split(BARS)[3];
+    }
+
+    public static String getItinerary(String id) {
+        return id.split(BARS)[5];
     }
 }

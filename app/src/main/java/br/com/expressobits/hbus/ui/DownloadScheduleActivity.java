@@ -34,7 +34,7 @@ import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.util.ZipUtils;
 import br.com.expressobits.hbus.utils.StringUtils;
 
-import static br.com.expressobits.hbus.R.string.city;
+import static br.com.expressobits.hbus.application.AppManager.DATABASE_VERSION;
 
 public class DownloadScheduleActivity extends Activity implements OnPausedListener<FileDownloadTask.TaskSnapshot>,OnProgressListener<FileDownloadTask.TaskSnapshot>,OnFailureListener,OnSuccessListener<FileDownloadTask.TaskSnapshot> {
 
@@ -45,7 +45,6 @@ public class DownloadScheduleActivity extends Activity implements OnPausedListen
     private String cityId;
 
 
-    public static final int DATABASE_VERSION = 1;
 
     public static final String STARTER_MODE = "starterMode";
     public static final String UPDATE_MODE = "updateMode";
