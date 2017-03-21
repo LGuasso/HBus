@@ -119,19 +119,17 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int i) {
         final Bus bus = listBus.get(i);
-        bus.setCode(bus.getCode().replace(" ",""));
         myViewHolder.txtViewSchedule.setText(TimeUtils.getFormatTime(bus.getTime()));
-        if(bus.getCode().length()>Code.CODE_LENGTH_TO_DESCRIPTION){
-            myViewHolder.txtViewDescription.setText(bus.getCode());
-        }else {
-            myViewHolder.txtViewCode.setText(bus.getCode());
+
+        myViewHolder.txtViewCode.setText(bus.getCode());
+
+        if(bus.getCode().replace(" ","").length()>0){
             myViewHolder.txtViewDescription.setText(context.getString(R.string.loading));
             ScheduleDAO dao = new ScheduleDAO(context,
                     SQLConstants.getCountryFromBusId(bus.getId()),
                     SQLConstants.getCityFromBusId(bus.getId()));
             Code code = dao.getCode(SQLConstants.getCompanyFromBusId(bus.getId()),
-                    SQLConstants.getItinerary(bus.getId()),
-                    bus.getCode());
+                    SQLConstants.getItinerary(bus.getId()),bus.getCode());
             dao.close();
             if (code != null) {
                 myViewHolder.txtViewDescription.setText(code.getDescrition());
@@ -140,9 +138,15 @@ public class ItemBusAdapter extends RecyclerView.Adapter<ItemBusAdapter.MyViewHo
                         SQLConstants.getCityFromBusId(bus.getId())+" "+
                         SQLConstants.getCompanyFromBusId(bus.getId())+" "+
                         bus.getCode());
-                myViewHolder.txtViewDescription.setText(context.getString(R.string.error_loading_description));
+                myViewHolder.txtViewDescription.setText(bus.getCode());
+                myViewHolder.txtViewCode.setText(bus.getCode().split(",")[0]);
+                //myViewHolder.txtViewDescription.setText(context.getString(R.string.error_loading_description));
             }
+        }else{
+            myViewHolder.txtViewDescription.setText((SQLConstants.getItinerary(bus.getId())).toUpperCase());
         }
+
+
 
         final Alarm alarm = alarmDAO.getAlarm(bus.getId());
         if(myViewHolder.getItemViewType()==LASTBUS){

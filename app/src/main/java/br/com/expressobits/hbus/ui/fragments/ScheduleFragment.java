@@ -38,12 +38,14 @@ public class ScheduleFragment extends Fragment{
     public static final String ARGS_ITINERARY = "itinerary";
     public static final String ARGS_WAY = "Way";
     public static final String ARGS_TYPEDAY = "typeday";
+    public static final String ARGS_CODES = "codes";
     private String country;
     private String city;
     private String company;
     private String itinerary;
     private String way;
     private String typeday;
+    private ArrayList<String> codes;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -65,13 +67,15 @@ public class ScheduleFragment extends Fragment{
                 arguments.getString(ARGS_COMPANY)!=null &&
                 arguments.getString(ARGS_ITINERARY)!=null &&
                 arguments.getString(ARGS_WAY)!=null &&
-                arguments.getString(ARGS_TYPEDAY)!=null){
+                arguments.getString(ARGS_TYPEDAY)!=null &&
+                arguments.getStringArrayList(ARGS_CODES)!=null){
             this.country = arguments.getString(ARGS_COUNTRY);
             this.city = arguments.getString(ARGS_CITY);
             this.company = arguments.getString(ARGS_COMPANY);
             this.itinerary = arguments.getString(ARGS_ITINERARY);
             this.way = arguments.getString(ARGS_WAY);
             this.typeday = arguments.getString(ARGS_TYPEDAY);
+            this.codes = arguments.getStringArrayList(ARGS_CODES);
             //refresh(country, city, company, itinerary, way ,typeday);
         }else{
             Log.e(TAG,"null references in args!");
@@ -83,7 +87,7 @@ public class ScheduleFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        refresh(country, city, company, itinerary, way ,typeday);
+        refresh(country, city, company, itinerary, way ,typeday, codes);
     }
 
     private void initRecyclerView(View view){
@@ -96,7 +100,11 @@ public class ScheduleFragment extends Fragment{
     }
 
 
-    protected void refresh(final String country, final String city, final String company, final String itinerary, final String way, final String typeday){
+    public void refresh(final String country, final String city, final String company,
+                           final String itinerary, final String way, final String typeday,
+                           final ArrayList<String> codes){
+
+        Log.d(TAG,"codes "+codes);
         recyclerView.setVisibility(View.INVISIBLE);
         textViewEmptyState.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
@@ -106,9 +114,21 @@ public class ScheduleFragment extends Fragment{
         List<Bus> buses = dao.getBuses(company,itinerary,way,typeday);
         dao.close();
         //
+        //TODO otimizar
+        List<Bus> busesFiltered = new ArrayList<>();
+        if(codes.size()>0){
+            for (Bus bus:buses){
+                if(!codes.contains(bus.getCode())){
+                    busesFiltered.add(bus);
+                }
+            }
+        }else {
+            busesFiltered = buses;
+        }
 
-        addBus(buses);
-        if(buses.size()>0){
+
+        addBus(busesFiltered);
+        if(busesFiltered.size()>0){
             recyclerView.setVisibility(View.VISIBLE);
             textViewEmptyState.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.INVISIBLE);

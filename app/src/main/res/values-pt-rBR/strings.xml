@@ -202,4 +202,9 @@
     <string name="dialog_alert_title_confirm_rate_us">Realmente não deseja avaliar?</string>
     <string name="choose_way">Escolha um sentido</string>
     <string name="no_have_connection_with_internet">Não há conexão com internet!</string>
+    <string name="action_filter">Filtrar</string>
+    <string name="filter">Filtrar</string>
+    <string name="filter_the_buses_for_your_code">Filtre os ônibus por seu código</string>
+    <string name="there_are_no_codes_to_filter_on_this_itinerary">Não há códigos para filtrar nesse itinerário!</string>
+    <string name="no_codes">Não há códigos</string>
 </resources>
