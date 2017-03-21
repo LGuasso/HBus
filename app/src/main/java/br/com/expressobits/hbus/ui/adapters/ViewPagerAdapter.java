@@ -1,7 +1,6 @@
 package br.com.expressobits.hbus.ui.adapters;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -40,19 +39,16 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         Log.d(TAG, "Selection fragment view pager " + position);
         if(mFragmentList[position]==null){
             ScheduleFragment scheduleFragment = new ScheduleFragment();
-            Bundle args = new Bundle();
-            args.putString(ScheduleFragment.ARGS_COUNTRY,country);
-            args.putString(ScheduleFragment.ARGS_CITY,city);
-            args.putString(ScheduleFragment.ARGS_COMPANY,company);
-            args.putString(ScheduleFragment.ARGS_ITINERARY,itinerary);
-            args.putString(ScheduleFragment.ARGS_WAY,way);
-            args.putString(ScheduleFragment.ARGS_TYPEDAY,StringUtils.getTypeDayInt(position));
-            args.putStringArrayList(ScheduleFragment.ARGS_CODES, codesNoSelected);
-            scheduleFragment.setArguments(args);
+            //scheduleFragment.setArguments(args);
+            scheduleFragment.setParams(country,city,company,itinerary,way,
+                    StringUtils.getTypeDayInt(position),codesNoSelected);
             mFragmentList[position] = scheduleFragment;
         }else{
-
+            //mFragmentList[position].setArguments(args);
+            mFragmentList[position].setParams(country,city,company,itinerary,way,
+                    StringUtils.getTypeDayInt(position),codesNoSelected);
         }
+
         return mFragmentList[position];
     }
 
@@ -60,6 +56,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return TypeDay.values().length;
     }
+
+
 
     @Override
     public CharSequence getPageTitle(int position) {
@@ -104,8 +102,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             Log.d(TAG,"viewpager refresh "+i);
             if(mFragmentList[i]!=null){
                 Log.d(TAG,"viewpager refresh "+i+" framgnet");
-                mFragmentList[i].refresh(country,city,company,itinerary,way,
+                mFragmentList[i].setParams(country,city,company,itinerary,way,
                         StringUtils.getTypeDayInt(i),codes);
+                mFragmentList[i].refresh();
             }
         }
     }

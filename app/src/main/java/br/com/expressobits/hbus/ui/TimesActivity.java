@@ -146,7 +146,6 @@ public class TimesActivity extends AppCompatActivity implements ChooseCodeFilter
         toolbar.setTitle(itinerary);
         toolbar.setSubtitle(way);
         textViewCompanyUse.setText(getString(R.string.company_use,company));
-
         viewPagerAdapter.refresh(country,city,company,itinerary,way,codesName);
     }
 
@@ -180,9 +179,9 @@ public class TimesActivity extends AppCompatActivity implements ChooseCodeFilter
     }
 
     @Override
-    public void onConfirmFilter(List<Code> codesSelected) {
-        this.codesNoSelected = codesSelected;
-        refresh(getCharSequenceArrayList(codesSelected));
+    public void onConfirmFilter(List<Code> codesNoSelected) {
+        this.codesNoSelected = codesNoSelected;
+        refresh(getCharSequenceArrayList(codesNoSelected));
     }
 
     /**

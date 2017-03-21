@@ -10,14 +10,7 @@
         android:layout_height = "match_parent"
         android:visibility="invisible"/>
 
-    <TextView
-        android:id="@+id/textViewEmptyState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textAppearance="?android:textAppearanceSmall"
-        android:text="@string/no_have_bus"
-        android:drawableTop="@drawable/ic_bus_grey600_48dp"/>
+    <include layout="@layout/content_empty_state"/>
 
     <ProgressBar
         android:layout_width="wrap_content"
