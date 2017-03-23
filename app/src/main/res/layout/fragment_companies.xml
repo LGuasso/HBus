@@ -8,7 +8,6 @@
         android:id="@+id/recyclerViewCompanies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         app:fastScrollPopupBgColor="@color/colorPrimary"
         app:fastScrollPopupTextColor="@color/white"
         app:fastScrollThumbColor="@color/colorPrimary"/>

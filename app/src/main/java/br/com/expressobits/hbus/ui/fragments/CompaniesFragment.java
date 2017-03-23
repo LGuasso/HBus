@@ -2,11 +2,15 @@ package br.com.expressobits.hbus.ui.fragments;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,27 +18,26 @@ import android.widget.ProgressBar;
 
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.dao.SQLConstants;
-import br.com.expressobits.hbus.dao.ScheduleDAO;
-import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.provider.CompanyContract;
+import br.com.expressobits.hbus.provider.ScheduleContentProvider;
 import br.com.expressobits.hbus.ui.CompanyDetailsActivity;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
 import br.com.expressobits.hbus.ui.TimesActivity;
-import br.com.expressobits.hbus.ui.adapters.ItemCompanyAdapter;
-import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
-import br.com.expressobits.hbus.utils.FirebaseUtils;
+import br.com.expressobits.hbus.ui.adapters.CursorRecyclerViewAdapter;
+import br.com.expressobits.hbus.ui.adapters.ItemCompanyCursorRecyclerViewAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CompaniesFragment extends Fragment implements RecyclerViewOnClickListenerHack{
+public class CompaniesFragment extends Fragment implements RecyclerViewOnClickListenerHack,LoaderManager.LoaderCallbacks<Cursor>{
 
-    private List<Company> listCompanies = new ArrayList<>();
+    /**public final int offset = 1;
+    private int page = 0;
+
+    private boolean loadingMore = false;*/
+
     public static final String TAG = "CompaniesFragment";
     private FastScrollRecyclerView recyclerViewCompanies;
     private ProgressBar progressBar;
@@ -43,7 +46,6 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
     public CompaniesFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,79 +57,131 @@ public class CompaniesFragment extends Fragment implements RecyclerViewOnClickLi
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String cityId = sharedPreferences.getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-        if(listCompanies.size()>0){
-            recyclerViewCompanies.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
-            refreshRecyclerView();
-        }else{
-            //TODO estado vazio nao existe companies vazia
-        }
-        String country = FirebaseUtils.getCountry(cityId);
-        String city = FirebaseUtils.getCityName(cityId);
-        refresh(country,city);
-    }
-
     private void initViews(View view){
         initListViews(view);
     }
 
     private void initListViews(View view){
+
+        ItemCompanyCursorRecyclerViewAdapter mAdapter = new
+                ItemCompanyCursorRecyclerViewAdapter( getActivity(), null );
+
+        mAdapter.setRecyclerViewOnClickListenerHack(this);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         recyclerViewCompanies = (FastScrollRecyclerView) view.findViewById(R.id.recyclerViewCompanies);
         recyclerViewCompanies.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerViewCompanies.setHasFixedSize(true);
+        recyclerViewCompanies.setAdapter(mAdapter);
+        //recyclerViewCompanies.setHasFixedSize(true);
+
+
+        /**recyclerViewCompanies.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+
+                int maxPositions = layoutManager.getItemCount();
+
+                if (lastVisibleItemPosition == maxPositions - 1) {
+                    if (loadingMore)
+                        return;
+
+                    loadingMore = true;
+                    page++;
+                    getActivity().getSupportLoaderManager().restartLoader(0, null, CompaniesFragment.this);
+                }
+            }
+        });*/
+
+        getActivity().getSupportLoaderManager().restartLoader(0, null, this);
+
     }
 
-    private void addCompanies(List<Company> companies){
-        listCompanies = companies;
-        Collections.sort(listCompanies);
-        if(listCompanies.size()>0){
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerViewCompanies.setVisibility(View.VISIBLE);
-        }
-        refreshRecyclerView();
-    }
-
-    private void refresh(String country,String city){
-        listCompanies.clear();
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerViewCompanies.setVisibility(View.INVISIBLE);
-        loadCompaniesFromDatabase(country, city);
-    }
-
-    private void loadCompaniesFromDatabase(String country,String city){
-        ScheduleDAO dao = new ScheduleDAO(getContext(),country,city);
-        addCompanies(dao.getCompanies());
-        dao.close();
-    }
-
-    public void refreshRecyclerView(){
-        ItemCompanyAdapter arrayAdapter = new ItemCompanyAdapter(getContext(),listCompanies);
-        arrayAdapter.setRecyclerViewOnClickListenerHack(this);
-        recyclerViewCompanies.setAdapter(arrayAdapter);
-        LinearLayoutManager llmUseful = new LinearLayoutManager(getActivity());
-        llmUseful.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewCompanies.setLayoutManager(llmUseful);
-    }
 
     @Override
     public void onClickListener(View view, int position) {
         Intent intent;
-        Company company = listCompanies.get(position);
+        String id = ((CursorRecyclerViewAdapter)recyclerViewCompanies.getAdapter()).getStringItemId(position);
+        Log.d(TAG,id);
         intent = new Intent(getContext(), CompanyDetailsActivity.class);
-        intent.putExtra(TimesActivity.ARGS_COUNTRY, SQLConstants.getCountryFromBusId(company.getId()));
-        intent.putExtra(TimesActivity.ARGS_CITY, SQLConstants.getCityFromBusId(company.getId()));
-        intent.putExtra(TimesActivity.ARGS_COMPANY, company.getName());
+        intent.putExtra(TimesActivity.ARGS_COUNTRY, SQLConstants.getCountryFromBusId(id));
+        intent.putExtra(TimesActivity.ARGS_CITY, SQLConstants.getCityFromBusId(id));
+        intent.putExtra(TimesActivity.ARGS_COMPANY,SQLConstants.getCompanyFromBusId(id));
         startActivity(intent);
     }
 
     @Override
     public boolean onLongClickListener(View view, int position) {
         return false;
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        recyclerViewCompanies.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        switch (id) {
+            case 0:
+                CursorLoader cursorLoader = new CursorLoader(
+                        getActivity(),
+                        ScheduleContentProvider.urlForAllItems(),
+                        null,
+                        null,
+                        null,
+                        null);
+                Log.d(TAG,"return cursorloader "+cursorLoader.getUri());
+                return cursorLoader;
+            default:
+                throw new IllegalArgumentException("no id handled!");
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        recyclerViewCompanies.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        switch (loader.getId()){
+            case 0:
+                //Toast.makeText(getActivity(),"loading more "+page,Toast.LENGTH_LONG).show();
+                Cursor cursor =
+                        ((ItemCompanyCursorRecyclerViewAdapter)recyclerViewCompanies.getAdapter()).getCursor();
+
+                //fill all exisitng in adapter
+                MatrixCursor mx = new MatrixCursor(CompanyContract.COLS);
+                fillMx(cursor, mx);
+
+                fillMx(data, mx);
+
+                ((ItemCompanyCursorRecyclerViewAdapter) recyclerViewCompanies.getAdapter()).swapCursor(mx);
+                break;
+            default:
+                throw new IllegalArgumentException("no loader id handled!");
+        }
+
+    }
+
+    private void fillMx(Cursor data, MatrixCursor mx) {
+        if (data == null)
+            return;
+
+        data.moveToPosition(-1);
+        while (data.moveToNext()) {
+            mx.addRow(new Object[]{
+                    data.getString(data.getColumnIndex(CompanyContract.Company._ID)),
+                    data.getString(data.getColumnIndex(CompanyContract.Company.COLUMN_NAME_NAME)),
+                    data.getString(data.getColumnIndex(CompanyContract.Company.COLUMN_NAME_EMAIL)),
+                    data.getString(data.getColumnIndex(CompanyContract.Company.COLUMN_NAME_WEBSITE)),
+                    data.getString(data.getColumnIndex(CompanyContract.Company.COLUMN_NAME_PHONENUMBER)),
+                    data.getString(data.getColumnIndex(CompanyContract.Company.COLUMN_NAME_ADDRESS))
+            });
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

@@ -1,4 +1,6 @@
-package br.com.expressobits.hbus.dao;
+package br.com.expressobits.hbus.provider;
+
+import br.com.expressobits.hbus.dao.SQLConstants;
 
 /**
  * @author Rafael Correa
@@ -13,7 +15,7 @@ public final class BusContract {
                     Bus.COLUMN_NAME_CODE + SQLConstants.TEXT_TYPE +
                     SQLConstants.PARENTES+SQLConstants.POINTCOMMA;
 
-    static final String[] COLS = {
+    public static final String[] COLS = {
             Bus._ID,
             Bus.COLUMN_NAME_TIME,
             Bus.COLUMN_NAME_CODE,
@@ -31,14 +33,14 @@ public final class BusContract {
 
     }
 
-    static final String SQL_DELETE_ALL =
+    public static final String SQL_DELETE_ALL =
             "DELETE FROM " + Bus.TABLE_NAME;
 
     public static abstract class Bus{
         public static final String TABLE_NAME = "bus";
-        static final String _ID = "_id";
-        static final String COLUMN_NAME_TIME = "time";
-        static final String COLUMN_NAME_CODE = "code";
+        public static final String _ID = "_id";
+        public static final String COLUMN_NAME_TIME = "time";
+        public static final String COLUMN_NAME_CODE = "code";
 
     }
 

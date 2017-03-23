@@ -25,6 +25,11 @@
     <uses-permission android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
     <uses-permission android:name="br.com.expressobits.hbus.permission.HBUS_PERMISSION" />
 
+    <uses-permission android:name="br.com.expressobits.hbus.provider.permission.READ_PROVIDER"/>
+
+    <permission android:name="br.com.expressobits.hbus.provider.permission.READ_PROVIDER"
+        android:protectionLevel="signature"/>
+
     <application
         android:name=".application.TPCDataBaseInit"
         android:allowBackup="false"
@@ -46,6 +51,12 @@
         <provider
             android:name=".provider.ItinerarySearchableProvider"
             android:authorities="br.com.expressobits.hbus.provider.ItinerarySearchableProvider" />
+
+        <provider
+            android:name=".provider.ScheduleContentProvider"
+            android:authorities="br.com.expressobits.hbus.provider"
+            android:exported="false"
+            android:readPermission="br.com.expressobits.hbus.provider.permission.READ_PROVIDER"/>
 
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -197,6 +208,11 @@
             android:enabled="true" />
 
         <activity android:name=".ui.CompanyDetailsActivity">
+            <intent-filter>
+                <action android:name="SHOW_COMPANY_DETAILS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.expressobits.company"/>
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.expressobits.hbus.ui.MainActivity" />

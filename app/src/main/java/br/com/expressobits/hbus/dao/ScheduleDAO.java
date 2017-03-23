@@ -1,9 +1,11 @@
 package br.com.expressobits.hbus.dao;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import br.com.expressobits.hbus.model.Bus;
 import br.com.expressobits.hbus.model.Code;
 import br.com.expressobits.hbus.model.Company;
 import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.provider.CompanyContract;
 import br.com.expressobits.hbus.utils.StringUtils;
 
 /**
@@ -31,6 +34,17 @@ public class ScheduleDAO extends SQLiteOpenHelper {
         this.city = cityName;
         this.country = country;
     }
+
+
+    public Cursor queryCompanies(SQLiteQueryBuilder queryBuilder,String[] projection,String selection,String[] selectionArgs,String orderBy){
+        if(queryBuilder == null){
+            queryBuilder = new SQLiteQueryBuilder();
+            queryBuilder.setTables(CompanyContract.Company.TABLE_NAME);
+        }
+        return queryBuilder.query(getReadableDatabase(),projection,selection,selectionArgs,null,null,orderBy);
+    }
+
+    /////
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

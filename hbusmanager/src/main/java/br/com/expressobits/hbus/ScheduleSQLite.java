@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import br.com.expressobits.hbus.dao.BusContract;
-import br.com.expressobits.hbus.dao.CodeContract;
-import br.com.expressobits.hbus.dao.CompanyContract;
+import br.com.expressobits.hbus.provider.BusContract;
+import br.com.expressobits.hbus.provider.CodeContract;
+import br.com.expressobits.hbus.provider.CompanyContract;
 import br.com.expressobits.hbus.dao.ItineraryContract;
 import br.com.expressobits.hbus.model.*;
 

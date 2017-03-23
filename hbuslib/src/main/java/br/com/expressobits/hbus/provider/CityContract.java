@@ -1,4 +1,4 @@
-package br.com.expressobits.hbus.dao;
+package br.com.expressobits.hbus.provider;
 
 /**
  * Following specified rules in android training
@@ -9,7 +9,7 @@ package br.com.expressobits.hbus.dao;
  */
 public final class CityContract {
 
-    static final String[] COLS= {
+    public static final String[] COLS= {
             City._ID,
             City.COLUMN_NAME_NAME,
             City.COLUMN_NAME_COUNTRY,
@@ -17,16 +17,16 @@ public final class CityContract {
             City.COLUMN_NAME_LONGITUDE
     };
 
-    static final String SQL_DELETE_ALL =
+    public static final String SQL_DELETE_ALL =
             "DELETE FROM " + City.TABLE_NAME;
 
     /* Inner class that defines the table contents */
     public static abstract class City {
         public static final String TABLE_NAME = "city";
-        static final String _ID = "_id";
-        static final String COLUMN_NAME_NAME = "name";
-        static final String COLUMN_NAME_COUNTRY= "country";
-        static final String COLUMN_NAME_LATITUDE= "latitude";
-        static final String COLUMN_NAME_LONGITUDE= "longitude";
+        public static final String _ID = "_id";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_COUNTRY= "country";
+        public static final String COLUMN_NAME_LATITUDE= "latitude";
+        public static final String COLUMN_NAME_LONGITUDE= "longitude";
     }
 }
