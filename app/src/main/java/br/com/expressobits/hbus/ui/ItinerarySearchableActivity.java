@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +50,10 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
     private String country;
     private String city;
     private Toolbar toolbar;
-    private RecyclerView mRecyclerView;
+    private RecyclerView recyclerViewSearchableItineraries;
     private List<Object> itinerariesSearchList;
     private ItemItineraryAdapter itemItineraryAdapter;
+    private ViewGroup layoutEmptyState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +71,26 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mRecyclerView = (RecyclerView) findViewById(R.id.itineraryRecyclerView);
-        mRecyclerView.setHasFixedSize(true);
+        recyclerViewSearchableItineraries = (RecyclerView) findViewById(R.id.itineraryRecyclerView);
+        recyclerViewSearchableItineraries.setHasFixedSize(true);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(llm);
+        recyclerViewSearchableItineraries.setLayoutManager(llm);
 
         itemItineraryAdapter = new ItemItineraryAdapter(this, itinerariesSearchList);
         itemItineraryAdapter.setRecyclerViewOnClickListenerHack(this);
-        mRecyclerView.setAdapter(itemItineraryAdapter);
+        recyclerViewSearchableItineraries.setAdapter(itemItineraryAdapter);
+
+        initEmptyStateViews();
+    }
+
+
+    private void initEmptyStateViews() {
+        layoutEmptyState = (ViewGroup) findViewById(R.id.layoutEmptyState);
+        ((TextView)layoutEmptyState.findViewById(R.id.textViewEmptyState)).setText(getString(R.string.no_have_itineraries_with_search,"search"));
+        ((ImageView)layoutEmptyState.findViewById(R.id.imageViewEmptyState)).setImageDrawable(
+                ContextCompat.getDrawable(this,R.drawable.ic_bench_grey_scale));
     }
 
     private void loadData() {
@@ -116,12 +131,23 @@ public class ItinerarySearchableActivity extends AppCompatActivity implements
                 getSupportActionBar().setTitle(q);
             }
             loadItinerariesFromDatabase(q,country,city);
+
             if(!PreferenceManager.getDefaultSharedPreferences(this).
                     getBoolean(PrivacyPreferenceFragment.PREFERENCE_PAUSE_SEARCH_HISTORY,false)){
                 SearchRecentSuggestions searchRecentSuggestions = new SearchRecentSuggestions(this,
                         ItinerarySearchableProvider.AUTHORITY,
                         ItinerarySearchableProvider.MODE);
                 searchRecentSuggestions.saveRecentQuery(q, null);
+            }
+
+            if(itinerariesSearchList.size()>0){
+                recyclerViewSearchableItineraries.setVisibility(View.VISIBLE);
+                layoutEmptyState.setVisibility(View.INVISIBLE);
+            }else {
+                recyclerViewSearchableItineraries.setVisibility(View.INVISIBLE);
+                layoutEmptyState.setVisibility(View.VISIBLE);
+                ((TextView)layoutEmptyState.findViewById(R.id.textViewEmptyState))
+                        .setText(getString(R.string.no_have_itineraries_with_search,q));
             }
 
         }

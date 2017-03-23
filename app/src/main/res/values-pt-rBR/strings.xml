@@ -207,4 +207,5 @@
     <string name="filter_the_buses_for_your_code">Filtre os ônibus por seu código</string>
     <string name="there_are_no_codes_to_filter_on_this_itinerary">Não há códigos para filtrar nesse itinerário!</string>
     <string name="no_codes">Não há códigos</string>
+    <string name="no_have_itineraries_with_search">não há itinerários com \'%1$s\'</string>
 </resources>
