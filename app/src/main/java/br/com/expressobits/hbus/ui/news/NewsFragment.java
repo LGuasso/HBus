@@ -14,7 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +33,7 @@ import br.com.expressobits.hbus.R;
 import br.com.expressobits.hbus.model.News;
 import br.com.expressobits.hbus.ui.adapters.ItemNewsAdapter;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
+import br.com.expressobits.hbus.util.NetworkUtils;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
 /**
@@ -40,11 +43,10 @@ public class NewsFragment extends Fragment{
 
     public static final String TAG = "NewsFragment";
 
-    private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerViewNews;
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<News> newses = new ArrayList<>();
-    private LinearLayout linearLayoutEmptyView;
+    private ViewGroup layoutEmptyState;
     private ViewGroup progressBarLayout;
 
 
@@ -66,11 +68,18 @@ public class NewsFragment extends Fragment{
 
     private void initViews(View view) {
         initListView(view);
-        initEmptyView(view);
-
+        initEmptyStateViews(view);
         progressBarLayout = (ViewGroup) view.findViewById(R.id.progressBarLayout);
         updateListView();
     }
+
+    private void initEmptyStateViews(View view) {
+        layoutEmptyState = (ViewGroup) view.findViewById(R.id.layoutEmptyState);
+        ((TextView)layoutEmptyState.findViewById(R.id.textViewEmptyState)).setText(R.string.no_have_news);
+        ((ImageView)layoutEmptyState.findViewById(R.id.imageViewEmptyState)).setImageDrawable(
+                ContextCompat.getDrawable(getActivity(),R.drawable.ic_bench_grey_scale));
+    }
+
 
     private void initListView(View view) {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
@@ -83,14 +92,10 @@ public class NewsFragment extends Fragment{
         recyclerViewNews = (RecyclerView) view.findViewById(R.id.recyclerViewNews);
         recyclerViewNews.setHasFixedSize(true);
         recyclerViewNews.setSelected(true);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewNews.setLayoutManager(linearLayoutManager);
         ItemNewsAdapter itemNewsAdapter = new ItemNewsAdapter(getActivity(),newses);
         recyclerViewNews.setAdapter(itemNewsAdapter);
-    }
-
-    private void initEmptyView(View view) {
-        linearLayoutEmptyView = (LinearLayout) view.findViewById(R.id.list_empty);
     }
 
     @Override
@@ -100,18 +105,26 @@ public class NewsFragment extends Fragment{
     }
 
     private void update(boolean isSwipe){
+        layoutEmptyState.setVisibility(View.INVISIBLE);
+        recyclerViewNews.setVisibility(View.INVISIBLE);
+        progressBarLayout.setVisibility(View.VISIBLE);
         newses = new ArrayList<>();
-        updateListView();
-        getGeneralNews();
-        String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
-        String country = FirebaseUtils.getCountry(cityId);
-        String city = FirebaseUtils.getCityName(cityId);
-        getCityNews(country,city);
-        String company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"");
-        getCompanyNews(company,country,city);
+        if(NetworkUtils.isMobileConnected(getContext()) || NetworkUtils.isWifiConnected(getContext())){
+            getGeneralNews();
+            String cityId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SelectCityActivity.TAG,SelectCityActivity.NOT_CITY);
+            String country = FirebaseUtils.getCountry(cityId);
+            String city = FirebaseUtils.getCityName(cityId);
+            getCityNews(country,city);
+            String company = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(cityId,"");
+            getCompanyNews(company,country,city);
+        }else {
+            Toast.makeText(getContext(),getString(R.string.no_have_connection_with_internet),Toast.LENGTH_LONG).show();
+        }
+
         if(isSwipe){
             swipeRefreshLayout.setRefreshing(false);
         }
+        updateListView();
     }
 
     /**
@@ -119,15 +132,13 @@ public class NewsFragment extends Fragment{
      */
     private void updateListView() {
         if(newses.size()>0){
-            linearLayoutEmptyView.setVisibility(View.INVISIBLE);
-            progressBarLayout.setVisibility(View.INVISIBLE);
+            layoutEmptyState.setVisibility(View.INVISIBLE);
             recyclerViewNews.setVisibility(View.VISIBLE);
-
+            progressBarLayout.setVisibility(View.INVISIBLE);
         }else {
-            linearLayoutEmptyView.setVisibility(View.INVISIBLE);
-            progressBarLayout.setVisibility(View.VISIBLE);
+            layoutEmptyState.setVisibility(View.VISIBLE);
             recyclerViewNews.setVisibility(View.INVISIBLE);
-            //linearLayoutEmptyView.setVisibility(View.VISIBLE);
+            progressBarLayout.setVisibility(View.VISIBLE);
         }
         Collections.sort(newses);
         ItemNewsAdapter adapter = new ItemNewsAdapter(getActivity(),newses);

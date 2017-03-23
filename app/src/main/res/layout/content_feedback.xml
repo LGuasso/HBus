@@ -17,7 +17,6 @@
         android:padding="@dimen/activity_horizontal_margin">
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +39,7 @@
 
             <Spinner
                 android:id="@+id/spinner_feedback"
-                style="@style/Platform.Widget.AppCompat.Spinner"
+                style="@style/Widget.AppCompat.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/list_feedbacks"
