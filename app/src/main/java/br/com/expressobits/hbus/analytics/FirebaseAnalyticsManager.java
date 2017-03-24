@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import br.com.expressobits.hbus.BuildConfig;
-import br.com.expressobits.hbus.dao.CityContract;
+import br.com.expressobits.hbus.provider.CityContract;
 import br.com.expressobits.hbus.dao.ItineraryContract;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 

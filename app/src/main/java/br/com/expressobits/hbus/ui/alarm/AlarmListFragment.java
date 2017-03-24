@@ -5,22 +5,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.model.City;
-import br.com.expressobits.hbus.ui.adapters.ItemAlarmAdapter;
-import br.com.expressobits.hbus.model.Alarm;
 import br.com.expressobits.hbus.dao.AlarmDAO;
+import br.com.expressobits.hbus.model.Alarm;
+import br.com.expressobits.hbus.model.City;
 import br.com.expressobits.hbus.ui.RecyclerViewOnClickListenerHack;
+import br.com.expressobits.hbus.ui.adapters.ItemAlarmAdapter;
 import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
 import br.com.expressobits.hbus.utils.FirebaseUtils;
 
@@ -32,7 +34,7 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
     public static final String TAG = "AlarmListFragment";
 
     private RecyclerView recyclerViewAlarms;
-    private RelativeLayout relativeLayoutEmptyState;
+    private ViewGroup layoutEmptyState;
     private List<Alarm> alarmList = new ArrayList<>();
 
 
@@ -54,7 +56,15 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
 
     private void initViews(View view){
         initRecyclerViewAlarms(view,getActivity());
-        relativeLayoutEmptyState = (RelativeLayout)  view.findViewById(R.id.relativeLayoutEmptyList);
+        initEmptyStateViews(view);
+    }
+
+
+    private void initEmptyStateViews(View view) {
+        layoutEmptyState = (ViewGroup) view.findViewById(R.id.layoutEmptyState);
+        ((TextView)layoutEmptyState.findViewById(R.id.textViewEmptyState)).setText(R.string.alarm_list_there_is_no_alarm);
+        ((ImageView)layoutEmptyState.findViewById(R.id.imageViewEmptyState)).setImageDrawable(
+                ContextCompat.getDrawable(getActivity(),R.drawable.ic_alarm_clock_neutral));
     }
 
 
@@ -93,10 +103,10 @@ public class AlarmListFragment extends Fragment implements RecyclerViewOnClickLi
         updateRecyclerViewAlarms();
         if(alarmList.size()>0){
             recyclerViewAlarms.setVisibility(View.VISIBLE);
-            relativeLayoutEmptyState.setVisibility(View.INVISIBLE);
+            layoutEmptyState.setVisibility(View.INVISIBLE);
         }else {
             recyclerViewAlarms.setVisibility(View.INVISIBLE);
-            relativeLayoutEmptyState.setVisibility(View.VISIBLE);
+            layoutEmptyState.setVisibility(View.VISIBLE);
         }
 
         super.onResume();

@@ -3,12 +3,14 @@ package br.com.expressobits.hbus.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ import br.com.expressobits.hbus.ui.adapters.ItemBusAdapter;
 public class ScheduleFragment extends Fragment{
 
     private RecyclerView recyclerView;
-    private TextView textViewEmptyState;
+    private ViewGroup layoutEmptyState;
     private ProgressBar progressBar;
     private List<Bus> listBus;
     //private Context context;
@@ -38,14 +40,14 @@ public class ScheduleFragment extends Fragment{
     public static final String ARGS_ITINERARY = "itinerary";
     public static final String ARGS_WAY = "Way";
     public static final String ARGS_TYPEDAY = "typeday";
-    public static final String ARGS_CODES = "codes";
+    public static final String ARGS_CODES = "codesNoSelected";
     private String country;
     private String city;
     private String company;
     private String itinerary;
     private String way;
     private String typeday;
-    private ArrayList<String> codes;
+    private ArrayList<String> codesNoSelected;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -58,36 +60,61 @@ public class ScheduleFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         //this.context = inflater.getContext();
         initRecyclerView(view);
-        textViewEmptyState = (TextView) view.findViewById(R.id.textViewEmptyState);
+        initEmptyStateViews(view);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         listBus = new ArrayList<>();
-        Bundle arguments = getArguments();
+        //loadParams(getArguments());
+        Log.d(TAG,typeday+" onCreateView");
+        return view;
+    }
+
+    public void loadParams(Bundle arguments) {
         if(arguments!=null && arguments.getString(ARGS_COUNTRY)!=null &&
                 arguments.getString(ARGS_CITY)!=null &&
                 arguments.getString(ARGS_COMPANY)!=null &&
                 arguments.getString(ARGS_ITINERARY)!=null &&
                 arguments.getString(ARGS_WAY)!=null &&
                 arguments.getString(ARGS_TYPEDAY)!=null &&
-                arguments.getStringArrayList(ARGS_CODES)!=null){
+                arguments.getStringArrayList(ARGS_CODES)!=null) {
+
             this.country = arguments.getString(ARGS_COUNTRY);
             this.city = arguments.getString(ARGS_CITY);
             this.company = arguments.getString(ARGS_COMPANY);
             this.itinerary = arguments.getString(ARGS_ITINERARY);
             this.way = arguments.getString(ARGS_WAY);
             this.typeday = arguments.getString(ARGS_TYPEDAY);
-            this.codes = arguments.getStringArrayList(ARGS_CODES);
-            //refresh(country, city, company, itinerary, way ,typeday);
+            this.codesNoSelected = arguments.getStringArrayList(ARGS_CODES);
         }else{
             Log.e(TAG,"null references in args!");
         }
-        return view;
+    }
+
+    public void setParams(String country, String city, String company,
+                          String itinerary, String way, String typeday,
+                          ArrayList<String> codesNoSelected){
+        this.country = country;
+        this.city = city;
+        this.company = company;
+        this.itinerary = itinerary;
+        this.way = way;
+        this.typeday = typeday;
+        this.codesNoSelected = codesNoSelected;
+
+    }
+
+    private void initEmptyStateViews(View view) {
+        layoutEmptyState = (ViewGroup) view.findViewById(R.id.layoutEmptyState);
+        ((TextView)layoutEmptyState.findViewById(R.id.textViewEmptyState)).setText(R.string.no_have_bus);
+        ((ImageView)layoutEmptyState.findViewById(R.id.imageViewEmptyState)).setImageDrawable(
+                ContextCompat.getDrawable(getActivity(),R.drawable.ic_bench_grey_scale));
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        refresh(country, city, company, itinerary, way ,typeday, codes);
+        Log.d(TAG,"onResume "+typeday);
+        refresh();
     }
 
     private void initRecyclerView(View view){
@@ -100,13 +127,11 @@ public class ScheduleFragment extends Fragment{
     }
 
 
-    public void refresh(final String country, final String city, final String company,
-                           final String itinerary, final String way, final String typeday,
-                           final ArrayList<String> codes){
+    public void refresh(){
 
-        Log.d(TAG,"codes "+codes);
+        Log.d(TAG,"codesNoSelected "+codesNoSelected);
         recyclerView.setVisibility(View.INVISIBLE);
-        textViewEmptyState.setVisibility(View.INVISIBLE);
+        layoutEmptyState.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
         //SQL
@@ -116,9 +141,9 @@ public class ScheduleFragment extends Fragment{
         //
         //TODO otimizar
         List<Bus> busesFiltered = new ArrayList<>();
-        if(codes.size()>0){
+        if(codesNoSelected.size()>0){
             for (Bus bus:buses){
-                if(!codes.contains(bus.getCode())){
+                if(!codesNoSelected.contains(bus.getCode())){
                     busesFiltered.add(bus);
                 }
             }
@@ -130,11 +155,11 @@ public class ScheduleFragment extends Fragment{
         addBus(busesFiltered);
         if(busesFiltered.size()>0){
             recyclerView.setVisibility(View.VISIBLE);
-            textViewEmptyState.setVisibility(View.INVISIBLE);
+            layoutEmptyState.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
         }else{
             recyclerView.setVisibility(View.INVISIBLE);
-            textViewEmptyState.setVisibility(View.VISIBLE);
+            layoutEmptyState.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
         }
 

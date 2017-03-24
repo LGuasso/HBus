@@ -1,12 +1,13 @@
-package br.com.expressobits.hbus.dao;
+package br.com.expressobits.hbus.provider;
 
-import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.dao.SQLConstants;
 
 /**
  * @author Rafael Correa
  * @since 01/03/17
  */
 public class CompanyContract {
+
     public static final String SQL_CREATE_TABLE =
             SQLConstants.CREATE_TABLE + Company.TABLE_NAME + " (" +
                     Company._ID + SQLConstants.TEXT_PRIMARY_KEY + SQLConstants.COMMA_SEP +
@@ -17,7 +18,7 @@ public class CompanyContract {
                     Company.COLUMN_NAME_ADDRESS + SQLConstants.TEXT_TYPE +
                     SQLConstants.PARENTES+SQLConstants.POINTCOMMA;
 
-    static final String[] COLS = {
+    public static final String[] COLS = {
             Company._ID,
             Company.COLUMN_NAME_NAME,
             Company.COLUMN_NAME_EMAIL,
@@ -26,7 +27,7 @@ public class CompanyContract {
             Company.COLUMN_NAME_ADDRESS,
     };
 
-    static final String SQL_DELETE_ALL =
+    public static final String SQL_DELETE_ALL =
             "DELETE FROM " + Company.TABLE_NAME;
 
     public static String getInsertSQL(br.com.expressobits.hbus.model.Company company) {
@@ -48,12 +49,12 @@ public class CompanyContract {
 
     public static abstract class Company{
         public static final String TABLE_NAME = "company";
-        static final String _ID = "_id";
-        static final String COLUMN_NAME_NAME = "name";
-        static final String COLUMN_NAME_EMAIL = "email";
-        static final String COLUMN_NAME_WEBSITE = "website";
-        static final String COLUMN_NAME_PHONENUMBER = "phoneNumber";
-        static final String COLUMN_NAME_ADDRESS = "address";
+        public static final String _ID = "_id";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_EMAIL = "email";
+        public static final String COLUMN_NAME_WEBSITE = "website";
+        public static final String COLUMN_NAME_PHONENUMBER = "phoneNumber";
+        public static final String COLUMN_NAME_ADDRESS = "address";
 
     }
 }

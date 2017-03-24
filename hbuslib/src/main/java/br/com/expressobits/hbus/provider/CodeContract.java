@@ -1,7 +1,6 @@
-package br.com.expressobits.hbus.dao;
+package br.com.expressobits.hbus.provider;
 
-import br.com.expressobits.hbus.model.Code;
-import br.com.expressobits.hbus.model.Company;
+import br.com.expressobits.hbus.dao.SQLConstants;
 
 /**
  * @author Rafael Correa
@@ -17,13 +16,13 @@ public final class CodeContract {
                     SQLConstants.PARENTES+SQLConstants.POINTCOMMA;
 
 
-    static final String[] COLS = {
+    public static final String[] COLS = {
             Code._ID,
             Code.COLUMN_NAME_NAME,
             Code.COLUMN_NAME_DESCRIPTION
     };
 
-    static final String SQL_DELETE_ALL =
+    public static final String SQL_DELETE_ALL =
             "DELETE FROM " + Code.TABLE_NAME;
 
     public static String getInsertSQL(br.com.expressobits.hbus.model.Code code) {

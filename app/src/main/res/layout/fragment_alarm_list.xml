@@ -4,35 +4,7 @@
     android:layout_height="match_parent"
     tools:context="br.com.expressobits.hbus.ui.alarm.AlarmListFragment">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/relativeLayoutEmptyList"
-        android:background="@color/md_grey_300"
-        android:visibility="visible">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="@string/alarm_list_there_is_no_alarm"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <ImageView
-                android:id="@+id/imageViewThereIsNoAlarm"
-                android:contentDescription="@string/alarm_list_there_is_no_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_alarm_clock_neutral"/>
-
-        </LinearLayout>
-    </RelativeLayout>
-
+    <include layout="@layout/content_empty_state"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewAlarms"
