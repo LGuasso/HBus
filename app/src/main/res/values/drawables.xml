@@ -1,0 +1,8 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="ic_menu_newspaper" type="drawable">@drawable/ic_newspaper_grey600_24dp</item>
+    <item name="ic_menu_domain" type="drawable">@drawable/ic_domain_grey600_24dp</item>
+    <item name="ic_menu_favorite" type="drawable">@drawable/ic_star_grey600_24dp</item>
+    <item name="ic_menu_bus" type="drawable">@drawable/ic_format_list_bulleted_grey600_24dp</item>
+    <item name="ic_menu_settings" type="drawable">@drawable/ic_settings_grey600_24dp</item>
+    <item name="ic_menu_Help" type="drawable">@drawable/ic_help_circle_grey600_24dp</item>
+</resources>

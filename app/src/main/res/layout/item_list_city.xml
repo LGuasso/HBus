@@ -1,0 +1,91 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="0dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="3dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/card_view_size_city"
+        android:background="@color/transparent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/imageViewCityPhoto"
+            android:src="@drawable/default_city"
+            android:layout_width="match_parent"
+            android:layout_height="144dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/city" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent_card_view_image"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageViewCityCoatsOfArms"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    app:civ_fill_color="@color/white"
+                    android:src="@drawable/ic_refresh_white_48dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/textView_city_name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:text="@string/abc_action_bar_home_description"
+                        android:orientation="vertical"/>
+
+                    <TextView
+                        android:id="@+id/textView_city_country"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:text="Rio Grande do Sul"
+                        android:orientation="vertical"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

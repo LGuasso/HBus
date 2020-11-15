@@ -1,41 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.expressobits.hbus" >
+    package="br.com.expressobits.hbus">
 
-    <!-- Permissão para ler memória externa-->
-    <uses-permission  android:name = "android.permission.READ_EXTERNAL_STORAGE"/>
-    <!-- Permissão para acesso á internet-->
-    <uses-permission  android:name = "android.permission.INTERNET"/>
-    <!-- Permissão para saber o estatus da rede -->
-    <uses-permission  android:name = "android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+    <!-- WARNING use to load alarms after boot restarted -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!--
+      IMPORTANT: Change "com.parse.starter.permission.C2D_MESSAGE" in the lines below
+      to match your app's package name + ".permission.C2D_MESSAGE".
+    -->
+    <permission
+        android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="br.com.expressobits.hbus.permission.HBUS_PERMISSION"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="br.com.expressobits.hbus.permission.C2D_MESSAGE" />
+    <uses-permission android:name="br.com.expressobits.hbus.permission.HBUS_PERMISSION" />
+
+    <uses-permission android:name="br.com.expressobits.hbus.provider.permission.READ_PROVIDER"/>
+
+    <permission android:name="br.com.expressobits.hbus.provider.permission.READ_PROVIDER"
+        android:protectionLevel="signature"/>
 
     <application
-        android:allowBackup="true"
+        android:name=".application.TPCDataBaseInit"
+        android:allowBackup="false"
+        android:fullBackupContent="@xml/hbus_backup_files"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/HBusTheme">
 
         <!-- Esta meta data é requerida com o play services -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <!-- Provider get search view to itinerary -->
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value="br.com.expressobits.hbus.ui.ItinerarySearchableActivity" />
+
+        <provider
+            android:name=".provider.ItinerarySearchableProvider"
+            android:authorities="br.com.expressobits.hbus.provider.ItinerarySearchableProvider" />
+
+        <provider
+            android:name=".provider.ScheduleContentProvider"
+            android:authorities="br.com.expressobits.hbus.provider"
+            android:exported="false"
+            android:readPermission="br.com.expressobits.hbus.provider.permission.READ_PROVIDER"/>
+
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_bus_white_24dp" />
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <!--
+         Optionally, register AnalyticsReceiver and AnalyticsService to support background
+         dispatching on non-Google Play devices
+        -->
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+            android:enabled="true"
+            android:permission="br.com.expressobits.hbus.permission.HBUS_PERMISSION">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!--
+          Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
+          installation campaign reporting
+        -->
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+            android:exported="true"
+            android:permission="br.com.expressobits.hbus.permission.HBUS_PERMISSION">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan|adjustNothing">
+
+            <!--
+            ATTENTION: This intent was auto-generated. Follow instructions at
+            https://g.co/AppIndexing/AndroidStudio to publish your URLs.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- ATTENTION: This data URL was auto-generated. We recommend that you use the HTTP scheme. -->
+                <data
+                    android:host="hbus-1206.firebaseapp.com"
+                    android:pathPrefix="/main"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".ui.tour.TourActivity"
+            android:label="@string/app_name"
+            android:noHistory="true" />
+        <activity
+            android:name=".ui.settings.SelectCityActivity"
+            android:label="@string/title_activity_choose_city"
+            android:noHistory="true" />
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:label="@string/app_name"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
-            android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent"
-            />
+            android:name=".ui.help.HelpActivity"
+            android:label="@string/title_activity_help">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.help.FeedbackActivity"
+            android:label="@string/title_activity_feedback">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.help.HelpActivity" />
+        </activity>
+        <activity
+            android:name=".ui.TimesActivity"
+            android:label="@string/title_activity_times">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/HBusTheme.ActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.help.HelpContentActivity"
+            android:label="@string/title_activity_help_content" />
+        <activity
+            android:name=".ui.alarm.AlarmEditorActivity"
+            android:label="@string/title_activity_help_content">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        >
+        <service
+            android:name=".alarm.AlarmService"
+            android:enabled="true" />
+
+        <receiver android:name=".alarm.AlarmReceiver" />
+        <receiver
+            android:name=".alarm.BootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".alarm.BootService"
+            android:enabled="true" />
+
+        <activity android:name=".ui.CompanyDetailsActivity">
+            <intent-filter>
+                <action android:name="SHOW_COMPANY_DETAILS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.expressobits.company"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity android:name=".ui.login.LoginActivity" />
+
+        <service
+            android:name=".messaging.NewsFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".ui.news.NewsDetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.help.PrivacyPolicyActivity"
+            android:label="@string/title_activity_privacy_policy">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.expressobits.hbus.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.ItinerarySearchableActivity"
+            android:label="@string/itineraries"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|adjustNothing">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/itinerary_searchable" />
+        </activity>
+        <activity android:name=".ui.DownloadScheduleActivity" />
+        <activity android:name=".ui.download.ListDatabaseActivity"
+            android:label="@string/pref_title_database_manager"/>
     </application>
 
 </manifest>

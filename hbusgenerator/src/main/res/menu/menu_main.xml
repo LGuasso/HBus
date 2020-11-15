@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="br.com.expressobits.hbusgenerator.MainActivity">
+    <item
+        android:id="@+id/action_data_manager"
+        android:orderInCategory="100"
+        android:icon="@android:drawable/stat_notify_sync"
+        android:title="@string/data_manager"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_news_editor"
+        android:orderInCategory="100"
+        android:icon="@android:drawable/ic_dialog_alert"
+        android:title="@string/news"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

@@ -1,6 +1,6 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
-# in D:\Program Files (x86)\Android\android-sdk/tools/proguard/proguard-android.txt
+# in android-sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
 # directive in build.gradle.
 #
@@ -15,7 +15,32 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontoptimize
 
--keep public class br.com.expressobits.hbus.ui.MainActivity
--keep public class br.com.expressobits.hbus.ui.fragments.LinhasFragment
--keep public class br.com.expressobits.hbus.ui.fragments.OnibusFragment
+-repackageclasses ''
+
+#disable option methods onClik View
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+-keepclassmembers public class * extends android.view.View {
+   void set*(***);
+   *** get*();
+}
+
+-keep class com.google.inject.** { *; }
+
+
+-keep class br.com.expressobits.hbus.application.TPCDataBaseInit
+
+
+-keep class br.com.expressobits.hbus.ui.*
+
+-keep class com.mikepenz.materialdrawer.*
+
+-keep public class com.google.android.gms.* { public *; }
+
+
+-keep class com.google.android.gms.ads.*
+
+-keep class com.google.ads.mediation.AdUrlAdapter

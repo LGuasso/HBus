@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ *************************************************************************************************
+  ~ Juramento do Programador no desenvolvimento de Código Limpo:
+  ~
+  ~  Antes de codificar, me colocarei na posição dos outros colaboradores desenvolvedores,
+  ~  buscando me expressar de maneira simples, logo:
+  ~
+  ~  - Nomearei as entidades como classes, métodos e variáveis com nomes significativos, pronunciáveis
+  ~  e pesquisável, que revelem a sua verdadeira e atual intenção;
+  ~
+  ~  - Farei com que cada método e cada deve ter apenas uma única responsabilidade, caso contrário,
+  ~  deve ser refatorados em métodos unitários;
+  ~
+  ~  - Ao comentar sobre uma entidade, deixarei claro qual é o seu papel atual e sugerirei  melhorias
+  ~  futuras, se for o caso; Atualizar comentários sempre quando atualizar código;
+  ~ *************************************************************************************************
+  -->
+
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbarBottom"
+    android:background="@color/transparent"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabDots"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabBackground="@drawable/tab_selector"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            >
+            <Button
+                android:id="@+id/previousText"
+                android:text="@string/action_jump"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textAllCaps="true"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:textColor="@color/white"
+                style="@android:style/Widget.ActionButton"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"/>
+
+
+            <Button
+                android:src="@drawable/ic_navigate_next_white_48dp"
+                android:id="@+id/nextButton"
+                android:text="@string/action_next"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textAllCaps="true"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:textColor="@color/white"
+                style="@android:style/Widget.ActionButton"
+                />
+
+            <!-- O botão de próximo foi implementado usando menu -->
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+
+</android.support.v7.widget.Toolbar>

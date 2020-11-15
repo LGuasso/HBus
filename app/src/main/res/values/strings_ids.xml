@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Strings que contém os dados de ids -->
+<resources>
+    <string name="analytics_id_tracker" translatable="false">UA-69666206-1</string>
+    <!-- Banner Normal WARNING Somente usado na produção -->
+    <string name="banner_ad_product_unit_id" translatable="false">ca-app-pub-3074923165940773/7875100197</string>
+    <!-- Banner de testes -->
+    <string name="banner_ad_developer_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <!-- Intersticial Normal WARNING Somente usado na produção -->
+    <string name="intersticial_ad_product_unit_id" translatable="false">ca-app-pub-3074923165940773/3453072593</string>
+    <!-- Intersticial de testes -->
+    <string name="intersticial_ad_developer_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+
+    <string name="intersticial_ad_unit_id" translatable="false">@string/intersticial_ad_product_unit_id</string>
+    <string name="banner_ad_unit_id" translatable="false">@string/banner_ad_product_unit_id</string>
+    <string name="tablet_test_device_id" translatable="false">64FFB296FF7100205B64D9CC8DF4CDA6</string>
+    <string name="cel_motorola_xt_1089_test_device_id" translatable="false">E46409385AFFDA970FCE38B4E886458D</string>
+    <!-- id client web O ID de cliente de tipo do aplicativo da Web é seu ID de cliente OAuth 2.0 do servidor de backend-->
+    <string name="web_client_id" translatable="false">36454287226-4jrfk9i6pud4jn0uqlg08tf5idh58o5b.apps.googleusercontent.com</string>
+    <string name="android_client_id" translatable="false">36454287226-243dkcl409mo9e2hioks0scden7lnkqq.apps.googleusercontent.com</string>
+</resources>

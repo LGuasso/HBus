@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Hbus Generator</string>
+    <string name="action_settings">Settings</string>
+    <string name="read_data_cities">Read data cities</string>
+    <string name="read_data_itineraries">Read data ititneraries</string>
+    <string name="delete_all_data_itineraries">Delete all data</string>
+    <string name="delete_all_data_itineraries_on_firebase">Delete all data on firebase</string>
+    <string name="read_data">Read data</string>
+    <string name="read_file_all_data">Read all file data</string>
+    <string name="push_all_data">Push all data</string>
+    <string name="save_in_database_file_all_data">Save in database all data</string>
+    <string name="readFileCity">Read city file</string>
+    <string name="pullCities">Pull cities</string>
+    <string name="pullBus" />
+    <string name="readBusFile">Read bus file</string>
+    <string name="pullItineraries">Pull itineraries</string>
+    <string name="read">Read</string>
+    <string name="pull">Pull</string>
+    <string name="data_manager">Data manager</string>
+    <string name="push">Push</string>
+    <string name="pushAllCodes">Push all codes</string>
+    <string name="pushAllItinerary">Push all data of itinerary</string>
+    <string name="news">News</string>
+</resources>

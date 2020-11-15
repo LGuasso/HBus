@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:id="@+id/side_nav_bar">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/imageViewCity"
+            android:src="@drawable/default_city"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/nav_header_scrim"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:paddingLeft="16dp"
+
+        android:paddingTop="@dimen/statusBarHeight"
+        android:paddingRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:paddingTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewUserProfile"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/ic_account_white_48dp"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewCityProfile"
+                android:layout_gravity="end"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:civ_fill_color="@color/white"
+                android:src="@drawable/ic_refresh_white_48dp"
+                android:layout_alignParentRight="true"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewCityName"
+                android:text="@string/not_found_city"
+                android:layout_below="@id/imageViewCityProfile"
+                android:layout_alignParentEnd="true"
+                android:textStyle="bold"
+                android:textAppearance="?android:textAppearanceSmallInverse"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textViewUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@android:string/unknownName"
+                android:textAppearance="?android:textAppearanceSmallInverse"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/textViewUserEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@android:string/unknownName"
+                android:textAppearance="?android:textAppearanceSmallInverse"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

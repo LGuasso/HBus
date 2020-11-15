@@ -1,63 +1,116 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="AppThemeNavigationDrawer">
-        <!-- MaterialDrawer specific values -->
-        <item name="material_drawer_background">@color/material_drawer_background</item>
-        <item name="material_drawer_icons">@color/material_drawer_icons</item>
-        <item name="material_drawer_primary_text">@color/material_drawer_primary_text</item>
-        <item name="material_drawer_primary_icon">@color/material_drawer_primary_icon</item>
-        <item name="material_drawer_secondary_text">@color/material_drawer_secondary_text</item>
-        <item name="material_drawer_hint_text">@color/material_drawer_hint_text</item>
-        <item name="material_drawer_divider">@color/material_drawer_divider</item>
-        <item name="material_drawer_selected">@color/material_drawer_selected</item>
-        <item name="material_drawer_selected_text">@color/material_drawer_selected_text</item>
-        <item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>
+    <!-- Tema padrão (sem actiobar) -->
+    <style name="HBusTheme" parent="HBusTheme.ActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- Base application theme. -->
-    <style name="AppThemeNavigationDrawer" parent="MaterialDrawerTheme.Light">
+    <!-- tema padrão -->
+    <style name="HBusTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!-- item name="android:actionBarStyle">@style/ActionBarOrange</item>
-        <item name="android:textAppearance">@style/Text</item -->
-        <item name="android:buttonStyle">@style/ButtonAppTheme</item>
-        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Orange</item>
-        <!-- Support library compatibility -->
-        <item name="actionBarStyle">@style/ActionBarOrange</item>
-        <item name="buttonStyle">@style/ButtonAppTheme</item>
 
 
     </style>
 
 
+    <!--Appbar -->
+    <style name="HBusTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="actionBarPopupTheme">@style/HBusTheme.PopupOverlay</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="autoCompleteTextViewStyle">@style/HBusTheme.AutoCompleteTextView</item>
+    </style>
 
-    <style name="ActionBarOrange" parent="@style/Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/colorPrimary</item>
-        <!-- Support library compatibility -->
-        <item name="background">@color/colorPrimary</item>
-        <item name="android:actionBarItemBackground">@color/colorPrimaryDark</item>
+    <!--Toolbar-->
+    <style name="HBusTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
+
+    <style name="HBusTheme.Android.AutoCompleteTextView" parent="android:style/Widget.AutoCompleteTextView">
+        <item name="android:popupBackground">@drawable/custom_abc_btn_default_mtrl_shape</item>
+
+    </style>
+
+    <style name="HBusTheme.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:popupBackground">@drawable/custom_abc_btn_default_mtrl_shape</item>
+        <item name="android:dropDownSelector">@color/colorPrimary</item>
+        <item name="android:icon">@drawable/ic_alarm_white_48dp</item>
+    </style>
+
+    <style name="ActionBarTabStyle" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_blue</item>
     </style>
 
     <style name="Text" parent="@style/TextAppearance.AppCompat.Large">
-        <!-- Support library compatibility -->
+        <!-- Support library compatibili 7fcty -->
+
     </style>
 
-    <style name="ButtonAppTheme" parent="@style/Widget.AppCompat.Button">
-        <item name="android:background">@drawable/orange_button</item>
-        <item name="android:minHeight">48dip</item>
+
+    <!--BUTTONS STYLES -->
+    <style name="AppTheme.Button.Borderless.Colored" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textAppearance">?android:textAppearanceButton</item>
+        <item name="android:minHeight">36dip</item>
         <item name="android:minWidth">64dip</item>
-        <item name="android:textAppearance">@style/TextStyle.Button</item>
-        <item name="background">@drawable/orange_button</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:paddingLeft">24dp</item>
+    </style>
+    <style name="AppTheme.Base.Widget.AppCompat.Button.Colored" parent="@style/Base.Widget.AppCompat.Button.Colored">
+        <item name="android:minHeight">36dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
+    </style>
+    <style name="HBusTheme.Widget.AppCompat.Button.Colored.BookmarkedItinerary" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:animation">@anim/fade_in</item>
+    </style>
+    <style name="HBusTheme.Widget.AppCompat.Button.Colored.HotTip" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimaryMoreDark</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="ActionBarTabStyle.Orange" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
-        <item name="android:background">@drawable/tab_indicator_ab_orange</item>
+
+
+    <style name="AppTheme.CardView" parent="CardView">
+        <item name="android:background">@color/cardview_light_background</item>
+        <item name="android:shadowColor">@color/cardview_shadow_start_color</item>
     </style>
+
+    <style name="DayOfWeek">
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Flat</item>
+    </style>
+
+    <style name="DayOfWeek.TextView">
+        <item name="android:paddingLeft">@dimen/margin_buttons_day_week_list</item>
+        <item name="android:textColor">@drawable/textcolor_days_of_week</item>
+    </style>
+
+    <style name="DayOfWeek.Button">
+        <item name="android:background">@drawable/radiobutton_days_of_week</item>
+        <item name="android:checked">true</item>
+        <item name="android:layout_margin">@dimen/margin_buttons_day_week</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">@drawable/radiobutton_textcolor_days_of_week</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
     <!-- POPUP WINDOW -->
     <style name="PopupWindow">
         <item name="android:windowEnterAnimation">@animator/fade_in</item>
         <item name="android:windowExitAnimation">@animator/fade_out</item>
     </style>
+
+
+
 </resources>

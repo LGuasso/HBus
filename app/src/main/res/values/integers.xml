@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="fade">300</integer>
+    <integer name="max_lines_feedback">3</integer>
+    <integer name="max_length_feedback">600</integer>
+    <integer name="counts_close_times_activity">2</integer>
+    <integer name="counts_view_beta_program">10</integer>
+    <integer name="counts_view_rate_us">5</integer>
 </resources>

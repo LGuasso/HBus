@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="br.com.expressobits.hbus.ui.fragments.ItinerariesFragment">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+            android:id="@+id/recyclerViewItineraries"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:fastScrollPopupBgColor="@color/colorPrimary"
+            app:fastScrollPopupTextColor="@color/white"
+            app:fastScrollThumbColor="@color/colorPrimary"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <!--
+        app:handleColor="#999999"
+        app:hideScrollbar="false"
+        app:showTrack="true"-->
+
+    <!--ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center"
+        android:indeterminate="false"
+        android:visibility="invisible"/-->
+
+</FrameLayout>

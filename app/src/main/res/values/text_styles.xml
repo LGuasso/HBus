@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <style name="TextStyle.Accent.Caption" parent="Base.TextAppearance.AppCompat.Caption">
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textStyle">bold</item>
+
+
+    <style name="AppTheme.SubTitleItineraryNextBus" parent="TextAppearance.AppCompat.Body2">
+        <!-- Splash screen titulo -->
+    </style>
+
+    <style name="AppTheme.TextAppearance.Button.Flat" parent="Base.Widget.AppCompat.Button">
+        <!-- Splash screen titulo -->
+        <item name="android:textColor">@android:color/secondary_text_dark</item>
+        <item name="android:textSize">16dp</item>
     </style>
 
 
+    <style name="HbusTheme.TextAppearance.ChooseWay" parent="Base.Widget.AppCompat.Button">
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <!--BASE -->
+    <style name="AppTheme.TextAppearance.AppCompat.HeadLine" parent="@style/Base.TextAppearance.AppCompat.Headline">
+    </style>
+
+    <style name="AppTheme.TextAppearance.AppCompat.AlarmHours" parent="@style/Base.TextAppearance.AppCompat.Headline">
+    </style>
+
+    <style name="AppTheme.TextAppearance.AppCompat.Subhead" parent="@style/Base.TextAppearance.AppCompat.Subhead">
+    </style>
+
+    <style name="AppTheme.TextAppearance.AppCompat.Caption" parent="@style/Base.TextAppearance.AppCompat.Caption">
+    </style>
+    <style name="AppTheme.TextAppearance.AppCompat.Display1" parent="@style/Base.TextAppearance.AppCompat.Display1">
+    </style>
+
+    <style name="AppTheme.TextAppearance.AppCompat" parent="TextAppearance.AppCompat">
+    </style>
+
+    <style name="HbusTheme.TextAppearance.AppCompat.SubHeader" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@color/white</item>
+    </style>
 
     <style name="TextStyle.Large" parent="TextAppearance.AppCompat.Large">
         <item name="android:textColor">@color/text_color</item>
@@ -26,13 +57,58 @@
         <item name="android:textColor">@color/colorAccentDark</item>
     </style>
 
-    <style name="TextStyle.Hours.Title" parent="TextAppearance.AppCompat.Large">
-        <item name="android:textColor">@color/text_color</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/horario_textsize</item>
+    <style name="AppTheme.TextAppearance.Display3.Mono" parent="TextAppearance.AppCompat.Display3">
+        <item name="android:textColor">@color/white</item>
+        <!--item name="android:textSize">@dimen/horario_textsize</item-->
+    </style>
+
+    <style name="AppTheme.TextAppearance.Display2.Mono" parent="TextAppearance.AppCompat.Display2">
+        <item name="android:textColor">@color/white</item>
+        <!--item name="android:textSize">@dimen/horario_textsize</item-->
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Display4.Mono" parent="TextAppearance.AppCompat.Display4">
+        <item name="android:textColor">@color/white</item>
+        <!--item name="android:textSize">@dimen/horario_textsize</item-->
+        <item name="android:typeface">monospace</item>
     </style>
 
     <style name="TextStyle.Button" parent="TextAppearance.AppCompat.Button">
         <item name="android:textStyle">bold</item>
     </style>
+
+
+    <!-- Respect styles -->
+    <style name="ItemBusTime">
+        <item name="android:textAppearance">?android:textAppearanceLarge</item>
+        <item name="android:textSize">32dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="ItemBusCodeDescription">
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:focusable">false</item>
+        <item name="android:fadingEdgeLength">20dp</item>
+        <item name="android:fadingEdge">horizontal</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textColorHighlight">#FFFFFF</item>
+    </style>
+
+    <style name="ItemBusCode">
+        <item name="android:textAppearance">?android:textAppearanceButton</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+
+
+
+
 </resources>

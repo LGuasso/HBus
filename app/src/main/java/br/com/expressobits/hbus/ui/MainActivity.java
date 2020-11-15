@@ -1,120 +1,222 @@
 package br.com.expressobits.hbus.ui;
 
-import android.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.AdRequest;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.expressobits.hbus.R;
-import br.com.expressobits.hbus.dao.FavoritosDAO;
-import br.com.expressobits.hbus.file.LinhaFile;
-import br.com.expressobits.hbus.modelo.Bus;
-import br.com.expressobits.hbus.modelo.Itinerario;
-import br.com.expressobits.hbus.modelo.Linha;
-import br.com.expressobits.hbus.modelo.TipoDeDia;
-import br.com.expressobits.hbus.preferences.Preferences;
-import br.com.expressobits.hbus.ui.fragments.AddFavoriteFragment;
-import br.com.expressobits.hbus.ui.fragments.LinhasFragment;
-import br.com.expressobits.hbus.ui.fragments.OnibusFragment;
-import br.com.expressobits.hbus.utils.Popup;
+import br.com.expressobits.hbus.application.AdManager;
+import br.com.expressobits.hbus.application.AppManager;
+import br.com.expressobits.hbus.messaging.ClickActionHelper;
+import br.com.expressobits.hbus.model.Itinerary;
+import br.com.expressobits.hbus.ui.alarm.AlarmListFragment;
+import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogFragment;
+import br.com.expressobits.hbus.ui.dialog.ChooseWayDialogListener;
+import br.com.expressobits.hbus.ui.fragments.CompaniesFragment;
+import br.com.expressobits.hbus.ui.fragments.HomeFragment;
+import br.com.expressobits.hbus.ui.fragments.ItinerariesFragment;
+import br.com.expressobits.hbus.ui.fragments.ScheduleFragment;
+import br.com.expressobits.hbus.ui.help.HelpActivity;
+import br.com.expressobits.hbus.ui.login.LoginActivity;
+import br.com.expressobits.hbus.ui.news.NewsFragment;
+import br.com.expressobits.hbus.ui.settings.SelectCityActivity;
+import br.com.expressobits.hbus.ui.settings.SettingsActivity;
+import br.com.expressobits.hbus.utils.FirebaseUtils;
 
-public class MainActivity extends AppCompatActivity implements OnSettingsListener,Drawer.OnDrawerItemClickListener {
+/* *************************************************************************************************
+~ Juramento do Programador no desenvolvimento de CÃ³digo Limpo:
+~
+~  Antes de codificar, me colocarei na posiÃ§Ã£o dos outros colaboradores desenvolvedores,
+~  buscando me expressar de maneira simples, logo:
+~
+~  - Nomearei as entidades como classes, mÃ©todos e variÃ¡veis com nomes significativos, pronunciÃ¡veis
+~  e pesquisÃ¡vel, que revelem a sua verdadeira e atual intenÃ§Ã£o;
+~
+~  - Farei com que cada mÃ©todo e cada deve ter apenas uma Ãºnica responsabilidade, caso contrÃ¡rio,
+~  deve ser refatorados em mÃ©todos unitÃ¡rios;
+~
+~  - Ao comentar sobre uma entidade, deixarei claro qual Ã© o seu papel atual e sugerirei  melhorias
+~  futuras, se for o caso; Atualizar comentÃ¡rios sempre quando atualizar cÃ³digo;
+~ **************************************************************************************************/
 
-    public static final String TAG = "Atividade Principal";
+public class MainActivity extends AppCompatActivity implements FragmentManagerListener,
+        ChooseWayDialogListener,NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
+
+    private static final String TAG = "MainActivity";
+    private static final String STACK = "stack";
+    public static final String DEBUG = "debug";
     private Toolbar pToolbar;
-    //Navigation Drawer
-    private Drawer navigationDrawer;
+    private NavigationView navigationView;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
-    //Gerencia a atuação dos fragments
-    FragmentManager fm = getSupportFragmentManager();
-    int lastPosition = 0;
-    String linha;
-    String sentido;
+    private ImageView imageViewCity;
+    private ImageView circleImageViewCityProfile;
+    private TextView textViewCityName;
+    private String country;
+    private String city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkIntent(getIntent());
         setContentView(R.layout.activity_main);
-
-
-
-        if(savedInstanceState == null){
-
-            LinhasFragment linhasFragment = new LinhasFragment();
-            if(findViewById(R.id.framelayout_main)!=null){
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.framelayout_main,linhasFragment,"linhasFragment");
-                ft.commit();
-            }else if(findViewById(R.id.framelayout_content)!=null){
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.framelayout_menu,linhasFragment,"linhasFragment");
-                ft.add(R.id.framelayout_content,new OnibusFragment(),"onibusFragment");
+        loadParams();
+        AppManager.verifyUpdatedDatabase(this,country,city);
+        if (savedInstanceState == null) {
+            Fragment fragment = new HomeFragment();
+            if (findViewById(R.id.framelayout_main) != null) {
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+                ft.add(R.id.framelayout_main, fragment, HomeFragment.TAG);
                 ft.commit();
             }
-
         }
-
         initViews();
-        initNavigationDrawer();
+        AppManager.countsOpenApp(this);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkIntent(intent);
+    }
 
+    private void checkIntent(Intent intent) {
+        if (intent.hasExtra("click_action")) {
+            ClickActionHelper.startActivity(intent.getStringExtra("click_action"), intent.getExtras(), this);
+        }
+    }
+
+    private void loadParams() {
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        city = FirebaseUtils.getCityName(cityId);
+        country = FirebaseUtils.getCountry(cityId);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadParams();
+        refresh();
+        initNavigationDrawer();
+
+    }
+
+    public void refresh(){
+        String cityId = PreferenceManager.getDefaultSharedPreferences(this).getString(SelectCityActivity.TAG, SelectCityActivity.NOT_CITY);
+        textViewCityName.setText(FirebaseUtils.getCityName(cityId));
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl(FirebaseUtils.REF_STORAGE_HBUS);
+        StorageReference imageRef = storageRef.child(FirebaseUtils.REF_STORAGE_HBUS_IMAGE);
+        StorageReference tableRef = imageRef.child(FirebaseUtils.CITY_TABLE);
+        StorageReference countryRef = tableRef.child(country);
+        StorageReference cityRef = countryRef.child(FirebaseUtils.getCityName(cityId));
+
+        StorageReference cityProfileRef = cityRef.child(FirebaseUtils.IMAGE_CITY_PHOTO_FILE +FirebaseUtils.EXTENSION_IMAGE_JPG);
+        StorageReference cityFlagRef = cityRef.child(FirebaseUtils.IMAGE_CITY_COATS_OF_ARMS_FILE +FirebaseUtils.EXTENSION_IMAGE_PNG);
+
+        cityProfileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(this).load(uri)
+                .placeholder(R.drawable.default_city)
+                .into(imageViewCity));
+
+
+        cityFlagRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(this).load(uri)
+                .error(R.drawable.ic_flag_white_48dp)
+                .placeholder(R.drawable.ic_shield_grey600_24dp)
+                .into(circleImageViewCityProfile));
+
+    }
+
+    private void initViews() {
+        initActionBar();
+        initNavigationDrawer();
+        AdManager.initAdInterstitial(this);
+    }
 
     private void initNavigationDrawer() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, pToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        navigationDrawer = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(pToolbar)
-                .withActionBarDrawerToggleAnimated(true)
-                .withDrawerGravity(Gravity.LEFT)
-                .withSelectedItem(0)
-                .withActionBarDrawerToggle(true)
-                .withOnDrawerItemClickListener(this)
-                .build();
-        navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.favorites));
-        FavoritosDAO dao = new FavoritosDAO(this);
-        new LinhaFile(this).iniciarDados(dao.getLista());
-        List<Itinerario> itinerarios = LinhaFile.getItinerarios();
-        for(Itinerario itinerario:itinerarios){
-            navigationDrawer.addItem(new PrimaryDrawerItem().withName(itinerario.getNome()).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_bus)));
-        }
-        navigationDrawer.addItem(new SectionDrawerItem().withName(R.string.all_lines));
-        List<String>allItinerarios = new LinhaFile(this).getNomeLinhas();
-        for(String txt:allItinerarios){
-            navigationDrawer.addItem(new SecondaryDrawerItem().withName(txt).withIcon(ContextCompat.getDrawable(this,R.drawable.ic_bus)));
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View naviHeader = navigationView.getHeaderView(0);
+        View naviView = naviHeader.findViewById(R.id.side_nav_bar);
+        naviView.setOnClickListener(this);
+        TextView textViewUserName = (TextView)naviHeader.findViewById(R.id.textViewUserName);
+        TextView textViewUserEmail = (TextView)naviHeader.findViewById(R.id.textViewUserEmail);
+        ImageView imageViewUserProfile = (ImageView) naviHeader.findViewById(R.id.imageViewUserProfile);
+
+
+        textViewCityName = (TextView) naviHeader.findViewById(R.id.textViewCityName);
+        circleImageViewCityProfile = (ImageView) naviHeader.findViewById(R.id.imageViewCityProfile);
+        imageViewCity = (ImageView) naviHeader.findViewById(R.id.imageViewCity);
+        imageViewCity.setOnClickListener(this);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser!=null){
+            String userName = currentUser.getDisplayName();
+            textViewUserName.setText(userName);
+            Uri uriImage = currentUser.getPhotoUrl();
+            Log.d(TAG,"Uri image"+uriImage);
+            Picasso.with(this).load(uriImage)
+                    .placeholder(R.drawable.ic_account_white_48dp)
+                    .error(R.drawable.ic_account_white_48dp)
+                    .into(imageViewUserProfile);
+            textViewUserEmail.setText(currentUser.getEmail());
+        }else{
+            textViewUserName.setText(getString(R.string.anonymous));
+            imageViewUserProfile.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_account_outline_white_48dp));
         }
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -124,188 +226,214 @@ public class MainActivity extends AppCompatActivity implements OnSettingsListene
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.menu_action_settings) {
-            Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
         }
-        if (id == R.id.menu_action_add) {
-            onSettingsDone(true);
-            Toast.makeText(this, getString(R.string.add_favorite), Toast.LENGTH_SHORT).show();
-
+        if (id == R.id.menu_action_help) {
+            openHelp();
+            return true;
         }
-        return false;
-    }
-
-    private void initViews() {
-        initActionBar();
-        initAdView();
-
+        return super.onOptionsItemSelected(item);
     }
 
     /**
      * Iniciando o actionbar
      * <ul>
-     *     <li>Mostra este logo como botão de HOME</li>
+     * <li>Mostra este logo como botï¿½o de HOME</li>
      * </ul>
      */
     private void initActionBar() {
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        //getSupportActionBar().setDisplayUseLogoEnabled(true);
-
-        pToolbar = (Toolbar) findViewById(R.id.primary_toolbar);
+        pToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(pToolbar);
-        //pToolbar.setTitle("My lines");
-        //pToolbar.setSubtitle("subtitle");
-
-
     }
+
 
     /**
-     * Gerencia forma dos {@link android.support.v4.app.Fragment}
+     * Ao abrir qualquer fragment, seta o navigation dawer evitando assim atalhos que nÃ£o sejam
+     * selecionados no navigation
      */
-    public void addOnibusFragment(){
-        FragmentTransaction ft = fm.beginTransaction();
-        OnibusFragment onibusFragment = (OnibusFragment)fm.findFragmentByTag("onibusFragment");
-        if(onibusFragment == null){
-            onibusFragment = new OnibusFragment();
+    private void setSelectItemNavigation(String TAG){
+        switch (TAG){
+            case HomeFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_favorites).setChecked(true);
+                break;
+            case ItinerariesFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_all_itineraries).setChecked(true);
+                break;
+            case NewsFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_news).setChecked(true);
+                break;
+            case CompaniesFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_companies).setChecked(true);
+                break;
+            case AlarmListFragment.TAG:
+                navigationView.getMenu().findItem(R.id.nav_alarms).setChecked(true);
+                break;
         }
-        ft.replace(R.id.framelayout_main, onibusFragment, "onibusFragment");
-        ft.addToBackStack("pilha");
-        ft.commit();
-        lastPosition = 1;
     }
 
-    @Override
-    public void onSettingsDone(boolean type){
-        FragmentTransaction ft = fm.beginTransaction();
-        if(!type){
-            getSupportFragmentManager().popBackStack();
-            //ft.remove(getSupportFragmentManager().findFragmentByTag("addFavoriteFragment"));
-        }else {
-
-
-            AddFavoriteFragment addFavoriteFragment = (AddFavoriteFragment) fm.findFragmentByTag("addFavoriteFragment");
+    public void addFragment(String TAG) {
+        Fragment fragment = new Fragment();
+        setSelectItemNavigation(TAG);
+        switch (TAG){
+            case HomeFragment.TAG:
+                setActionBarTitle(getString(R.string.app_name));
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case ItinerariesFragment.TAG:
+                fragment = new ItinerariesFragment();
+                setActionBarTitle(getString(R.string.itineraries));
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case CompaniesFragment.TAG:
+                fragment = new CompaniesFragment();
+                setActionBarTitle(getString(R.string.companies));
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case AlarmListFragment.TAG:
+                fragment = new AlarmListFragment();
+                pToolbar.setTitle(getString(R.string.alarms));
+                if(getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+            case NewsFragment.TAG:
+                fragment = new NewsFragment();
+                setActionBarTitle(getString(R.string.news));
+                if(getSupportFragmentManager().findFragmentByTag(ItinerariesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(AlarmListFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                if(getSupportFragmentManager().findFragmentByTag(CompaniesFragment.TAG)!=null){
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+        }
+        if(getSupportFragmentManager().findFragmentByTag(TAG)==null){
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (findViewById(R.id.framelayout_main) != null) {
-
-                addFavoriteFragment = new AddFavoriteFragment();
                 // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transação novamente na pilha de navegação
-                ft.replace(R.id.framelayout_main, addFavoriteFragment, "addFavoriteFragment");
-                ft.addToBackStack("pilha");
-                lastPosition = 1;
-
-
-            } else if (findViewById(R.id.framelayout_content) != null) {
-                addFavoriteFragment = new AddFavoriteFragment();
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transação novamente na pilha de navegação
-                ft.replace(R.id.framelayout_content, addFavoriteFragment, "onibusFragment");
-                lastPosition = 1;
-
+                // e adiciona a transaï¿½ï¿½o novamente na pilha de navegacao
+                fragmentTransaction.replace(R.id.framelayout_main, fragment,TAG);
+                fragmentTransaction.addToBackStack(STACK);
             }
+            // Finaliza a transacao com sucesso
+            fragmentTransaction.commit();
         }
 
-        // Finaliza a transção com sucesso
-        ft.commit();
 
-    }
-
-    @Override
-    public void onSettingsDone(String linha, String sentido) {
-
-        this.linha = linha;
-        this.sentido = sentido;
-
-        getSupportActionBar().setTitle(linha);
-        getSupportActionBar().setSubtitle(sentido);
-
-        FragmentTransaction ft = fm.beginTransaction();
-
-        /** Se for acessodado de um smartphone o espaço main existirá */
-        /** Adiciona o fragment com o novo conteúdo no único espaço */
-        OnibusFragment onibusFragment = (OnibusFragment)fm.findFragmentByTag("onibusFragment");
-
-        if(findViewById(R.id.framelayout_main)!=null){
-
-            if(onibusFragment != null){
-                onibusFragment.refresh(linha, sentido);
-            }else{
-                onibusFragment = new OnibusFragment();
-                Bundle args = new Bundle();
-                args.putString(OnibusFragment.ARGS_LINHA,linha);
-                args.putString(OnibusFragment.ARGS_SENTIDO, sentido);
-                onibusFragment.setArguments(args);
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transação novamente na pilha de navegação
-                ft.replace(R.id.framelayout_main, onibusFragment, "onibusFragment");
-                ft.addToBackStack("pilha");
-                lastPosition = 1;
-
-            }
-
-        }else if(findViewById(R.id.framelayout_content)!=null){
-            if(onibusFragment != null){
-                onibusFragment.refresh(linha, sentido);
-            }else{
-                onibusFragment = new OnibusFragment();
-                Bundle args = new Bundle();
-                args.putString(OnibusFragment.ARGS_LINHA,linha);
-                args.putString(OnibusFragment.ARGS_SENTIDO, sentido);
-                onibusFragment.setArguments(args);
-                // Troca o que quer que tenha na view do fragment_container por este fragment,
-                // e adiciona a transação novamente na pilha de navegação
-                ft.replace(R.id.framelayout_content, onibusFragment, "onibusFragment");
-                lastPosition = 1;
-            }
-        }
-
-        // Finaliza a transção com sucesso
-        ft.commit();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString(OnibusFragment.ARGS_LINHA,linha);
-        outState.putString(OnibusFragment.ARGS_SENTIDO,sentido);
+        outState.putString(ScheduleFragment.ARGS_COUNTRY, country);
+        outState.putString(ScheduleFragment.ARGS_CITY, city);
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
-    public void setActionBarTitle(String title,String subtitle){
-        getSupportActionBar().setTitle(title);
-        getSupportActionBar().setSubtitle(subtitle);
-        Log.i(TAG, "Trocando o título da action bar para " + title + " ,trocando o subtítulo para " + subtitle);
+    public void onCreateDialogChooseWay(Itinerary itinerary) {
+        List<String> ways;
+        String company = FirebaseUtils.getCompany(itinerary.getId());
+        ways = itinerary.getWays();
+        if (ways.size() > 1) {
+            ChooseWayDialogFragment chooseWayDialogFragment = new ChooseWayDialogFragment();
+            chooseWayDialogFragment.setParameters(this,country,city,company,itinerary.getName(), ways);
+            chooseWayDialogFragment.show(MainActivity.this.getSupportFragmentManager(), ChooseWayDialogFragment.TAG);
+        } else {
+            AppManager.onSettingsDone(this,country,city,company,itinerary.getName(),ways.get(0));
+        }
     }
 
-    public void initAdView(){
-        AdView mAdView = (AdView) findViewById(R.id.ad_view);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+    private void openHelp(){
+        Intent intent = new Intent(this,HelpActivity.class);
+        startActivity(intent);
+    }
+
+    private void logout(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
+
+    public void setActionBarTitle(String title){
+        pToolbar.setTitle(title);
     }
 
 
     @Override
-    public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-        String selectedItem = new String("");
-        if(iDrawerItem instanceof SecondaryDrawerItem) {
-                 selectedItem = ((SecondaryDrawerItem) iDrawerItem).getName();
+    public void onItemClick(String country,String city,String company,String itinerary, String way) {
+        AppManager.onSettingsDone(this,country,city,company,itinerary,way);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_logout) {
+            logout();
+        }else if (id == R.id.nav_favorites) {
+            addFragment(HomeFragment.TAG);
+        } else if (id == R.id.nav_all_itineraries) {
+            addFragment(ItinerariesFragment.TAG);
+        }else if (id == R.id.nav_alarms) {
+            addFragment(AlarmListFragment.TAG);
+        }else if (id == R.id.nav_companies) {
+            addFragment(CompaniesFragment.TAG);
+        } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        } else if (id == R.id.nav_news){
+            addFragment(NewsFragment.TAG);
+        } else if(id == R.id.nav_help){
+            openHelp();
         }
-        if(iDrawerItem instanceof PrimaryDrawerItem) {
-            selectedItem = ((PrimaryDrawerItem) iDrawerItem).getName();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imageViewCity:
+                startActivity(new Intent(MainActivity.this,SelectCityActivity.class));
+                break;
         }
-            switch (selectedItem) {
-                case "Itarare Brigada":
-                case "Circular Cemiterio Sul":
-                case "Circular Cemiterio Norte":
-                case "Circular Camobi":
-                case "Circular Barao":
-                case "Brigada Itarare":
-                    onSettingsDone(selectedItem, Arrays.asList(getResources().getStringArray(R.array.list_sentido_circular)).get(0));
-                    break;
-
-                default:
-
-                    Popup.showPopUp(this, view, selectedItem,new LinhaFile(this).getSentidos(this,selectedItem));
-            }
-
-        return false;
     }
 }
